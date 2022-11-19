@@ -1,0 +1,300 @@
+import React from "react";
+import { View, Button, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Image, TextInput, Alert } from "react-native";
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { NavigationContainer } from "@react-navigation/native";
+import { MainStackNavigator } from "../navigation/navigationstack";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import Fontisto from '@expo/vector-icons/Fontisto';
+//import { createDrawerNavigator } from "@react-navigation/drawer";
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import Data from "../data/data";
+import ColorPicker from 'react-native-wheel-color-picker';
+import { ChromePicker } from 'react-color';
+const chooseColor = () =>
+{
+    return (
+        <ChromePicker 
+        />
+    )
+}
+
+const CustomHabit= ({navigation}) => {
+return (
+    <View style={styles.container}>
+
+        {/* <View style = {styles.addHabit}>
+            <TouchableOpacity style ={styles.customHabit}> 
+                <Ionicons name='add-circle'  size ={30} color = 'green' />
+                <Text> Create Your Custom Habit </Text>
+            </TouchableOpacity>
+        </View> */}
+
+        <View style ={styles.Habit}>
+            <ScrollView >
+                <View style = {{flexDirection: 'column', padding: 10, }}>
+                <Text style ={{fontWeight: 'bold'}}>Name</Text>
+                <TextInput
+                    style={styles.textInput}
+                    placeholder="Enter your name habit!"
+                    //data.push(route.params.name)
+                    //onChangeText={newText => setText(newText)}
+                    //defaultValue={text}
+                />
+                </View>
+                <View style = {{flexDirection: 'column', padding: 10, }}>
+                <Text style ={{fontWeight: 'bold'}}>Note</Text>
+                <TextInput
+                    style={styles.textInput}
+                    placeholder="Description or other infos"
+                    //onChangeText={newText => setText(newText)}
+                    //defaultValue={text}
+                />
+                </View>
+                <View style = {{flexDirection: 'column', padding: 10, }}>
+                    <Text style ={{fontWeight: 'bold'}}>Icon & Color</Text>
+                    <View style = {{flexDirection: 'row', flex: 2}}>
+                        <View style ={{ flexDirection: 'row', justifyContent: 'space-evenly', flex: 0.5 }}>
+                        <Text>Icon</Text>
+                        <TouchableOpacity style = {styles.btnTouch}>
+                        <Ionicons name ='add' size = {20} color ='red' />
+                        </TouchableOpacity>
+                        <Text>|</Text>
+                        <Text>Color</Text>
+                        <TouchableOpacity onPress ={chooseColor} style = {styles.btnTouch}>
+                        <Ionicons name ='add' size = {20} color ='red' />
+                        </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+
+                <View style = {{flexDirection: 'column', padding: 10}}>
+                    <Text style ={{fontWeight: 'bold'}}>Tag</Text>
+                    <TouchableOpacity style = {{borderWidth: 1, borderRadius: 10, width: 40, alignItems: 'center',}}>
+                        <Ionicons name ='add' size = {20} color ='red' />
+                    </TouchableOpacity>
+                </View>
+
+                <View style = {{flexDirection: 'column',padding: 10}}>
+                <Text style ={{fontWeight: 'bold'}}>Goal & Goal Period</Text>
+                    <View style = {{flexDirection: 'row', flex: 1}}>
+                        <View style ={{ flexDirection: 'row', justifyContent: 'flex-start',flex: 0.5 }}>
+                        <TouchableOpacity style = {styles.btnTouch}>
+                        <Text>1</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style = {styles.btnTouch}>
+                        <Text>count</Text>
+                        </TouchableOpacity>
+                        <Text>/</Text>
+                        <TouchableOpacity  style = {styles.btnTouch}>
+                        <Text>Day</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity  style = {styles.btnTouch}>
+                        <Text>Week</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style = {styles.btnTouch}>
+                        <Text>Month</Text>
+                        </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+                <View style = {{flexDirection: 'column', padding: 10}}>
+                <Text style ={{fontWeight: 'bold'}}>Frequency</Text>
+                <TextInput
+                    style={styles.textInput}
+                    placeholder="Type here to translate!"
+                    //onChangeText={newText => setText(newText)}
+                    //defaultValue={text}
+                />
+                </View>
+                <View style = {{flexDirection: 'column', padding: 10}}>
+                <Text style ={{fontWeight: 'bold'}}>Time Range</Text>
+                    <View style = {{flexDirection: 'row', flex: 1}}>
+                        <View style ={{ flexDirection: 'row', justifyContent: 'flex-start',flex: 0.5 }}>
+                        <TouchableOpacity style = {styles.btnTouchTime}>
+                        <Text>Anytime</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style = {styles.btnTouchTime}>
+                        <Text>Morning</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity  style = {styles.btnTouchTime}>
+                        <Text>Afternoon</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity   style = {styles.btnTouchTime}>
+                        <Text>Evening</Text>
+                        </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+                <View style = {{flexDirection: 'column', padding: 10}}>
+                <Text style ={{fontWeight: 'bold'}}>Remainder</Text>
+                <TextInput
+                    style={styles.textInput}
+                    placeholder="Type here to translate!"
+                    //onChangeText={newText => setText(newText)}
+                    //defaultValue={text}
+                />
+                </View>
+                <View style = {{flexDirection: 'column', padding: 10}}>
+                <Text style ={{fontWeight: 'bold'}}>Remainder Messages</Text>
+                <TextInput
+                    style={styles.textInput}
+                    placeholder="Type here to translate!"
+                    //onChangeText={newText => setText(newText)}
+                    //defaultValue={text}
+                />
+                </View>
+                <View style = {{flexDirection: 'column', padding: 10}}>
+                    <View style = {{flexDirection : 'row'}}>
+                        <Text style ={{fontWeight: 'bold'}}>Chart Type</Text>
+                        <Image 
+                            source={require('./Icon/bar-chart.png')}
+                            style={{ width: 48, height: 48,}}
+                        />
+                    </View>
+                </View>
+                <View style = {{flexDirection: 'column', padding: 10}}>
+                <Text style ={{fontWeight: 'bold'}}>Habit Term</Text>
+                    <View style = {{flexDirection: 'row', flex: 1}}>
+                        <View style ={{ flexDirection: 'row', justifyContent: 'flex-start',flex: 0.5 }}>
+                        <TouchableOpacity style = {styles.btnTouchTime}>
+                        <Text>Anytime</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style = {styles.btnTouchTime}>
+                        <Text>Morning</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity  style = {styles.btnTouchTime}>
+                        <Text>Afternoon</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity   style = {styles.btnTouchTime}>
+                        <Text>Evening</Text>
+                        </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </ScrollView>
+
+        </View>
+      <SafeAreaView style = {styles.homeZone}> 
+        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+            <Image
+                source={require('./Icon/done.png')}
+                style={{ width: 45, height: 45,}}
+            />
+        </TouchableOpacity>
+      </SafeAreaView>
+    </View>
+    );
+};
+
+const styles = StyleSheet.create({
+    container:{
+      flex: 1, 
+      backgroundColor: 'white',
+      flexDirection: 'column',
+    },
+    addHabit: { 
+        //flex: 0.5,
+      //flexDirection : 'column',
+        alignItems: 'stretch',
+      //alignSelf: 'center',
+        //backgroundColor: "#fffaf0",
+      //justifyContent: "center",
+      //TextSize: 50,
+        //padding: 0,
+        //height: '88%',
+        //borderWidth: 5,
+        //position: 'absolute',
+        //top: '10%',
+        height: '15%',
+        width: '100%',
+
+    },
+    Habit: {
+        flex: 0.9,
+      //flexDirection : 'column',
+        //alignItems: 'stretch',
+      //alignSelf: 'center',
+        //backgroundColor: "#f0ffff",
+      //justifyContent: "center",
+      //TextSize: 50,
+        //padding: 0,
+        height: '88%',
+        //borderWidth: 5,
+        //position: 'fixed',
+        //top: '5%',
+        //height: '68%',
+        width: '100%',
+        //left: '2%',
+        //right: '10%',
+    },
+    homeZone: {
+      //flex: 0.15,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent : 'space-evenly',
+      backgroundColor: '#BEABAB',
+      position: 'absolute',
+      width: '100%',
+      height: '10%',
+      top: '90%',
+      left: '0%',
+      padding: 0,
+    },
+    textInput: {
+        height: 40, 
+        borderWidth: 1, 
+        with: '20%', 
+        flex: 0.2,
+        borderRadius: 5,
+        backgroundColor: '#dcdcdc'
+    },
+    customHabit: {
+        flex: 0.4,
+        flexDirection: 'row',
+        borderWidth: 1,
+        borderRadius: 10,
+        alignItems: 'center',
+        //justifyContent: 'center',
+        alignSelf: 'flex-start',
+        padding: 2,
+        backgroundColor: '#D9D9D9',
+        left: '20%',
+        right: '20%',
+        width: '60%',
+        top: '5%',
+    },
+    btnTouch: {
+        borderWidth: 1, 
+        borderRadius: 10, 
+        width: 50, 
+        alignItems: 'center',
+    },
+    btnTouchTime: {
+        borderWidth: 1, 
+        borderRadius: 10, 
+        width: 80, 
+        alignItems: 'center',
+        fontSize: 20,
+    },
+    habitZone: {
+        flexDirection: 'column',
+        //backgroundColor: '#fffaf0',
+        //borderWidth: 1,
+        //alignSelf: 'stretch'
+        //alignItems: 'center',
+
+    },
+    zone: {
+        flexDirection :'row',
+        //justifyContent : 'flex-start',
+        //backgroundColor: 'red',
+        //alignContent: 'center',
+        //backgroundColor: 'white',
+        justifyContent : 'space-evenly',
+        //borderWidth: 1,
+        padding: 10,
+        //borderWidth: 2,
+    }
+});
+
+export default CustomHabit;
