@@ -206,17 +206,17 @@ return (
 
         </View>
 
-      <SafeAreaView style = {styles.homeZone}> 
+      {/* <SafeAreaView style = {styles.homeZone}> 
 
         <TouchableOpacity onPress={() => navigation.navigate("Home")}>
             <Ionicons name='home' size={35} color='red' />
             <Text>Home</Text>
         </TouchableOpacity>
 
-        {/* <TouchableOpacity>
+         <TouchableOpacity>
             <Ionicons name='add-circle-outline' size={40} color='red' />
             <Text>Add</Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity> 
 
         <TouchableOpacity>
             <Ionicons name='md-stats-chart-outline' size={35} color='black' />
@@ -228,7 +228,7 @@ return (
             <Text>Setting</Text>
         </TouchableOpacity>
 
-      </SafeAreaView>
+      </SafeAreaView> */}
 
     </View>
     );

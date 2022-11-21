@@ -87,24 +87,16 @@ return (
         </TouchableOpacity>
       </View> */}
       <Data />
-      <View style = {styles.homeZone} > 
-      {/* <TouchableOpacity>
+      {/* <View style = {styles.homeZone} > 
+       <TouchableOpacity>
         <Ionicons name='home' size={32} color='red' />
         <Text>Home</Text>
-      </TouchableOpacity> */}
+      </TouchableOpacity> 
       <TouchableOpacity  onPress={() => navigation.navigate("Habit")}>
         <Ionicons name='add-circle-outline' size={32} color='red' />
         <Text>Add</Text>
       </TouchableOpacity>
-      <TouchableOpacity>
-        <Ionicons name='md-stats-chart-outline' size={32} color='black' />
-        <Text>Statistic</Text>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <Ionicons name='settings-outline' size={32} color='black' />
-        <Text>Setting</Text>
-      </TouchableOpacity>
-      </View>
+      </View> */}
     </View>
   );
 };
