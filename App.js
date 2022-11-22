@@ -5,6 +5,7 @@ const Main = () => {
    return (
    <NavigationContainer>
       <MainTabNavigator/>
+      
    </NavigationContainer>
    ); 
 };
