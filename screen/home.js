@@ -79,19 +79,22 @@ return (
           // Enable the option to swipe between months. Default = false
           enableSwipeMonths={true}
         /> */}
-      {/* <View style = {styles.addHabit}>
+      <View style = {styles.addHabit}>
         <TouchableOpacity style = { styles.addHabit} onPress = {() => navigation.navigate("Habit")}>
-          <MaterialCommunityIcons name ='rocket-launch-outline' size={100} color='black' />
+          <Image
+                source={require('./Icon/rocket.png')}
+                style={{ width: 100, height: 100,}}
+                  />
           <Text>No Habits</Text>
           <Text>Press '+' to add new habit </Text>
         </TouchableOpacity>
-      </View> */}
+      </View>
       <Data />
-      <View style = {styles.homeZone} > 
-      {/* <TouchableOpacity>
+      {/* <View style = {styles.homeZone} > 
+      <TouchableOpacity>
         <Ionicons name='home' size={32} color='red' />
         <Text>Home</Text>
-      </TouchableOpacity> */}
+      </TouchableOpacity> 
       <TouchableOpacity  onPress={() => navigation.navigate("Habit")}>
         <Ionicons name='add-circle-outline' size={32} color='red' />
         <Text>Add</Text>
@@ -104,7 +107,7 @@ return (
         <Ionicons name='settings-outline' size={32} color='black' />
         <Text>Setting</Text>
       </TouchableOpacity>
-      </View>
+      </View> */}
     </View>
   );
 };

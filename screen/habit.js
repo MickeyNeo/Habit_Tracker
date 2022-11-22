@@ -203,33 +203,7 @@ return (
                 </View>
                 </View>
             </ScrollView>
-
         </View>
-
-      <SafeAreaView style = {styles.homeZone}> 
-
-        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-            <Ionicons name='home' size={35} color='red' />
-            <Text>Home</Text>
-        </TouchableOpacity>
-
-        {/* <TouchableOpacity>
-            <Ionicons name='add-circle-outline' size={40} color='red' />
-            <Text>Add</Text>
-        </TouchableOpacity> */}
-
-        <TouchableOpacity>
-            <Ionicons name='md-stats-chart-outline' size={35} color='black' />
-            <Text>Statistic</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity>
-            <Ionicons name='settings-outline' size={35} color='black' />
-            <Text>Setting</Text>
-        </TouchableOpacity>
-
-      </SafeAreaView>
-
     </View>
     );
 };
@@ -260,7 +234,7 @@ const styles = StyleSheet.create({
 
     },
     Habit: {
-        flex: 0.9,
+        flex: 1,
       //flexDirection : 'column',
         alignItems: 'stretch',
       //alignSelf: 'center',
@@ -268,7 +242,7 @@ const styles = StyleSheet.create({
       //justifyContent: "center",
       //TextSize: 50,
         //padding: 0,
-        height: '88%',
+        //height: '90%',
         //borderWidth: 5,
         //position: 'fixed',
         //top: '5%',
@@ -297,27 +271,27 @@ const styles = StyleSheet.create({
     customHabit: {
         flex: 0.4,
         flexDirection: 'row',
-        borderWidth: 1,
+        //borderWidth: 1,
         borderRadius: 10,
         alignItems: 'center',
         //justifyContent: 'center',
         alignSelf: 'flex-start',
         padding: 2,
-        backgroundColor: '#D9D9D9',
+        backgroundColor: '#f5f5f5',
         left: '20%',
         right: '20%',
         width: '60%',
         top: '5%',
     },
     btnHabit : {
-        borderRadius: 10,
+        borderRadius: 100,
         //borderWidth: 2,
         width : 90,
         height: 90,
         alignItems: 'center',
         padding: 10,
         fontSize: 20,
-        backgroundColor: '#c0c0c0',
+        backgroundColor: '#EFF9FD',
     },
     habitZone: {
         flexDirection: 'column',

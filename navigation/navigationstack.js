@@ -1,39 +1,20 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+//Screen
+import Setting from "../screen/setting";
+import Statistic from "../screen/statistic";
 
-import Home from "../screen/home";
-import Habit from "../screen/habit";
-import CustomHabit from "../screen/customhabit";
-import AddHabit from "../screen/addhabit";
+const SettingsStack = createNativeStackNavigator();
 
-const Stack = createStackNavigator();
-
-const MainStackNavigator = () => {
+function SettingsStackScreen() {
   return (
-    <Stack.Navigator /*initialRouteName="Home"*/>
-      <Stack.Screen 
-        name="Home" 
-        component={Home} 
-        options={{ title: 'Welcome' }} />
-      <Stack.Screen name="Habit" component={Habit} />
-      <Stack.Screen name="CustomHabit" component={CustomHabit} 
-         options={{
-          title: 'Custom Habit',
-          headerStyle: {
-            backgroundColor: '#f4511e',
-          },
-        }}
-      />
-      <Stack.Screen name="AddHabit" component={AddHabit} 
-        options={{
-          title: 'Add Habit',
-          headerStyle: {
-            backgroundColor: '#f4511e',
-          },
-        }}
-      />
-    </Stack.Navigator>
+    <SettingsStack.Navigator screenOptions={{ headerShown: false }}>
+      <SettingsStack.Screen name="Settings" component={Setting} />
+      <SettingsStack.Screen name="Statistic" component={Statistic} />
+    </SettingsStack.Navigator>
   );
 }
-
-export { MainStackNavigator };
+export {SettingsStackScreen};

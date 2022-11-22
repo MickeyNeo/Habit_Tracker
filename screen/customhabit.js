@@ -56,12 +56,12 @@ return (
                         <View style ={{ flexDirection: 'row', justifyContent: 'space-evenly', flex: 0.5 }}>
                         <Text>Icon</Text>
                         <TouchableOpacity style = {styles.btnTouch}>
-                        <Ionicons name ='add' size = {20} color ='red' />
+                        <Ionicons name ='add' size = {20} color ='#00FF7F' />
                         </TouchableOpacity>
                         <Text>|</Text>
                         <Text>Color</Text>
                         <TouchableOpacity onPress ={chooseColor} style = {styles.btnTouch}>
-                        <Ionicons name ='add' size = {20} color ='red' />
+                        <Ionicons name ='add' size = {20} color ='#00FF7F' />
                         </TouchableOpacity>
                         </View>
                     </View>
@@ -69,22 +69,21 @@ return (
 
                 <View style = {{flexDirection: 'column', padding: 10}}>
                     <Text style ={{fontWeight: 'bold'}}>Tag</Text>
-                    <TouchableOpacity style = {{borderWidth: 1, borderRadius: 10, width: 40, alignItems: 'center',}}>
-                        <Ionicons name ='add' size = {20} color ='red' />
+                    <TouchableOpacity style = {{borderRadius: 10, width: 40, alignItems: 'center', backgroundColor: '#f5f5f5',}}>
+                        <Ionicons name ='add' size = {20} color ='#00FF7F' />
                     </TouchableOpacity>
                 </View>
 
                 <View style = {{flexDirection: 'column',padding: 10}}>
                 <Text style ={{fontWeight: 'bold'}}>Goal & Goal Period</Text>
                     <View style = {{flexDirection: 'row', flex: 1}}>
-                        <View style ={{ flexDirection: 'row', justifyContent: 'flex-start',flex: 0.5 }}>
+                        <View style ={{ flexDirection: 'row', justifyContent: 'space-evenly',flex: 1, marginTop: 5 }}>
                         <TouchableOpacity style = {styles.btnTouch}>
                         <Text>1</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style = {styles.btnTouch}>
                         <Text>count</Text>
                         </TouchableOpacity>
-                        <Text>/</Text>
                         <TouchableOpacity  style = {styles.btnTouch}>
                         <Text>Day</Text>
                         </TouchableOpacity>
@@ -109,7 +108,7 @@ return (
                 <View style = {{flexDirection: 'column', padding: 10}}>
                 <Text style ={{fontWeight: 'bold'}}>Time Range</Text>
                     <View style = {{flexDirection: 'row', flex: 1}}>
-                        <View style ={{ flexDirection: 'row', justifyContent: 'flex-start',flex: 0.5 }}>
+                        <View style ={{ flexDirection: 'row', justifyContent: 'flex-start',flex: 0.5, marginTop: 5 }}>
                         <TouchableOpacity style = {styles.btnTouchTime}>
                         <Text>Anytime</Text>
                         </TouchableOpacity>
@@ -232,21 +231,25 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent : 'space-evenly',
-      backgroundColor: '#BEABAB',
+      //backgroundColor: '#BEABAB',
       position: 'absolute',
-      width: '100%',
-      height: '10%',
+      width: 59,
+      height: 59,
       top: '90%',
-      left: '0%',
+      left: '40%',
       padding: 0,
+      borderRadius: 150,
+      borderWidth: 1,
     },
     textInput: {
         height: 40, 
-        borderWidth: 1, 
+        //borderWidth: 1, 
         with: '20%', 
         flex: 0.2,
         borderRadius: 5,
-        backgroundColor: '#dcdcdc'
+        padding: 10,
+        backgroundColor: '#f5f5f5', 
+        color: '#a9a9a9',
     },
     customHabit: {
         flex: 0.4,
@@ -264,17 +267,21 @@ const styles = StyleSheet.create({
         top: '5%',
     },
     btnTouch: {
-        borderWidth: 1, 
+        //borderWidth: 1, 
         borderRadius: 10, 
         width: 50, 
         alignItems: 'center',
+        backgroundColor: '#f5f5f5',
+        
     },
     btnTouchTime: {
-        borderWidth: 1, 
+        //borderWidth: 1, 
         borderRadius: 10, 
         width: 80, 
         alignItems: 'center',
         fontSize: 20,
+        backgroundColor: '#f5f5f5',
+        color: '#a9a9a9',
     },
     habitZone: {
         flexDirection: 'column',
@@ -296,5 +303,4 @@ const styles = StyleSheet.create({
         //borderWidth: 2,
     }
 });
-
 export default CustomHabit;
