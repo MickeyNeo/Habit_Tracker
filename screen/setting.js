@@ -1,11 +1,21 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useRef, useState } from 'react';
-import { Animated, Image, SafeAreaView, StyleSheet, ScrollView,Text, TouchableOpacity, View, TextInput, Switch } from 'react-native';
+import { Button, Image, SafeAreaView, StyleSheet, ScrollView,Text, TouchableOpacity, View, TextInput, Switch } from 'react-native';
+import Modal from "react-native-modal";
 import Dog from '../assets/dog.png';
 import { FontAwesome5 } from '@expo/vector-icons';
 
+//Popup
+import language from './settingsScreen/language';
+
+
 export default function Settings(){
     const [currentTab, setCurrentTab] = useState();
+    
+    const [isModalVisible, setModalVisible] = useState(false);
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible);
+    };
     return(
         <SafeAreaView style={style.container}> 
             <ScrollView>
@@ -26,22 +36,39 @@ export default function Settings(){
                     <FontAwesome5 name="pen" size={10} color="black" style={{marginTop: 32, marginLeft: 5}} />
                 </View>
 
-                {tabButton(currentTab, setCurrentTab,"Language")}
-                {tabButton(currentTab, setCurrentTab,"Theme")}
-                {tabButton(currentTab, setCurrentTab,"Widget Theme,")}
-                {tabButton(currentTab, setCurrentTab,"Tab Bar")}
+                {tabButton("Language")}
+                {tabButton("Theme")}
+                {tabButton("Widget Theme,")}
+                {tabButton("Tab Bar")}
                 {line()}
-                {tabButton(currentTab, setCurrentTab,"Habbit Manager")}
-                {tabButton(currentTab, setCurrentTab,"Icon Sync",1)}
-                {tabButton(currentTab, setCurrentTab,"Daily Notification",1)}
-                {tabButton(currentTab, setCurrentTab,"Safety Lock",1)}
-                {tabButton(currentTab, setCurrentTab,"Sound",1)}
-                {tabButton(currentTab, setCurrentTab,"Export")}
-                {tabButton(currentTab, setCurrentTab,"More Settings")}
+                {tabButton("Habbit Manager")}
+                {tabButton("Icon Sync",1)}
+                {tabButton("Daily Notification",1)}
+                {tabButton("Safety Lock",1)}
+                {tabButton("Sound",1)}
+                {tabButton("Export")}
+                {tabButton("More Settings")}
                 {line()}
-                {tabButton(currentTab, setCurrentTab,"Usage Tips")}
-                {tabButton(currentTab, setCurrentTab,"Feedback")}
-                {tabButton(currentTab, setCurrentTab,"Share")}
+                {tabButton("Usage Tips")}
+                {tabButton("Feedback")}
+                {tabButton("Share")}
+                
+                <View>
+                    <Button title="Show modal" onPress={toggleModal} />
+
+                    <Modal isVisible={isModalVisible} 
+                        useNativeDriver={true}
+                        onBackdropPress={() => setModalVisible(false)}
+                        animationIn = 'bounceIn'
+                        animationInTiming = {500}
+                        animationOut ="bounceOut"
+                        animationOutTiming = {500}
+                    >
+                        <View style={style.model}>
+                            <Text>Hello!</Text>
+                        </View>
+                    </Modal>
+                </View>
             
             
             
@@ -51,12 +78,17 @@ export default function Settings(){
 }
 
 //Multi Buttons..
-const tabButton = (currentTab, setCurrentTab, name, nb=0)=>{
+const tabButton = (name, nb=0)=>{
     const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+    // const toggleModal = () => {
+    //     setModalVisible(!isModalVisible);
+    // };
     if (nb==0)
         return(
-            <TouchableOpacity style={{flexDirection: "row" }}>
+            <TouchableOpacity style={{flexDirection: "row" }}
+                //onPress={()=>lg(f)}
+            >
                     <Text style={{
                         flex: 1,
                         marginTop: 20,
@@ -97,6 +129,27 @@ const line = () =>{
         </View>
     )
 }
+const lg =() =>{
+    const [isModalVisible, setModalVisible] = useState(false);
+    
+    return(         
+                <View>
+                    <Modal isVisible={isModalVisible} 
+                        useNativeDriver={true}
+                        onBackdropPress={() => setModalVisible(false)}
+                        animationIn = 'bounceIn'
+                        animationInTiming = {500}
+                        animationOut ="bounceOut"
+                        animationOutTiming = {500}
+                    >
+                        <View style={{height: '38%', backgroundColor: 'white', borderRadius: 30, borderWidth: 1,justifyContent: 'center'}}>
+                            <Text>Hello!</Text>
+                        </View>
+                    </Modal>
+                </View>
+    );
+}
+
 const style = StyleSheet.create({
     container:{
         flex: 1,
@@ -110,5 +163,12 @@ const style = StyleSheet.create({
         fontWeight: 'bold',
         color: 'black',
         marginTop: 20
+    },
+    model:{
+        height: '38%',
+        backgroundColor: 'white',
+        borderRadius: 30,
+        borderWidth: 1,
+        justifyContent: 'center'
     }
 })
