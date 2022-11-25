@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from 'react';
 import {Text,  View } from 'react-native';
 
-export default function Language (params){
+export default function MoreSettings (params){
     return(         
                 <View>
                     <Modal isVisible={params.myIsmodalVisible} 
