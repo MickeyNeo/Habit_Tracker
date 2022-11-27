@@ -1,9 +1,9 @@
 import React from "react";
 import { useState } from 'react';
-import {Text,  View ,StyleSheet} from 'react-native';
+import {Text,  View } from 'react-native';
 import Modal from "react-native-modal";
 
-export default function Language (params){
+export default function WidgetTheme (params){
     return(         
         <View >
             <Modal isVisible={params.myIsmodalVisible} 
@@ -15,11 +15,11 @@ export default function Language (params){
                 animationOutTiming = {500}
                 >
                     <View style={{height: '38%', backgroundColor: 'white', borderRadius: 30, borderWidth: 1,justifyContent: 'center'}}>
-                        <Text>Language</Text>
+                        <Text>WidgetTheme</Text>
                     </View>
                 </Modal>       
             
         </View>
-    )
+    );
 
 }
