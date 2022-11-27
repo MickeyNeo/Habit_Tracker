@@ -4,15 +4,19 @@ import { Button, Image, SafeAreaView, StyleSheet, ScrollView,Text, TouchableOpac
 import Modal from "react-native-modal";
 import Dog from '../assets/dog.png';
 import { FontAwesome5 } from '@expo/vector-icons';
-
+import Language from './settingsScreen/Language';
+import Theme from './settingsScreen/Theme'
+import WidgetTheme from './settingsScreen/WidgetTheme';
+import HabitManager from './settingsScreen/HabitManager';
+import Export from './settingsScreen/Export';
+import MoreSettings from './settingsScreen/MoreSettings'
+import UsageTips from './settingsScreen/UsageTips';
 
 export default function Settings(){
     const [currentTab, setCurrentTab] = useState('');
     // const [isEnabled, setIsEnabled] = useState(false);
     const [isModalVisible, setModalVisible] = useState(false);
-    const toggleModal = () => {
-        setModalVisible(!isModalVisible);
-    };
+    
     return(
         <SafeAreaView style={style.container}> 
             <ScrollView>
@@ -126,9 +130,9 @@ export default function Settings(){
                  */}
 
                 <View>
-                    <Button title="Show modal" onPress={toggleModal} />
-
-                    <Modal isVisible={isModalVisible} 
+                    <Button title="Show modal" onPress={() => setModalVisible(!isModalVisible)} />
+                    
+                    {/* <Modal isVisible={isModalVisible} 
                         useNativeDriver={true}
                         onBackdropPress={() => setModalVisible(false)}
                         animationIn = 'bounceIn'
@@ -139,7 +143,8 @@ export default function Settings(){
                         <View style={style.model}>
                             <Text style={style.nameText}>Select Language</Text>
                         </View>
-                    </Modal>
+                    </Modal> */}
+                    
                 </View>
             
             
@@ -155,20 +160,58 @@ const tabButton = (currentTab, setCurrentTab ,name, nb=0)=>{
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
     if (nb==0)
         return(
-                
-                <TouchableOpacity style={{flexDirection: "row" }}
-                    
-                >   
-                    
-                        <Text style={{
-                            flex: 1,
-                            marginTop: 20,
-                            marginLeft: 10,
-                            fontSize: 20,
-                            color: 'black'
-                        }}>{name}</Text>
-                            {tail()}
-                </TouchableOpacity>
+                <View>
+                    <TouchableOpacity style={{flexDirection: "row" }}
+                    onPress ={() => {
+                        setIsEnabled(!isEnabled)
+                    }}
+                    >   
+                            <Text style={{
+                                flex: 1,
+                                marginTop: 20,
+                                marginLeft: 10,
+                                fontSize: 20,
+                                color: 'black'
+                            }}>{name}</Text>
+                                {tail()}
+                    </TouchableOpacity>
+                    {isEnabled && name == 'Language' && <Language 
+                        myIsmodalVisible = {isEnabled}
+                        setModalVisible = {setIsEnabled}
+                    ></Language> }
+                    {isEnabled && name == 'Theme' && <Theme 
+                        myIsmodalVisible = {isEnabled}
+                        setModalVisible = {setIsEnabled}
+                    ></Theme> }
+                    {isEnabled && name == 'Widget Theme' && <WidgetTheme 
+                        myIsmodalVisible = {isEnabled}
+                        setModalVisible = {setIsEnabled}
+                    ></WidgetTheme> }
+                    {/* {isEnabled && name == 'Tab Bar' && <Language 
+                        myIsmodalVisible = {isEnabled}
+                        setModalVisible = {setIsEnabled}
+                    ></Language> } */}
+                    {isEnabled && name == 'Habbit Manager' && <HabitManager 
+                        myIsmodalVisible = {isEnabled}
+                        setModalVisible = {setIsEnabled}
+                    ></HabitManager> }
+                    {isEnabled && name == 'Export' && <Export 
+                        myIsmodalVisible = {isEnabled}
+                        setModalVisible = {setIsEnabled}
+                    ></Export> }
+                    {isEnabled && name == 'More Settings' && <MoreSettings 
+                        myIsmodalVisible = {isEnabled}
+                        setModalVisible = {setIsEnabled}
+                    ></MoreSettings> }
+                    {isEnabled && name == 'Usage Tips' && <UsageTips 
+                        myIsmodalVisible = {isEnabled}
+                        setModalVisible = {setIsEnabled}
+                    ></UsageTips> }
+                    {/* {isEnabled && name == 'Share' && <Language 
+                        myIsmodalVisible = {isEnabled}
+                        setModalVisible = {setIsEnabled}
+                    ></Language> } */}
+                </View>
             
         );
     else{
