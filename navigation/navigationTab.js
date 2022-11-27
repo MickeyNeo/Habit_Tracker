@@ -1,8 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { SettingsStackScreen } from "./navigationstack";
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DarkTheme } from '@react-navigation/native';
 import Habit from "../screen/habit";
 import CustomHabit from "../screen/customhabit";
 import AddHabit from "../screen/addhabit";
@@ -10,10 +9,21 @@ import Home from "../screen/home";
 import { Ionicons } from '@expo/vector-icons';
 import Setting from "../screen/setting";
 import Statistic from "../screen/statistic";
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
-
+function getHeaderTitle(route) {
+  const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
+  switch (routeName) {
+    case 'Home':
+      return 'Home';
+    case 'Statistic':
+      return 'Statistic';
+    case 'Settings':
+      return 'Settings';
+  }
+}
 function HomeTabs() {
   return (
     <Tab.Navigator
@@ -21,7 +31,6 @@ function HomeTabs() {
             headerShown: false,
             tabBarIcon: ({ focused, color, size }) => {
             let iconName;
-
             if (route.name === 'Home') {
               iconName = focused
                 ? 'ios-home-outline'
@@ -37,21 +46,24 @@ function HomeTabs() {
           tabBarActiveTintColor: 'tomato',
           tabBarInactiveTintColor: 'gray',
         })}>
-      <Tab.Screen  options={{ title: 'My home' }} name="Home" component={Home} />
-      <Tab.Screen  options={{ title: 'Statistic' }} name="Statistic" component={Statistic} />
-      <Tab.Screen options={{ title: 'Setting' }} name="Settings" component={Setting} />
+      <Tab.Screen  option = {{headerShown: false}} name="Home" component={Home} />
+      <Tab.Screen  option = {{headerShown: false}}  name="Statistic" component={Statistic} />
+      <Tab.Screen  option = {{headerShown: false}}  name="Settings" component={Setting} />
     </Tab.Navigator>
   );
 }
 
 function MainTabNavigator () {
   return (
-    <Stack.Navigator >
-      <Stack.Screen option = {{headerShown: false}} name="Home" component={HomeTabs} />
-      <Stack.Screen name="Habit" component={Habit} />
-      <Stack.Screen name="AddHabit" component={AddHabit} />
-      <Stack.Screen name="CustomHabit" component={CustomHabit} />
-    </Stack.Navigator>
+      <Stack.Navigator >
+        <Stack.Screen   
+          options={({ route }) => ({
+          headerTitle: getHeaderTitle(route), })} 
+          name="Home" component={HomeTabs} />
+        <Stack.Screen name="Habit" component={Habit} />
+        <Stack.Screen name="AddHabit" component={AddHabit} />
+        <Stack.Screen name="CustomHabit" component={CustomHabit} />
+      </Stack.Navigator>
   );
 }
 export {MainTabNavigator};

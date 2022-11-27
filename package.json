@@ -28,6 +28,7 @@
     "react-native": "0.70.5",
     "react-native-add-calendar-event": "^4.0.0",
     "react-native-calendars": "^1.1291.1",
+    "react-native-event-listeners": "^1.0.7",
     "react-native-gesture-handler": "^2.8.0",
     "react-native-modal": "^13.0.1",
     "react-native-reanimated": "~2.12.0",

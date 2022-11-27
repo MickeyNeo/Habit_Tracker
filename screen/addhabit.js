@@ -1,185 +1,111 @@
-import React, { useState, Component }from "react";
+import React, { useState, Component, useContext }from "react";
 import { View, Button, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Image, TextInput, Alert, TouchableHighlight } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { NavigationContainer } from "@react-navigation/native";
-import { MainStackNavigator } from "../navigation/navigationstack";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Fontisto from '@expo/vector-icons/Fontisto';
-//import { createDrawerNavigator } from "@react-navigation/drawer";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import Data from "../data/data";
 import ColorPicker from 'react-native-wheel-color-picker';
 import { ChromePicker } from 'react-color';
-
-
-const chooseColor = () =>
-{
-    return (
-        <ChromePicker />
-    )
-}
-// const backgroundColor1 =() => 
-// {
-//     const [backgroundColor1,setbackgroundColor1] = useState('black');
-//     setbackgroundColor1({
-//     backgroundColor1: 'red'});
-// }
-// const backgroundColor2 =() => 
-// {
-//     const [backgroundColor2,setbackgroundColor2] = useState('black');
-//     setbackgroundColor2({
-//     backgroundColor2: 'green'})
-// }
-function ChangeColor()
-{
-   
-    
-}
+import themeContext from "./styles/themeContext";
 
 
 const AddHabit = ({navigation, route}) => {
-
-const [updateColor,setbackgroundColor] = useState({
-        backgroundColor: 'black', 
-        backgroundColor2: 'black',
-        pressed: false,
-    });
-// const chooseColor = () => 
-// {
-//     if (!(updateColor(pressed)))
-//         {
-//     setbackgroundColor({
-//         backgroundColor: 'red', 
-//         backgroundColor2: 'black',
-//         pressed: true,
-//     })
-//     }
-//     else {
-//          setbackgroundColor({
-//         backgroundColor: 'black', 
-//         backgroundColor2: 'red',
-//         pressed: false,
-//     })
-//     }
-// }
+console.log(route.params);
+const { name, colors, image } = route.params;
+const theme = useContext(themeContext);
+const [currentTab, setCurrentTab] = useState("Day");
+const [currentTabTime, setCurrentTabTime] = useState("Anytime");
 return (
-    <View style={styles.container}>
-
-        {/* <View style = {styles.addHabit}>
-            <TouchableOpacity style ={styles.customHabit}> 
-                <Ionicons name='add-circle'  size ={30} color = 'green' />
-                <Text> Create Your Custom Habit </Text>
-            </TouchableOpacity>
-        </View> */}
-
+    <View style={{backgroundColor: theme.backgroundColor, flex: 1, flexDirection : 'column'}}>
         <View style ={styles.Habit}>
             <ScrollView >
                 <View style = {{flexDirection: 'column', padding: 10, }}>
-                <Text style ={{fontWeight: 'bold'}}>Name</Text>
+                <Text style ={{fontWeight: 'bold', color: theme.color }}>Name</Text>
                 <TextInput
-                    style={styles.textInput}
-                    placeholder={route.params.name}
+                    style={[styles.textInput,{backgroundColor: theme.backgroundColor1}]}
+                    placeholder={(name)}
                     //data.push(route.params.name)
                     //onChangeText={newText => setText(newText)}
                     //defaultValue={text}
                 />
                 </View>
                 <View style = {{flexDirection: 'column', padding: 10, }}>
-                <Text style ={{fontWeight: 'bold'}}>Note</Text>
+                <Text style ={{fontWeight: 'bold', color: theme.color }}>Note</Text>
                 <TextInput
-                    style={styles.textInput}
+                    style={[styles.textInput,{backgroundColor: theme.backgroundColor1}]}
                     placeholder="Description or other infos"
                     //onChangeText={newText => setText(newText)}
                     //defaultValue={text}
                 />
                 </View>
                 <View style = {{flexDirection: 'column', padding: 10, }}>
-                    <Text style ={{fontWeight: 'bold'}}>Icon & Color</Text>
+                    <Text style ={{fontWeight: 'bold', color: theme.color }}>Icon & Color</Text>
                     <View style = {{flexDirection: 'row', flex: 2}}>
                         <View style ={{ flexDirection: 'row', justifyContent: 'space-evenly', flex: 0.5 }}>
                         <Text>Icon</Text>
                         <TouchableOpacity style = {styles.btnTouch}>
-                        <Ionicons name ='add' size = {20} color ='#00FF7F' />
+                        <Ionicons name ='add' size = {20} color = {colors} />
                         </TouchableOpacity>
                         <Text>|</Text>
                         <Text>Color</Text>
-                        <TouchableOpacity onPress ={chooseColor} style = {styles.btnTouch}>
-                        <Ionicons name ='add' size = {20} color ='#00FF7F' />
+                        <TouchableOpacity  style = {[styles.btnTouch, {backgroundColor: colors}]}>
                         </TouchableOpacity>
                         </View>
                     </View>
                 </View>
 
                 <View style = {{flexDirection: 'column', padding: 10}}>
-                    <Text style ={{fontWeight: 'bold'}}>Tag</Text>
+                    <Text style ={{fontWeight: 'bold', color: theme.color }}>Tag</Text>
                     <TouchableOpacity style = {{borderRadius: 10, width: 40, alignItems: 'center', backgroundColor: '#f5f5f5',}}>
-                        <Ionicons name ='add' size = {20} color ='#00FF7F' />
+                        <Ionicons name ='add' size = {20} color = {colors} />
                     </TouchableOpacity>
                 </View>
 
                 <View style = {{flexDirection: 'column',padding: 10}}>
-                <Text style ={{fontWeight: 'bold'}}>Goal & Goal Period</Text>
+                <Text style ={{fontWeight: 'bold', color: theme.color }}>Goal & Goal Period</Text>
                     <View style = {{flexDirection: 'row', flex: 1}}>
                         <View style ={{ flexDirection: 'row', justifyContent: 'space-evenly',flex: 1, marginTop: 5 }}>
-                        <TouchableOpacity style = {styles.btnTouch}>
-                        <Text>1</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style = {styles.btnTouch}>
-                        <Text>count</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity  style = {styles.btnTouch}>
-                        <Text>Day</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity  style = {styles.btnTouch}>
-                        <Text>Week</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style = {styles.btnTouch}>
-                        <Text>Month</Text>
-                        </TouchableOpacity>
+                        {TabButton(currentTab, setCurrentTab, "1", colors)}
+                        {TabButton(currentTab, setCurrentTab, "count",colors)}
+                        {TabButton(currentTab, setCurrentTab, "Day", colors)}
+                        {TabButton(currentTab, setCurrentTab, "Week", colors)}
+                        {TabButton(currentTab, setCurrentTab, "Month", colors)}
                         </View>
                     </View>
                 </View>
                 <View style = {{flexDirection: 'column', padding: 10}}>
-                <Text style ={{fontWeight: 'bold'}}>Frequency</Text>
+                <Text style ={{fontWeight: 'bold', color: theme.color }}>Frequency</Text>
                 <TextInput
-                    style={styles.textInput}
+                    style={[styles.textInput,{backgroundColor: theme.backgroundColor1}]}
                     placeholder="Type here to translate!"
                     //onChangeText={newText => setText(newText)}
                     //defaultValue={text}
                 />
                 </View>
                 <View style = {{flexDirection: 'column', padding: 10}}>
-                <Text style ={{fontWeight: 'bold'}}>Time Range</Text>
+                <Text style ={{fontWeight: 'bold', color: theme.color }}>Time Range</Text>
                     <View style = {{flexDirection: 'row', flex: 1}}>
                         <View style ={{ flexDirection: 'row', justifyContent: 'flex-start',flex: 0.5, marginTop: 5 }}>
-                        <TouchableOpacity style = {styles.btnTouchTime}>
-                        <Text>Anytime</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style = {styles.btnTouchTime}>
-                        <Text>Morning</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity  style = {styles.btnTouchTime}>
-                        <Text>Afternoon</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity   style = {styles.btnTouchTime}>
-                        <Text>Evening</Text>
-                        </TouchableOpacity>
+                        {TabButtontime(currentTabTime, setCurrentTabTime, "Anytime",colors)}
+                        {TabButtontime(currentTabTime, setCurrentTabTime, "Morning", colors)}
+                        {TabButtontime(currentTabTime, setCurrentTabTime, "Afternoon", colors)}
+                        {TabButtontime(currentTabTime, setCurrentTabTime, "Evening", colors)}
                         </View>
-                    </View>
+                    </View> 
                 </View>
                 <View style = {{flexDirection: 'column', padding: 10}}>
-                <Text style ={{fontWeight: 'bold'}}>Remainder</Text>
+                <Text style ={{fontWeight: 'bold', color: theme.color }}>Remainder</Text>
                 <TextInput
-                    style={styles.textInput}
+                    style={[styles.textInput,{backgroundColor: theme.backgroundColor1}]}
                     placeholder="Type here to translate!"
                     //onChangeText={newText => setText(newText)}
                     //defaultValue={text}
                 />
                 </View>
                 <View style = {{flexDirection: 'column', padding: 10}}>
-                <Text style ={{fontWeight: 'bold'}}>Remainder Messages</Text>
+                <Text style ={{fontWeight: 'bold', color: theme.color }}>Remainder Messages</Text>
                 <TextInput
-                    style={styles.textInput}
+                    style={[styles.textInput,{backgroundColor: theme.backgroundColor1}]}
                     placeholder="Type here to translate!"
                     //onChangeText={newText => setText(newText)}
                     //defaultValue={text}
@@ -187,7 +113,7 @@ return (
                 </View>
                 <View style = {{flexDirection: 'column', padding: 10}}>
                     <View style = {{flexDirection : 'row'}}>
-                        <Text style ={{fontWeight: 'bold'}}>Chart Type</Text>
+                        <Text style ={{fontWeight: 'bold', color: theme.color }}>Chart Type</Text>
                         <Image 
                             source={require('./Icon/bar-chart.png')}
                             style={{ width: 48, height: 48,}}
@@ -195,21 +121,9 @@ return (
                     </View>
                 </View>
                 <View style = {{flexDirection: 'column', padding: 10}}>
-                <Text style ={{fontWeight: 'bold'}}>Habit Term</Text>
+                <Text style ={{fontWeight: 'bold', color: theme.color }}>Habit Term</Text>
                     <View style = {{flexDirection: 'row', flex: 1}}>
                         <View style ={{ flexDirection: 'row', justifyContent: 'flex-start',flex: 0.5 }}>
-                        <TouchableOpacity style = {styles.btnTouchTime}>
-                        <Text>Anytime</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style = {styles.btnTouchTime}>
-                        <Text>Morning</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity  style = {styles.btnTouchTime}>
-                        <Text>Afternoon</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity   style = {styles.btnTouchTime}>
-                        <Text>Evening</Text>
-                        </TouchableOpacity>
                         </View>
                     </View>
                 </View>
@@ -217,7 +131,13 @@ return (
 
         </View>
       <SafeAreaView style = {styles.homeZone}> 
-        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+        <TouchableOpacity 
+            onPress={() => {
+           navigation.navigate('Home', {
+            screen: 'AddHabit',
+            params: { user: 'jane' },
+            });
+    }}>
             <Image
                 source={require('./Icon/done.png')}
                 style={{ width: 45, height: 45,}}
@@ -228,53 +148,64 @@ return (
     );
 };
 
+const TabButton = (currentTab, setCurrentTab, title, colors) => {
+  return (
+    <TouchableOpacity onPress={() => {
+    //   if (title == "Day") {
+    //     // Do your Stuff...
+    //   } else {
+        setCurrentTab(title)
+    //   }
+    }}>
+      <View style={[styles.btnTouch, 
+        { backgroundColor: currentTab == title ? colors : 'transparent'}
+      ]}>
+        <Text style={{
+          fontSize: 15,
+          color: currentTab == title ? "#a9a9a9" : "grey"
+        }}>{title}</Text>
+
+      </View>
+    </TouchableOpacity>
+  );
+}
+const TabButtontime = (currentTabTime, setCurrentTabTime, title, colors) => {
+  return (
+    <TouchableOpacity onPress={() => {
+    //   if (title == "Day") {
+    //     // Do your Stuff...
+    //   } else {
+        setCurrentTabTime(title)
+    //   }
+    }}>
+      <View style={[styles.btnTouchTime, 
+        { backgroundColor: currentTabTime == title ? colors : 'transparent'}
+      ]}>
+        <Text style={{
+          fontSize: 15,
+          color: currentTabTime == title ? "#a9a9a9" : "grey"
+        }}>{title}</Text>
+
+      </View>
+    </TouchableOpacity>
+  )
+}
 const styles = StyleSheet.create({
-    container:{
-      flex: 1, 
-      backgroundColor: 'white',
-      flexDirection: 'column',
-    },
     addHabit: { 
-        //flex: 0.5,
-      //flexDirection : 'column',
         alignItems: 'stretch',
-      //alignSelf: 'center',
-        //backgroundColor: "#fffaf0",
-      //justifyContent: "center",
-      //TextSize: 50,
-        //padding: 0,
-        //height: '88%',
-        //borderWidth: 5,
-        //position: 'absolute',
-        //top: '10%',
         height: '15%',
         width: '100%',
 
     },
     Habit: {
         flex: 0.9,
-      //flexDirection : 'column',
-        //alignItems: 'stretch',
-      //alignSelf: 'center',
-        //backgroundColor: "#f0ffff",
-      //justifyContent: "center",
-      //TextSize: 50,
-        //padding: 0,
         height: '88%',
-        //borderWidth: 5,
-        //position: 'fixed',
-        //top: '5%',
-        //height: '68%',
         width: '100%',
-        //left: '2%',
-        //right: '10%',
     },
     homeZone: {
-      //flex: 0.15,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent : 'space-evenly',
-      //backgroundColor: '#BEABAB',
       position: 'absolute',
       width: 59,
       height: 59,
@@ -286,12 +217,11 @@ const styles = StyleSheet.create({
     },
     textInput: {
         height: 40, 
-        //borderWidth: 1, 
         with: '20%', 
         flex: 0.2,
         borderRadius: 5,
         padding: 10,
-        backgroundColor: '#f5f5f5', 
+        //backgroundColor: '#f5f5f5', 
         color: '#a9a9a9',
     },
     customHabit: {
@@ -300,7 +230,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 10,
         alignItems: 'center',
-        //justifyContent: 'center',
         alignSelf: 'flex-start',
         padding: 2,
         backgroundColor: '#D9D9D9',
@@ -310,7 +239,6 @@ const styles = StyleSheet.create({
         top: '5%',
     },
     btnTouch: {
-        //borderWidth: 1, 
         borderRadius: 10, 
         width: 50, 
         alignItems: 'center',
@@ -318,7 +246,6 @@ const styles = StyleSheet.create({
         
     },
     btnTouchTime: {
-        //borderWidth: 1, 
         borderRadius: 10, 
         width: 80, 
         alignItems: 'center',
@@ -328,22 +255,11 @@ const styles = StyleSheet.create({
     },
     habitZone: {
         flexDirection: 'column',
-        //backgroundColor: '#fffaf0',
-        //borderWidth: 1,
-        //alignSelf: 'stretch'
-        //alignItems: 'center',
-
     },
     zone: {
         flexDirection :'row',
-        //justifyContent : 'flex-start',
-        //backgroundColor: 'red',
-        //alignContent: 'center',
-        //backgroundColor: 'white',
         justifyContent : 'space-evenly',
-        //borderWidth: 1,
         padding: 10,
-        //borderWidth: 2,
     }
 });
 export default AddHabit;

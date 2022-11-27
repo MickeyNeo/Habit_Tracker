@@ -1,17 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useRef, useState } from 'react';
-import { Button, Image, SafeAreaView, StyleSheet, ScrollView,Text, TouchableOpacity, View, TextInput, Switch } from 'react-native';
+import React, { useRef, useState, createContext, useContext } from 'react';
+import { Button, Image, SafeAreaView, StyleSheet, ScrollView,Text, TouchableOpacity, View, TextInput, Switch, Appearance } from 'react-native';
 import Modal from "react-native-modal";
 import Dog from '../assets/dog.png';
 import { FontAwesome5 } from '@expo/vector-icons';
-
 //Popup
 import language from './settingsScreen/language';
 
 
 export default function Settings(){
     const [currentTab, setCurrentTab] = useState();
-    
     const [isModalVisible, setModalVisible] = useState(false);
     const toggleModal = () => {
         setModalVisible(!isModalVisible);
@@ -99,7 +97,7 @@ const tabButton = (name, nb=0)=>{
                     <Text style={{marginTop: 20,AlignItems: 'flex-end', marginRight:5}}>{'>'}</Text>
             </TouchableOpacity>
         );
-    else{
+    else if ( nb === 1)
         return(
             <View style={{flexDirection: "row" }}>
                 <Text style={{
@@ -110,7 +108,7 @@ const tabButton = (name, nb=0)=>{
                         color: 'black'
                     }}>{name}</Text>
                 <Switch 
-                    style={{marginTop: 20,AlignItems: 'flex-end', marginRight:5}}
+                    style={{marginTop: 20, AlignItems: 'flex-end', marginRight:5}}
                     trackColor={{ false: "#d9d6c6", true: "orange" }}
                     thumbColor={isEnabled ? "white" : "#76756d"}
                     ios_backgroundColor="#3e3e3e"
@@ -118,9 +116,8 @@ const tabButton = (name, nb=0)=>{
                     value={isEnabled}
                 />
             </View>
-            
         );
-    }
+       
 }
 const line = () =>{
     return(
@@ -153,7 +150,7 @@ const lg =() =>{
 const style = StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: 'white',
+        //backgroundColor: 'white',
         alignItems: 'stretch',
         justifyContent: 'flex-start',
     },
