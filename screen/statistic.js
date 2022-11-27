@@ -41,7 +41,7 @@ export default function Statistic(){
                     <Calendar style={style.calendar} firstDay={1}/>
                     <View style={style.static}>
                         <View>
-                            
+                            <Text></Text>
                         </View>
                         <View style={{flex:1, justifyContent:'flex-end'}}>
                             <View style={{flexDirection:'row',justifyContent:'center'}}>

@@ -12,6 +12,7 @@ import Export from './settingsScreen/Export';
 import MoreSettings from './settingsScreen/MoreSettings'
 import UsageTips from './settingsScreen/UsageTips';
 
+
 export default function Settings(){
     const [currentTab, setCurrentTab] = useState('');
     // const [isEnabled, setIsEnabled] = useState(false);
@@ -36,7 +37,7 @@ export default function Settings(){
                     ></TextInput>
                     <FontAwesome5 name="pen" size={10} color="black" style={{marginTop: 32, marginLeft: 5}} />
                 </View>
-
+                
                 {tabButton(currentTab, setCurrentTab ,"Language")}
                 {tabButton(currentTab, setCurrentTab ,"Theme")}
                 {tabButton(currentTab, setCurrentTab ,"Widget Theme")}
@@ -146,7 +147,7 @@ export default function Settings(){
                     </Modal> */}
                     
                 </View>
-            
+                
             
             
             </ScrollView>
@@ -260,7 +261,7 @@ const tail =()=>{
 const style = StyleSheet.create({
     container:{
         flex: 1,
-        //backgroundColor: 'white',
+        backgroundColor: 'white',
         alignItems: 'stretch',
         justifyContent: 'flex-start',
     },
