@@ -1,24 +1,18 @@
-import React from "react";
+import React, { useState, Component, useContext }from "react";
 import { View, Button, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Image, TextInput, Alert } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { NavigationContainer } from "@react-navigation/native";
-import { MainStackNavigator } from "../navigation/navigationstack";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Fontisto from '@expo/vector-icons/Fontisto';
-//import { createDrawerNavigator } from "@react-navigation/drawer";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Data from "../data/data";
 import ColorPicker from 'react-native-wheel-color-picker';
 import { ChromePicker } from 'react-color';
-const chooseColor = () =>
-{
-    return (
-        <ChromePicker 
-        />
-    )
-}
+
 
 const CustomHabit= ({navigation}) => {
+const colors = 'green';
+const [currentTab, setCurrentTab] = useState("Day");
+const [currentTabTime, setCurrentTabTime] = useState("Anytime");
 return (
     <View style={styles.container}>
 
@@ -60,7 +54,7 @@ return (
                         </TouchableOpacity>
                         <Text>|</Text>
                         <Text>Color</Text>
-                        <TouchableOpacity onPress ={chooseColor} style = {styles.btnTouch}>
+                        <TouchableOpacity  style = {styles.btnTouch}>
                         <Ionicons name ='add' size = {20} color ='#00FF7F' />
                         </TouchableOpacity>
                         </View>
@@ -78,21 +72,11 @@ return (
                 <Text style ={{fontWeight: 'bold'}}>Goal & Goal Period</Text>
                     <View style = {{flexDirection: 'row', flex: 1}}>
                         <View style ={{ flexDirection: 'row', justifyContent: 'space-evenly',flex: 1, marginTop: 5 }}>
-                        <TouchableOpacity style = {styles.btnTouch}>
-                        <Text>1</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style = {styles.btnTouch}>
-                        <Text>count</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity  style = {styles.btnTouch}>
-                        <Text>Day</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity  style = {styles.btnTouch}>
-                        <Text>Week</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style = {styles.btnTouch}>
-                        <Text>Month</Text>
-                        </TouchableOpacity>
+                        {TabButton(currentTab, setCurrentTab, "1", colors)}
+                        {TabButton(currentTab, setCurrentTab, "count",colors)}
+                        {TabButton(currentTab, setCurrentTab, "Day", colors)}
+                        {TabButton(currentTab, setCurrentTab, "Week", colors)}
+                        {TabButton(currentTab, setCurrentTab, "Month", colors)}
                         </View>
                     </View>
                 </View>
@@ -109,18 +93,10 @@ return (
                 <Text style ={{fontWeight: 'bold'}}>Time Range</Text>
                     <View style = {{flexDirection: 'row', flex: 1}}>
                         <View style ={{ flexDirection: 'row', justifyContent: 'flex-start',flex: 0.5, marginTop: 5 }}>
-                        <TouchableOpacity style = {styles.btnTouchTime}>
-                        <Text>Anytime</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style = {styles.btnTouchTime}>
-                        <Text>Morning</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity  style = {styles.btnTouchTime}>
-                        <Text>Afternoon</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity   style = {styles.btnTouchTime}>
-                        <Text>Evening</Text>
-                        </TouchableOpacity>
+                        {TabButtontime(currentTabTime, setCurrentTabTime, "Anytime",colors)}
+                        {TabButtontime(currentTabTime, setCurrentTabTime, "Morning", colors)}
+                        {TabButtontime(currentTabTime, setCurrentTabTime, "Afternoon", colors)}
+                        {TabButtontime(currentTabTime, setCurrentTabTime, "Evening", colors)}
                         </View>
                     </View>
                 </View>
@@ -155,18 +131,6 @@ return (
                 <Text style ={{fontWeight: 'bold'}}>Habit Term</Text>
                     <View style = {{flexDirection: 'row', flex: 1}}>
                         <View style ={{ flexDirection: 'row', justifyContent: 'flex-start',flex: 0.5 }}>
-                        <TouchableOpacity style = {styles.btnTouchTime}>
-                        <Text>Anytime</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style = {styles.btnTouchTime}>
-                        <Text>Morning</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity  style = {styles.btnTouchTime}>
-                        <Text>Afternoon</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity   style = {styles.btnTouchTime}>
-                        <Text>Evening</Text>
-                        </TouchableOpacity>
                         </View>
                     </View>
                 </View>
@@ -184,6 +148,48 @@ return (
     </View>
     );
 };
+const TabButton = (currentTab, setCurrentTab, title, colors) => {
+  return (
+    <TouchableOpacity onPress={() => {
+    //   if (title == "Day") {
+    //     // Do your Stuff...
+    //   } else {
+        setCurrentTab(title)
+    //   }
+    }}>
+      <View style={[styles.btnTouch, 
+        { backgroundColor: currentTab == title ? colors : 'transparent'}
+      ]}>
+        <Text style={{
+          fontSize: 15,
+          color: currentTab == title ? "#a9a9a9" : "grey"
+        }}>{title}</Text>
+
+      </View>
+    </TouchableOpacity>
+  );
+}
+const TabButtontime = (currentTabTime, setCurrentTabTime, title, colors) => {
+  return (
+    <TouchableOpacity onPress={() => {
+    //   if (title == "Day") {
+    //     // Do your Stuff...
+    //   } else {
+        setCurrentTabTime(title)
+    //   }
+    }}>
+      <View style={[styles.btnTouchTime, 
+        { backgroundColor: currentTabTime == title ? colors : 'transparent'}
+      ]}>
+        <Text style={{
+          fontSize: 15,
+          color: currentTabTime == title ? "#a9a9a9" : "grey"
+        }}>{title}</Text>
+
+      </View>
+    </TouchableOpacity>
+  )
+}
 
 const styles = StyleSheet.create({
     container:{

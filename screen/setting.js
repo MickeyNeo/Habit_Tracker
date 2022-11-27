@@ -214,7 +214,7 @@ const tabButton = (currentTab, setCurrentTab ,name, nb=0)=>{
                 </View>
             
         );
-    else{
+    else if ( nb === 1)
         return(
             <View style={{flexDirection: "row" }}>
                 <Text style={{
@@ -235,9 +235,8 @@ const tabButton = (currentTab, setCurrentTab ,name, nb=0)=>{
                     />
                 </TouchableOpacity>
             </View>
-            
         );
-    }
+       
 }
 const line = () =>{
     return(
@@ -261,7 +260,7 @@ const tail =()=>{
 const style = StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: 'white',
+        //backgroundColor: 'white',
         alignItems: 'stretch',
         justifyContent: 'flex-start',
     },
