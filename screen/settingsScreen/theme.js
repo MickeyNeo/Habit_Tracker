@@ -1,25 +1,34 @@
 import React from "react";
 import { useState } from 'react';
-import {Text,  View } from 'react-native';
-import Modal from "react-native-modal";
+import {Text,  View, StyleSheet, ScrollView} from 'react-native';
 
-export default function Theme (params){
+
+export default function Theme (){
     return(         
-        <View >
-            <Modal isVisible={params.myIsmodalVisible} 
-                useNativeDriver={true}
-                onBackdropPress={() => params.setModalVisible(false)}
-                animationIn = 'bounceIn'
-                animationInTiming = {500}
-                animationOut ="bounceOut"
-                animationOutTiming = {500}
-                >
-                    <View style={{height: '38%', backgroundColor: 'white', borderRadius: 30, borderWidth: 1,justifyContent: 'center'}}>
-                        <Text>Theme</Text>
-                    </View>
-                </Modal>       
+        <View style={styles.container}>
+            
+            <ScrollView>
+                <Text style={styles.text}>Habit Bar Style</Text>
+                <Text style={styles.text}>Date Bar Style</Text>
+                <Text style={styles.text}>Appearance</Text>
+                <Text style={styles.text}>Habit Bar size</Text>
+                <Text style={styles.text}>Streaks on Bar</Text>
+                <Text style={styles.text}>Theme Color</Text>
+            </ScrollView>    
             
         </View>
     );
 
 }
+const styles=StyleSheet.create({
+    container:{
+        flex: 1,
+        backgroundColor: 'white',
+        justifyContent: 'flex-start',
+    },
+    text:{   
+        marginLeft: 30,
+        fontSize: 20,
+        marginTop: 30,
+    }
+})

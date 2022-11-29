@@ -11,9 +11,12 @@ import HabitManager from './settingsScreen/HabitManager';
 import Export from './settingsScreen/Export';
 import MoreSettings from './settingsScreen/MoreSettings'
 import UsageTips from './settingsScreen/UsageTips';
+import DailyNotification from './settingsScreen/DailyNotification';
+import TabBar from './settingsScreen/TabBar';
+import VactionMode from './settingsScreen/VactionMode';
 
 
-export default function Settings(){
+export default function Settings({navigation}){
     const [currentTab, setCurrentTab] = useState('');
     // const [isEnabled, setIsEnabled] = useState(false);
     const [isModalVisible, setModalVisible] = useState(false);
@@ -38,115 +41,22 @@ export default function Settings(){
                     <FontAwesome5 name="pen" size={10} color="black" style={{marginTop: 32, marginLeft: 5}} />
                 </View>
                 
-                {tabButton(currentTab, setCurrentTab ,"Language")}
-                {tabButton(currentTab, setCurrentTab ,"Theme")}
-                {tabButton(currentTab, setCurrentTab ,"Widget Theme")}
-                {tabButton(currentTab, setCurrentTab ,"Tab Bar")}
+                {tabButton(navigation,"Language")}
+                {tabButton(navigation,"Theme")}
+                {tabButton(navigation,"Widget Theme")}
+                {tabButton(navigation,"Tab Bar")}
                 {line()}
-                {tabButton(currentTab, setCurrentTab ,"Habbit Manager")}
-                {tabButton(currentTab, setCurrentTab ,"Daily Notification",1)}
-                {tabButton(currentTab, setCurrentTab ,"Safety Lock",1)}
-                {tabButton(currentTab, setCurrentTab ,"Sound",1)}
-                {tabButton(currentTab, setCurrentTab ,"Export")}
-                {tabButton(currentTab, setCurrentTab ,"More Settings")}
+                {tabButton(navigation,"Habit Manager")}
+                {tabButton(navigation,"Daily Notification",1)}
+                {tabButton(navigation,"Safety Lock",1)}
+                {tabButton(navigation,"Vacation Mode",1)}
+                {tabButton(navigation,"Sound",1)}
+                {tabButton(navigation,"Export")}
+                {tabButton(navigation,"More Settings")}
                 {line()}
-                {tabButton(currentTab, setCurrentTab ,"Usage Tips")}
-                {tabButton(currentTab, setCurrentTab ,"Share")}
-                {/* <TouchableOpacity style={style.row}>
-                    <Text style= {style.tab}>Language</Text>{tail()}
-                </TouchableOpacity>
-                <TouchableOpacity style={style.row}>
-                    <Text style= {style.tab}>Theme</Text>{tail()}
-                </TouchableOpacity>
-                <TouchableOpacity style={style.row}>
-                    <Text style= {style.tab}>Widget Theme</Text>{tail()}
-                </TouchableOpacity>
-                <TouchableOpacity style={style.row}>
-                    <Text style= {style.tab}>Tab Bar</Text>{tail()}
-                </TouchableOpacity>
-                {line()}
-                <TouchableOpacity style={style.row}>
-                    <Text style= {style.tab}>Habbit Manager</Text>{tail()}
-                </TouchableOpacity>
-                <TouchableOpacity style={style.row}>
-                    <Text style= {style.tab}>Icon Sync</Text>
-                    <Switch 
-                        style={{marginTop: 20,AlignItems: 'flex-end', marginRight:5}}
-                        trackColor={{ false: "#d9d6c6", true: "orange" }}
-                        thumbColor={isEnabled ? "white" : "#76756d"}
-                        ios_backgroundColor="#3e3e3e"
-                        onValueChange={toggleSwitch}
-                        value={isEnabled}
-                    />
-                </TouchableOpacity>
-                <TouchableOpacity style={style.row}>
-                    <Text style= {style.tab}>Daily Notification</Text>
-                    <Switch 
-                        style={{marginTop: 20,AlignItems: 'flex-end', marginRight:5}}
-                        trackColor={{ false: "#d9d6c6", true: "orange" }}
-                        thumbColor={isEnabled ? "white" : "#76756d"}
-                        ios_backgroundColor="#3e3e3e"
-                        onValueChange={toggleSwitch}
-                        value={isEnabled}
-                    />
-                </TouchableOpacity>
-                <TouchableOpacity style={style.row}>
-                    <Text style= {style.tab}>Safety Lock</Text>
-                    <Switch 
-                        style={{marginTop: 20,AlignItems: 'flex-end', marginRight:5}}
-                        trackColor={{ false: "#d9d6c6", true: "orange" }}
-                        thumbColor={isEnabled ? "white" : "#76756d"}
-                        ios_backgroundColor="#3e3e3e"
-                        onValueChange={toggleSwitch}
-                        value={isEnabled}
-                    />
-                </TouchableOpacity>
-                <TouchableOpacity style={style.row}>
-                    <Text style= {style.tab}>Sound</Text>
-                    <Switch 
-                        style={{marginTop: 20,AlignItems: 'flex-end', marginRight:5}}
-                        trackColor={{ false: "#d9d6c6", true: "orange" }}
-                        thumbColor={isEnabled ? "white" : "#76756d"}
-                        ios_backgroundColor="#3e3e3e"
-                        onValueChange={toggleSwitch}
-                        value={isEnabled}
-                    />
-                </TouchableOpacity>
-                <TouchableOpacity style={style.row}>
-                    <Text style= {style.tab}>Export</Text>{tail()}
-                </TouchableOpacity>
-                <TouchableOpacity style={style.row}>
-                    <Text style= {style.tab}>More Settings</Text>{tail()}
-                </TouchableOpacity>
-                {line()}
-                <TouchableOpacity style={style.row}>
-                    <Text style= {style.tab}>Usage Tips</Text>{tail()}
-                </TouchableOpacity>
-                <TouchableOpacity style={style.row}>
-                    <Text style= {style.tab}>Feedback</Text>{tail()}
-                </TouchableOpacity>
-                <TouchableOpacity style={style.row}>
-                    <Text style= {style.tab}>Share</Text>{tail()}
-                </TouchableOpacity>
-                 */}
+                {tabButton(navigation,"Usage Tips")}
+        
 
-                <View>
-                    <Button title="Show modal" onPress={() => setModalVisible(!isModalVisible)} />
-                    
-                    {/* <Modal isVisible={isModalVisible} 
-                        useNativeDriver={true}
-                        onBackdropPress={() => setModalVisible(false)}
-                        animationIn = 'bounceIn'
-                        animationInTiming = {500}
-                        animationOut ="bounceOut"
-                        animationOutTiming = {500}
-                    >
-                        <View style={style.model}>
-                            <Text style={style.nameText}>Select Language</Text>
-                        </View>
-                    </Modal> */}
-                    
-                </View>
                 
             
             
@@ -156,15 +66,41 @@ export default function Settings(){
 }
 
 //Multi Buttons..
-const tabButton = (currentTab, setCurrentTab ,name, nb=0)=>{
+const tabButton = (navigation,name, nb=0)=>{
     const [isEnabled, setIsEnabled] = useState(false);
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+    const [isEnabledSwitch, setIsEnabledSwitch] =useState(false)
+    const toggleSwitch = () => {
+        if (isEnabledSwitch ==false) setIsEnabled(true)
+        setIsEnabledSwitch(previousState => !previousState);
+        
+    }
+        
     if (nb==0)
         return(
                 <View>
                     <TouchableOpacity style={{flexDirection: "row" }}
                     onPress ={() => {
                         setIsEnabled(!isEnabled)
+                        switch (name) {
+                            case 'Theme':
+                                navigation.navigate("Theme")
+                            break;
+                            case 'Habit Manager':
+                                navigation.navigate("HabitManager")
+                            break;
+                            case 'More Settings':
+                                navigation.navigate("MoreSettings")
+                            break;
+                            case 'Export':
+                                navigation.navigate("Export")
+                            break;
+                            case 'Usage Tips':
+                                navigation.navigate("UsageTips")
+                            break;
+                            default :
+                                break;
+                        }
+                        
                     }}
                     >   
                             <Text style={{
@@ -180,38 +116,14 @@ const tabButton = (currentTab, setCurrentTab ,name, nb=0)=>{
                         myIsmodalVisible = {isEnabled}
                         setModalVisible = {setIsEnabled}
                     ></Language> }
-                    {isEnabled && name == 'Theme' && <Theme 
+                    {isEnabled && name == 'Tab Bar' && <TabBar 
                         myIsmodalVisible = {isEnabled}
                         setModalVisible = {setIsEnabled}
-                    ></Theme> }
+                    ></TabBar> }
                     {isEnabled && name == 'Widget Theme' && <WidgetTheme 
                         myIsmodalVisible = {isEnabled}
                         setModalVisible = {setIsEnabled}
                     ></WidgetTheme> }
-                    {/* {isEnabled && name == 'Tab Bar' && <Language 
-                        myIsmodalVisible = {isEnabled}
-                        setModalVisible = {setIsEnabled}
-                    ></Language> } */}
-                    {isEnabled && name == 'Habbit Manager' && <HabitManager 
-                        myIsmodalVisible = {isEnabled}
-                        setModalVisible = {setIsEnabled}
-                    ></HabitManager> }
-                    {isEnabled && name == 'Export' && <Export 
-                        myIsmodalVisible = {isEnabled}
-                        setModalVisible = {setIsEnabled}
-                    ></Export> }
-                    {isEnabled && name == 'More Settings' && <MoreSettings 
-                        myIsmodalVisible = {isEnabled}
-                        setModalVisible = {setIsEnabled}
-                    ></MoreSettings> }
-                    {isEnabled && name == 'Usage Tips' && <UsageTips 
-                        myIsmodalVisible = {isEnabled}
-                        setModalVisible = {setIsEnabled}
-                    ></UsageTips> }
-                    {/* {isEnabled && name == 'Share' && <Language 
-                        myIsmodalVisible = {isEnabled}
-                        setModalVisible = {setIsEnabled}
-                    ></Language> } */}
                 </View>
             
         );
@@ -225,16 +137,24 @@ const tabButton = (currentTab, setCurrentTab ,name, nb=0)=>{
                         fontSize: 20,
                         color: 'black'
                     }}>{name}</Text>
-                 <TouchableOpacity>
+                
                     <Switch 
                         style={{marginTop: 20,AlignItems: 'flex-end', marginRight:5}}
                         trackColor={{ false: "#d9d6c6", true: "orange" }}
-                        thumbColor={isEnabled ? "white" : "#76756d"}
+                        thumbColor={isEnabledSwitch ? "white" : "#76756d"}
                         ios_backgroundColor="#3e3e3e"
                         onValueChange={toggleSwitch}
-                        value={isEnabled}
+                        value={isEnabledSwitch}
                     />
-                </TouchableOpacity>
+                    {isEnabled  && name == 'Daily Notification' && <DailyNotification 
+                        myIsmodalVisible = {isEnabled}
+                        setModalVisible = {setIsEnabled}
+                    ></DailyNotification> }
+                    {isEnabled  && name == 'Vacation Mode' && <VactionMode
+                        myIsmodalVisible = {isEnabled}
+                        setModalVisible = {setIsEnabled}
+                    ></VactionMode> }
+                    
             </View>
         );
        
@@ -243,13 +163,6 @@ const line = () =>{
     return(
         <View style={{flexDirection: 'row',alignItems: 'center', marginLeft:'5%', marginRight:'5%', marginTop: 20,}}> 
                 <View style ={{flex: 1,height:1,borderWidth: 0.3}}></View>
-        </View>
-    )
-}
-const languageScreen =() =>{
-    return(
-        <View style={style.model}>
-            <Text>Hello!</Text>
         </View>
     )
 }
