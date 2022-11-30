@@ -4,10 +4,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import Data from "../data/data";
 import ColorPicker from 'react-native-wheel-color-picker';
 import { ChromePicker } from 'react-color';
-
 
 const CustomHabit= ({navigation}) => {
 const colors = 'green';

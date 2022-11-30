@@ -5,7 +5,7 @@ import Modal from "react-native-modal";
 import Dog from '../assets/dog.png';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Language from './settingsScreen/Language';
-import Theme from './settingsScreen/Theme'
+import Theme from './settingsScreen/Theme';
 import WidgetTheme from './settingsScreen/WidgetTheme';
 import HabitManager from './settingsScreen/HabitManager';
 import Export from './settingsScreen/Export';
