@@ -6,15 +6,14 @@ import Dog from '../assets/dog.png';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Language from './settingsScreen/Language';
 import Theme from './settingsScreen/Theme'
-import WidgetTheme from './settingsScreen/WidgetTheme';
 import HabitManager from './settingsScreen/HabitManager';
 import Export from './settingsScreen/Export';
 import MoreSettings from './settingsScreen/MoreSettings'
-import UsageTips from './settingsScreen/UsageTips';
+import TagManager from './settingsScreen/TagManager';
 import DailyNotification from './settingsScreen/DailyNotification';
 import TabBar from './settingsScreen/TabBar';
 import VactionMode from './settingsScreen/VactionMode';
-
+import DateTimePicker from 'react-native-date-time-picker';
 
 export default function Settings({navigation}){
     const [currentTab, setCurrentTab] = useState('');
@@ -43,7 +42,6 @@ export default function Settings({navigation}){
                 
                 {tabButton(navigation,"Language")}
                 {tabButton(navigation,"Theme")}
-                {tabButton(navigation,"Widget Theme")}
                 {tabButton(navigation,"Tab Bar")}
                 {line()}
                 {tabButton(navigation,"Habit Manager")}
@@ -54,7 +52,7 @@ export default function Settings({navigation}){
                 {tabButton(navigation,"Export")}
                 {tabButton(navigation,"More Settings")}
                 {line()}
-                {tabButton(navigation,"Usage Tips")}
+                {tabButton(navigation,"Tag Manager")}
         
 
                 
@@ -94,8 +92,8 @@ const tabButton = (navigation,name, nb=0)=>{
                             case 'Export':
                                 navigation.navigate("Export")
                             break;
-                            case 'Usage Tips':
-                                navigation.navigate("UsageTips")
+                            case 'Tag Manager':
+                                navigation.navigate("TagManager")
                             break;
                             default :
                                 break;
@@ -120,10 +118,6 @@ const tabButton = (navigation,name, nb=0)=>{
                         myIsmodalVisible = {isEnabled}
                         setModalVisible = {setIsEnabled}
                     ></TabBar> }
-                    {isEnabled && name == 'Widget Theme' && <WidgetTheme 
-                        myIsmodalVisible = {isEnabled}
-                        setModalVisible = {setIsEnabled}
-                    ></WidgetTheme> }
                 </View>
             
         );

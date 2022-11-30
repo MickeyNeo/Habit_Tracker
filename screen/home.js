@@ -22,7 +22,7 @@ return (
           </TouchableOpacity>
             <View style={{flexDirection: "row" }}>
                 
-                <Switch 
+                {/* <Switch 
                     style={{marginTop: 20, AlignItems: 'flex-end', marginRight:5}}
                     trackColor={{ false: "#d9d6c6", true: "orange" }}
                     thumbColor={isEnabled ? "white" : "#76756d"}
@@ -32,7 +32,7 @@ return (
                         value => {setDarkMode(value);
                         EventRegister.emit('changeThemeEvent', value)
                     }}
-                />
+                /> */}
             </View>
       </View>
     </View>

@@ -14,7 +14,7 @@ import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import HabitManager from "../screen/settingsScreen/HabitManager";
 import MoreSettings from "../screen/settingsScreen/MoreSettings";
 import Export from "../screen/settingsScreen/Export";
-import UsageTips from "../screen/settingsScreen/UsageTips";
+import TagManager from "../screen/settingsScreen/TagManager";
 
 
 const Tab = createBottomTabNavigator();
@@ -73,7 +73,7 @@ function MainTabNavigator () {
         <Stack.Screen option ={{headerTitle: 'All Habit'}} name='HabitManager' component={HabitManager}/>
         <Stack.Screen name="MoreSettings" component={MoreSettings} />
         <Stack.Screen name="Export" component={Export} />
-        <Stack.Screen name="UsageTips" component={UsageTips}/>
+        <Stack.Screen name="TagManager" component={TagManager}/>
       </Stack.Navigator>
   );
 }
