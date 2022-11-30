@@ -9,7 +9,9 @@ import Home from "../screen/home";
 import { Ionicons } from '@expo/vector-icons';
 import Setting from "../screen/setting";
 import Statistic from "../screen/statistic";
+import HabitDetail from "../screen/habitDetail/habitDetail";
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import { View, Button, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Image, TextInput, Alert, } from "react-native";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -24,17 +26,23 @@ function getHeaderTitle(route) {
       return 'Settings';
   }
 }
-function HomeTabs() {
+
+function HomeTabs({navigation}) {
   return (
     <Tab.Navigator
+            initialRouteName="Home"
             screenOptions={({ route }) => ({
+            tabBarShowLabel: false,
             headerShown: false,
             tabBarIcon: ({ focused, color, size }) => {
             let iconName;
             if (route.name === 'Home') {
               iconName = focused
-                ? 'ios-home-outline'
-                : 'home-outline';
+                ? 'add'
+                : 'ios-home-outline';
+            if (iconName === 'add' && !focused) { 
+              {navigation.navigate('Habit')}
+            }
             } else if (route.name === 'Settings') {
               iconName = focused ? 'ios-list' : 'ios-list-outline';
             }
@@ -43,8 +51,10 @@ function HomeTabs() {
             }
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-          tabBarActiveTintColor: 'tomato',
+          tabBarActiveTintColor: '#0c5776',
           tabBarInactiveTintColor: 'gray',
+          tabBarActiveBackgroundColor: '#bcfefe',
+          tabBarInactiveBackgroundColor: 'white',
         })}>
       <Tab.Screen  option = {{headerShown: false}} name="Home" component={Home} />
       <Tab.Screen  option = {{headerShown: false}}  name="Statistic" component={Statistic} />
@@ -63,6 +73,7 @@ function MainTabNavigator () {
         <Stack.Screen name="Habit" component={Habit} />
         <Stack.Screen name="AddHabit" component={AddHabit} />
         <Stack.Screen name="CustomHabit" component={CustomHabit} />
+        <Stack.Screen options={{ headerTitle: 'Habit Detail' }} name="HabitDetail" component={HabitDetail} />
       </Stack.Navigator>
   );
 }

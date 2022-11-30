@@ -1,5 +1,5 @@
 import React, { useState, Component, useContext }from "react";
-import { View, Button, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Image, TextInput, Alert, TouchableHighlight } from "react-native";
+import { View, Button, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Image, TextInput, Alert, } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Fontisto from '@expo/vector-icons/Fontisto';
@@ -7,14 +7,26 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import ColorPicker from 'react-native-wheel-color-picker';
 import { ChromePicker } from 'react-color';
 import themeContext from "./styles/themeContext";
-
+import ChooseColor from "./icon_color/chooseColor";
+import ChooseIcon from "./icon_color/chooseIcon";
+import Icon from "./icon_color/Icon";
 
 const AddHabit = ({navigation, route}) => {
-console.log(route.params);
 const { name, colors, image } = route.params;
 const theme = useContext(themeContext);
 const [currentTab, setCurrentTab] = useState("Day");
 const [currentTabTime, setCurrentTabTime] = useState("Anytime");
+const [isEnabled, setIsEnabled] = useState(false);
+const [changecolor, setcolor] = useState(colors);
+var icons = { 
+    icon: '',
+    family: '',
+    color: '',
+};
+const setIcon = (value) => {
+    icons = value;
+    return icons;
+}
 return (
     <View style={{backgroundColor: theme.backgroundColor, flex: 1, flexDirection : 'column'}}>
         <View style ={styles.Habit}>
@@ -42,14 +54,11 @@ return (
                     <Text style ={{fontWeight: 'bold', color: theme.color }}>Icon & Color</Text>
                     <View style = {{flexDirection: 'row', flex: 2}}>
                         <View style ={{ flexDirection: 'row', justifyContent: 'space-evenly', flex: 0.5 }}>
-                        <Text>Icon</Text>
-                        <TouchableOpacity style = {styles.btnTouch}>
-                        <Ionicons name ='add' size = {20} color = {colors} />
-                        </TouchableOpacity>
-                        <Text>|</Text>
-                        <Text>Color</Text>
-                        <TouchableOpacity  style = {[styles.btnTouch, {backgroundColor: colors}]}>
-                        </TouchableOpacity>
+                            <Text>Icon</Text>
+                             {TabChoose('Icon', changecolor, setcolor,setIcon,0)}
+                             <Icon type={icons.family} name={icons.icon} size={20} color="black" />
+                            <Text>Color</Text>
+                            {TabChoose('Color', changecolor, setcolor,setIcon,1)}
                         </View>
                     </View>
                 </View>
@@ -57,7 +66,7 @@ return (
                 <View style = {{flexDirection: 'column', padding: 10}}>
                     <Text style ={{fontWeight: 'bold', color: theme.color }}>Tag</Text>
                     <TouchableOpacity style = {{borderRadius: 10, width: 40, alignItems: 'center', backgroundColor: '#f5f5f5',}}>
-                        <Ionicons name ='add' size = {20} color = {colors} />
+                        <Ionicons name ='add' size = {20} color = {changecolor} />
                     </TouchableOpacity>
                 </View>
 
@@ -65,11 +74,11 @@ return (
                 <Text style ={{fontWeight: 'bold', color: theme.color }}>Goal & Goal Period</Text>
                     <View style = {{flexDirection: 'row', flex: 1}}>
                         <View style ={{ flexDirection: 'row', justifyContent: 'space-evenly',flex: 1, marginTop: 5 }}>
-                        {TabButton(currentTab, setCurrentTab, "1", colors)}
-                        {TabButton(currentTab, setCurrentTab, "count",colors)}
-                        {TabButton(currentTab, setCurrentTab, "Day", colors)}
-                        {TabButton(currentTab, setCurrentTab, "Week", colors)}
-                        {TabButton(currentTab, setCurrentTab, "Month", colors)}
+                        {TabButton(currentTab, setCurrentTab, "1", changecolor)}
+                        {TabButton(currentTab, setCurrentTab, "count",changecolor)}
+                        {TabButton(currentTab, setCurrentTab, "Day", changecolor)}
+                        {TabButton(currentTab, setCurrentTab, "Week", changecolor)}
+                        {TabButton(currentTab, setCurrentTab, "Month", changecolor)}
                         </View>
                     </View>
                 </View>
@@ -86,10 +95,10 @@ return (
                 <Text style ={{fontWeight: 'bold', color: theme.color }}>Time Range</Text>
                     <View style = {{flexDirection: 'row', flex: 1}}>
                         <View style ={{ flexDirection: 'row', justifyContent: 'flex-start',flex: 0.5, marginTop: 5 }}>
-                        {TabButtontime(currentTabTime, setCurrentTabTime, "Anytime",colors)}
-                        {TabButtontime(currentTabTime, setCurrentTabTime, "Morning", colors)}
-                        {TabButtontime(currentTabTime, setCurrentTabTime, "Afternoon", colors)}
-                        {TabButtontime(currentTabTime, setCurrentTabTime, "Evening", colors)}
+                        {TabButtontime(currentTabTime, setCurrentTabTime, "Anytime",changecolor)}
+                        {TabButtontime(currentTabTime, setCurrentTabTime, "Morning", changecolor)}
+                        {TabButtontime(currentTabTime, setCurrentTabTime, "Afternoon", changecolor)}
+                        {TabButtontime(currentTabTime, setCurrentTabTime, "Evening", changecolor)}
                         </View>
                     </View> 
                 </View>
@@ -148,7 +157,7 @@ return (
     );
 };
 
-const TabButton = (currentTab, setCurrentTab, title, colors) => {
+const TabButton = (currentTab, setCurrentTab, title, color) => {
   return (
     <TouchableOpacity onPress={() => {
     //   if (title == "Day") {
@@ -158,7 +167,7 @@ const TabButton = (currentTab, setCurrentTab, title, colors) => {
     //   }
     }}>
       <View style={[styles.btnTouch, 
-        { backgroundColor: currentTab == title ? colors : 'transparent'}
+        { backgroundColor: currentTab == title ? color : 'transparent'}
       ]}>
         <Text style={{
           fontSize: 15,
@@ -169,7 +178,7 @@ const TabButton = (currentTab, setCurrentTab, title, colors) => {
     </TouchableOpacity>
   );
 }
-const TabButtontime = (currentTabTime, setCurrentTabTime, title, colors) => {
+const TabButtontime = (currentTabTime, setCurrentTabTime, title, color) => {
   return (
     <TouchableOpacity onPress={() => {
     //   if (title == "Day") {
@@ -179,7 +188,7 @@ const TabButtontime = (currentTabTime, setCurrentTabTime, title, colors) => {
     //   }
     }}>
       <View style={[styles.btnTouchTime, 
-        { backgroundColor: currentTabTime == title ? colors : 'transparent'}
+        { backgroundColor: currentTabTime == title ? color : 'transparent'}
       ]}>
         <Text style={{
           fontSize: 15,
@@ -189,6 +198,31 @@ const TabButtontime = (currentTabTime, setCurrentTabTime, title, colors) => {
       </View>
     </TouchableOpacity>
   )
+}
+const TabChoose = (title, changecolor, setcolor,setIcon,flag) => {
+const [isEnabled, setIsEnabled] = useState(false);
+  return (
+    <TouchableOpacity style = {[styles.btnTouch, {backgroundColor: changecolor}]}    
+    onPress ={() => {
+                    setIsEnabled(!isEnabled)
+                    }}
+                    >
+                    {isEnabled && title == 'Color' && flag == 1 && <ChooseColor
+                        myIsmodalVisible = {isEnabled}
+                        setModalVisible = {setIsEnabled}
+                        color = {changecolor}
+                        setColor ={setcolor}
+                    ></ChooseColor>
+                    }
+                    {isEnabled && title == 'Icon' && <ChooseIcon 
+                        myIsmodalVisible = {isEnabled}
+                        setModalVisible = {setIsEnabled}
+                        seticon = {setIcon}
+                    ></ChooseIcon>
+                    }
+    </TouchableOpacity>
+    
+  );
 }
 const styles = StyleSheet.create({
     addHabit: { 
