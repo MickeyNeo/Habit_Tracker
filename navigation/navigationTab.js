@@ -12,6 +12,13 @@ import Statistic from "../screen/statistic";
 import HabitDetail from "../screen/habitDetail/habitDetail";
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { View, Button, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Image, TextInput, Alert, } from "react-native";
+import Theme from "../screen/settingsScreen/Theme";
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import HabitManager from "../screen/settingsScreen/HabitManager";
+import MoreSettings from "../screen/settingsScreen/MoreSettings";
+import Export from "../screen/settingsScreen/Export";
+import UsageTips from "../screen/settingsScreen/UsageTips";
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -74,6 +81,11 @@ function MainTabNavigator () {
         <Stack.Screen name="AddHabit" component={AddHabit} />
         <Stack.Screen name="CustomHabit" component={CustomHabit} />
         <Stack.Screen options={{ headerTitle: 'Habit Detail' }} name="HabitDetail" component={HabitDetail} />
+        <Stack.Screen name='Theme' component={Theme}/>
+        <Stack.Screen option ={{headerTitle: 'All Habit'}} name='HabitManager' component={HabitManager}/>
+        <Stack.Screen name="MoreSettings" component={MoreSettings} />
+        <Stack.Screen name="Export" component={Export} />
+        <Stack.Screen name="UsageTips" component={UsageTips}/>
       </Stack.Navigator>
   );
 }

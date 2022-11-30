@@ -53,6 +53,7 @@ return (
           <Text style = {{color: theme.color}} >Press '+' to add new habit </Text>
           </TouchableOpacity>
             <View style={{flexDirection: "row" }}>
+
                 <Switch 
                     style={{marginTop: 20, AlignItems: 'flex-end', marginRight:5}}
                     trackColor={{ false: "#d9d6c6", true: "orange" }}
