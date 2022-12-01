@@ -15,35 +15,35 @@ const [darkmode, setDarkMode] = useState(false);
 const theme = useContext(themeContext);
 return (
     <View style={{backgroundColor: theme.backgroundColor, flex: 1}}>
-      <View style = {{flex: 0.1}}>
-      <WeeklyCalendar style={{ height: 400 }} />
-      </View>
-      <View style = {styles.progress}> 
-        <TouchableOpacity style = {{flex: 1}} onPress = {() => navigation.navigate("HabitDetail")}>
-            <Progress.Bar 
-              progress={0.5} 
-              width={null} 
-              height = {35} 
-              color = "#2d99ae" 
-              //unfilledColor ='#bcfefe' 
-            > 
-            <View style={{
-              position: 'absolute', 
-              flexDirection: 'row', 
-              color: 'grey', 
-              alignItems: 'center',
-              //borderWidth: 2,
-              }}>
-            <Image
-                source={walking}
-                style={{ width: 35, height: 35,}}
-            /> 
-            <Text style = {{color: 'red', fontSize: 15}}>Walking</Text>
-            </View> 
-            </Progress.Bar>
-        </TouchableOpacity>
-      </View>
-      {/* <View style = {styles.addHabit}>
+//       <View style = {{flex: 0.1}}>
+//       <WeeklyCalendar style={{ height: 400 }} />
+//       </View>
+//       <View style = {styles.progress}> 
+//         <TouchableOpacity style = {{flex: 1}} onPress = {() => navigation.navigate("HabitDetail")}>
+//             <Progress.Bar 
+//               progress={0.5} 
+//               width={null} 
+//               height = {35} 
+//               color = "#2d99ae" 
+//               //unfilledColor ='#bcfefe' 
+//             > 
+//             <View style={{
+//               position: 'absolute', 
+//               flexDirection: 'row', 
+//               color: 'grey', 
+//               alignItems: 'center',
+//               //borderWidth: 2,
+//               }}>
+//             <Image
+//                 source={walking}
+//                 style={{ width: 35, height: 35,}}
+//             /> 
+//             <Text style = {{color: 'red', fontSize: 15}}>Walking</Text>
+//             </View> 
+//             </Progress.Bar>
+//         </TouchableOpacity>
+//       </View>
+      {<View style = {styles.addHabit}>
         <TouchableOpacity style = { styles.addHabit} onPress = {() => navigation.navigate("Habit")}>
           <Image
                 source={require('./Icon/rocket.png')}
@@ -66,7 +66,7 @@ return (
                     }}
                 />
             </View>
-      </View> */}
+      </View>}
       {/* <Data /> */}
     </View>
   );
