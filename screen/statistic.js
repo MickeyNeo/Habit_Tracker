@@ -1,5 +1,6 @@
+
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
+import {React, useState } from 'react';
 import { Animated, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import Ionicons from '@expo/vector-icons/Ionicons';
