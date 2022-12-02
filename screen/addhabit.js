@@ -1,4 +1,4 @@
-import React, { useState, Component, useContext }from "react";
+import React, { useState, Component, useContext,useReducer } from "react";
 import { View, Button, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Image, TextInput, Alert, } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -11,151 +11,163 @@ import ChooseColor from "./icon_color/chooseColor";
 import ChooseIcon from "./icon_color/chooseIcon";
 import Icon from "./icon_color/Icon";
 
+
+import { useStore} from '../Store'
+import { setHabitInput } from '../Store/action'
+
 const AddHabit = ({navigation, route}) => {
-const { name, colors, image } = route.params;
-const theme = useContext(themeContext);
-const [currentTab, setCurrentTab] = useState("Day");
-const [currentTabTime, setCurrentTabTime] = useState("Anytime");
-const [isEnabled, setIsEnabled] = useState(false);
-const [changecolor, setcolor] = useState(colors);
-var icons = { 
-    icon: '',
-    family: '',
-    color: '',
-};
-const setIcon = (value) => {
-    icons = value;
-    return icons;
-}
-return (
-    <View style={{backgroundColor: theme.backgroundColor, flex: 1, flexDirection : 'column'}}>
-        <View style ={styles.Habit}>
-            <ScrollView >
-                <View style = {{flexDirection: 'column', padding: 10, }}>
-                <Text style ={{fontWeight: 'bold', color: theme.color }}>Name</Text>
-                <TextInput
-                    style={[styles.textInput,{backgroundColor: theme.backgroundColor1}]}
-                    placeholder={(name)}
-                    //data.push(route.params.name)
-                    //onChangeText={newText => setText(newText)}
-                    //defaultValue={text}
-                />
-                </View>
-                <View style = {{flexDirection: 'column', padding: 10, }}>
-                <Text style ={{fontWeight: 'bold', color: theme.color }}>Note</Text>
-                <TextInput
-                    style={[styles.textInput,{backgroundColor: theme.backgroundColor1}]}
-                    placeholder="Description or other infos"
-                    //onChangeText={newText => setText(newText)}
-                    //defaultValue={text}
-                />
-                </View>
-                <View style = {{flexDirection: 'column', padding: 10, }}>
-                    <Text style ={{fontWeight: 'bold', color: theme.color }}>Icon & Color</Text>
-                    <View style = {{flexDirection: 'row', flex: 2}}>
-                        <View style ={{ flexDirection: 'row', justifyContent: 'space-evenly', flex: 0.5 }}>
-                            <Text>Icon</Text>
-                             {TabChoose('Icon', changecolor, setcolor,setIcon,0)}
-                             <Icon type={icons.family} name={icons.icon} size={20} color="black" />
-                            <Text>Color</Text>
-                            {TabChoose('Color', changecolor, setcolor,setIcon,1)}
+    const [state,dispatch] = useStore();
+    const { name, colors, image } = route.params;
+    const theme = useContext(themeContext);
+    const [currentTab, setCurrentTab] = useState("Day");
+    const [currentTabTime, setCurrentTabTime] = useState("Anytime");
+    const [isEnabled, setIsEnabled] = useState(false);
+    const [changecolor, setcolor] = useState(colors);
+    const [text, setText] = useState('');
+    //const onSubmitEditing = (text) => {dispatch(setHabitInput(text))}
+    //console.log(text);
+    console.log(state.name);
+    var icons = { 
+        icon: '',
+        family: '',
+        color: '',
+    };
+    const setIcon = (value) => {
+        icons = value;
+        return icons;
+    }
+    return (
+        <View style={{backgroundColor: theme.backgroundColor, flex: 1, flexDirection : 'column'}}>
+            <View style ={styles.Habit}>
+                <ScrollView >
+                    <View style = {{flexDirection: 'column', padding: 10, }}>
+                    <Text style ={{fontWeight: 'bold', color: theme.color }}>Name</Text>
+                    <TextInput
+                        style={[styles.textInput,{backgroundColor: theme.backgroundColor1}]}
+                        placeholder={(name)}
+                        value = {text}
+                        onChangeText={(value) => setText(value)}
+                        // onSubmitEditing={() => {
+                        // if (!text) return
+                        //     onSubmitEditing(text)
+                        // setText('')
+                        // }}
+                    />
+                    </View>
+                    <View style = {{flexDirection: 'column', padding: 10, }}>
+                    <Text style ={{fontWeight: 'bold', color: theme.color }}>Note</Text>
+                    {/* <TextInput
+                        style={[styles.textInput,{backgroundColor: theme.backgroundColor1}]}
+                        placeholder={'Type a todo, then hit enter!'}
+                        onSubmitEditing={(title) => dispatch(actionCreators.add(title))}
+                    /> */}
+                    </View>
+                    <View style = {{flexDirection: 'column', padding: 10, }}>
+                        <Text style ={{fontWeight: 'bold', color: theme.color }}>Icon & Color</Text>
+                        <View style = {{flexDirection: 'row', flex: 2}}>
+                            <View style ={{ flexDirection: 'row', justifyContent: 'space-evenly', flex: 0.5 }}>
+                                <Text>Icon</Text>
+                                {TabChoose('Icon', changecolor, setcolor,setIcon,0)}
+                                <Icon type={icons.family} name={icons.icon} size={20} color="black" />
+                                <Text>Color</Text>
+                                {TabChoose('Color', changecolor, setcolor,setIcon,1)}
+                            </View>
                         </View>
                     </View>
-                </View>
 
-                <View style = {{flexDirection: 'column', padding: 10}}>
-                    <Text style ={{fontWeight: 'bold', color: theme.color }}>Tag</Text>
-                    <TouchableOpacity style = {{borderRadius: 10, width: 40, alignItems: 'center', backgroundColor: '#f5f5f5',}}>
-                        <Ionicons name ='add' size = {20} color = {changecolor} />
-                    </TouchableOpacity>
-                </View>
+                    <View style = {{flexDirection: 'column', padding: 10}}>
+                        <Text style ={{fontWeight: 'bold', color: theme.color }}>Tag</Text>
+                        <TouchableOpacity style = {{borderRadius: 10, width: 40, alignItems: 'center', backgroundColor: '#f5f5f5',}}>
+                            <Ionicons name ='add' size = {20} color = {changecolor} />
+                        </TouchableOpacity>
+                    </View>
 
-                <View style = {{flexDirection: 'column',padding: 10}}>
-                <Text style ={{fontWeight: 'bold', color: theme.color }}>Goal & Goal Period</Text>
-                    <View style = {{flexDirection: 'row', flex: 1}}>
-                        <View style ={{ flexDirection: 'row', justifyContent: 'space-evenly',flex: 1, marginTop: 5 }}>
-                        {TabButton(currentTab, setCurrentTab, "1", changecolor)}
-                        {TabButton(currentTab, setCurrentTab, "count",changecolor)}
-                        {TabButton(currentTab, setCurrentTab, "Day", changecolor)}
-                        {TabButton(currentTab, setCurrentTab, "Week", changecolor)}
-                        {TabButton(currentTab, setCurrentTab, "Month", changecolor)}
+                    <View style = {{flexDirection: 'column',padding: 10}}>
+                    <Text style ={{fontWeight: 'bold', color: theme.color }}>Goal & Goal Period</Text>
+                        <View style = {{flexDirection: 'row', flex: 1}}>
+                            <View style ={{ flexDirection: 'row', justifyContent: 'space-evenly',flex: 1, marginTop: 5 }}>
+                            {TabButton(currentTab, setCurrentTab, "1", changecolor)}
+                            {TabButton(currentTab, setCurrentTab, "count",changecolor)}
+                            {TabButton(currentTab, setCurrentTab, "Day", changecolor)}
+                            {TabButton(currentTab, setCurrentTab, "Week", changecolor)}
+                            {TabButton(currentTab, setCurrentTab, "Month", changecolor)}
+                            </View>
                         </View>
                     </View>
-                </View>
-                <View style = {{flexDirection: 'column', padding: 10}}>
-                <Text style ={{fontWeight: 'bold', color: theme.color }}>Frequency</Text>
-                <TextInput
-                    style={[styles.textInput,{backgroundColor: theme.backgroundColor1}]}
-                    placeholder="Type here to translate!"
-                    //onChangeText={newText => setText(newText)}
-                    //defaultValue={text}
-                />
-                </View>
-                <View style = {{flexDirection: 'column', padding: 10}}>
-                <Text style ={{fontWeight: 'bold', color: theme.color }}>Time Range</Text>
-                    <View style = {{flexDirection: 'row', flex: 1}}>
-                        <View style ={{ flexDirection: 'row', justifyContent: 'flex-start',flex: 0.5, marginTop: 5 }}>
-                        {TabButtontime(currentTabTime, setCurrentTabTime, "Anytime",changecolor)}
-                        {TabButtontime(currentTabTime, setCurrentTabTime, "Morning", changecolor)}
-                        {TabButtontime(currentTabTime, setCurrentTabTime, "Afternoon", changecolor)}
-                        {TabButtontime(currentTabTime, setCurrentTabTime, "Evening", changecolor)}
-                        </View>
-                    </View> 
-                </View>
-                <View style = {{flexDirection: 'column', padding: 10}}>
-                <Text style ={{fontWeight: 'bold', color: theme.color }}>Remainder</Text>
-                <TextInput
-                    style={[styles.textInput,{backgroundColor: theme.backgroundColor1}]}
-                    placeholder="Type here to translate!"
-                    //onChangeText={newText => setText(newText)}
-                    //defaultValue={text}
-                />
-                </View>
-                <View style = {{flexDirection: 'column', padding: 10}}>
-                <Text style ={{fontWeight: 'bold', color: theme.color }}>Remainder Messages</Text>
-                <TextInput
-                    style={[styles.textInput,{backgroundColor: theme.backgroundColor1}]}
-                    placeholder="Type here to translate!"
-                    //onChangeText={newText => setText(newText)}
-                    //defaultValue={text}
-                />
-                </View>
-                <View style = {{flexDirection: 'column', padding: 10}}>
-                    <View style = {{flexDirection : 'row'}}>
-                        <Text style ={{fontWeight: 'bold', color: theme.color }}>Chart Type</Text>
-                        <Image 
-                            source={require('./Icon/bar-chart.png')}
-                            style={{ width: 48, height: 48,}}
-                        />
+                    <View style = {{flexDirection: 'column', padding: 10}}>
+                    <Text style ={{fontWeight: 'bold', color: theme.color }}>Frequency</Text>
+                    <TextInput
+                        style={[styles.textInput,{backgroundColor: theme.backgroundColor1}]}
+                        placeholder="Type here to translate!"
+                        //onChangeText={newText => setText(newText)}
+                        //defaultValue={text}
+                    />
                     </View>
-                </View>
-                <View style = {{flexDirection: 'column', padding: 10}}>
-                <Text style ={{fontWeight: 'bold', color: theme.color }}>Habit Term</Text>
-                    <View style = {{flexDirection: 'row', flex: 1}}>
-                        <View style ={{ flexDirection: 'row', justifyContent: 'flex-start',flex: 0.5 }}>
+                    <View style = {{flexDirection: 'column', padding: 10}}>
+                    <Text style ={{fontWeight: 'bold', color: theme.color }}>Time Range</Text>
+                        <View style = {{flexDirection: 'row', flex: 1}}>
+                            <View style ={{ flexDirection: 'row', justifyContent: 'flex-start',flex: 0.5, marginTop: 5 }}>
+                            {TabButtontime(currentTabTime, setCurrentTabTime, "Anytime",changecolor)}
+                            {TabButtontime(currentTabTime, setCurrentTabTime, "Morning", changecolor)}
+                            {TabButtontime(currentTabTime, setCurrentTabTime, "Afternoon", changecolor)}
+                            {TabButtontime(currentTabTime, setCurrentTabTime, "Evening", changecolor)}
+                            </View>
+                        </View> 
+                    </View>
+                    <View style = {{flexDirection: 'column', padding: 10}}>
+                    <Text style ={{fontWeight: 'bold', color: theme.color }}>Remainder</Text>
+                    <TextInput
+                        style={[styles.textInput,{backgroundColor: theme.backgroundColor1}]}
+                        placeholder="Type here to translate!"
+                        //onChangeText={newText => setText(newText)}
+                        //defaultValue={text}
+                    />
+                    </View>
+                    <View style = {{flexDirection: 'column', padding: 10}}>
+                    <Text style ={{fontWeight: 'bold', color: theme.color }}>Remainder Messages</Text>
+                    <TextInput
+                        style={[styles.textInput,{backgroundColor: theme.backgroundColor1}]}
+                        placeholder="Type here to translate!"
+                        //onChangeText={newText => setText(newText)}
+                        //defaultValue={text}
+                    />
+                    </View>
+                    <View style = {{flexDirection: 'column', padding: 10}}>
+                        <View style = {{flexDirection : 'row'}}>
+                            <Text style ={{fontWeight: 'bold', color: theme.color }}>Chart Type</Text>
+                            <Image 
+                                source={require('./Icon/bar-chart.png')}
+                                style={{ width: 48, height: 48,}}
+                            />
                         </View>
                     </View>
-                </View>
-            </ScrollView>
+                    <View style = {{flexDirection: 'column', padding: 10}}>
+                    <Text style ={{fontWeight: 'bold', color: theme.color }}>Habit Term</Text>
+                        <View style = {{flexDirection: 'row', flex: 1}}>
+                            <View style ={{ flexDirection: 'row', justifyContent: 'flex-start',flex: 0.5 }}>
+                            </View>
+                        </View>
+                    </View>
+                </ScrollView>
 
+            </View>
+        <SafeAreaView style = {styles.homeZone}> 
+            <TouchableOpacity 
+                onPress={() => {
+            navigation.navigate('Home', {
+                screen: 'AddHabit',
+                params: { user: 'jane' },
+                });
+        }}>
+                <Image
+                    source={require('./Icon/done.png')}
+                    style={{ width: 45, height: 45,}}
+                />
+            </TouchableOpacity>
+        </SafeAreaView>
         </View>
-      <SafeAreaView style = {styles.homeZone}> 
-        <TouchableOpacity 
-            onPress={() => {
-           navigation.navigate('Home', {
-            screen: 'AddHabit',
-            params: { user: 'jane' },
-            });
-    }}>
-            <Image
-                source={require('./Icon/done.png')}
-                style={{ width: 45, height: 45,}}
-            />
-        </TouchableOpacity>
-      </SafeAreaView>
-    </View>
-    );
-};
+        );
+    };
 
 const TabButton = (currentTab, setCurrentTab, title, color) => {
   return (
