@@ -4,7 +4,6 @@ import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import dateFns from 'date-fns';
 import { EventRegister } from 'react-native-event-listeners';
 import themeContext from "./styles/themeContext";
-import Data from "../data/Data";
 import * as Progress from 'react-native-progress';
 import walking from './Icon/walking.png';
 import WeeklyCalendar from 'react-native-weekly-calendar';
