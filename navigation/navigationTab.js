@@ -10,7 +10,6 @@ import { Ionicons } from '@expo/vector-icons';
 import Setting from "../screen/setting";
 import Statistic from "../screen/statistic";
 import HabitDetail from "../screen/habitDetail/habitDetail";
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { View, Button, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Image, TextInput, Alert, } from "react-native";
 import Theme from "../screen/settingsScreen/Theme";
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';

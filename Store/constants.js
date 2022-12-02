@@ -1,0 +1,1 @@
+export const SET_HABIT_INPUT = 'set_habit_input';
