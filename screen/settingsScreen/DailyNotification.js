@@ -1,29 +1,34 @@
 import React from "react";
 import { useState } from 'react';
-import {Text,  View,StyleSheet,Button } from 'react-native';
+import {Text,  View,StyleSheet,Button, TextInput } from 'react-native';
 import Modal from "react-native-modal";
 
-export default function VactionMode (params){
+export default function DailyNotification (params){
+    const [text, setText] = useState("Are your habits completed?");
     return(         
                 <View>
-                    <Modal isVisible={params.myIsmodalVisible} 
+                     <Modal isVisible={params.myIsmodalVisible} 
                         useNativeDriver={true}
                         onBackdropPress={() => params.setModalVisible(false)}
                         animationIn = 'bounceIn'
-                        animationInTiming = {500}
-                        animationOut ="bounceOut"
+                        animationInTiming = {600}
+                        animationOut ='bounceOut'
                         animationOutTiming = {500}
                     >
-                        <View style={{height: '50%', backgroundColor: 'white', borderRadius: 30, borderWidth: 1,justifyContent: 'center'}}>
-                            <View style={styles.container}>
-                                <Text style={styles.tilte}>Do you want to turn vacation mode on?</Text>
-                                <Text style={styles.text}>Start Date</Text>
-                                <Text style={styles.text}>End Date</Text>
-                            </View>
+                    <View style={{height: '50%', backgroundColor: 'white', borderRadius: 30, borderWidth: 1,justifyContent: 'center'}}>
+                        <View style={styles.container}>
+                            <Text style={styles.tilte}>Daily Motivation</Text>
+                            <TextInput
+                                style={styles.input}
+                                onChangeText={(text)=>setText(text)}
+                                value={text}
+                            />  
+                            <Text style={styles.tilte}>Time</Text>
+                        </View>
                         <View style={styles.buttonType}>
                             <Button  title="Confirm" color="white" onPress={() => params.setModalVisible(false)} />
                         </View>
-                        </View>
+                    </View>
                     </Modal>
                 </View>
     );
@@ -34,8 +39,8 @@ const styles=StyleSheet.create({
         flex:1
     },
     tilte:{
-        marginLeft: 20,
-        fontSize: 18,
+        marginLeft: 30,
+        fontSize: 25,
         fontWeight: 'bold',
         color: 'black',
         marginTop: 20
@@ -52,7 +57,7 @@ const styles=StyleSheet.create({
     },
     text:{
         
-        textAlign: 'center',
+        marginLeft: 30,
         fontSize: 15,
         marginTop: 30,
 

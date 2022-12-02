@@ -3,12 +3,14 @@ import { useState } from 'react';
 import {Text,  View } from 'react-native';
 
 
-export default function Export (params){
+export default function UsageTips (params){
     return(         
         <View >
+            
             <View >
-                <Text>Export</Text>
+                <Text>Usage Tips</Text>
             </View>    
+            
         </View>
     );
 

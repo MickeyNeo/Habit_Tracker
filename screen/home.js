@@ -1,7 +1,6 @@
 import React, {useState, useContext} from 'react';
 import { View, Button, Text, StyleSheet, TouchableOpacity, Image, Switch, TextInput } from "react-native";
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
-//import Data from "../data/Data";
 import * as Progress from 'react-native-progress';
 import walking from './Icon/walking.png';
 import WeeklyCalendar from 'react-native-weekly-calendar';
