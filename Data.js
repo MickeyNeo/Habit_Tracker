@@ -2,8 +2,8 @@ import SQLite from 'react-native-sqlite-storage';
 
 const db = SQLite.openDatabase(
     {
-        name: 'MainDB',
-        location: 'default',
+        name: 'Habit tracker',
+        createFromLocation: 1,
     },
     () => { },
     error => { console.log(error) }
