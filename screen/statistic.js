@@ -5,12 +5,15 @@ import { Animated, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/FontAwesome'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Foundation,Octicons,Entypo } from '@expo/vector-icons'; 
-
+import {useStore} from '../Store'
 
 
 export default function Statistic(){
+    const[state, dispatch] =useStore()
+    console.log(state.stateHabitOfDay)
     return(
         <View style={style.container}> 
             <View style={{flexDirection:'row',backgroundColor: 'white',}}>
@@ -19,22 +22,12 @@ export default function Statistic(){
                     name="graph-pie" size={27} color="pink" />
                 
                 <ScrollView style={style.scroll} horizontal={true}> 
-                    <TouchableOpacity>
-                        <FontAwesome5 style={style.iconTitle} name='walking' size={27} color='crimson' />
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <FontAwesome5 style={style.iconTitle} name='running' size={27} color='darkgoldenrod' />
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <FontAwesome5 style={style.iconTitle} name ='chess' size={27} color='black' />
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                    <MaterialCommunityIcons style={style.iconTitle} name='yoga' size={27} color='darkred' />
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Ionicons style={style.iconTitle} name='bicycle' size={27} color='dodgerblue' />
-                    </TouchableOpacity>
-
+                    {state.stateHabitOfDay.map((value,index) =>(
+                        
+                        <TouchableOpacity key={index}>
+                            <FontAwesome5 style={style.iconTitle} name={value} size={27} color='crimson' />
+                        </TouchableOpacity>
+                    ))}
                 </ScrollView>
             </View>
             <View style={{flex: 1,alignItems: 'stretch'}}>

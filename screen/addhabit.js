@@ -12,7 +12,7 @@ import ChooseIcon from "./icon_color/chooseIcon";
 import Icon from "./icon_color/Icon";
 
 
-import { useStore} from '../Store'
+import { useStore , addHabitOfaDay} from '../Store'
 import { setHabitInput } from '../Store/action'
 
 const AddHabit = ({navigation, route}) => {
@@ -26,7 +26,9 @@ const AddHabit = ({navigation, route}) => {
     const [text, setText] = useState('');
     //const onSubmitEditing = (text) => {dispatch(setHabitInput(text))}
     //console.log(text);
-    console.log(state.name);
+    
+    console.log(state.stateHabitOfDay)
+    console.log(typeof(name));
     var icons = { 
         icon: '',
         family: '',
@@ -36,6 +38,7 @@ const AddHabit = ({navigation, route}) => {
         icons = value;
         return icons;
     }
+
     return (
         <View style={{backgroundColor: theme.backgroundColor, flex: 1, flexDirection : 'column'}}>
             <View style ={styles.Habit}>
@@ -154,11 +157,12 @@ const AddHabit = ({navigation, route}) => {
         <SafeAreaView style = {styles.homeZone}> 
             <TouchableOpacity 
                 onPress={() => {
-            navigation.navigate('Home', {
-                screen: 'AddHabit',
-                params: { user: 'jane' },
-                });
-        }}>
+                    dispatch(addHabitOfaDay(name.toLowerCase()));
+                    navigation.navigate('Home', {
+                        screen: 'AddHabit',
+                        params: { user: 'jane' },
+                    });
+                }}>
                 <Image
                     source={require('./Icon/done.png')}
                     style={{ width: 45, height: 45,}}
