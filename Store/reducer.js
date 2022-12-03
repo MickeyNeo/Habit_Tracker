@@ -1,10 +1,11 @@
 import { SET_HABIT_INPUT} from './constants'
 import { SET_LANGUAGE } from './constants'
-const initialHabit = {
+import { ADD_HABIT_OF_ADAY } from './constants'
+const globalState = {
     name: 't buc r do',
-    note: '',
-    image: '',
     stateLanguage:"English",
+    stateHabitOfDay: ["running", "walking"],
+    
 }
 function reducer (state, action) {
     switch (action.type) {
@@ -18,11 +19,16 @@ function reducer (state, action) {
                 ...state,
                 stateLanguage: action.payload,
             }
+        case ADD_HABIT_OF_ADAY:
+            return {
+                ...state,
+                stateHabitOfDay: [...state.stateHabitOfDay, action.payload]
+            }
         default:
             throw new Error('sai goi ne')
     }
 }
 
-export {initialHabit}
+export {globalState}
 export default reducer;
 
