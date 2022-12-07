@@ -11,7 +11,7 @@ import { Foundation,Octicons,Entypo } from '@expo/vector-icons';
 import {useStore} from '../Store'
 
 
-export default function Statistic(){
+export default function Statistic({navigation}){
     const[state, dispatch] =useStore()
     console.log(state.stateHabitOfDay)
     return(
@@ -24,7 +24,14 @@ export default function Statistic(){
                 <ScrollView style={style.scroll} horizontal={true}> 
                     {state.stateHabitOfDay.map((value,index) =>(
                         
-                        <TouchableOpacity key={index}>
+                        <TouchableOpacity key={index}
+                            onPress={() => {
+                                navigation.navigate('HabitOfADay', {
+                                    // name: title,
+                                    // colors: color,
+                                    // image: image,
+                                })
+                            }}>
                             <FontAwesome5 style={style.iconTitle} name={value} size={27} color='crimson' />
                         </TouchableOpacity>
                     ))}

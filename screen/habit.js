@@ -113,7 +113,7 @@ const TabButton = (navigation, title, image, color) => {
             name: title,
             colors: color,
             image: image,
-    })
+        })
     }} style = {styles.btnHabit}>
     <Image
         source={image}

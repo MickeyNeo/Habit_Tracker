@@ -17,6 +17,7 @@ import HabitManager from "../screen/settingsScreen/HabitManager";
 import MoreSettings from "../screen/settingsScreen/MoreSettings";
 import Export from "../screen/settingsScreen/Export";
 import UsageTips from "../screen/settingsScreen/UsageTips";
+import HabitOfADay from "../screen/HabitOfADay";
 
 
 const Tab = createBottomTabNavigator();
@@ -85,6 +86,7 @@ function MainTabNavigator () {
         <Stack.Screen name="MoreSettings" component={MoreSettings} />
         <Stack.Screen name="Export" component={Export} />
         <Stack.Screen name="UsageTips" component={UsageTips}/>
+        <Stack.Screen options={{ headerTitle: 'Habit Of Day' }} name="HabitOfADay" component={HabitOfADay}/>
       </Stack.Navigator>
   );
 }

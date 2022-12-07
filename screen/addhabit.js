@@ -170,8 +170,8 @@ const AddHabit = ({navigation, route}) => {
             </TouchableOpacity>
         </SafeAreaView>
         </View>
-        );
-    };
+    );
+};
 
 const TabButton = (currentTab, setCurrentTab, title, color) => {
   return (
