@@ -27,7 +27,7 @@ export default function Statistic({navigation}){
                         <TouchableOpacity key={index}
                             onPress={() => {
                                 navigation.navigate('HabitOfADay', {
-                                    // name: title,
+                                    iconName: value,
                                     // colors: color,
                                     // image: image,
                                 })
@@ -41,41 +41,38 @@ export default function Statistic({navigation}){
                 <ScrollView>
                     <Calendar style={style.calendar} firstDay={1}/>
                     <View style={style.static}>
-                        <View>
+                        {/* <View>
                             <Text></Text>
-                        </View>
+                        </View> */}
                         <View style={{flex:1, justifyContent:'flex-end'}}>
                             <View style={{flexDirection:'row',justifyContent:'center'}}>
                                 <View style={style.colum}>
                                     <View style={style.iconRecord}>
                                         <FontAwesome5  name="medal" size={50} color="orange" />
-                                        <Text>Day</Text>
+                                        <Text>0 Day</Text>
                                         <Text>Best Streaks</Text>
                                     </View>
                                     <View style={style.iconRecord}>
                                         <Octicons name="checklist" size={50} color="green" />
-                                        <Text>Day</Text>
-                                        <Text>Best Streaks</Text>
+                                        <Text>0</Text>
+                                        <Text>Habits Done</Text>
                                     </View>
                                     
                                 </View>
                                 <View style={style.colum}>
                                     <View style={style.iconRecord}>
                                         <FontAwesome5 name="calendar-check" size={50} color="blue" />
-                                        <Text>Day</Text>
-                                        <Text>Best Streaks</Text>
+                                        <Text>0 Day</Text>
+                                        <Text>Perfect Days</Text>
                                     </View>
                                     <View style={style.iconRecord}>
                                         <Entypo name="dots-three-vertical" size={50} color="purle" />
-                                        <Text>Day</Text>
-                                        <Text>Best Streaks</Text> 
+                                        <Text>0</Text>
+                                        <Text>Daily Average</Text> 
                                     </View>
-                                    
-                                    
                                 </View>
                             
                             </View>
-                            
                             
                         </View>
                     </View>
@@ -97,7 +94,7 @@ const style = StyleSheet.create({
         margin:5
     },
     iconTitle:{
-        marginLeft: 40,
+        marginLeft: 30,
     },
     calendar:{
         backgroundColor: 'white',

@@ -86,7 +86,7 @@ function MainTabNavigator () {
         <Stack.Screen name="MoreSettings" component={MoreSettings} />
         <Stack.Screen name="Export" component={Export} />
         <Stack.Screen name="UsageTips" component={UsageTips}/>
-        <Stack.Screen options={{ headerTitle: 'Habit Of Day' }} name="HabitOfADay" component={HabitOfADay}/>
+        <Stack.Screen options={{ headerTitle: 'Habit Details' }} name="HabitOfADay" component={HabitOfADay}/>
       </Stack.Navigator>
   );
 }
