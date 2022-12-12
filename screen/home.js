@@ -8,21 +8,15 @@ import { useStore } from '../Store'
 
 const Home = ({ navigation }) => {
   const [state,dispatch] = useStore();
-  //console.log(state.name);
+  console.log(state.habit);
+  //console.log(state.name)i;
       return (
           <View style={{backgroundColor: 'white', flex: 1}}>
             {/* <View style = {{flex: 0.1}}>
-            <WeeklyCalendar style={{ height: 400 }} />
             </View>
             <View style = {styles.progress}> 
               <TouchableOpacity style = {{flex: 1}} onPress = {() => navigation.navigate("HabitDetail")}>
-                  <Progress.Bar 
-                    progress={0.5} 
-                    width={null} 
-                    height = {35} 
-                    color = "#2d99ae" 
-                    //unfilledColor ='#bcfefe' 
-                  > 
+                  <Progress.Circle size={100} indeterminate={true} color = 'white'>
                   <View style={{
                     position: 'absolute', 
                     flexDirection: 'row', 
@@ -36,7 +30,7 @@ const Home = ({ navigation }) => {
                   /> 
                   <Text style = {{color: 'red', fontSize: 15}}>Walking</Text>
                   </View> 
-                  </Progress.Bar>
+                  </Progress.Circle>
               </TouchableOpacity>
             </View> */}
             <View style = {styles.addHabit}>

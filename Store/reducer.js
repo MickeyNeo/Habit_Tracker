@@ -5,19 +5,55 @@ import theme from '../screen/styles/theme'
 import { SET_THEME } from './constants'
 import { SET_HABIT_STAT } from './constants'
 const globalState = {
-    name: 't buc r do',
+    habit: {
+        id: 0,
+        name: '',
+        note: '',
+        frequency: '',
+        color: '',
+        tagID: 0,
+        frequencyType: '',
+        timeRange: '',
+        remainderMessage: '',
+        showMemo: 0,
+        chartType: '',
+        habitStartDay: '',
+        habitEndDay: '',
+        goalNo: '',
+        goalPeriod: '',
+        unitID: '',
+    },
+    memo: {
+        habitID: 0,
+        date: '',
+        content: '',
+    },
+    remainder: {
+        habitID: 0,
+        time: '',
+    },
+    tag: {
+        id: 0,
+        name: '',
+    },
+    unit: {
+        id: 0,
+        name: '',
+    },
     stateLanguage:"English",
     stateHabitOfDay: ["running", "walking"],
+
     currentTheme: theme.dark,
     stateHabitStat: true,
     
 }
+
 function reducer (state, action) {
     switch (action.type) {
         case SET_HABIT_INPUT: 
             return {
                 ...state,
-                name: action.payload,
+                habit: action.payload,
             }
         case SET_LANGUAGE:
             return {
