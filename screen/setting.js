@@ -43,7 +43,6 @@ export default function Settings({navigation}){
                 
                 {tabButton(navigation,"Language")}
                 {tabButton(navigation,"Theme")}
-                {tabButton(navigation,"Widget Theme")}
                 {tabButton(navigation,"Tab Bar")}
                 {line()}
                 {tabButton(navigation,"Habit Manager")}
