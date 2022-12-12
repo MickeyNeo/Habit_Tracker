@@ -49,7 +49,7 @@ return (
                 <Text style = {{ fontSize: 20, padding: 10,}}>Sports</Text>
                 <View style = { styles.habitZone}>
                     <View style = {styles.zone}>
-                        {TabButton(navigation,"Walking", walking, 'red')}
+                        {TabButton(navigation,"Walking", walking, 'red', ['add', 'Ionicons'])}
                         {TabButton(navigation,"Running", running, 'green')}
                         {TabButton(navigation,"Chess", chess, 'grey')}
                     </View>
@@ -106,13 +106,14 @@ return (
     </View>
     );
 };
-const TabButton = (navigation, title, image, color) => {
+const TabButton = (navigation, title, image, color, IconInfo) => {
   return (
     <TouchableOpacity onPress={() => {
         navigation.navigate('AddHabit', {
             name: title,
             colors: color,
             image: image,
+            IconInfo: IconInfo,
         })
     }} style = {styles.btnHabit}>
     <Image

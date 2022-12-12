@@ -13,14 +13,6 @@ const [currentTab, setCurrentTab] = useState("Day");
 const [currentTabTime, setCurrentTabTime] = useState("Anytime");
 return (
     <View style={styles.container}>
-
-        {/* <View style = {styles.addHabit}>
-            <TouchableOpacity style ={styles.customHabit}> 
-                <Ionicons name='add-circle'  size ={30} color = 'green' />
-                <Text> Create Your Custom Habit </Text>
-            </TouchableOpacity>
-        </View> */}
-
         <View style ={styles.Habit}>
             <ScrollView >
                 <View style = {{flexDirection: 'column', padding: 10, }}>
@@ -28,9 +20,6 @@ return (
                 <TextInput
                     style={styles.textInput}
                     placeholder="Enter your name habit!"
-                    //data.push(route.params.name)
-                    //onChangeText={newText => setText(newText)}
-                    //defaultValue={text}
                 />
                 </View>
                 <View style = {{flexDirection: 'column', padding: 10, }}>

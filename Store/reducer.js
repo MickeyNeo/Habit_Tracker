@@ -2,17 +2,51 @@ import { SET_HABIT_INPUT} from './constants'
 import { SET_LANGUAGE } from './constants'
 import { ADD_HABIT_OF_ADAY } from './constants'
 const globalState = {
-    name: 't buc r do',
+    habit: {
+        id: 0,
+        name: '',
+        note: '',
+        frequency: '',
+        color: '',
+        tagID: 0,
+        frequencyType: '',
+        timeRange: '',
+        remainderMessage: '',
+        showMemo: 0,
+        chartType: '',
+        habitStartDay: '',
+        habitEndDay: '',
+        goalNo: '',
+        goalPeriod: '',
+        unitID: '',
+    },
+    memo: {
+        habitID: 0,
+        date: '',
+        content: '',
+    },
+    remainder: {
+        habitID: 0,
+        time: '',
+    },
+    tag: {
+        id: 0,
+        name: '',
+    },
+    unit: {
+        id: 0,
+        name: '',
+    },
     stateLanguage:"English",
     stateHabitOfDay: ["running", "walking"],
-    
 }
+
 function reducer (state, action) {
     switch (action.type) {
         case SET_HABIT_INPUT: 
             return {
                 ...state,
-                name: action.payload,
+                habit: action.payload,
             }
         case SET_LANGUAGE:
             return {

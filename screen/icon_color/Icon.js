@@ -1,6 +1,6 @@
 import React from 'react';
 import Feather from 'react-native-vector-icons/Feather';
-import Ionicon from 'react-native-vector-icons/Ionicons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import ZocialIcon from 'react-native-vector-icons/Zocial';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import Fontisto from 'react-native-vector-icons/Fontisto';
@@ -39,7 +39,7 @@ const Icons = ({type, ...props}) => {
             case 'fa':
                 return FAIcon;
             case 'Ionicons':
-                return Ionicon;
+                return Ionicons;
             case 'materialCommunity':
                 return MaterialCommunityIcon;
             case 'entypo':
