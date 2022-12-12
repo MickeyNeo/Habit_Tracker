@@ -18,7 +18,7 @@ import MoreSettings from "../screen/settingsScreen/MoreSettings";
 import Export from "../screen/settingsScreen/Export";
 import UsageTips from "../screen/settingsScreen/UsageTips";
 import HabitOfADay from "../screen/HabitOfADay";
-
+import { useStore } from "../Store";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -35,6 +35,43 @@ function getHeaderTitle(route) {
 }
 
 function HomeTabs({navigation}) {
+  const [state, dispatch] = useStore()
+  const {stateHabitStat} = state
+  if (stateHabitStat==true)
+    return (
+      <Tab.Navigator
+              initialRouteName="Home"
+              screenOptions={({ route }) => ({
+              tabBarShowLabel: false,
+              headerShown: false,
+              tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
+              if (route.name === 'Home') {
+                iconName = focused
+                  ? 'add'
+                  : 'ios-home-outline';
+              if (iconName === 'add' && !focused) { 
+                {navigation.navigate('Habit')}
+              }
+              } else if (route.name === 'Settings') {
+                iconName = focused ? 'ios-list' : 'ios-list-outline';
+              }
+              else if (route.name === 'Statistic') {
+                  iconName = focused ? 'ios-bar-chart' : 'ios-bar-chart-outline';
+              }
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
+            tabBarActiveTintColor: '#0c5776',
+            tabBarInactiveTintColor: 'gray',
+            tabBarActiveBackgroundColor: '#bcfefe',
+            tabBarInactiveBackgroundColor: 'white',
+          })}>
+        <Tab.Screen  option = {{headerShown: false}} name="Home" component={Home} /> 
+        <Tab.Screen  option = {{headerShown: false}}  name="Statistic" component={Statistic} />
+        <Tab.Screen  option = {{headerShown: false}}  name="Settings" component={Setting} />
+      </Tab.Navigator>
+  );
+  else
   return (
     <Tab.Navigator
             initialRouteName="Home"
@@ -63,11 +100,11 @@ function HomeTabs({navigation}) {
           tabBarActiveBackgroundColor: '#bcfefe',
           tabBarInactiveBackgroundColor: 'white',
         })}>
-      <Tab.Screen  option = {{headerShown: false}} name="Home" component={Home} />
-      <Tab.Screen  option = {{headerShown: false}}  name="Statistic" component={Statistic} />
+      <Tab.Screen  option = {{headerShown: false}} name="Home" component={Home} /> 
       <Tab.Screen  option = {{headerShown: false}}  name="Settings" component={Setting} />
     </Tab.Navigator>
-  );
+);
+
 }
 
 function MainTabNavigator () {

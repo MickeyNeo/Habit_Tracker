@@ -2,12 +2,18 @@ import React from "react";
 import { useState } from 'react';
 import {Text,  View, StyleSheet,Button, Switch } from 'react-native';
 import Modal from "react-native-modal";
+import { useStore,setHabitStat} from "../../Store";
 
 export default function TabBar (params){
-    const [isEnabledSwitch, setIsEnabledSwitch] =useState(false)
-    const toggleSwitch = () => setIsEnabledSwitch(previousState => !previousState);
+    const [state, dispatch] =useStore()
+    const {stateHabitStat} =state
+    //console.log(stateHabitStat)
+    const [isEnabledSwitch, setIsEnabledSwitch] =useState(stateHabitStat)
+    const toggleSwitch = () => {setIsEnabledSwitch(previousState => !previousState)};
+    
     return(         
         <View >
+            
             <Modal isVisible={params.myIsmodalVisible} 
                 useNativeDriver={true}
                 onBackdropPress={() => params.setModalVisible(false)}
@@ -18,7 +24,7 @@ export default function TabBar (params){
                 >
                     <View style={{height: '38%', backgroundColor: 'white', borderRadius: 30, borderWidth: 1,justifyContent: 'center'}}>
                         <View style={styles.container}>
-                                <Text style={styles.tilte}>Tab Bar</Text>
+                                <Text style={styles.tilte}>Tab Bar</Text> 
                                 <View style={{flexDirection:'row'}}>
                                     <Text style={styles.text}>Habit Stat</Text>
                                     <Switch 
@@ -33,7 +39,7 @@ export default function TabBar (params){
                                 
                             </View>
                             <View style={styles.buttonType}>
-                                <Button  title="Confirm" color="white" onPress={() => params.setModalVisible(false)} />
+                                <Button  title="Confirm" color="white" onPress={() => {params.setModalVisible(false),dispatch(setHabitStat(isEnabledSwitch))}} />
                             </View>
                         </View>
                 </Modal>       
