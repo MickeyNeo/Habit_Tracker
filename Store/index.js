@@ -1,4 +1,4 @@
-import { setLanguage } from './action'
+import { setHabitStat, setLanguage } from './action'
 
 export { default as StoreProvider }  from './Provider'
 export { default as StoreContext } from './Context'
@@ -8,3 +8,4 @@ export * from './hooks'
 export {setLanguage} from './action'
 export {addHabitOfaDay} from './action'
 export {setTheme} from './action'
+export {setHabitStat} from './action'
