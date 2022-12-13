@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from 'react';
 import {Text,  View,StyleSheet,Button, TextInput } from 'react-native';
 import Modal from "react-native-modal";
-
+import TimePickerDialog from '@react-native-community/datetimepicker';
 export default function DailyNotification (params){
     const [text, setText] = useState("Are your habits completed?");
     return(         
@@ -24,6 +24,10 @@ export default function DailyNotification (params){
                                 value={text}
                             />  
                             <Text style={styles.tilte}>Time</Text>
+                            <View style={{flex:1}}>
+                                <TimePickerDialog style={{alignSelf:'center'}} mode="time" value={new Date()} />
+                            </View>
+                             
                         </View>
                         <View style={styles.buttonType}>
                             <Button  title="Confirm" color="white" onPress={() => params.setModalVisible(false)} />
