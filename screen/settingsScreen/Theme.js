@@ -55,20 +55,7 @@ export default function Theme (){
                             selectedValue={HBSize}
                             setSelectedValue={setHBSize}
                         />
-                    </View>
-            
-                
-                    
-                
-                
-                
-                
-                
-                
-
-                
-                
-                
+                    </View>                
             </ScrollView>    
             
         </View>

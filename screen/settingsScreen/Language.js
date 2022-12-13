@@ -32,7 +32,6 @@ export default function Language (params){
                                 values={["English", "Vietnamese", "French", "German"]}
                                 selectedValue={lg}
                                 setSelectedValue={setLg}
-                                
                             />
                         </View>
                         <View style={styles.buttonType}>

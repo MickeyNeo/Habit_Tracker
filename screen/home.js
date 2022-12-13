@@ -8,49 +8,77 @@ import { useStore } from '../Store'
 
 const Home = ({ navigation }) => {
   const [state,dispatch] = useStore();
-  console.log(state.habit);
-  //console.log(state.name)i;
+  console.log(state.listHabit)
+  const [lg,setLg] = useState('');
+   if (state.listHabit != '')
       return (
           <View style={{backgroundColor: 'white', flex: 1}}>
-            {/* <View style = {{flex: 0.1}}>
-            </View>
             <View style = {styles.progress}> 
-              <TouchableOpacity style = {{flex: 1}} onPress = {() => navigation.navigate("HabitDetail")}>
-                  <Progress.Circle size={100} indeterminate={true} color = 'white'>
-                  <View style={{
-                    position: 'absolute', 
-                    flexDirection: 'row', 
-                    color: 'grey', 
-                    alignItems: 'center',
-                    //borderWidth: 2,
-                    }}>
-                  <Image
-                      source={walking}
-                      style={{ width: 35, height: 35,}}
-                  /> 
-                  <Text style = {{color: 'red', fontSize: 15}}>Walking</Text>
-                  </View> 
-                  </Progress.Circle>
-              </TouchableOpacity>
-            </View> */}
+              <PreviewLayout
+                        values={state.listHabit}
+                        selectedValue={lg}
+                        setSelectedValue={setLg}
+              />
+            </View>
+            <TouchableOpacity style = { styles.addHabit} onPress = {() => navigation.navigate("Habit")}>
+                <Text style = {{color: 'black'}} >Press '+' to add new habit </Text>
+            </TouchableOpacity>
+          </View>
+        )
+  else 
+    return (
+            <View style={{backgroundColor: 'white', flex: 1}}>
             <View style = {styles.addHabit}>
               <TouchableOpacity style = { styles.addHabit} onPress = {() => navigation.navigate("Habit")}>
                 <Image
                       source={require('./Icon/rocket.png')}
                       style={{ width: 100, height: 100,}}
-                        />
+                />
                 <Text style = {{color: 'black'}} >No Habits</Text>
                 <Text style = {{color: 'black'}} >Press '+' to add new habit </Text>
                 </TouchableOpacity>
             </View>
           </View>
-        );
-      };
+  )
+};
+const PreviewLayout =({
+    values,
+    selectedValue,
+    setSelectedValue, 
+  })=>(
+    <View>
+        {values.map((value) =>(
+              <TouchableOpacity style = {{padding: 5}} key={value.name} onPress = {() => navigation.navigate("Habit")}>
+                  <Progress.Bar progress={0.3} width = {300} height={35}>
+                    <View style={{
+                      flex: 1,
+                      position: 'absolute', 
+                      flexDirection: 'row', 
+                      alignItems: 'center',
+                      }}>
 
+                      <Image
+                        source={value.image}
+                        style={{ width: 35, height: 35,}}
+                      /> 
+
+                      <View style ={{flexDirection: 'column', borderWidth: 1,}}>
+                        <Text style = {{color: value.color, fontSize: 10}}>{value.name}</Text>
+                        <Text style = {{color: value.color, fontSize: 8}}>{value.note}</Text>
+                      </View>
+
+                      <View style={{left: '50%', alignSelf: 'flex-end', borderWidth: 1, flex: 1}}>
+                          <Text>Test</Text>
+                      </View>
+                    </View>
+                  </Progress.Bar>
+              </TouchableOpacity>
+        ))}
+    </View>
+);
 const styles = StyleSheet.create({
     container:{
         flex: 1, 
-        //backgroundColor: 'white',
     },
     addHabit: { 
         flex: 1,
@@ -60,25 +88,11 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         padding: 10,
         fontSize: 20,
-      //TextSize: 50,
     },
     progress: {
+      padding: 10,
       flexDirection: 'row',
-      top: '10%',
       width: "100%",
-    },
-    homeZone: {
-      //flex: 0.15,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent : 'space-evenly',
-      backgroundColor: '#BEABAB',
-      position: 'absolute',
-      width: '100%',
-      height: '10%',
-      top: '90%',
-      left: '0%',
-      padding: 0,
     }
 });
 

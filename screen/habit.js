@@ -49,21 +49,21 @@ return (
                 <Text style = {{ fontSize: 20, padding: 10,}}>Sports</Text>
                 <View style = { styles.habitZone}>
                     <View style = {styles.zone}>
-                        {TabButton(navigation,"Walking", walking, 'red', ['add', 'Ionicons'])}
-                        {TabButton(navigation,"Running", running, 'green')}
-                        {TabButton(navigation,"Chess", chess, 'grey')}
+                        {TabButton(navigation,"Walking", walking, 'red', ['walking', 'FontAwesome5'])}
+                        {TabButton(navigation,"Running", running, 'green', ['running','FontAwesome5'])}
+                        {TabButton(navigation,"Chess", chess, 'grey', ['chess-king','MaterialCommunityIcons'])}
                     </View>
 
                     <View style = {styles.zone}>
-                        {TabButton(navigation,"Stretch", stretch, '#dc143c')}
-                        {TabButton(navigation,"Yoga", yoga, '#ffb6c1')}
-                        {TabButton(navigation,"Cycling", cycling, '#a0522d')}
+                        {TabButton(navigation,"Stretch", stretch, '#dc143c', ['running','FontAwesome5'])}
+                        {TabButton(navigation,"Yoga", yoga, '#ffb6c1', ['yoga','MaterialCommunityIcons'])}
+                        {TabButton(navigation,"Cycling", cycling, '#a0522d', ['md-bicycle-sharp','Ionicons'])}
                     </View>
 
                     <View style = { styles.zone}>
-                        {TabButton(navigation,"Swim", swim, '#00ffff')}
-                        {TabButton(navigation,"Burn Calo", burn, '#ff6347')}
-                        {TabButton(navigation,"Exercise", exercise, '#00ff7f')}
+                        {TabButton(navigation,"Swim", swim, '#00ffff', ['swimmer','FontAwesome5'])}
+                        {TabButton(navigation,"Burn Calo", burn, '#ff6347', ['burn','FontAwesome5'])}
+                        {TabButton(navigation,"Exercise", exercise, '#00ff7f', ['fitness-center','MaterialIcons'])}
                     </View>
 
                     </View>
@@ -71,34 +71,34 @@ return (
                 <Text style = {{ fontSize: 20, padding: 10,}}>Thought</Text>
                 <View style = { styles.habitZone} >
                     <View style = {styles.zone}> 
-                        {TabButton(navigation,"Breathe", breathe, '#98fb98')}
-                        {TabButton(navigation,"Meditation", meditation, '#ffa500')}
-                        {TabButton(navigation,"Read book", read, '#7b68ee')}
+                        {TabButton(navigation,"Breathe", breathe, '#98fb98', ['running','FontAwesome5'])}
+                        {TabButton(navigation,"Meditation", meditation, '#ffa500', ['meditation','MaterialCommunityIcons'])}
+                        {TabButton(navigation,"Read book", read, '#7b68ee', ['book-reader','FontAwesome5'])}
                     </View>
 
                     <View style = {styles.zone}>
-                        {TabButton(navigation,"Learning", learning, '#ff8c00')}
-                        {TabButton(navigation,"Review", review, '#ffb6c1')}
-                        {TabButton(navigation,"Mind Clear", clear, '#ffe4e1')}
+                        {TabButton(navigation,"Learning", learning, '#ff8c00', ['brain','MaterialCommunityIcons'])}
+                        {TabButton(navigation,"Review", review, '#ffb6c1', ['preview','Fontisto'])}
+                        {TabButton(navigation,"Mind Clear", clear, '#ffe4e1', ['clear','MaterialIcons'])}
                     </View>
                 </View>
 
                 <Text style = {{ fontSize: 20, padding: 10,}}>Health</Text>
                 <View style = { styles.habitZone} >
                     <View style = {styles.zone}> 
-                        {TabButton(navigation,"Workout", workout, '#ffff00')}
-                        {TabButton(navigation,"Eat Fruit", fruit, '#9acd32')}
-                        {TabButton(navigation,"Eat Vegetable", vege, '#98fb98')}
+                        {TabButton(navigation,"Workout", workout, '#ffff00', ['fitness','Ionicons'])}
+                        {TabButton(navigation,"Eat Fruit", fruit, '#9acd32', ['fruit-grapes-outline','MaterialCommunityIcons'])}
+                        {TabButton(navigation,"Eat Vegetable", vege, '#98fb98', ['running','FontAwesome5'])}
                     </View>
 
                     <View style = {styles.zone}>
-                        {TabButton(navigation,"No Sugar", nosugar, '#afeeee')}
-                        {TabButton(navigation,"Sleep Early", sleep, '#cd853f')}
-                        {TabButton(navigation,"Eat Low-Fat", lowfat, '#dda0dd')}
+                        {TabButton(navigation,"No Sugar", nosugar, '#afeeee', ['spoon-sugar','MaterialCommunityIcons'])}
+                        {TabButton(navigation,"Sleep Early", sleep, '#cd853f', ['sleep','MaterialCommunityIcons'])}
+                        {TabButton(navigation,"Eat Low-Fat", lowfat, '#dda0dd', ['running','FontAwesome5'])}
                     </View>
 
                     <View style = { styles.zone}>
-                        {TabButton(navigation,"Eat Breakfast", breakfast, '#db7093')}
+                        {TabButton(navigation,"Eat Breakfast", breakfast, '#db7093', ['breakfast-dining','MaterialIcons'])}
                     </View>
                 </View>
             </ScrollView>
