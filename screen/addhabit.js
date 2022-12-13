@@ -12,7 +12,7 @@ import ChooseIcon from "./icon_color/chooseIcon";
 import Icons from "./icon_color/Icon";
 // import addName from ./''
 
-import { useStore , addHabitOfaDay} from '../Store'
+import { useStore , addHabitOfaDay, addHabitList} from '../Store'
 import { setHabitInput } from '../Store/action'
 import { db, addHabit} from '../Store/database'
 
@@ -32,7 +32,7 @@ const AddHabit = ({navigation, route}) => {
     const [note, setNote] = useState('');
     const [freq, setFreq] = useState('');
     const [mess, setMess] = useState('');
-    const habit = {
+   const habit = {
         id: 0,
         name: name,
         note: note,
@@ -49,6 +49,7 @@ const AddHabit = ({navigation, route}) => {
         goalNo: currentTabGoal,
         goalPeriod: currentTabPeriod,
         unitID: '',
+        image: image,
     }
     const [icon, setIcon] = useState('');
 
@@ -77,9 +78,9 @@ const AddHabit = ({navigation, route}) => {
                         <View style = {{flexDirection: 'row', flex: 2}}>
                             <View style ={{ flexDirection: 'row', justifyContent: 'space-evenly', flex: 0.5 }}>
                                 <Text>Icon</Text>
-                                {TabChoose('Icon', changecolor, setcolor,setIcon,0)}
+                                {TabChoose('Icon', changecolor, setcolor,setIcon,0,IconDetail)}
                                 <Text>Color</Text>
-                                {TabChoose('Color', changecolor, setcolor,setIcon,1)}
+                                {TabChoose('Color', changecolor, setcolor,setIcon,1,IconDetail)}
                             </View>
                         </View>
                     </View>
@@ -158,12 +159,12 @@ const AddHabit = ({navigation, route}) => {
             <TouchableOpacity 
                 onPress={() => {
                     dispatch(addHabitOfaDay(name.toLowerCase()));
-                    dispatch(setHabitInput(habit));  
-                    //addHabit();
-                    // addName();  
+
+                    dispatch(setHabitInput(habit));
+                    dispatch(addHabitList(habit));
+
                     navigation.navigate('Home', {
                         screen: 'AddHabit',
-                        params: { user: 'jane' },
                     });
                 }}>
                 <Image
@@ -213,11 +214,7 @@ else
 const TabButtontime = (currentTabTime, setCurrentTabTime, title, color) => {
   return (
     <TouchableOpacity onPress={() => {
-    //   if (title == "Day") {
-    //     // Do your Stuff...
-    //   } else {
         setCurrentTabTime(title)
-    //   }
     }}>
       <View style={[styles.btnTouchTime, 
         { backgroundColor: currentTabTime == title ? color : 'transparent'}
@@ -231,7 +228,7 @@ const TabButtontime = (currentTabTime, setCurrentTabTime, title, color) => {
     </TouchableOpacity>
   )
 }
-const TabChoose = (title, changecolor, setcolor, setIcon, flag) => {
+const TabChoose = (title, changecolor, setcolor, setIcon, flag, IconDetail) => {
 const [isEnabled, setIsEnabled] = useState(false);
 if (flag == 1)
   return (
@@ -256,7 +253,7 @@ return (
                     setIsEnabled(!isEnabled)
                     }}
                     >
-    <Icons type = "Ionicons" name = {'add'} size = {20} color = {changecolor} />
+    <Icons type = {IconDetail.iconFamily} name = {IconDetail.iconName} size = {20} color = {changecolor} />
                     {isEnabled && title == 'Icon' && <ChooseIcon 
                         myIsmodalVisible = {isEnabled}
                         setModalVisible = {setIsEnabled}

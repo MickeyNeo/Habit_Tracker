@@ -5,22 +5,23 @@ import ZocialIcon from 'react-native-vector-icons/Zocial';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import EvilIcon from 'react-native-vector-icons/EvilIcons';
-import FAIcon from 'react-native-vector-icons/FontAwesome';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import OcticonIcon from 'react-native-vector-icons/Octicons';
-import FAIcon5 from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FoundationIcon from 'react-native-vector-icons/Foundation';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+ 
 const Icons = ({type, ...props}) => {
   const getIcon = type => {
         switch (type) {
-            case 'fontisto':
+            case 'Fontisto':
                 return Fontisto
             case 'MaterialIcons':
                 return MaterialIcons;
-            case 'evil':
+            case 'EvilIcon':
                 return EvilIcon;
             case 'feather':
                 return Feather;
@@ -34,20 +35,20 @@ const Icons = ({type, ...props}) => {
                 return SimpleLineIcon;
             case 'foundation':
                 return FoundationIcon;
-            case 'fa5':
-                return FAIcon5;
+            case 'FontAwesome5':
+                return FontAwesome5;
             case 'fa':
                 return FAIcon;
             case 'Ionicons':
                 return Ionicons;
-            case 'materialCommunity':
-                return MaterialCommunityIcon;
+            case 'MaterialCommunityIcons':
+                return MaterialCommunityIcons;
             case 'entypo':
                 return EntypoIcon;
             case 'octicon':
                 return OcticonIcon;
             default:
-                return FAIcon;
+                return FontAwesome;
         }
 };
 const FontIcon = getIcon(type);

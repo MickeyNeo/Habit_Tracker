@@ -7,5 +7,9 @@ export * from './hooks'
 //export * as actions from './action'
 export {setLanguage} from './action'
 export {addHabitOfaDay} from './action'
+
+export {addHabitList} from './action'
+
 export {setTheme} from './action'
 export {setHabitStat} from './action'
+
