@@ -1,7 +1,13 @@
 import { SET_HABIT_INPUT} from './constants'
 import { SET_LANGUAGE } from './constants'
 import { ADD_HABIT_OF_ADAY } from './constants'
+
 import { ADD_HABIT_LIST } from './constants'
+
+import theme from '../screen/styles/theme'
+import { SET_THEME } from './constants'
+import { SET_HABIT_STAT } from './constants'
+
 const globalState = {
     habit: {
         id: 0,
@@ -45,6 +51,10 @@ const globalState = {
     },
     stateLanguage:"English",
     stateHabitOfDay: ["running", "walking"],
+
+    currentTheme: theme.dark,
+    stateHabitStat: true,
+    
 }
 
 function reducer (state, action) {
@@ -64,10 +74,23 @@ function reducer (state, action) {
                 ...state,
                 stateHabitOfDay: [...state.stateHabitOfDay, action.payload]
             }
+
         case ADD_HABIT_LIST:
             return {
                 ...state,
                 listHabit: [...state.listHabit, action.payload]
+
+        case SET_THEME:
+            const newThemeKey = state.currentTheme.id === "dark" ? "light" : "dark";
+            return {
+                ...state,
+                currentTheme:theme[newThemeKey]
+            }
+        case SET_HABIT_STAT:
+            return{
+                ...state,
+                stateHabitStat: action.payload,
+
             }
         default:
             throw new Error('sai goi ne')

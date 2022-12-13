@@ -1,32 +1,39 @@
 import React from "react";
 import { useState } from 'react';
-import {Text,  View, StyleSheet, ScrollView, TouchableOpacity,Switch} from 'react-native';
+import {Text,  View, StyleSheet, ScrollView, TouchableOpacity,Switch,Button} from 'react-native';
+import { useStore,setTheme } from "../../Store";
 
 const valueHBS = ['Simple','Intutive'];
 const valueDBS =['Week only','Day + Week','Date only'];
 export default function Theme (){
+    const [state, dispatch] =useStore()
+    const {currentTheme} =state
+    console.log(currentTheme.id)
     const [HBSize, setHBSize] =useState('Normal')
     const [DBS, setDBS] =useState('Normal')
-    const [isEnabledSwitch, setIsEnabledSwitch] =useState(false)
-    const toggleSwitch = () => setIsEnabledSwitch(previousState => !previousState);
+    const flag = (currentTheme.id =='light')? false:true
+    const [isEnabledSwitch, setIsEnabledSwitch] =useState(flag)
+    const toggleSwitch = () => {setIsEnabledSwitch(previousState => !previousState),dispatch(setTheme())};
     const [HBS,setHBS] = useState('Simple')
     const handleHBS =()=>{
         if (HBS =='Simple') setHBS('Intutive')
         else setHBS('Simple')
     }
+    
     return(         
-        <View style={styles.container}>
+        <View style={[styles.container, {backgroundColor: currentTheme.backgroundColor}]}>
             
             <ScrollView>
+                
                 <TouchableOpacity onPress={handleHBS}>
                     <View style={{flexDirection:'row'}}>
-                        <Text style={styles.text}>Habit Bar Style</Text>
-                        <Text style={styles.textCheck}>{HBS}</Text>                        
+                        <Text style={[styles.text,,{color: currentTheme.color}]}>Habit Bar Style</Text>
+                        <Text style={[styles.textCheck,{color: currentTheme.color}]}>{HBS}</Text>                        
                     </View>
                 </TouchableOpacity>
                     
                     <View style={{flexDirection:'row'}}>
-                        <Text style={styles.text}>Date Bar Style</Text>
+                        <Text style={[styles.text,{color: currentTheme.color}]}>Date Bar Style</Text>
                         <CheckTab 
                             values={valueDBS}
                             selectedValue={DBS}
@@ -36,7 +43,7 @@ export default function Theme (){
                 
                 
                     <View style={{flexDirection:'row'}}>
-                        <Text style={styles.text}>Appearance</Text>
+                        <Text style={[styles.text,{color: currentTheme.color}]}>Appearance</Text>
                         <Switch 
                             style={styles.switchType}
                             trackColor={{ false: "#d9d6c6", true: "orange" }}
@@ -49,7 +56,7 @@ export default function Theme (){
                
                 
                     <View style={{flexDirection:'row'}}>
-                        <Text style={styles.text}>Habit Bar size</Text>
+                        <Text style={[styles.text,{color: currentTheme.color}]}>Habit Bar size</Text>
                         <CheckTab 
                             values={['Normal','Small']}
                             selectedValue={HBSize}

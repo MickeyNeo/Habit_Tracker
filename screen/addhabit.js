@@ -10,10 +10,11 @@ import themeContext from "./styles/themeContext";
 import ChooseColor from "./icon_color/chooseColor";
 import ChooseIcon from "./icon_color/chooseIcon";
 import Icons from "./icon_color/Icon";
-
+// import addName from ./''
 
 import { useStore , addHabitOfaDay, addHabitList} from '../Store'
 import { setHabitInput } from '../Store/action'
+import { db, addHabit} from '../Store/database'
 
 const AddHabit = ({navigation, route}) => {
     const [state,dispatch] = useStore();
@@ -158,8 +159,10 @@ const AddHabit = ({navigation, route}) => {
             <TouchableOpacity 
                 onPress={() => {
                     dispatch(addHabitOfaDay(name.toLowerCase()));
+
                     dispatch(setHabitInput(habit));
                     dispatch(addHabitList(habit));
+
                     navigation.navigate('Home', {
                         screen: 'AddHabit',
                     });
