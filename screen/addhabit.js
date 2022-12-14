@@ -14,7 +14,7 @@ import Icons from "./icon_color/Icon";
 
 import { useStore , addHabitOfaDay, addHabitList} from '../Store'
 import { setHabitInput } from '../Store/action'
-import { db, addHabit} from '../Store/database'
+//import { db, addHabit} from '../Store/database'
 
 const AddHabit = ({navigation, route}) => {
     const [state,dispatch] = useStore();
@@ -52,6 +52,57 @@ const AddHabit = ({navigation, route}) => {
         image: image,
     }
     const [icon, setIcon] = useState('');
+    const db = SQLite.openDatabase('Habit_tracker.db');
+
+    useEffect(() => {
+
+        console.log("Updating database")
+    
+        /* db.transaction(tx => {
+          tx.executeSql('DROP TABLE Reminder')
+        }); */
+    
+        db.transaction(tx => {
+          tx.executeSql('CREATE TABLE IF NOT EXISTS Habit (\
+             id	INTEGER,\
+             name	TEXT NOT NULL,\
+             note	TEXT,\
+             frequency	TEXT NOT NULL,\
+             color	TEXT NOT NULL DEFAULT \'#000\',\
+             tagID	INTEGER COLLATE BINARY,\
+             frequencyType	TEXT NOT NULL CHECK(frequencyType IN (\'Daily\', \'Weekly\', \'Monthly\')),\
+             timeRange	TEXT NOT NULL CHECK(timeRange IN (\'Anytime\', \'Morning\', \'Afternoon\', \'Evening\')),\
+             reminderMessage	TEXT,\
+             showMemo	INTEGER NOT NULL CHECK(showMemo IN (0, 1)),\
+             chartType	INTEGER NOT NULL CHECK(chartType IN (0, 1)),\
+             habitStartDate	TEXT NOT NULL,\
+             habitEndDate	TEXT,\
+             goalNo	INTEGER NOT NULL DEFAULT 1,\
+             goalPeriod	TEXT NOT NULL CHECK(goalPeriod IN (\'Day\', \'Week\', \'Month\')),\
+             unitID	INTEGER,\
+             PRIMARY KEY(id AUTOINCREMENT))')
+        });
+    
+    }, [db]);
+
+    const addHabit = () => {
+        const [habitState,habitDispatch] = useStore();
+    
+        console.log("Adding Habit to db");
+        db.transaction(tx => {
+            tx.executeSql('INSERT INTO Habit (id, name, note, frequency, color, tagID, frequencyType, timeRange, reminderMessage, showMemo, chartType, habitStartDate, habitEndDate, goalNo, goalPeriod, unitID) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+            [state.habit.id, state.habit.name, state.habit.note, state.habit.frequency, state.habit.color, state.habit.tagID, state.habit.frequencyType, state.habit.timeRange, state.habit.reminderMessage, state.habit.showMemo, state.habit.chartType, state.habit.habitStartDate, state.habit.habitEndDate, state.habit.goalNo, state.habit.goalPeriod, state.habit.unitID],
+            (txObj, resultSet) => {
+                console.log(resultSet);
+                /* let existingNames = [...names];
+                existingNames.push({ id: resultSet.insertId, name: '11111'});
+                setNames(existingNames);
+                setCurrentName(undefined); */
+            },
+            (txObj, error) => console.log(error)
+            );
+        });
+    }
 
     return (
         <View style={{backgroundColor: theme.backgroundColor, flex: 1, flexDirection : 'column'}}>
@@ -162,7 +213,7 @@ const AddHabit = ({navigation, route}) => {
 
                     dispatch(setHabitInput(habit));
                     dispatch(addHabitList(habit));
-
+                    addHabit();
                     navigation.navigate('Home', {
                         screen: 'AddHabit',
                     });
