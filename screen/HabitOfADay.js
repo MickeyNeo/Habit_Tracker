@@ -18,7 +18,8 @@ const HabitOfADay = ({navigation,route}) =>{
           {
             data: [20, 30, 40, 10, 5, 30,45]
           }
-        ]
+        ],
+        color :["black"]
       };
       const chartConfig = {
         backgroundGradientFrom: "white",
@@ -28,16 +29,17 @@ const HabitOfADay = ({navigation,route}) =>{
         color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
         strokeWidth: 2, // optional, default 3
         barPercentage: 0.5,
-        useShadowColorFromDataset: false // optional
-      };
+        useShadowColorFromDataset: false, // optional,
+        fillShadowGradientFrom: 'black'
+    };
     return(
         <View style = {styles.container}>
             <View style = {styles.header}>
                 <FontAwesome5 style={styles.iconTitle} name={iconName} size={27} color='crimson' />
-                <Text style ={{marginTop: 10,fontFamily: 'Arial', fontSize: 20, fontWeight : "bold"}}>{iconName[0].toUpperCase()+iconName.slice(1)}</Text>
+                <Text style ={{marginTop: 10, fontSize: 20, fontWeight : "bold"}}>{iconName[0].toUpperCase()+iconName.slice(1)}</Text>
             </View>
             <View style={{flex: 1,alignItems: 'stretch'}}>
-                <ScrollView>
+                <ScrollView style ={{marginBottom: 10, flex:1 }}>
                     <Calendar style={styles.calendar} firstDay={1}/>
                     
                     {/* Yearly Status */}
@@ -105,35 +107,37 @@ const HabitOfADay = ({navigation,route}) =>{
                         <Text style = {styles.headText}>Chart</Text>
                         <View style = {{ flexDirection: 'row',justifyContent: 'center'}}>
                             <BarChart
-                                // style={graphStyle}
-                                
                                 data={data}
                                 width= {Dimensions.get('window').width -40}
                                 height={220}
                                 yAxisSuffix="mins"
                                 chartConfig={chartConfig}
+                                fillShadowGradientFrom =  'black'
+                                
                                 // verticalLabelRotation={30}
                             />
                         </View>
                     </View>
 
-                    {/* Buttons */}
-                    <View style = {{marginHorizontal: 10, flexDirection: 'row', justifyContent: 'space-around'}}>
-                        <TouchableOpacity style = {{flexDirection: 'column', backgroundColor: '#c5bebe', borderRadius: 8, width: '40%',height: '140%', justifyContent: 'center'}} onPress={()=> {}}>
+                    <View style = {{flex: 1, marginHorizontal: 10, flexDirection: 'row', justifyContent: 'space-around', marginBottom: 20}}>
+                        <TouchableOpacity style = {{ backgroundColor: '#c5bebe', borderRadius: 8, width: '40%',height: '140%', justifyContent: 'center'}} onPress={()=> {}}>
                             <View style = {{flexDirection: 'row',justifyContent: 'center'}}>
                                 <FontAwesome5 style = {{marginHorizontal: 5}} name='pencil-alt' size={15} color='black' />
                                 <Text>Edit</Text>
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style = {{flexDirection: 'column', backgroundColor: '#c5bebe', borderRadius: 8, width: '40%',height: '140%', justifyContent: 'center'}} onPress={()=> {}}>
+                        <TouchableOpacity style = {{ backgroundColor: '#c5bebe', borderRadius: 8, width: '40%',height: '140%', justifyContent: 'center'}} onPress={()=> {}}>
                             <View style = {{flexDirection: 'row',justifyContent: 'center'}}>
                                 <FontAwesome5 style = {{marginHorizontal: 5}} name='trash-alt' size={15} color='black' />
                                 <Text>Delete</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
+                    
                 </ScrollView>
+                {/* Buttons */}
+                
             </View>
            
         </View>
