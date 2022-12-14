@@ -1,5 +1,5 @@
 import React, { useState, Component, useContext,useReducer } from "react";
-import { View, Button, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Image, TextInput, Alert, } from "react-native";
+import { View, Button, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Image, TextInput, Alert, Switch} from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Fontisto from '@expo/vector-icons/Fontisto';
@@ -10,11 +10,16 @@ import themeContext from "./styles/themeContext";
 import ChooseColor from "./icon_color/chooseColor";
 import ChooseIcon from "./icon_color/chooseIcon";
 import Icons from "./icon_color/Icon";
+import TimePickerDialog from '@react-native-community/datetimepicker';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
+import SelectFreq from './frequency/selectday'
 // import addName from ./''
+
 
 import { useStore , addHabitOfaDay, addHabitList} from '../Store'
 import { setHabitInput } from '../Store/action'
-import { db, addHabit} from '../Store/database'
+//import { db, addHabit} from '../Store/database'
 
 const AddHabit = ({navigation, route}) => {
     const [state,dispatch] = useStore();
@@ -27,12 +32,16 @@ const AddHabit = ({navigation, route}) => {
     const [currentTabGoal, setCurrentTabGoal] = useState("1");
     const [currentTabPeriod, setCurrentTabPeriod] = useState("Day");
     const [currentTabTime, setCurrentTabTime] = useState("Anytime");
-    const [isEnabled, setIsEnabled] = useState(false);
     const [changecolor, setcolor] = useState(colors);
     const [note, setNote] = useState('');
     const [freq, setFreq] = useState('');
     const [mess, setMess] = useState('');
-   const habit = {
+    const [startDay, setStartDay] = useState(new Date(2022,12,14));
+    const [endDay, setEndDay] = useState(new Date());
+    const [isEnabled, setIsEnabled] = useState(false);
+    const [isEnable, setIsEnable] = useState(false);
+    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+    const habit = {
         id: 0,
         name: name,
         note: note,
@@ -42,17 +51,16 @@ const AddHabit = ({navigation, route}) => {
         frequencyType: '',
         timeRange: currentTabTime,
         remainderMessage: mess,
-        showMemo: 0,
+        showMemo: isEnabled,
         chartType: '',
-        habitStartDay: '',
-        habitEndDay: '',
+        habitStartDay: startDay.toLocaleString(),
+        habitEndDay: endDay.toDateString(),
         goalNo: currentTabGoal,
         goalPeriod: currentTabPeriod,
         unitID: '',
         image: image,
     }
     const [icon, setIcon] = useState('');
-
     return (
         <View style={{backgroundColor: theme.backgroundColor, flex: 1, flexDirection : 'column'}}>
             <View style ={styles.Habit}>
@@ -105,13 +113,21 @@ const AddHabit = ({navigation, route}) => {
                         </View>
                     </View>
                     <View style = {{flexDirection: 'column', padding: 10}}>
-                    <Text style ={{fontWeight: 'bold', color: theme.color }}>Frequency</Text>
-                    <TextInput
-                        style={[styles.textInput,{backgroundColor: theme.backgroundColor1}]}
-                        placeholder="Type here to translate!"
-                        //onChangeText={newText => setText(newText)}
-                        //defaultValue={text}
-                    />
+                        <View style = {{flexDirection: 'row' , justifyContent: 'space-between'}}>
+                        <Text style ={{fontWeight: 'bold', color: theme.color }}>Frequency</Text>
+                        <TouchableOpacity 
+                            onPress ={() => {
+                                setIsEnabled(!isEnabled)
+                                }}
+                                >
+                                {isEnabled && <SelectFreq
+                                    myIsmodalVisible = {isEnabled}
+                                    setModalVisible = {setIsEnabled}
+                                ></SelectFreq>
+                                }
+                        <Text>{currentTabGoal}></Text>
+                        </TouchableOpacity>
+                        </View>
                     </View>
                     <View style = {{flexDirection: 'column', padding: 10}}>
                     <Text style ={{fontWeight: 'bold', color: theme.color }}>Time Range</Text>
@@ -124,11 +140,13 @@ const AddHabit = ({navigation, route}) => {
                             </View>
                         </View> 
                     </View>
+
                     <View style = {{flexDirection: 'column', padding: 10}}>
-                    <Text style ={{fontWeight: 'bold', color: theme.color }}>Remainder</Text>
+                        <Text style ={{fontWeight: 'bold', color: theme.color }}>Remainder</Text>
                     </View>
+
                     <View style = {{flexDirection: 'column', padding: 10}}>
-                    <Text style ={{fontWeight: 'bold', color: theme.color }}>Remainder Messages</Text>
+                        <Text style ={{fontWeight: 'bold', color: theme.color }}>Remainder Messages</Text>
                     <TextInput
                         style={[styles.textInput,{backgroundColor: theme.backgroundColor1}]}
                         value={mess}
@@ -136,22 +154,39 @@ const AddHabit = ({navigation, route}) => {
                         onChangeText={(value) => setMess(value)}
                     />
                     </View>
-                    {/* <View style = {{flexDirection: 'column', padding: 10}}>
-                        <View style = {{flexDirection : 'row'}}>
-                            <Text style ={{fontWeight: 'bold', color: theme.color }}>Chart Type</Text>
-                            <Image 
-                                source={require('./Icon/bar-chart.png')}
-                                style={{ width: 48, height: 48,}}
-                            />
-                        </View>
+                    <View style = {{flexDirection: 'row', padding: 10, justifyContent: 'space-between' }}>
+                        <Text style ={{fontWeight: 'bold', color: theme.color }}>Show memo after check-in</Text>
+                        <Switch 
+                            trackColor={{ false: "#d9d6c6", true: "orange" }}
+                            thumbColor={isEnabled ? "white" : "#76756d"}
+                            ios_backgroundColor="#3e3e3e"
+                            onValueChange={toggleSwitch}
+                            value={isEnabled}
+                        />
                     </View>
-                    <View style = {{flexDirection: 'column', padding: 10}}>
-                    <Text style ={{fontWeight: 'bold', color: theme.color }}>Habit Term</Text>
-                        <View style = {{flexDirection: 'row', flex: 1}}>
-                            <View style ={{ flexDirection: 'row', justifyContent: 'flex-start',flex: 0.5 }}>
+
+                    {/* <View style = {{flexDirection: 'column', padding: 10}}>
+                            <View style = {{flexDirection : 'row'}}>
+                                <Text style ={{fontWeight: 'bold', color: theme.color }}>Chart Type</Text>
+                                <Image 
+                                    source={require('./Icon/bar-chart.png')}
+                                    style={{ width: 48, height: 48,}}
+                                />
                             </View>
-                        </View>
-                    </View> */}
+                        </View> */}
+                    <View style = {{flexDirection: 'column', padding: 10}}>
+                        <Text style ={{fontWeight: 'bold', color: theme.color }}>Habit Term</Text>
+                            <View style = {{flexDirection: 'row', flex: 1}}>
+                                <View style ={{ flexDirection: 'column', alignItems: 'center',flex: 0.5, padding: 10 }}>
+                                    <Text>Start</Text>
+                                    {ShowTimePicker(startDay, setStartDay,endDay, setEndDay, 1)}
+                                </View>
+                                <View style ={{ flexDirection: 'column', alignItems: 'center',flex: 0.5, padding: 10 }}>
+                                    <Text>End</Text>
+                                    {ShowTimePicker(startDay, setStartDay,endDay, setEndDay, 0)}
+                                </View>
+                            </View>
+                    </View> 
                 </ScrollView>
 
             </View>
@@ -159,10 +194,8 @@ const AddHabit = ({navigation, route}) => {
             <TouchableOpacity 
                 onPress={() => {
                     dispatch(addHabitOfaDay(name.toLowerCase()));
-
                     dispatch(setHabitInput(habit));
                     dispatch(addHabitList(habit));
-
                     navigation.navigate('Home', {
                         screen: 'AddHabit',
                     });
@@ -262,6 +295,61 @@ return (
                     }
     </TouchableOpacity>
   )
+}
+const ShowTimePicker = (startDay, setStartDay,endDay, setEndDay, flag) => {
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(false);
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate;
+        setShow(false);
+        if (flag == 1)
+            setStartDay(currentDate);
+        else 
+            setEndDay(currentDate);
+        };
+        const showMode = (currentMode) => {
+        setShow(true);
+        setMode(currentMode);
+        };
+        const showDatepicker = () => {
+            showMode('date');
+        };
+    if (flag == 1)
+    return (
+        <View>
+            <TouchableOpacity onPress={showDatepicker} style = {{flexDirection: 'row', borderRadius: 10, backgroundColor: 'green'}} >
+            <Text>{startDay.toLocaleString()}</Text>
+            {show && (
+                <RNDateTimePicker
+                testID="dateTimePicker"
+                value={startDay}
+                mode={mode}
+                is24Hour={true}
+                positiveButton={{label: 'OK', textColor: 'green'}}
+                onChange={onChange}
+                />
+            )}
+            </TouchableOpacity>
+        </View>
+    )
+    else 
+    return (
+            <View>
+            <TouchableOpacity onPress={showDatepicker} style = {{flexDirection: 'row', borderRadius: 10, backgroundColor: 'green'}} >
+            <Text>{endDay.toLocaleString()}</Text>
+            {show && (
+                <RNDateTimePicker
+                testID="dateTimePicker"
+                value={endDay}
+                mode={mode}
+                is24Hour={true}
+                positiveButton={{label: 'OK', textColor: 'green'}}
+                onChange={onChange}
+                />
+            )}
+            </TouchableOpacity>
+        </View>
+        )
 }
 const styles = StyleSheet.create({
     addHabit: { 

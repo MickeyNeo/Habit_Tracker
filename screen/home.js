@@ -8,23 +8,55 @@ import { useStore } from '../Store'
 
 const Home = ({ navigation }) => {
   const [state,dispatch] = useStore();
-  console.log(state.listHabit)
-  const [lg,setLg] = useState('');
-   if (state.listHabit != '')
-      return (
-          <View style={{backgroundColor: 'white', flex: 1}}>
-            <View style = {styles.progress}> 
-              <PreviewLayout
-                        values={state.listHabit}
-                        selectedValue={lg}
-                        setSelectedValue={setLg}
-              />
-            </View>
-            <TouchableOpacity style = { styles.addHabit} onPress = {() => navigation.navigate("Habit")}>
-                <Text style = {{color: 'black'}} >Press '+' to add new habit </Text>
-            </TouchableOpacity>
-          </View>
-        )
+  const [day, setDay] = useState('');
+  return (
+    <View style={{backgroundColor: 'white', flex: 1}}>
+      <Calendar 
+              onDayPress={ (day) => setDay(day)}
+            />
+      {HabitZone(state.listHabit,navigation,day.dateString)}
+    </View>
+  )
+};
+const HabitZone =(
+    values,
+    navigation,
+    day) => {
+    console.log(day);
+    console.log(values)
+    if (values != '')
+    return (
+    <View>
+        {values.map((value) => {value.habitStartDay == day && 
+        <TouchableOpacity style = {{padding: 5}} key={value.name} onPress = {() => navigation.navigate("Habit")}>
+            <Progress.Bar progress={0.3} width = {300} height={35}>
+              <View style={{
+                    flex: 1,
+                    position: 'absolute', 
+                    flexDirection: 'row', 
+                    alignItems: 'center',
+                    }}>
+                      <Image
+                        source={value.image}
+                        style={{ width: 35, height: 35,}}
+                      />
+                      <View style ={{flexDirection: 'column', borderWidth: 1,}}>
+                        <Text style = {{color: value.color, fontSize: 10}}>{value.name}</Text>
+                        <Text style = {{color: value.color, fontSize: 8}}>{value.note}</Text>
+                      </View>
+
+                      <View style={{left: '50%', alignSelf: 'flex-end', borderWidth: 1, flex: 1}}>
+                          <Text>Test</Text>
+                      </View>
+                    </View>
+                  </Progress.Bar>
+              </TouchableOpacity>
+            })}
+        <TouchableOpacity style = { styles.addHabit} onPress = {() => navigation.navigate("Habit")}>
+                  <Text style = {{color: 'black'}} >Press '+' to add new habit </Text>
+        </TouchableOpacity>
+    </View>
+  )
   else 
     return (
             <View style={{backgroundColor: 'white', flex: 1}}>
@@ -40,42 +72,7 @@ const Home = ({ navigation }) => {
             </View>
           </View>
   )
-};
-const PreviewLayout =({
-    values,
-    selectedValue,
-    setSelectedValue, 
-  })=>(
-    <View>
-        {values.map((value) =>(
-              <TouchableOpacity style = {{padding: 5}} key={value.name} onPress = {() => navigation.navigate("Habit")}>
-                  <Progress.Bar progress={0.3} width = {300} height={35}>
-                    <View style={{
-                      flex: 1,
-                      position: 'absolute', 
-                      flexDirection: 'row', 
-                      alignItems: 'center',
-                      }}>
-
-                      <Image
-                        source={value.image}
-                        style={{ width: 35, height: 35,}}
-                      /> 
-
-                      <View style ={{flexDirection: 'column', borderWidth: 1,}}>
-                        <Text style = {{color: value.color, fontSize: 10}}>{value.name}</Text>
-                        <Text style = {{color: value.color, fontSize: 8}}>{value.note}</Text>
-                      </View>
-
-                      <View style={{left: '50%', alignSelf: 'flex-end', borderWidth: 1, flex: 1}}>
-                          <Text>Test</Text>
-                      </View>
-                    </View>
-                  </Progress.Bar>
-              </TouchableOpacity>
-        ))}
-    </View>
-);
+}
 const styles = StyleSheet.create({
     container:{
         flex: 1, 

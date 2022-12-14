@@ -74,12 +74,11 @@ function reducer (state, action) {
                 ...state,
                 stateHabitOfDay: [...state.stateHabitOfDay, action.payload]
             }
-
         case ADD_HABIT_LIST:
             return {
                 ...state,
                 listHabit: [...state.listHabit, action.payload]
-
+            }
         case SET_THEME:
             const newThemeKey = state.currentTheme.id === "dark" ? "light" : "dark";
             return {
@@ -90,7 +89,6 @@ function reducer (state, action) {
             return{
                 ...state,
                 stateHabitStat: action.payload,
-
             }
         default:
             throw new Error('sai goi ne')

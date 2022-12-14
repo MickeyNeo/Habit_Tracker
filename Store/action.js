@@ -24,7 +24,8 @@ export const addHabitOfaDay = payload => ({
 
 export const addHabitList = payload => ({
     type: ADD_HABIT_LIST,
-
+    payload
+})
 export const setTheme = () => ({
     type: SET_THEME
 })
