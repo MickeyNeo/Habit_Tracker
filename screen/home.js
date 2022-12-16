@@ -8,27 +8,26 @@ import { useStore } from '../Store'
 
 const Home = ({ navigation }) => {
   const [state,dispatch] = useStore();
+  console.log(state.listHabit);
   const [day, setDay] = useState('');
   return (
     <View style={{backgroundColor: 'white', flex: 1}}>
       <Calendar 
               onDayPress={ (day) => setDay(day)}
             />
-      {HabitZone(state.listHabit,navigation,day.dateString)}
+      {HabitZone(state.listHabit,navigation)}
     </View>
   )
 };
 const HabitZone =(
     values,
-    navigation,
-    day) => {
-    console.log(day);
-    console.log(values)
+    navigation
+    ) => {
     if (values != '')
     return (
     <View>
-        {values.map((value) => {value.habitStartDay == day && 
-        <TouchableOpacity style = {{padding: 5}} key={value.name} onPress = {() => navigation.navigate("Habit")}>
+        {values.map((value) => 
+        <TouchableOpacity style = {{padding: 5}} key={value.name} onPress = {() => navigation.navigate("HabitDetail")}>
             <Progress.Bar progress={0.3} width = {300} height={35}>
               <View style={{
                     flex: 1,
@@ -51,7 +50,7 @@ const HabitZone =(
                     </View>
                   </Progress.Bar>
               </TouchableOpacity>
-            })}
+            )}
         <TouchableOpacity style = { styles.addHabit} onPress = {() => navigation.navigate("Habit")}>
                   <Text style = {{color: 'black'}} >Press '+' to add new habit </Text>
         </TouchableOpacity>

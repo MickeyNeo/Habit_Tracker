@@ -46,11 +46,11 @@ return (
 
         <View style ={styles.Habit}>
             <ScrollView>
-                <Text style = {{ fontSize: 20, padding: 10,}}>Sports</Text>
+                <Text style = {{ fontSize: 20, padding: 10, fontWeight: 'bold'}}>Sports</Text>
                 <View style = { styles.habitZone}>
                     <View style = {styles.zone}>
-                        {TabButton(navigation,"Walking", walking, 'red', ['walking', 'FontAwesome5'])}
-                        {TabButton(navigation,"Running", running, 'green', ['running','FontAwesome5'])}
+                        {TabButton(navigation,"Walking", walking, 'red', ['walking', 'FontAwesome5'], 'km')}
+                        {TabButton(navigation,"Running", running, 'green', ['running','FontAwesome5'], 'km')}
                         {TabButton(navigation,"Chess", chess, 'grey', ['chess-king','MaterialCommunityIcons'])}
                     </View>
 
@@ -68,7 +68,7 @@ return (
 
                     </View>
 
-                <Text style = {{ fontSize: 20, padding: 10,}}>Thought</Text>
+                <Text style = {{ fontSize: 20, padding: 10, fontWeight: 'bold'}}>Thought</Text>
                 <View style = { styles.habitZone} >
                     <View style = {styles.zone}> 
                         {TabButton(navigation,"Breathe", breathe, '#98fb98', ['running','FontAwesome5'])}
@@ -83,7 +83,7 @@ return (
                     </View>
                 </View>
 
-                <Text style = {{ fontSize: 20, padding: 10,}}>Health</Text>
+                <Text style = {{ fontSize: 20, padding: 10, fontWeight: 'bold'}}>Health</Text>
                 <View style = { styles.habitZone} >
                     <View style = {styles.zone}> 
                         {TabButton(navigation,"Workout", workout, '#ffff00', ['fitness','Ionicons'])}
@@ -106,7 +106,7 @@ return (
     </View>
     );
 };
-const TabButton = (navigation, title, image, color, IconInfo) => {
+const TabButton = (navigation, title, image, color, IconInfo, unit) => {
   return (
     <TouchableOpacity onPress={() => {
         navigation.navigate('AddHabit', {
@@ -114,26 +114,26 @@ const TabButton = (navigation, title, image, color, IconInfo) => {
             colors: color,
             image: image,
             IconInfo: IconInfo,
+            unitHabit: unit,
         })
     }} style = {styles.btnHabit}>
     <Image
         source={image}
         style={{ width: 40, height: 40,}}
     />
-    <Text>{title}</Text>
+    <Text style = {{fontSize: 10}}>{title}</Text>
     </TouchableOpacity>
   );
 }
 const styles = StyleSheet.create({
     container:{
       flex: 1, 
-      backgroundColor: 'white',
+      backgroundColor: '#B3D5F2',
       flexDirection: 'column',
     },
     addHabit: { 
-        height: '15%',
+        height: '8%',
         width: '100%',
-
     },
     Habit: {
         flex: 1,
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
       padding: 0,
     },
     textHabit: {
-        fontSize: 20,
+        fontSize: 12,
         alignSelf: 'flex-start',
         color: 'red',
     },
@@ -172,13 +172,15 @@ const styles = StyleSheet.create({
         top: '5%',
     },
     btnHabit : {
+        justifyContent: 'center',
         borderRadius: 100,
         width : 90,
         height: 90,
         alignItems: 'center',
         padding: 10,
-        fontSize: 20,
-        backgroundColor: '#EFF9FD',
+        backgroundColor: '#00FFF6',
+        borderWidth: 1.5,
+        borderColor:'#79ACD9'
     },
     habitZone: {
         flexDirection: 'column',

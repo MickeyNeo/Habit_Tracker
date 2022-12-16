@@ -14,32 +14,36 @@ import TimePickerDialog from '@react-native-community/datetimepicker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import SelectFreq from './frequency/selectday'
+import SelectUnit from './unit/unit'
 // import addName from ./''
 
 
-import { useStore , addHabitOfaDay, addHabitList} from '../Store'
+import { useStore , addHabitOfaDay, addHabitList, changenote} from '../Store'
 import { setHabitInput } from '../Store/action'
 //import { db, addHabit} from '../Store/database'
 
 const AddHabit = ({navigation, route}) => {
     const [state,dispatch] = useStore();
-    const { name, colors, image, IconInfo } = route.params;
+    console.log(state.listHabit);
+    const { name, colors, image, IconInfo, unitHabit } = route.params;
     const IconDetail = {
         iconName: IconInfo[0],
         iconFamily: IconInfo[1],
     }
+    console.log(unitHabit);
     const theme = useContext(themeContext);
-    const [currentTabGoal, setCurrentTabGoal] = useState("1");
+    const [goal, setGoal] = useState("1");
     const [currentTabPeriod, setCurrentTabPeriod] = useState("Day");
     const [currentTabTime, setCurrentTabTime] = useState("Anytime");
     const [changecolor, setcolor] = useState(colors);
     const [note, setNote] = useState('');
     const [freq, setFreq] = useState('');
     const [mess, setMess] = useState('');
-    const [startDay, setStartDay] = useState(new Date(2022,12,14));
+    const [startDay, setStartDay] = useState(new Date());
     const [endDay, setEndDay] = useState(new Date());
     const [isEnabled, setIsEnabled] = useState(false);
-    const [isEnable, setIsEnable] = useState(false);
+    const [unit, setUnit] = useState(unitHabit);
+    const [tag, setTag] = useState('');
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
     const habit = {
         id: 0,
@@ -55,7 +59,7 @@ const AddHabit = ({navigation, route}) => {
         chartType: '',
         habitStartDay: startDay.toLocaleString(),
         habitEndDay: endDay.toDateString(),
-        goalNo: currentTabGoal,
+        goalNo: goal,
         goalPeriod: currentTabPeriod,
         unitID: '',
         image: image,
@@ -86,47 +90,47 @@ const AddHabit = ({navigation, route}) => {
                         <View style = {{flexDirection: 'row', flex: 2}}>
                             <View style ={{ flexDirection: 'row', justifyContent: 'space-evenly', flex: 0.5 }}>
                                 <Text>Icon</Text>
-                                {TabChoose('Icon', changecolor, setcolor,setIcon,0,IconDetail)}
+                                {TabChoose('Icon', changecolor, setcolor,setIcon, unit,setUnit, tag, setTag, IconDetail,1)}
                                 <Text>Color</Text>
-                                {TabChoose('Color', changecolor, setcolor,setIcon,1,IconDetail)}
+                                {TabChoose('Color', changecolor, setcolor,setIcon, unit,setUnit, tag, setTag, IconDetail,2)}
                             </View>
                         </View>
                     </View>
 
                     <View style = {{flexDirection: 'column', padding: 10}}>
-                        <Text style ={{fontWeight: 'bold', color: theme.color }}>Tag</Text>
-                        <TouchableOpacity style = {{borderRadius: 10, width: 40, alignItems: 'center', backgroundColor: '#f5f5f5',}}>
-                            <Ionicons name ='add' size = {20} color = {changecolor} />
-                        </TouchableOpacity>
+                            <Text style ={{fontWeight: 'bold', color: theme.color }}>Tag</Text>
+                            
                     </View>
 
                     <View style = {{flexDirection: 'column',padding: 10}}>
                     <Text style ={{fontWeight: 'bold', color: theme.color }}>Goal & Goal Period</Text>
                         <View style = {{flexDirection: 'row', flex: 1}}>
                             <View style ={{ flexDirection: 'row', justifyContent: 'space-evenly',flex: 1, marginTop: 5 }}>
-                            {TabButton(currentTabGoal,currentTabPeriod, setCurrentTabGoal,setCurrentTabPeriod,"1", changecolor,1)}
-                            {TabButton(currentTabGoal,currentTabPeriod, setCurrentTabGoal,setCurrentTabPeriod,"count",changecolor,1)}
-                            {TabButton(currentTabGoal,currentTabPeriod, setCurrentTabGoal,setCurrentTabPeriod,"Day", changecolor,0)}
-                            {TabButton(currentTabGoal,currentTabPeriod, setCurrentTabGoal,setCurrentTabPeriod,"Week", changecolor,0)}
-                            {TabButton(currentTabGoal,currentTabPeriod, setCurrentTabGoal,setCurrentTabPeriod,"Month", changecolor,0)}
+                            <TextInput
+                                    style={{
+                                        borderRadius: 10, 
+                                        alignItems: 'center',
+                                        fontSize: 15,
+                                        width: 80,
+                                        height: 18,
+                                        backgroundColor: changecolor,
+                                        color: '#a9a9a9'
+                                    }}
+                                    value={goal}
+                                    placeholder={goal}
+                                    onChangeText={(value) => setGoal(value)}
+                                />
+                            {TabChoose('count', changecolor, setcolor,setIcon, unit,setUnit, tag, setTag, IconDetail,4)}
+                            {TabButton(currentTabPeriod, setCurrentTabPeriod,"Day", changecolor)}
+                            {TabButton(currentTabPeriod, setCurrentTabPeriod,"Week", changecolor)}
+                            {TabButton(currentTabPeriod, setCurrentTabPeriod,"Month", changecolor)}
                             </View>
                         </View>
                     </View>
                     <View style = {{flexDirection: 'column', padding: 10}}>
                         <View style = {{flexDirection: 'row' , justifyContent: 'space-between'}}>
                         <Text style ={{fontWeight: 'bold', color: theme.color }}>Frequency</Text>
-                        <TouchableOpacity 
-                            onPress ={() => {
-                                setIsEnabled(!isEnabled)
-                                }}
-                                >
-                                {isEnabled && <SelectFreq
-                                    myIsmodalVisible = {isEnabled}
-                                    setModalVisible = {setIsEnabled}
-                                ></SelectFreq>
-                                }
-                        <Text>{currentTabGoal}></Text>
-                        </TouchableOpacity>
+                        {TabChoose('Freq', changecolor, setcolor,setIcon, unit,setUnit, tag, setTag, IconDetail,3, currentTabPeriod)}
                         </View>
                     </View>
                     <View style = {{flexDirection: 'column', padding: 10}}>
@@ -210,24 +214,7 @@ const AddHabit = ({navigation, route}) => {
     );
 };
 
-const TabButton = (currentTabGoal,currentTabPeriod, setCurrentTabGoal,setCurrentTabPeriod, title, color , flag) => {
-if (flag ==1 )
-    return (
-        <TouchableOpacity onPress={() => {
-            setCurrentTabGoal(title)
-        }}>
-        <View style={[styles.btnTouch, 
-            { backgroundColor: currentTabGoal == title ? color : 'transparent'}
-        ]}>
-            <Text style={{
-            fontSize: 15,
-            color: currentTabGoal == title ? "#a9a9a9" : "grey"
-            }}>{title}</Text>
-
-        </View>
-        </TouchableOpacity>
-    )
-else 
+const TabButton = (currentTabPeriod, setCurrentTabPeriod, title, color) => {
     return (
         <TouchableOpacity onPress={() => {
             setCurrentTabPeriod(title)
@@ -236,7 +223,7 @@ else
             { backgroundColor: currentTabPeriod == title ? color : 'transparent'}
         ]}>
             <Text style={{
-            fontSize: 15,
+            fontSize: 12,
             color: currentTabPeriod == title ? "#a9a9a9" : "grey"
             }}>{title}</Text>
 
@@ -253,7 +240,7 @@ const TabButtontime = (currentTabTime, setCurrentTabTime, title, color) => {
         { backgroundColor: currentTabTime == title ? color : 'transparent'}
       ]}>
         <Text style={{
-          fontSize: 15,
+          fontSize: 12,
           color: currentTabTime == title ? "#a9a9a9" : "grey"
         }}>{title}</Text>
 
@@ -261,12 +248,12 @@ const TabButtontime = (currentTabTime, setCurrentTabTime, title, color) => {
     </TouchableOpacity>
   )
 }
-const TabChoose = (title, changecolor, setcolor, setIcon, flag, IconDetail) => {
+const TabChoose = (title, changecolor, setcolor,setIcon, unit,setUnit, tag, setTag, IconDetail, flag,currentTabPeriod) => {
 const [isEnabled, setIsEnabled] = useState(false);
-if (flag == 1)
+if (flag == 2)
   return (
     <TouchableOpacity style = {[styles.btnTouch, {backgroundColor: changecolor}]}    
-    onPress ={() => {
+        onPress ={() => {
                     setIsEnabled(!isEnabled)
                     }}
                     >
@@ -279,7 +266,7 @@ if (flag == 1)
                     }
     </TouchableOpacity>
   )
-else 
+else if (flag == 1)
 return (
     <TouchableOpacity style = {[styles.btnTouch]} 
     onPress ={() => {
@@ -294,6 +281,39 @@ return (
                     ></ChooseIcon>
                     }
     </TouchableOpacity>
+  )
+  else if ( flag == 3)
+  return (
+    <TouchableOpacity 
+            onPress ={() => {
+                setIsEnabled(!isEnabled)
+                            }}
+                >
+                {isEnabled  && title == 'Freq' && <SelectFreq
+                myIsmodalVisible = {isEnabled}
+                setModalVisible = {setIsEnabled}
+                freq = {currentTabPeriod}
+                ></SelectFreq>
+                }
+                <Text>ahihi></Text>
+                </TouchableOpacity>
+  )
+  else if (flag == 4)
+    return (
+        <TouchableOpacity 
+            onPress ={() => {
+                setIsEnabled(!isEnabled)
+                            }}
+                >
+                {isEnabled && title == 'count' && <SelectUnit
+                myIsmodalVisible = {isEnabled}
+                setModalVisible = {setIsEnabled}
+                unit = {unit}
+                setunit = {setUnit}
+                ></SelectUnit>
+                }
+                <Text>{unit}</Text>
+                </TouchableOpacity>
   )
 }
 const ShowTimePicker = (startDay, setStartDay,endDay, setEndDay, flag) => {

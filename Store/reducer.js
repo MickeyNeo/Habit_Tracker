@@ -7,7 +7,7 @@ import { ADD_HABIT_LIST } from './constants'
 import theme from '../screen/styles/theme'
 import { SET_THEME } from './constants'
 import { SET_HABIT_STAT } from './constants'
-
+import { CHANGE_NOTE } from './constants'
 const globalState = {
     habit: {
         id: 0,
@@ -28,7 +28,7 @@ const globalState = {
         unitID: '',
         image:'',
     },
-    listHabit: [],
+    listHabit: [ ],
     memo: {
         habitID: 0,
         date: '',
@@ -51,13 +51,11 @@ const globalState = {
     },
     stateLanguage:"English",
     stateHabitOfDay: ["running", "walking"],
-
     currentTheme: theme.dark,
     stateHabitStat: true,
-    
 }
 
-function reducer (state, action) {
+function reducer (state , action) {
     switch (action.type) {
         case SET_HABIT_INPUT: 
             return {
