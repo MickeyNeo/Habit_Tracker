@@ -9,46 +9,8 @@ import { SET_THEME } from './constants'
 import { SET_HABIT_STAT } from './constants'
 
 const globalState = {
-    habit: {
-        id: 0,
-        name: '',
-        note: '',
-        frequency: '',
-        color: '',
-        tagID: 0,
-        frequencyType: '',
-        timeRange: '',
-        remainderMessage: '',
-        showMemo: 0,
-        chartType: '',
-        habitStartDay: '',
-        habitEndDay: '',
-        goalNo: '',
-        goalPeriod: '',
-        unitID: '',
-        image:'',
-    },
     listHabit: [],
-    memo: {
-        habitID: 0,
-        date: '',
-        content: '',
-    },
-    remainder: {
-        habitID: 0,
-        time: '',
-    },
-    tag: {
-        id: 0,
-        name: '',
-    },
-    unit: {
-        id: 0,
-        name: '',
-    },
-    progress: {
 
-    },
     stateLanguage:"English",
     stateHabitOfDay: ["running", "walking"],
 
@@ -57,6 +19,27 @@ const globalState = {
     
 }
 
+/* const memoState = {
+    habitID: 0,
+    date: '',
+    content: '',
+}
+
+const remainderState = {
+    habitID: 0,
+    time: '',
+}
+
+const tagState = {
+    id: 0,
+    name: '',
+}
+
+const unitState = {
+    id: 0,
+    name: '',
+}
+ */
 function reducer (state, action) {
     switch (action.type) {
         case SET_HABIT_INPUT: 
@@ -98,6 +81,34 @@ function reducer (state, action) {
     }
 }
 
+/* function memoReducer (memo, action) {
+    switch (action.type) {
+        default:
+            throw new Error('sai goi ne')
+    }
+}
+
+function reminderReducer (reminder, action) {
+    switch (action.type) {
+        default:
+            throw new Error('sai goi ne')
+    }
+}
+
+function tagReducer (tag, action) {
+    switch (action.type) {
+        default:
+            throw new Error('sai goi ne')
+    }
+}
+
+function unitReducer (unit, action) {
+    switch (action.type) {
+        default:
+            throw new Error('sai goi ne')
+    }
+} */
+
 export {globalState}
-export default reducer;
+export default reducer
 

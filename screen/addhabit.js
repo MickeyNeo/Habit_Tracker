@@ -1,66 +1,46 @@
-import React, { useState, Component, useContext,useReducer } from "react";
+import React, { useState, Component, useContext, useReducer, useEffect } from "react";
 import { View, Button, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Image, TextInput, Alert, } from "react-native";
-import Ionicons from '@expo/vector-icons/Ionicons';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import Fontisto from '@expo/vector-icons/Fontisto';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import ColorPicker from 'react-native-wheel-color-picker';
-import { ChromePicker } from 'react-color';
+//import Ionicons from '@expo/vector-icons/Ionicons';
+//import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+//import Fontisto from '@expo/vector-icons/Fontisto';
+//import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+//import ColorPicker from 'react-native-wheel-color-picker';
+//import { ChromePicker } from 'react-color';
 import themeContext from "./styles/themeContext";
-import ChooseColor from "./icon_color/chooseColor";
-import ChooseIcon from "./icon_color/chooseIcon";
-import Icons from "./icon_color/Icon";
+//import ChooseColor from "./icon_color/chooseColor";
+//import ChooseIcon from "./icon_color/chooseIcon";
+//import Icons from "./icon_color/Icon";
 // import addName from ./''
 
-import { useStore , addHabitOfaDay, addHabitList} from '../Store'
-import { setHabitInput } from '../Store/action'
+import { useStore, useHabit, addHabitOfaDay, addHabitList, HabitProvider } from '../Store'
+import { setHabitGoalNo, setHabitInput, setHabitGoalPeriod, initAddHabit, setHabitTimeRange, setHabitUnit, setHabitColor, setHabitFrequency } from '../Store/action'
 //import { db, addHabit} from '../Store/database'
+import * as SQLite from 'expo-sqlite';
+//import { color } from "react-native-reanimated";
 
 const AddHabit = ({navigation, route}) => {
+    console.log(1);
+
     const [state,dispatch] = useStore();
+    const [habitState, habitDispatch] = useHabit();
+
     const { name, colors, image, IconInfo } = route.params;
+
     const IconDetail = {
         iconName: IconInfo[0],
         iconFamily: IconInfo[1],
     }
+
     const theme = useContext(themeContext);
-    const [currentTabGoal, setCurrentTabGoal] = useState("1");
-    const [currentTabPeriod, setCurrentTabPeriod] = useState("Day");
-    const [currentTabTime, setCurrentTabTime] = useState("Anytime");
-    const [isEnabled, setIsEnabled] = useState(false);
-    const [changecolor, setcolor] = useState(colors);
-    const [note, setNote] = useState('');
-    const [freq, setFreq] = useState('');
-    const [mess, setMess] = useState('');
-   const habit = {
-        id: 0,
-        name: name,
-        note: note,
-        frequency: freq,
-        color: changecolor,
-        tagID: 0,
-        frequencyType: '',
-        timeRange: currentTabTime,
-        remainderMessage: mess,
-        showMemo: 0,
-        chartType: '',
-        habitStartDay: '',
-        habitEndDay: '',
-        goalNo: currentTabGoal,
-        goalPeriod: currentTabPeriod,
-        unitID: '',
-        image: image,
-    }
+
     const [icon, setIcon] = useState('');
+
+    habitDispatch(initAddHabit({name: name, color: colors}))
     const db = SQLite.openDatabase('Habit_tracker.db');
 
-    useEffect(() => {
+    /* useEffect(() => {
 
         console.log("Updating database")
-    
-        /* db.transaction(tx => {
-          tx.executeSql('DROP TABLE Reminder')
-        }); */
     
         db.transaction(tx => {
           tx.executeSql('CREATE TABLE IF NOT EXISTS Habit (\
@@ -83,15 +63,38 @@ const AddHabit = ({navigation, route}) => {
              PRIMARY KEY(id AUTOINCREMENT))')
         });
     
-    }, [db]);
+    }, [db]); */
 
-    const addHabit = () => {
-        const [habitState,habitDispatch] = useStore();
+    const addHabitDB = () => {
+        /* db.transaction(tx => {
+            tx.executeSql('DROP TABLE Habit')
+          }); */
+        
+        db.transaction(tx => {
+            tx.executeSql('CREATE TABLE IF NOT EXISTS Habit (\
+               id	INTEGER,\
+               name	TEXT NOT NULL,\
+               note	TEXT,\
+               frequency	TEXT NOT NULL,\
+               color	TEXT NOT NULL DEFAULT \'#000\',\
+               tagID	INTEGER COLLATE BINARY,\
+               frequencyType	TEXT NOT NULL CHECK(frequencyType IN (\'Day\', \'Week\', \'Month\')),\
+               timeRange	TEXT NOT NULL CHECK(timeRange IN (\'Anytime\', \'Morning\', \'Afternoon\', \'Evening\')),\
+               reminderMessage	TEXT,\
+               showMemo	INTEGER NOT NULL CHECK(showMemo IN (0, 1)),\
+               chartType	INTEGER NOT NULL CHECK(chartType IN (0, 1)),\
+               habitStartDate	TEXT NOT NULL,\
+               habitEndDate	TEXT,\
+               goalNo	INTEGER NOT NULL DEFAULT 1,\
+               goalPeriod	TEXT NOT NULL CHECK(goalPeriod IN (\'Day\', \'Week\', \'Month\')),\
+               unitID	INTEGER,\
+               PRIMARY KEY(id AUTOINCREMENT))')
+          });
     
         console.log("Adding Habit to db");
         db.transaction(tx => {
-            tx.executeSql('INSERT INTO Habit (id, name, note, frequency, color, tagID, frequencyType, timeRange, reminderMessage, showMemo, chartType, habitStartDate, habitEndDate, goalNo, goalPeriod, unitID) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
-            [state.habit.id, state.habit.name, state.habit.note, state.habit.frequency, state.habit.color, state.habit.tagID, state.habit.frequencyType, state.habit.timeRange, state.habit.reminderMessage, state.habit.showMemo, state.habit.chartType, state.habit.habitStartDate, state.habit.habitEndDate, state.habit.goalNo, state.habit.goalPeriod, state.habit.unitID],
+            tx.executeSql('INSERT INTO Habit (id, name, note, frequency, color, tagID, timeRange, reminderMessage, showMemo, chartType, habitStartDate, habitEndDate, goalNo, goalPeriod, unitID, progress) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+            [habitState.id, habitState.name, habitState.note, habitState.frequency, habitState.color, habitState.tagID, habitState.timeRange, habitState.reminderMessage, habitState.showMemo, habitState.chartType, habitState.habitStartDate, habitState.habitEndDate, habitState.goalNo, habitState.goalPeriod, habitState.unitID],
             (txObj, resultSet) => {
                 console.log(resultSet);
                 /* let existingNames = [...names];
@@ -119,7 +122,7 @@ const AddHabit = ({navigation, route}) => {
                     <Text style ={{fontWeight: 'bold', color: theme.color }}>Note</Text>
                     <TextInput
                         style={styles.textInput}
-                        value={note}
+                        value={habitState.note}
                         placeholder="Description or other infos"
                         onChangeText={(value) => setNote(value)}
                     />
@@ -128,30 +131,31 @@ const AddHabit = ({navigation, route}) => {
                         <Text style ={{fontWeight: 'bold', color: theme.color }}>Icon & Color</Text>
                         <View style = {{flexDirection: 'row', flex: 2}}>
                             <View style ={{ flexDirection: 'row', justifyContent: 'space-evenly', flex: 0.5 }}>
-                                <Text>Icon</Text>
-                                {TabChoose('Icon', changecolor, setcolor,setIcon,0,IconDetail)}
+                                {/* {<Text>Icon</Text>
+                                {TabChoose('Icon', habitState, habitDispatch,setIcon,0,IconDetail)}}
                                 <Text>Color</Text>
-                                {TabChoose('Color', changecolor, setcolor,setIcon,1,IconDetail)}
+                                {TabChoose('Color', habitState, habitDispatch,setIcon,1,IconDetail)} */}
                             </View>
                         </View>
                     </View>
 
                     <View style = {{flexDirection: 'column', padding: 10}}>
                         <Text style ={{fontWeight: 'bold', color: theme.color }}>Tag</Text>
-                        <TouchableOpacity style = {{borderRadius: 10, width: 40, alignItems: 'center', backgroundColor: '#f5f5f5',}}>
+                        {/* <TouchableOpacity style = {{borderRadius: 10, width: 40, alignItems: 'center', backgroundColor: '#f5f5f5',}}>
                             <Ionicons name ='add' size = {20} color = {changecolor} />
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
 
                     <View style = {{flexDirection: 'column',padding: 10}}>
                     <Text style ={{fontWeight: 'bold', color: theme.color }}>Goal & Goal Period</Text>
                         <View style = {{flexDirection: 'row', flex: 1}}>
                             <View style ={{ flexDirection: 'row', justifyContent: 'space-evenly',flex: 1, marginTop: 5 }}>
-                            {TabButton(currentTabGoal,currentTabPeriod, setCurrentTabGoal,setCurrentTabPeriod,"1", changecolor,1)}
-                            {TabButton(currentTabGoal,currentTabPeriod, setCurrentTabGoal,setCurrentTabPeriod,"count",changecolor,1)}
-                            {TabButton(currentTabGoal,currentTabPeriod, setCurrentTabGoal,setCurrentTabPeriod,"Day", changecolor,0)}
-                            {TabButton(currentTabGoal,currentTabPeriod, setCurrentTabGoal,setCurrentTabPeriod,"Week", changecolor,0)}
-                            {TabButton(currentTabGoal,currentTabPeriod, setCurrentTabGoal,setCurrentTabPeriod,"Month", changecolor,0)}
+
+                            {TabButton(habitState, habitDispatch,"1")}
+                            {TabButtonUnit(habitState, habitDispatch,"count")}
+                            {TabButton(habitState, habitDispatch,"Day",0)}
+                            {TabButton(habitState, habitDispatch,"Week",0)}
+                            {TabButton(habitState, habitDispatch,"Month",0)}
                             </View>
                         </View>
                     </View>
@@ -168,10 +172,10 @@ const AddHabit = ({navigation, route}) => {
                     <Text style ={{fontWeight: 'bold', color: theme.color }}>Time Range</Text>
                         <View style = {{flexDirection: 'row', flex: 1}}>
                             <View style ={{ flexDirection: 'row', justifyContent: 'flex-start',flex: 0.5, marginTop: 5 }}>
-                            {TabButtontime(currentTabTime, setCurrentTabTime, "Anytime",changecolor)}
-                            {TabButtontime(currentTabTime, setCurrentTabTime, "Morning", changecolor)}
-                            {TabButtontime(currentTabTime, setCurrentTabTime, "Afternoon", changecolor)}
-                            {TabButtontime(currentTabTime, setCurrentTabTime, "Evening", changecolor)}
+                            {TabButtontime(habitState, habitDispatch, "Anytime")}
+                            {TabButtontime(habitState, habitDispatch, "Morning")}
+                            {TabButtontime(habitState, habitDispatch, "Afternoon")}
+                            {TabButtontime(habitState, habitDispatch, "Evening")}
                             </View>
                         </View> 
                     </View>
@@ -182,27 +186,12 @@ const AddHabit = ({navigation, route}) => {
                     <Text style ={{fontWeight: 'bold', color: theme.color }}>Remainder Messages</Text>
                     <TextInput
                         style={[styles.textInput,{backgroundColor: theme.backgroundColor1}]}
-                        value={mess}
+                        value={habitState.reminderMessage}
                         placeholder="Enter your message here!"
                         onChangeText={(value) => setMess(value)}
                     />
                     </View>
-                    {/* <View style = {{flexDirection: 'column', padding: 10}}>
-                        <View style = {{flexDirection : 'row'}}>
-                            <Text style ={{fontWeight: 'bold', color: theme.color }}>Chart Type</Text>
-                            <Image 
-                                source={require('./Icon/bar-chart.png')}
-                                style={{ width: 48, height: 48,}}
-                            />
-                        </View>
-                    </View>
-                    <View style = {{flexDirection: 'column', padding: 10}}>
-                    <Text style ={{fontWeight: 'bold', color: theme.color }}>Habit Term</Text>
-                        <View style = {{flexDirection: 'row', flex: 1}}>
-                            <View style ={{ flexDirection: 'row', justifyContent: 'flex-start',flex: 0.5 }}>
-                            </View>
-                        </View>
-                    </View> */}
+                    {}
                 </ScrollView>
 
             </View>
@@ -210,10 +199,9 @@ const AddHabit = ({navigation, route}) => {
             <TouchableOpacity 
                 onPress={() => {
                     dispatch(addHabitOfaDay(name.toLowerCase()));
-
-                    dispatch(setHabitInput(habit));
+                    /* dispatch(setHabitInput(habit)); */
                     dispatch(addHabitList(habit));
-                    addHabit();
+                    addHabitDB();
                     navigation.navigate('Home', {
                         screen: 'AddHabit',
                     });
@@ -228,92 +216,109 @@ const AddHabit = ({navigation, route}) => {
     );
 };
 
-const TabButton = (currentTabGoal,currentTabPeriod, setCurrentTabGoal,setCurrentTabPeriod, title, color , flag) => {
-if (flag ==1 )
+const TabButton = (habitState, habitDispatch, title, flag) => {
+if (flag ==1)
     return (
         <TouchableOpacity onPress={() => {
-            setCurrentTabGoal(title)
+            habitDispatch(setHabitGoalNo(title));
         }}>
-        <View style={[styles.btnTouch, 
-            { backgroundColor: currentTabGoal == title ? color : 'transparent'}
-        ]}>
-            <Text style={{
-            fontSize: 15,
-            color: currentTabGoal == title ? "#a9a9a9" : "grey"
-            }}>{title}</Text>
-
-        </View>
+            <View style={[styles.btnTouch, { backgroundColor: habitState.goalNo == title ? color : 'transparent'}]}>
+                <Text style={{
+                    fontSize: 15,
+                    color: habit.goalNo == title ? "#a9a9a9" : "grey"
+                }}>{title}</Text>
+            </View>
         </TouchableOpacity>
     )
 else 
     return (
         <TouchableOpacity onPress={() => {
-            setCurrentTabPeriod(title)
+            //setCurrentTabPeriod(title)
+            habitDispatch(setHabitGoalPeriod(title));
         }}>
         <View style={[styles.btnTouch, 
-            { backgroundColor: currentTabPeriod == title ? color : 'transparent'}
+            { backgroundColor: habitState.goalPeriod == title ? habitState.color : 'transparent'}
         ]}>
             <Text style={{
             fontSize: 15,
-            color: currentTabPeriod == title ? "#a9a9a9" : "grey"
+            color: habitState.goalPeriod == title ? "#a9a9a9" : "grey"
             }}>{title}</Text>
 
         </View>
         </TouchableOpacity>
     )
 }
-const TabButtontime = (currentTabTime, setCurrentTabTime, title, color) => {
+
+const TabButtonUnit = (habitState, habitDispatch, title) => {
+    return (
+      <TouchableOpacity onPress={() => {
+          habitDispatch(setHabitUnit(title));
+      }}>
+        <View style={[styles.btnTouchTime, 
+          { backgroundColor: 'transparent'}
+        ]}>
+          <Text style={{
+            fontSize: 15,
+            color: "grey"
+          }}>{title}</Text>
+  
+        </View>
+      </TouchableOpacity>
+    )
+  }
+
+const TabButtontime = (habitState, habitDispatch, title) => {
   return (
     <TouchableOpacity onPress={() => {
-        setCurrentTabTime(title)
+        habitDispatch(setHabitTimeRange(title))
     }}>
       <View style={[styles.btnTouchTime, 
-        { backgroundColor: currentTabTime == title ? color : 'transparent'}
+        { backgroundColor: habitState.timeRange == title ? habitState.color : 'transparent'}
       ]}>
         <Text style={{
           fontSize: 15,
-          color: currentTabTime == title ? "#a9a9a9" : "grey"
+          color: habitState.timeRange == title ? "#a9a9a9" : "grey"
         }}>{title}</Text>
 
       </View>
     </TouchableOpacity>
   )
 }
-const TabChoose = (title, changecolor, setcolor, setIcon, flag, IconDetail) => {
-const [isEnabled, setIsEnabled] = useState(false);
-if (flag == 1)
-  return (
-    <TouchableOpacity style = {[styles.btnTouch, {backgroundColor: changecolor}]}    
-    onPress ={() => {
-                    setIsEnabled(!isEnabled)
-                    }}
-                    >
-                    {isEnabled && title == 'Color' && <ChooseColor
-                        myIsmodalVisible = {isEnabled}
-                        setModalVisible = {setIsEnabled}
-                        color = {changecolor}
-                        setColor ={setcolor}
-                    ></ChooseColor>
-                    }
-    </TouchableOpacity>
-  )
-else 
-return (
-    <TouchableOpacity style = {[styles.btnTouch]} 
-    onPress ={() => {
-                    setIsEnabled(!isEnabled)
-                    }}
-                    >
-    <Icons type = {IconDetail.iconFamily} name = {IconDetail.iconName} size = {20} color = {changecolor} />
-                    {isEnabled && title == 'Icon' && <ChooseIcon 
-                        myIsmodalVisible = {isEnabled}
-                        setModalVisible = {setIsEnabled}
-                        seticon = {setIcon}
-                    ></ChooseIcon>
-                    }
-    </TouchableOpacity>
-  )
-}
+/* const TabChoose = (title, habitState, habitDispatch, setIcon, flag, IconDetail) => {
+    const [isEnabled, setIsEnabled] = useState(false);
+    if (flag == 1)
+    return (
+        <TouchableOpacity style = {[styles.btnTouch, {backgroundColor: habitState.color}]}    
+        onPress ={() => {
+                        setIsEnabled(!isEnabled)
+                        }}
+                        >
+                        {isEnabled && title == 'Color' && <ChooseColor
+                            myIsmodalVisible = {isEnabled}
+                            setModalVisible = {setIsEnabled}
+                            color = {habitState.color}
+                            setColor ={habitDispatch(setHabitColor())}
+                        ></ChooseColor>
+                        }
+        </TouchableOpacity>
+    )
+    else 
+    return (
+        <TouchableOpacity style = {[styles.btnTouch]} 
+        onPress ={() => {
+                        setIsEnabled(!isEnabled)
+                        }}
+                        >
+        <Icons type = {IconDetail.iconFamily} name = {IconDetail.iconName} size = {20} color = {habitState.color} />
+                        {isEnabled && title == 'Icon' && <ChooseIcon 
+                            myIsmodalVisible = {isEnabled}
+                            setModalVisible = {setIsEnabled}
+                            seticon = {setIcon}
+                        ></ChooseIcon>
+                        }
+        </TouchableOpacity>
+    )
+} */
 const styles = StyleSheet.create({
     addHabit: { 
         alignItems: 'stretch',

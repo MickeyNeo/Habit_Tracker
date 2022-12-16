@@ -1,4 +1,6 @@
 import {createContext} from 'react';
 
-const Context = createContext(); 
-export default Context
+const StoreContext = createContext(); 
+const HabitContext = createContext();
+
+export {StoreContext, HabitContext}

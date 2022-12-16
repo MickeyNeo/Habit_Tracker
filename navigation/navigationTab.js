@@ -109,22 +109,22 @@ function HomeTabs({navigation}) {
 
 function MainTabNavigator () {
   return (
-      <Stack.Navigator >
-        <Stack.Screen   
-          options={({ route }) => ({
-          headerTitle: getHeaderTitle(route), })} 
-          name="Home" component={HomeTabs} />
-        <Stack.Screen name="Habit" component={Habit} />
-        <Stack.Screen name="AddHabit" component={AddHabit} />
-        <Stack.Screen name="CustomHabit" component={CustomHabit} />
-        <Stack.Screen options={{ headerTitle: 'Habit Detail' }} name="HabitDetail" component={HabitDetail} />
-        <Stack.Screen name='Theme' component={Theme}/>
-        <Stack.Screen option ={{headerTitle: 'All Habit'}} name='HabitManager' component={HabitManager}/>
-        <Stack.Screen name="MoreSettings" component={MoreSettings} />
-        <Stack.Screen name="Export" component={Export} />
-        <Stack.Screen name="UsageTips" component={UsageTips}/>
-        <Stack.Screen options={{ headerTitle: 'Habit Details' }} name="HabitOfADay" component={HabitOfADay}/>
-      </Stack.Navigator>
+        <Stack.Navigator >
+          <Stack.Screen   
+            options={({ route }) => ({
+            headerTitle: getHeaderTitle(route), })} 
+            name="Home" component={HomeTabs} />
+          <Stack.Screen name="Habit" component={Habit} />
+          <Stack.Screen name="AddHabit" component={AddHabit} />
+          <Stack.Screen name="CustomHabit" component={CustomHabit} />
+          <Stack.Screen options={{ headerTitle: 'Habit Detail' }} name="HabitDetail" component={HabitDetail} />
+          <Stack.Screen name='Theme' component={Theme}/>
+          <Stack.Screen option ={{headerTitle: 'All Habit'}} name='HabitManager' component={HabitManager}/>
+          <Stack.Screen name="MoreSettings" component={MoreSettings} />
+          <Stack.Screen name="Export" component={Export} />
+          <Stack.Screen name="UsageTips" component={UsageTips}/>
+          <Stack.Screen options={{ headerTitle: 'Habit Details' }} name="HabitOfADay" component={HabitOfADay}/>
+        </Stack.Navigator>
   );
 }
 export {MainTabNavigator};

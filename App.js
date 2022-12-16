@@ -1,18 +1,18 @@
 import React, {useState} from "react";
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native";
 import { MainTabNavigator } from "./navigation/navigationTab";
-import { StoreProvider } from "./Store"
+import { StoreProvider, HabitProvider } from "./Store"
 
 const Main = () => {
    return (
 
-   <StoreProvider>
-      <NavigationContainer>
-         <MainTabNavigator/>
-      </NavigationContainer>
-   </StoreProvider>
-
-
+   <HabitProvider> 
+      <StoreProvider>
+         <NavigationContainer>
+            <MainTabNavigator/>
+         </NavigationContainer>
+      </StoreProvider>
+   </HabitProvider>  
    ); 
 };
 export default Main;

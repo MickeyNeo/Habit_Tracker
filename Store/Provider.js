@@ -1,15 +1,26 @@
 import { useReducer } from 'react'
-import Context from './Context'
-import reducer , { globalState } from './reducer'
+import {StoreContext, HabitContext} from './Context'
+import reducer, { globalState } from './reducer'
+import habitReducer, { habitState } from './habitReducer'
  
-function Provider ({children}) {
+function StoreProvider ({children}) {
     const [state, dispatch] = useReducer(reducer, globalState)
     
     return (
-        <Context.Provider value = {[state, dispatch]}>
+        <StoreContext.Provider value = {[state, dispatch]}>
             {children}
-        </Context.Provider>
+        </StoreContext.Provider>
     ) 
 }
 
-export default Provider
+function HabitProvider ({children}) {
+    const [state, dispatch] = useReducer(habitReducer, habitState)
+    
+    return (
+        <HabitContext.Provider value = {[state, dispatch]}>
+            {children}
+        </HabitContext.Provider>
+    ) 
+}
+
+export {StoreProvider, HabitProvider}
