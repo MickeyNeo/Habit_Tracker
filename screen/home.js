@@ -4,17 +4,48 @@ import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import * as Progress from 'react-native-progress';
 import walking from './Icon/walking.png';
 import WeeklyCalendar from 'react-native-weekly-calendar';
-import { useStore } from '../Store'
+import { addHabitList, useStore } from '../Store'
+import * as SQLite from 'expo-sqlite';
+
 
 const Home = ({ navigation }) => {
   const [state,dispatch] = useStore();
-  console.log(state.listHabit);
   const [day, setDay] = useState('');
+  const db = SQLite.openDatabase('Habit_tracker.db');
+  
+
+  const loadHabit = () => {
+    console.log("Loading habit to db");
+
+    /* db.transaction(tx => {"DROP TABLE Habit"}); */
+
+    db.transaction(tx => {
+       tx.executeSql('SELECT * FROM Habit', 
+       [],
+       (txObj, resultSet) => {
+           console.log("Loading data into habit list");
+           console.log("List habit state");
+           console.log(state.listHabit);
+           console.log("Database resultset");
+           console.log(resultSet.rows);
+           if (state.listHabit.length < resultSet.rows.length) {
+              for (let i = 0; i < resultSet.rows.length; i++) {
+                dispatch(addHabitList(resultSet.rows[i]));
+              }
+           }
+       },
+       (txObj, error) => console.log(error)
+       );
+   })
+  }
+
+  loadHabit();
+
   return (
     <View style={{backgroundColor: 'white', flex: 1}}>
-      <Calendar 
+      {/* <Calendar 
               onDayPress={ (day) => setDay(day)}
-            />
+            /> */}
       {HabitZone(state.listHabit,navigation)}
     </View>
   )

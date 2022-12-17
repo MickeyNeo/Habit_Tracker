@@ -4,6 +4,7 @@ import { MainTabNavigator } from "./navigation/navigationTab";
 import { StoreProvider } from "./Store"
 
 const Main = () => {
+
    return (
 
    <StoreProvider>
