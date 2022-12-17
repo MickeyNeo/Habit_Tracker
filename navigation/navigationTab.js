@@ -3,7 +3,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer, DarkTheme } from '@react-navigation/native';
 import Habit from "../screen/habit";
-import CustomHabit from "../screen/customhabit";
 import AddHabit from "../screen/addhabit";
 import Home from "../screen/home";
 import { Ionicons } from '@expo/vector-icons';
@@ -115,8 +114,7 @@ function MainTabNavigator () {
           headerTitle: getHeaderTitle(route), })} 
           name="Home" component={HomeTabs} />
         <Stack.Screen name="Habit" component={Habit} />
-        <Stack.Screen name="AddHabit" component={AddHabit} />
-        <Stack.Screen name="CustomHabit" component={CustomHabit} />
+        <Stack.Screen options={{ headerTitle: 'Add Your Habit' }}name="AddHabit" component={AddHabit} />
         <Stack.Screen options={{ headerTitle: 'Habit Detail' }} name="HabitDetail" component={HabitDetail} />
         <Stack.Screen name='Theme' component={Theme}/>
         <Stack.Screen option ={{headerTitle: 'All Habit'}} name='HabitManager' component={HabitManager}/>
