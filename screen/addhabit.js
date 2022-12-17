@@ -11,8 +11,6 @@ import ChooseColor from "./icon_color/chooseColor";
 import ChooseIcon from "./icon_color/chooseIcon";
 import Icons from "./icon_color/Icon";
 import TimePickerDialog from '@react-native-community/datetimepicker';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import RNDateTimePicker from '@react-native-community/datetimepicker';
 import SelectFreq from './frequency/selectday'
 import SelectUnit from './unit/unit'
 
@@ -299,7 +297,7 @@ return (
                 freq = {currentTabPeriod}
                 ></SelectFreq>
                 }
-                <Text>ahihi></Text>
+                <Text>ahihi</Text>
                 </TouchableOpacity>
   )
   else if (flag == 4)
@@ -344,7 +342,7 @@ const ShowTimePicker = (startDay, setStartDay,endDay, setEndDay, flag) => {
             <TouchableOpacity onPress={showDatepicker} style = {{flexDirection: 'row', borderRadius: 10, backgroundColor: 'green'}} >
             <Text>{startDay.toLocaleString()}</Text>
             {show && (
-                <RNDateTimePicker
+                <TimePickerDialog
                 testID="dateTimePicker"
                 value={startDay}
                 mode={mode}
@@ -362,7 +360,7 @@ const ShowTimePicker = (startDay, setStartDay,endDay, setEndDay, flag) => {
             <TouchableOpacity onPress={showDatepicker} style = {{flexDirection: 'row', borderRadius: 10, backgroundColor: 'green'}} >
             <Text>{endDay.toLocaleString()}</Text>
             {show && (
-                <RNDateTimePicker
+                <TimePickerDialog
                 testID="dateTimePicker"
                 value={endDay}
                 mode={mode}

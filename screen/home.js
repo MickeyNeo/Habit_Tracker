@@ -3,7 +3,7 @@ import { View, Button, Text, StyleSheet, TouchableOpacity, Image, Switch, TextIn
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import * as Progress from 'react-native-progress';
 import walking from './Icon/walking.png';
-import WeeklyCalendar from 'react-native-weekly-calendar';
+//import WeeklyCalendar from 'react-native-weekly-calendar';
 import { addHabitList, useStore } from '../Store'
 import * as SQLite from 'expo-sqlite';
 import { refreshDatabase, loadHabit, initDatabase, loadUnit } from '../Store/database';
