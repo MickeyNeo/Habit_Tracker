@@ -42,12 +42,13 @@ const AddHabit = ({navigation, route}) => {
     const [mess, setMess] = useState('');
     const [startDay, setStartDay] = useState(new Date());
     const [endDay, setEndDay] = useState(new Date());
-    const [isEnabled, setIsEnabled] = useState(0);
+    const [isEnabled, setIsEnabled] = useState(false);
     const [unit, setUnit] = useState(unitHabit);
     const [tag, setTag] = useState('');
+    const [habitname, setName] = useState(name);
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
     const habit = {
-        name: name,
+        name: habitname,
         note: note,
         frequency: freq,
         color: changecolor,
@@ -56,7 +57,7 @@ const AddHabit = ({navigation, route}) => {
         timeRange: currentTabTime,
         remainderMessage: mess,
         showMemo: isEnabled,
-        chartType: 0,
+        chartType: '',
         habitStartDay: startDay.toLocaleString(),
         habitEndDay: endDay.toDateString(),
         goalNo: goal,
@@ -73,7 +74,9 @@ const AddHabit = ({navigation, route}) => {
                     <Text style ={{fontWeight: 'bold', color: theme.color }}>Name</Text>
                     <TextInput
                         style={[styles.textInput,{backgroundColor: theme.backgroundColor1}]}
-                        placeholder={(name)}
+                        placeholder={(habitname)}
+                        value={habitname}
+                        onChangeText={(value) => setName(value)}
                     />
                     </View>
                     <View style = {{flexDirection: 'column', padding: 10, }}>
@@ -250,7 +253,7 @@ const TabButtontime = (currentTabTime, setCurrentTabTime, title, color) => {
   )
 }
 const TabChoose = (title, changecolor, setcolor,setIcon, unit,setUnit, tag, setTag, IconDetail, flag,currentTabPeriod) => {
-const [isEnabled, setIsEnabled] = useState(0);
+const [isEnabled, setIsEnabled] = useState(false);
 if (flag == 2)
   return (
     <TouchableOpacity style = {[styles.btnTouch, {backgroundColor: changecolor}]}    
@@ -445,3 +448,4 @@ const styles = StyleSheet.create({
     }
 });
 export default AddHabit;
+
