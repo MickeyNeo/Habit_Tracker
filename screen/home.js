@@ -6,40 +6,17 @@ import walking from './Icon/walking.png';
 import WeeklyCalendar from 'react-native-weekly-calendar';
 import { addHabitList, useStore } from '../Store'
 import * as SQLite from 'expo-sqlite';
+import { refreshDatabase, loadHabit } from '../Store/database';
 
 
 const Home = ({ navigation }) => {
   const [state,dispatch] = useStore();
   const [day, setDay] = useState('');
   const db = SQLite.openDatabase('Habit_tracker.db');
-  
 
-  const loadHabit = () => {
-    console.log("Loading habit to db");
+  //refreshDatabase();  
 
-    /* db.transaction(tx => {"DROP TABLE Habit"}); */
-
-    db.transaction(tx => {
-       tx.executeSql('SELECT * FROM Habit', 
-       [],
-       (txObj, resultSet) => {
-           console.log("Loading data into habit list");
-           console.log("List habit state");
-           console.log(state.listHabit);
-           console.log("Database resultset");
-           console.log(resultSet.rows);
-           if (state.listHabit.length < resultSet.rows.length) {
-              for (let i = 0; i < resultSet.rows.length; i++) {
-                dispatch(addHabitList(resultSet.rows[i]));
-              }
-           }
-       },
-       (txObj, error) => console.log(error)
-       );
-   })
-  }
-
-  loadHabit();
+  loadHabit(state.listHabit, dispatch);
 
   return (
     <View style={{backgroundColor: 'white', flex: 1}}>
