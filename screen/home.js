@@ -6,7 +6,7 @@ import walking from './Icon/walking.png';
 import WeeklyCalendar from 'react-native-weekly-calendar';
 import { addHabitList, useStore } from '../Store'
 import * as SQLite from 'expo-sqlite';
-import { refreshDatabase, loadHabit } from '../Store/database';
+import { refreshDatabase, loadHabit, initDatabase, loadUnit } from '../Store/database';
 
 
 const Home = ({ navigation }) => {
@@ -14,9 +14,11 @@ const Home = ({ navigation }) => {
   const [day, setDay] = useState('');
   const db = SQLite.openDatabase('Habit_tracker.db');
 
-  //refreshDatabase();  
+  initDatabase();
 
   loadHabit(state.listHabit, dispatch);
+
+  loadUnit();
 
   return (
     <View style={{backgroundColor: 'white', flex: 1}}>

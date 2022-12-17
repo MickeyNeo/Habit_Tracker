@@ -29,7 +29,7 @@ const refreshDatabase = () => {
         (txObj, error) => console.log(error)
         );
     })
-    
+4
     db.transaction(tx => {
         tx.executeSql("DROP TABLE Reminder",
         [],
@@ -117,7 +117,9 @@ const initDatabase = () => {
                 console.log(resultSet);
            },
            (txObj, error) => console.log(error)
-           );
+        );
+
+
      });
   
      db.transaction(tx => {
@@ -147,6 +149,21 @@ const initDatabase = () => {
      });
   
      db.transaction(tx => {
+        tx.executeSql("INSERT INTO Tag (\"id\", \"name\") VALUES \
+        ('1', 'Health'),\
+        ('2', 'Fitness'),\
+        ('3', 'Productivity')",
+        [], 
+        (txObj, resultSet) => {
+            console.log("Initialize tag data")
+            console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+     }); 
+    
+
+     db.transaction(tx => {
         tx.executeSql('CREATE TABLE IF NOT EXISTS Unit (\
            id	INTEGER,\
            name	TEXT,\
@@ -160,6 +177,29 @@ const initDatabase = () => {
         (txObj, error) => console.log(error)
         );
      }); 
+
+     db.transaction(tx => {
+        tx.executeSql("INSERT INTO Unit (\"id\", \"name\") VALUES \
+        ('1', 'sec'),\
+        ('2', 'min'),\
+        ('3', 'hr'),\
+        ('4', 'ml'),\
+        ('5', 'oz'),\
+        ('6', 'cal'),\
+        ('7', 'count'),\
+        ('8', 'steps'),\
+        ('9', 'm'),\
+        ('10', 'km'),\
+        ('11', 'mile')",
+        [], 
+        (txObj, resultSet) => {
+            console.log("Initialize unit data")
+            console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+     }); 
+
 
      db.transaction(tx => {
         tx.executeSql('CREATE TABLE IF NOT EXISTS HaveTag (\
@@ -216,5 +256,31 @@ const loadHabit = (listHabit, dispatch) => {
    })
   }
 
+  const loadUnit = () => {
+    console.log("Loading habit to db");
 
-export {db, loadHabit, addHabit, refreshDatabase}
+    /* db.transaction(tx => {"DROP TABLE Habit"}); */
+
+    db.transaction(tx => {
+       tx.executeSql('SELECT * FROM Unit', 
+       [],
+       (txObj, resultSet) => {
+           console.log("Loading init unit");
+           /*console.log("List habit state");
+           console.log(listHabit);
+           console.log("Database resultset");
+           console.log(resultSet.rows);
+           if (listHabit.length < resultSet.rows.length) {
+              for (let i = 0; i < resultSet.rows.length; i++) {
+                dispatch(addHabitList(resultSet.rows[i]));
+              }
+           } */
+           console.log(resultSet);
+       },
+       (txObj, error) => console.log(error)
+       );
+   })
+  }
+
+
+export {db, loadHabit, addHabit, refreshDatabase, initDatabase, loadUnit}
