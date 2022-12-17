@@ -1,4 +1,4 @@
-import { SET_HABIT_INPUT } from './constants'
+import { EMPTY_HABIT_LIST, SET_HABIT_INPUT } from './constants'
 import { SET_LANGUAGE } from './constants'
 import { ADD_HABIT_OF_ADAY } from './constants'
 
@@ -35,5 +35,9 @@ export const setHabitStat = payload =>({
 })
 export const changenote = payload =>({
     type: CHANGE_NOTE,
+    payload
+})
+export const emptyHabitList = payload => ({
+    type: EMPTY_HABIT_LIST,
     payload
 })

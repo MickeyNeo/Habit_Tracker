@@ -14,11 +14,12 @@ const Home = ({ navigation }) => {
   const [day, setDay] = useState('');
   const db = SQLite.openDatabase('Habit_tracker.db');
 
-  initDatabase();
+  // refreshDatabase();
+  // initDatabase();
 
   loadHabit(state.listHabit, dispatch);
 
-  loadUnit();
+  /* loadUnit(); */
 
   return (
     <View style={{backgroundColor: 'white', flex: 1}}>

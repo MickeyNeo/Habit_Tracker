@@ -2,7 +2,7 @@ import * as SQLite from 'expo-sqlite';
 import { useContext } from 'react';
 import Context from './Context';
 import reducer, { globalState } from './reducer';
-import { addHabitList } from './action';
+import { addHabitList, emptyHabitList } from './action';
 
 const db = SQLite.openDatabase('Habit_tracker.db');
 
@@ -109,7 +109,7 @@ const initDatabase = () => {
            habitName TEXT,\
            date	TEXT,\
            content	TEXT,\
-           progress INTERGER.\
+           progress INTERGER,\
            PRIMARY KEY(habitName,date))',
            [], 
            (txObj, resultSet) => {
@@ -118,8 +118,6 @@ const initDatabase = () => {
            },
            (txObj, error) => console.log(error)
         );
-
-
      });
   
      db.transaction(tx => {
@@ -149,10 +147,10 @@ const initDatabase = () => {
      });
   
      db.transaction(tx => {
-        tx.executeSql("INSERT INTO Tag (\"id\", \"name\") VALUES \
-        ('1', 'Health'),\
-        ('2', 'Fitness'),\
-        ('3', 'Productivity')",
+        tx.executeSql("INSERT INTO Tag (\"name\") VALUES \
+        ('Health'),\
+        ('Fitness'),\
+        ('Productivity')",
         [], 
         (txObj, resultSet) => {
             console.log("Initialize tag data")
@@ -179,18 +177,18 @@ const initDatabase = () => {
      }); 
 
      db.transaction(tx => {
-        tx.executeSql("INSERT INTO Unit (\"id\", \"name\") VALUES \
-        ('1', 'sec'),\
-        ('2', 'min'),\
-        ('3', 'hr'),\
-        ('4', 'ml'),\
-        ('5', 'oz'),\
-        ('6', 'cal'),\
-        ('7', 'count'),\
-        ('8', 'steps'),\
-        ('9', 'm'),\
-        ('10', 'km'),\
-        ('11', 'mile')",
+        tx.executeSql("INSERT INTO Unit (\"name\") VALUES \
+        ('sec'),\
+        ('min'),\
+        ('hr'),\
+        ('ml'),\
+        ('oz'),\
+        ('cal'),\
+        ('count'),\
+        ('steps'),\
+        ('m'),\
+        ('km'),\
+        ('mile')",
         [], 
         (txObj, resultSet) => {
             console.log("Initialize unit data")
@@ -231,8 +229,16 @@ const addHabit = (habit) => {
     })
 }
 
+const isInHabitList = (listHabit, habit) => {
+    for (let j = 0; j < listHabit.length; j++)
+        if (habit.name == listHabit[j].name) {
+            return true;
+        }
+    return false;
+}
+
 const loadHabit = (listHabit, dispatch) => {
-    console.log("Loading habit to db");
+    console.log("Loading habit from db");
 
     /* db.transaction(tx => {"DROP TABLE Habit"}); */
 
@@ -246,8 +252,8 @@ const loadHabit = (listHabit, dispatch) => {
            console.log("Database resultset");
            console.log(resultSet.rows);
            if (listHabit.length < resultSet.rows.length) {
-              for (let i = 0; i < resultSet.rows.length; i++) {
-                dispatch(addHabitList(resultSet.rows[i]));
+                for (let i = 0; i < resultSet.rows.length; i++) {
+                    dispatch(addHabitList(resultSet.rows[i]));
               }
            }
        },
@@ -257,7 +263,7 @@ const loadHabit = (listHabit, dispatch) => {
   }
 
   const loadUnit = () => {
-    console.log("Loading habit to db");
+    console.log("Loading unit from db");
 
     /* db.transaction(tx => {"DROP TABLE Habit"}); */
 

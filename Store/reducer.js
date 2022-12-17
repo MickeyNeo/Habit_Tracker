@@ -1,4 +1,4 @@
-import { SET_HABIT_INPUT} from './constants'
+import { EMPTY_HABIT_LIST, SET_HABIT_INPUT} from './constants'
 import { SET_LANGUAGE } from './constants'
 import { ADD_HABIT_OF_ADAY } from './constants'
 
@@ -8,9 +8,9 @@ import theme from '../screen/styles/theme'
 import { SET_THEME } from './constants'
 import { SET_HABIT_STAT } from './constants'
 import { CHANGE_NOTE } from './constants'
+import { emptyHabitList } from './action'
 const globalState = {
     habit: {
-        id: 0,
         name: 'Habit',
         note: '',
         frequency: '1',
@@ -28,7 +28,7 @@ const globalState = {
         unitID: 0,
         image:'',
     },
-    listHabit: [ ],
+    listHabit: [],
     memo: {
         habitID: 0,
         date: '',
@@ -73,9 +73,27 @@ function reducer (state , action) {
                 stateHabitOfDay: [...state.stateHabitOfDay, action.payload]
             }
         case ADD_HABIT_LIST:
+            for (let i = 0; i < state.listHabit.length; i++) {
+                if (state.listHabit[i].name == action.payload.name) {
+                    return {
+                        ...state
+                    }
+                }
+            }
             return {
                 ...state,
                 listHabit: [...state.listHabit, action.payload]
+            }
+        case EMPTY_HABIT_LIST:
+            if (state.listHabit.length >= action.payload) {
+                return {
+                    ...state
+                }
+            }
+            console.log("Emptied Habit List");
+            return {
+                ...state,
+                listHabit: []
             }
         case SET_THEME:
             const newThemeKey = state.currentTheme.id === "dark" ? "light" : "dark";

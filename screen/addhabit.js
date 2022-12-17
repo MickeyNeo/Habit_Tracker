@@ -42,22 +42,21 @@ const AddHabit = ({navigation, route}) => {
     const [mess, setMess] = useState('');
     const [startDay, setStartDay] = useState(new Date());
     const [endDay, setEndDay] = useState(new Date());
-    const [isEnabled, setIsEnabled] = useState(false);
+    const [isEnabled, setIsEnabled] = useState(0);
     const [unit, setUnit] = useState(unitHabit);
     const [tag, setTag] = useState('');
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
     const habit = {
-        id: 0,
         name: name,
         note: note,
         frequency: freq,
         color: changecolor,
         tagID: 0,
-        frequencyType: '',
+        frequencyType: 'Day',
         timeRange: currentTabTime,
         remainderMessage: mess,
         showMemo: isEnabled,
-        chartType: '',
+        chartType: 0,
         habitStartDay: startDay.toLocaleString(),
         habitEndDay: endDay.toDateString(),
         goalNo: goal,
@@ -251,7 +250,7 @@ const TabButtontime = (currentTabTime, setCurrentTabTime, title, color) => {
   )
 }
 const TabChoose = (title, changecolor, setcolor,setIcon, unit,setUnit, tag, setTag, IconDetail, flag,currentTabPeriod) => {
-const [isEnabled, setIsEnabled] = useState(false);
+const [isEnabled, setIsEnabled] = useState(0);
 if (flag == 2)
   return (
     <TouchableOpacity style = {[styles.btnTouch, {backgroundColor: changecolor}]}    
