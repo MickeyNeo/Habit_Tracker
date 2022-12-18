@@ -95,6 +95,7 @@ db.transaction(tx => {
         goalPeriod	TEXT NOT NULL CHECK(goalPeriod IN (\'Day\', \'Week\', \'Month\')),\
         unitID	INTEGER,\
         icon TEXT,\
+        iconFamily TEXT,\
         PRIMARY KEY(name))',
         [], 
         (txObj, resultSet) => {
@@ -148,71 +149,71 @@ db.transaction(tx => {
     });
 
     db.transaction(tx => {
-    tx.executeSql("INSERT INTO Tag (\"name\") VALUES \
-    ('Health'),\
-    ('Fitness'),\
-    ('Productivity')",
-    [], 
-    (txObj, resultSet) => {
-        console.log("Initialize tag data")
-        console.log(resultSet);
-    },
-    (txObj, error) => console.log(error)
-    );
+        tx.executeSql("INSERT INTO Tag (\"name\") VALUES \
+        ('Health'),\
+        ('Fitness'),\
+        ('Productivity')",
+        [], 
+        (txObj, resultSet) => {
+            console.log("Initialize tag data")
+            console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
     }); 
 
 
     db.transaction(tx => {
-    tx.executeSql('CREATE TABLE IF NOT EXISTS Unit (\
-        id	INTEGER,\
-        name	TEXT,\
-        PRIMARY KEY(id AUTOINCREMENT)\
-    )',
-    [], 
-    (txObj, resultSet) => {
-        console.log("Initialize unit table")
-        console.log(resultSet);
-    },
-    (txObj, error) => console.log(error)
-    );
+        tx.executeSql('CREATE TABLE IF NOT EXISTS Unit (\
+            id	INTEGER,\
+            name	TEXT,\
+            PRIMARY KEY(id AUTOINCREMENT)\
+        )',
+        [], 
+        (txObj, resultSet) => {
+            console.log("Initialize unit table")
+            console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
     }); 
 
     db.transaction(tx => {
-    tx.executeSql("INSERT INTO Unit (\"name\") VALUES \
-    ('sec'),\
-    ('min'),\
-    ('hr'),\
-    ('ml'),\
-    ('oz'),\
-    ('cal'),\
-    ('count'),\
-    ('steps'),\
-    ('m'),\
-    ('km'),\
-    ('mile')",
-    [], 
-    (txObj, resultSet) => {
-        console.log("Initialize unit data")
-        console.log(resultSet);
-    },
-    (txObj, error) => console.log(error)
-    );
+        tx.executeSql("INSERT INTO Unit (\"name\") VALUES \
+        ('sec'),\
+        ('min'),\
+        ('hr'),\
+        ('ml'),\
+        ('oz'),\
+        ('cal'),\
+        ('count'),\
+        ('steps'),\
+        ('m'),\
+        ('km'),\
+        ('mile')",
+        [], 
+        (txObj, resultSet) => {
+            console.log("Initialize unit data")
+            console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
     }); 
 
 
     db.transaction(tx => {
-    tx.executeSql('CREATE TABLE IF NOT EXISTS HaveTag (\
-        habitName TEXT,\
-        tagId    INTEGER,\
-        PRIMARY KEY(habitName, tagId)\
-    )',
-    [], 
-    (txObj, resultSet) => {
-        console.log("Initialize haveTag table")
-        console.log(resultSet);
-    },
-    (txObj, error) => console.log(error)
-    );
+        tx.executeSql('CREATE TABLE IF NOT EXISTS HaveTag (\
+            habitName TEXT,\
+            tagId    INTEGER,\
+            PRIMARY KEY(habitName, tagId)\
+        )',
+        [], 
+        (txObj, resultSet) => {
+            console.log("Initialize haveTag table")
+            console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
     }); 
 }
 
@@ -385,11 +386,11 @@ const updateHabit = (habit, newHabit) => {
     db.transaction(tx => {
         tx.executeSql('UPDATE Habit \
         SET name = ?, note = ?, frequency = ?, color = ?, frequencyType = ?, timeRange = ?, reminderMessage = ?, showMemo = ?, \
-        chartType = ?, habitStartDate = ?, habitEndDate = ?, goalNo = ?, goalPeriod = ?, unitID = ?, icon = ?\
+        chartType = ?, habitStartDate = ?, habitEndDate = ?, goalNo = ?, goalPeriod = ?, unitID = ?, icon = ?\, iconFamily = ?\
         WHERE name = ?', 
         [newHabit.name, newHabit.note, newHabit.frequency, newHabit.color, newHabit.frequencyType, newHabit.timeRange, 
         newHabit.reminderMessage, newHabit.showMemo, newHabit.chartType, newHabit.habitStartDate, newHabit.habitEndDate, 
-        newHabit.goalNo, newHabit.goalPeriod, newHabit.unitID, newHabit.icon, habit.name],
+        newHabit.goalNo, newHabit.goalPeriod, newHabit.unitID, newHabit.icon, newHabit.iconFamily, habit.name],
         (txObj, resultSet) => {
             console.log("Update habit ", habitName, " from table Habit");
             console.log(resultSet);
