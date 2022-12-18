@@ -401,4 +401,4 @@ const updateHabit = (habit, newHabit) => {
 }
 
 
-export {db, loadHabit, addHabit, refreshDatabase, initDatabase, loadUnit}
+export {db, loadHabit, addHabit, refreshDatabase, initDatabase, loadUnit, deleteHabit, updateHabit}
