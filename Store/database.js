@@ -401,5 +401,42 @@ const updateHabit = (habit, newHabit) => {
 
 }
 
+const calculateMonthlyVolumn = () => {
+
+}
+
+const calculateTotalVolumn  = (habit) => {
+    db.transaction(tx => {
+        tx.executeSql('SELECT SUM(progress) \
+        FROM Memo\
+        WHERE habitName = ?', 
+        [habit.name],
+        (txObj, resultSet) => {
+            console.log("Calculated Total Volumn");
+            console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+}
+
+/* const calculateDailyAverage = () => {
+    db.transaction(tx => {
+        tx.executeSql('SELECT SUM(progress) \
+        FROM Memo\
+        WHERE habitName = ?', 
+        [habit.name],
+        (txObj, resultSet) => {
+            console.log("Calculated Total Volumn");
+            console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+} */
+
+const calculateOverallRate = () => {
+
+}
 
 export {db, loadHabit, addHabit, refreshDatabase, initDatabase, loadUnit, deleteHabit, updateHabit}
