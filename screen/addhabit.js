@@ -200,7 +200,7 @@ const AddHabit = ({navigation, route}) => {
                 onPress={() => {
                     dispatch(addHabitOfaDay(name.toLowerCase()));
                     dispatch(setHabitInput(habit));
-                    dispatch(addHabitList(habit));
+                    //dispatch(addHabitList(habit));
                     addHabit(state.habit);
                     navigation.navigate('Home', {
                         screen: 'AddHabit',

@@ -15,10 +15,9 @@ const globalState = {
         note: '',
         frequency: '1',
         color: '',
-        tagID: 0,
         frequencyType: 'Day',
         timeRange: 'Anytime',
-        remainderMessage: '',
+        reminderMessage: '',
         showMemo: 0,
         chartType: 0,
         habitStartDay: '',
@@ -26,13 +25,15 @@ const globalState = {
         goalNo: '1',
         goalPeriod: 'Day',
         unitID: 0,
-        image:'',
+        icon:'',
+        iconFamily: '',
     },
     listHabit: [],
     memo: {
         habitID: 0,
         date: '',
         content: '',
+        progress: 0
     },
     remainder: {
         habitID: 0,
@@ -46,8 +47,9 @@ const globalState = {
         id: 0,
         name: '',
     },
-    progress: {
-
+    haveTag: {
+        habitName: '',
+        tagID: 1
     },
     stateLanguage:"English",
     stateHabitOfDay: ["running", "walking"],
