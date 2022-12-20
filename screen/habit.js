@@ -49,7 +49,7 @@ return (
                 <Text style = {{ fontSize: 20, padding: 10, fontWeight: 'bold'}}>Sports</Text>
                 <View style = { styles.habitZone}>
                     <View style = {styles.zone}>
-                        {TabButton(navigation,"Walking", walking, 'red', ['walking', 'FontAwesome5'], 'km')}
+                        {TabButton(navigation,"Walking", walking, '#FFAEAE', ['walking', 'FontAwesome5'], 'km')}
                         {TabButton(navigation,"Running", running, 'green', ['running','FontAwesome5'], 'km')}
                         {TabButton(navigation,"Chess", chess, 'grey', ['chess-king','MaterialCommunityIcons'])}
                     </View>
@@ -128,7 +128,7 @@ const TabButton = (navigation, title, image, color, IconInfo, unit) => {
 const styles = StyleSheet.create({
     container:{
       flex: 1, 
-      backgroundColor: '#B3D5F2',
+      //backgroundColor: '#B3D5F2',
       flexDirection: 'column',
     },
     addHabit: { 
@@ -178,9 +178,7 @@ const styles = StyleSheet.create({
         height: 90,
         alignItems: 'center',
         padding: 10,
-        backgroundColor: '#00FFF6',
-        borderWidth: 1.5,
-        borderColor:'#79ACD9'
+        backgroundColor: '#F3ACB4',
     },
     habitZone: {
         flexDirection: 'column',

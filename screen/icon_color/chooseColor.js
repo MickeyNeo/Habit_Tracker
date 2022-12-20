@@ -10,27 +10,28 @@ const ChooseColor = (params) => {
                 useNativeDriver={true}
                 onBackdropPress={() => params.setModalVisible(false)}
                 >
-                    {/* <View style={{backgroundColor: 'red', 
-                            borderRadius: 30, borderWidth: 1,
-                            height: '20%',
+                    <View style={{backgroundColor: 'white', 
+                            borderRadius: 20, 
+                            borderWidth: 1,
+                            height: '60%',
                             marginTop: 'auto', 
                             justifyContent: 'center',
-                            alignContent: 'center',}}> */}
+                            alignContent: 'center',}}>
                     <ColorPicker
                         //ref={r => { picker = r }}
                         color= {params.color}
                         //swatchesOnly={swatchesOnly}
                         onColorChange={(color) => params.setColor(color)}
                         onColorChangeComplete={(color) => params.setColor(color)}
-                        thumbSize={40}
-                        sliderSize={40}
+                        thumbSize={30}
+                        sliderSize={30}
                         noSnap={true}
                         row={false}
                         //swatchesLast={swatchesLast}
                         //swatches={swatchesEnabled}
                         //discrete={disc}
 				    />
-                    {/* </View> */}
+                    </View>
                 </Modal>  
         </View>
     )
