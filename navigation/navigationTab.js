@@ -36,8 +36,7 @@ function getHeaderTitle(route) {
 function HomeTabs({navigation}) {
   const [state, dispatch] = useStore()
   const {stateHabitStat} = state
-  if (stateHabitStat==true)
-    return (
+  return (
       <Tab.Navigator
               initialRouteName="Home"
               screenOptions={({ route }) => ({
@@ -66,43 +65,10 @@ function HomeTabs({navigation}) {
             tabBarInactiveBackgroundColor: 'white',
           })}>
         <Tab.Screen  option = {{headerShown: false}} name="Home" component={Home} /> 
-        <Tab.Screen  option = {{headerShown: false}}  name="Statistic" component={Statistic} />
+        {stateHabitStat && <Tab.Screen  option = {{headerShown: false}}  name="Statistic" component={Statistic} />}
         <Tab.Screen  option = {{headerShown: false}}  name="Settings" component={Setting} />
       </Tab.Navigator>
   );
-  else
-  return (
-    <Tab.Navigator
-            initialRouteName="Home"
-            screenOptions={({ route }) => ({
-            tabBarShowLabel: false,
-            headerShown: false,
-            tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
-            if (route.name === 'Home') {
-              iconName = focused
-                ? 'add'
-                : 'ios-home-outline';
-            if (iconName === 'add' && !focused) { 
-              {navigation.navigate('Habit')}
-            }
-            } else if (route.name === 'Settings') {
-              iconName = focused ? 'ios-list' : 'ios-list-outline';
-            }
-            else if (route.name === 'Statistic') {
-                iconName = focused ? 'ios-bar-chart' : 'ios-bar-chart-outline';
-            }
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-          tabBarActiveTintColor: '#0c5776',
-          tabBarInactiveTintColor: 'gray',
-          tabBarActiveBackgroundColor: '#bcfefe',
-          tabBarInactiveBackgroundColor: 'white',
-        })}>
-      <Tab.Screen  option = {{headerShown: false}} name="Home" component={Home} /> 
-      <Tab.Screen  option = {{headerShown: false}}  name="Settings" component={Setting} />
-    </Tab.Navigator>
-);
 
 }
 
