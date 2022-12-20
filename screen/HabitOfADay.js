@@ -53,37 +53,47 @@ const HabitOfADay = ({navigation,route}) =>{
                         <View style={{flexDirection:'row',justifyContent:'center',alignContent: "space-around"}}>
                             <View style = {styles.column}>
                                 <View style={styles.iconRecords}>
-                                    <FontAwesome5  name="calendar-alt" size={50} color="#d8c3c3" />
+                                    <FontAwesome5  name="calendar-alt" size={50} color="#7fb7fa" />
                                     <Text>0 Day</Text>
                                     <Text>Done in December</Text>
                                 </View>
                                 <View style={styles.iconRecords}>
-                                    <FontAwesome5  name="layer-group" size={50} color="#d8c3c3" />
+                                    <FontAwesome5  name="layer-group" size={50} color="#a6acf0" />
                                     <Text>0 Day</Text>
                                     <Text>Current Streak</Text>
                                 </View>
                                 <View style={styles.iconRecords}>
-                                    <FontAwesome5  name="medal" size={50} color="#d8c3c3" />
-                                    <Text>0 Day</Text>
-                                    <Text>Best Streak</Text>
+                                    <FontAwesome5  name="poll" size={50} color="#10cc7a" />
+                                    <Text>0</Text>
+                                    <Text>Vol. in</Text>
+                                </View>
+                                <View style={styles.iconRecords}>
+                                    <FontAwesome5  name="cubes" size={50} color="#f8b2b3" />
+                                    <Text>0</Text>
+                                    <Text>Daily Avg.</Text>
                                 </View>
                             </View>
 
                             <View style = {styles.column}>
                                 <View style={styles.iconRecords}>
-                                    <FontAwesome5  name="clipboard-list" size={50} color="#d8c3c3" />
+                                    <FontAwesome5  name="clipboard-list" size={50} color="#4be1a9" />
                                     <Text>0 Day</Text>
                                     <Text>Total Done</Text>
                                 </View>
                                 <View style={styles.iconRecords}>
-                                    <FontAwesome5  name="medal" size={50} color="#d8c3c3" />
-                                    <Text>Day</Text>
+                                    <FontAwesome5  name="medal" size={50} color="#f8b043" />
+                                    <Text>0 Day</Text>
                                     <Text>Best Streaks</Text>
                                 </View>
                                 <View style={styles.iconRecords}>
-                                    <FontAwesome5  name="medal" size={50} color="#d8c3c3" />
-                                    <Text>Day</Text>
-                                    <Text>Best Streaks</Text>
+                                    <FontAwesome5  name="receipt" size={50} color="#81b6f8" />
+                                    <Text>0</Text>
+                                    <Text>Vol. Total</Text>
+                                </View>
+                                <View style={styles.iconRecords}>
+                                    <FontAwesome5  name="percent" size={50} color="#fca133" />
+                                    <Text>0%</Text>
+                                    <Text>Overall Rate</Text>
                                 </View>
                                 
                             </View>
@@ -97,7 +107,7 @@ const HabitOfADay = ({navigation,route}) =>{
                             <Text style = {styles.headText}>Memos</Text>
                             <Text style = {{marginTop: '1.25%'}}>More</Text>
                         </View>
-                        <View style = {{padding: 10, backgroundColor: '#c5acac' , borderRadius: 6, marginHorizontal: 10, marginBottom: 5}}>
+                        <View style = {{padding: 10, backgroundColor: '#F9BBAE' , borderRadius: 6, marginHorizontal: 10, marginBottom: 5}}>
                             <TextInput placeholder="No memos yet."/>
                         </View>
                     </View>
@@ -119,15 +129,16 @@ const HabitOfADay = ({navigation,route}) =>{
                         </View>
                     </View>
 
+                    {/* Buttons */}
                     <View style = {{flex: 1, marginHorizontal: 10, flexDirection: 'row', justifyContent: 'space-around', marginBottom: 20}}>
-                        <TouchableOpacity style = {{ backgroundColor: '#c5bebe', borderRadius: 8, width: '40%',height: '140%', justifyContent: 'center'}} onPress={()=> {}}>
+                        <TouchableOpacity style = {{ backgroundColor: '#F3ACB4', borderRadius: 8, width: '40%',height: '140%', justifyContent: 'center'}} onPress={()=> {}}>
                             <View style = {{flexDirection: 'row',justifyContent: 'center'}}>
                                 <FontAwesome5 style = {{marginHorizontal: 5}} name='pencil-alt' size={15} color='black' />
                                 <Text>Edit</Text>
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style = {{ backgroundColor: '#c5bebe', borderRadius: 8, width: '40%',height: '140%', justifyContent: 'center'}} onPress={()=> {}}>
+                        <TouchableOpacity style = {{ backgroundColor: '#F3ACB4', borderRadius: 8, width: '40%',height: '140%', justifyContent: 'center'}} onPress={()=> {}}>
                             <View style = {{flexDirection: 'row',justifyContent: 'center'}}>
                                 <FontAwesome5 style = {{marginHorizontal: 5}} name='trash-alt' size={15} color='black' />
                                 <Text>Delete</Text>
@@ -136,7 +147,6 @@ const HabitOfADay = ({navigation,route}) =>{
                     </View>
                     
                 </ScrollView>
-                {/* Buttons */}
                 
             </View>
            
