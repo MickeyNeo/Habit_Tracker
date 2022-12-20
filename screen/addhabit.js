@@ -42,7 +42,7 @@ const AddHabit = ({navigation, route}) => {
     const [mess, setMess] = useState('');
     const [startDay, setStartDay] = useState(new Date());
     const [endDay, setEndDay] = useState(new Date());
-    const [isEnabled, setIsEnabled] = useState(false);
+    const [isEnabled, setIsEnabled] = useState(0);
     const [unit, setUnit] = useState(unitHabit);
     const [tag, setTag] = useState('');
     const [habitname, setName] = useState(name);
@@ -57,7 +57,7 @@ const AddHabit = ({navigation, route}) => {
         timeRange: currentTabTime,
         remainderMessage: mess,
         showMemo: isEnabled,
-        chartType: '',
+        chartType: 0,
         habitStartDay: startDay.toLocaleString(),
         habitEndDay: endDay.toDateString(),
         goalNo: goal,

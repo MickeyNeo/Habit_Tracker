@@ -3,7 +3,6 @@ import { useContext } from 'react';
 import Context from './Context';
 import reducer, { globalState } from './reducer';
 import { addHabitList, emptyHabitList } from './action';
-import { C } from 'chart.js/dist/chunks/helpers.core';
 
 const db = SQLite.openDatabase('Habit_tracker.db');
 
