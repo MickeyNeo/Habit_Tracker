@@ -30,7 +30,7 @@ export default function Statistic({navigation}){
         backgroundGradientFromOpacity: 1,
         backgroundGradientTo: "white",
         backgroundGradientToOpacity: 1,
-        color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+        color: (opacity = 1) => `rgba(249, 187, 174, ${opacity})`,
         // strokeWidth: 2, // optional, default 3
         barPercentage: 0.5,
         useShadowColorFromDataset: false // optional
@@ -67,7 +67,7 @@ export default function Statistic({navigation}){
                                 data={dataPro}
                                 width={Dimensions.get('window').width-40}
                                 height={220}
-                                strokeWidth={20}
+                                strokeWidth={30}
                                 radius={90}
                                 chartConfig={chartConfig}
                                 hideLegend={true}
@@ -78,12 +78,12 @@ export default function Statistic({navigation}){
                             <View style={{flexDirection:'row',justifyContent:'center'}}>
                                 <View style={style.colum}>
                                     <View style={style.iconRecord}>
-                                        <FontAwesome5  name="medal" size={50} color="orange" />
+                                        <FontAwesome5  name="medal" size={50} color="#fcac44" />
                                         <Text>0 Day</Text>
                                         <Text>Best Streaks</Text>
                                     </View>
                                     <View style={style.iconRecord}>
-                                        <Octicons name="checklist" size={50} color="green" />
+                                        <Octicons name="checklist" size={50} color="#3ee7a8" />
                                         <Text>0</Text>
                                         <Text>Habits Done</Text>
                                     </View>
@@ -91,12 +91,12 @@ export default function Statistic({navigation}){
                                 </View>
                                 <View style={style.colum}>
                                     <View style={style.iconRecord}>
-                                        <FontAwesome5 name="calendar-check" size={50} color="blue" />
+                                        <FontAwesome5 name="calendar-check" size={50} color="#84b5f7" />
                                         <Text>0 Day</Text>
                                         <Text>Perfect Days</Text>
                                     </View>
                                     <View style={style.iconRecord}>
-                                        <Entypo name="dots-three-vertical" size={50} color="purle" />
+                                        <Entypo name="dots-three-vertical" size={50} color="#b697ff" />
                                         <Text>0</Text>
                                         <Text>Daily Average</Text> 
                                     </View>
