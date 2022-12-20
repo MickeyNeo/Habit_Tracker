@@ -60,9 +60,9 @@ function HomeTabs({navigation}) {
               }
               return <Ionicons name={iconName} size={size} color={color} />;
             },
-            tabBarActiveTintColor: '#0c5776',
+            tabBarActiveTintColor: 'black',
             tabBarInactiveTintColor: 'gray',
-            tabBarActiveBackgroundColor: '#bcfefe',
+            tabBarActiveBackgroundColor: '#F3ACB4',
             tabBarInactiveBackgroundColor: 'white',
           })}>
         <Tab.Screen  option = {{headerShown: false}} name="Home" component={Home} /> 

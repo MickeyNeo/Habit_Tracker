@@ -109,7 +109,7 @@ const SelectZone =({
                     width: condition == 'Week' ? 40 : 20,
                     height: 20, 
                     alignItems: 'center',
-                    backgroundColor: 'green',
+                    backgroundColor: '#FFAEAE',
                     justifyContent: condition == 'Week' ? 'center' : 'space-evenly',
                 }}
                     key={value}
