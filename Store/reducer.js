@@ -80,6 +80,7 @@ function reducer (state , action) {
             }
         case ADD_HABIT_LIST:
             for (let i = 0; i < state.listHabit.length; i++) {
+                console.log("habit payload: ", action.payload.name)
                 if (state.listHabit[i].name == action.payload.name) {
                     return {
                         ...state

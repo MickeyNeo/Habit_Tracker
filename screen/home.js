@@ -14,12 +14,12 @@ const Home = ({ navigation }) => {
   const [state,dispatch] = useStore();
   const [day, setDay] = useState('');
   const db = SQLite.openDatabase('Habit_tracker.db');
-  console.log(state.habit.iconName)
+  console.log("List habit: ", state.listHabit);
   // refreshDatabase();
   // initDatabase();
 
   loadHabit(state.listHabit, dispatch);
-  loadSetting(state, dispatch);
+  //loadSetting(state, dispatch);
 
   /* loadUnit(); */
 
