@@ -20,7 +20,12 @@ import {
 
 export default function Statistic({navigation}){
     const[state, dispatch] =useStore()
-    console.log(state.stateHabitOfDay)
+    let list_of_habit = []
+    for (let i = 0; i < state.listHabit.length; i++){
+        list_of_habit.push(state.listHabit[i]['name'].toLowerCase())
+    }
+    // console.log('statistic',state.listHabit[0]['name'])
+    console.log('statistic',list_of_habit)
     const dataPro = {
         labels: ['Monthly_rate'], // optional
         data: [0.8]
@@ -43,14 +48,13 @@ export default function Statistic({navigation}){
                     name="graph-pie" size={27} color="pink" />
                 
                 <ScrollView style={style.scroll} horizontal={true}> 
-                    {state.stateHabitOfDay.map((value,index) =>(
+                    {list_of_habit.map((value,index) =>(
                         
                         <TouchableOpacity key={index}
                             onPress={() => {
                                 navigation.navigate('HabitOfADay', {
                                     iconName: value,
-                                    // colors: color,
-                                    // image: image,
+                                    
                                 })
                             }}>
                             <FontAwesome5 style={style.iconTitle} name={value} size={27} color='crimson' />

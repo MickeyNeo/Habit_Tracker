@@ -235,8 +235,8 @@ const AddHabit = ({navigation, route}) => {
         <SafeAreaView style = {styles.homeZone}> 
             <TouchableOpacity 
                 onPress={() => {
-                    dispatch(addHabitOfaDay(name.toLowerCase()));
-                    dispatch(setHabitInput(habit));
+                    // dispatch(addHabitOfaDay(name.toLowerCase()));
+                    // dispatch(setHabitInput(habit));
                     //dispatch(addHabitList(habit));
                     addHabit(state.habit);
                     navigation.navigate('Home', {

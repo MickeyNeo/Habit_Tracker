@@ -217,43 +217,43 @@ db.transaction(tx => {
 }
 
 const addHabit = (habit) => {    
-console.log("Adding Habit to db");
+    console.log("Adding Habit to db");
 
-db.transaction(tx => {
-    tx.executeSql('INSERT INTO Habit (name, note, frequency, color, tagID, frequencyType, timeRange, reminderMessage, showMemo, chartType, habitStartDate, habitEndDate, goalNo, goalPeriod, unitID) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
-    [habit.name, habit.note, habit.frequency, habit.color, habit.tagID, habit.frequencyType, habit.timeRange, habit.reminderMessage, habit.showMemo, habit.chartType, habit.habitStartDate, habit.habitEndDate, habit.goalNo, habit.goalPeriod, habit.unitID],
-    (txObj, resultSet) => {
-        console.log(resultSet);
-    },
-    (txObj, error) => console.log(error)
-    );
-})
-}
+    db.transaction(tx => {
+        tx.executeSql('INSERT INTO Habit (name, note, frequency, color, tagID, frequencyType, timeRange, reminderMessage, showMemo, chartType, habitStartDate, habitEndDate, goalNo, goalPeriod, unitID) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+        [habit.name, habit.note, habit.frequency, habit.color, habit.tagID, habit.frequencyType, habit.timeRange, habit.reminderMessage, habit.showMemo, habit.chartType, habit.habitStartDate, habit.habitEndDate, habit.goalNo, habit.goalPeriod, habit.unitID],
+        (txObj, resultSet) => {
+            console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+    }
 
-const loadHabit = (listHabit, dispatch) => {
+    const loadHabit = (listHabit, dispatch) => {
 
-console.log("Loading habit from db");
+    console.log("Loading habit from db");
 
-/* db.transaction(tx => {"DROP TABLE Habit"}); */
+    /* db.transaction(tx => {"DROP TABLE Habit"}); */
 
-db.transaction(tx => {
-    tx.executeSql('SELECT * FROM Habit', 
-    [],
-    (txObj, resultSet) => {
-        console.log("Loading data into habit list");
-        console.log("List habit state");
-        console.log(listHabit);
-        console.log("Database resultset");
-        console.log(resultSet.rows);
-        if (listHabit.length < resultSet.rows.length) {
-            for (let i = 0; i < resultSet.rows.length; i++) {
-                dispatch(addHabitList(resultSet.rows[i]));
-            } 
-        }
-    },
-    (txObj, error) => console.log(error)
-    );
-})
+    db.transaction(tx => {
+        tx.executeSql('SELECT * FROM Habit', 
+        [],
+        (txObj, resultSet) => {
+            console.log("Loading data into habit list");
+            console.log("List habit state");
+            console.log(listHabit);
+            console.log("Database resultset");
+            console.log(resultSet.rows);
+            if (listHabit.length < resultSet.rows.length) {
+                for (let i = 0; i < resultSet.rows.length; i++) {
+                    dispatch(addHabitList(resultSet.rows[i]));
+                } 
+            }
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
 }
 
 const loadUnit = () => {
@@ -419,6 +419,21 @@ const calculateTotalVolumn  = (habit) => {
     })
 }
 
+const calculateDayDoneInMonth  = (habit) => {
+    db.transaction(tx => {
+        tx.executeSql('SELECT COUNT(*) \
+        FROM Memo\
+        WHERE habitName = ? AND progress != 0 AND MONTH(date_time) = MONTH(CURRENT_DATE()))', 
+        [habit.name],
+        (txObj, resultSet) => {
+            console.log("Calculated Total Volumn");
+            console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+}
+
 /* const calculateDailyAverage = () => {
     db.transaction(tx => {
         tx.executeSql('SELECT SUM(progress) \
@@ -438,4 +453,4 @@ const calculateOverallRate = () => {
 
 }
 
-export {db, loadHabit, addHabit, refreshDatabase, initDatabase, loadUnit, deleteHabit, updateHabit}
+export {db, loadHabit, addHabit, refreshDatabase, initDatabase, loadUnit, deleteHabit, updateHabit, calculateDayDoneInMonth}
