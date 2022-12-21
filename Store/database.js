@@ -73,53 +73,64 @@ db.transaction(tx => {
     (txObj, error) => console.log(error)
     );
 })
+
+db.transaction(tx => {
+    tx.executeSql("DROP TABLE Setting",
+    [],
+    (txObj, resultSet) => {
+        console.log("Dropped Tag setting")
+        console.log(resultSet);
+    },
+    (txObj, error) => console.log(error)
+    );
+})
 }
 
 const initDatabase = () => {
-db.transaction(tx => {
-    tx.executeSql('CREATE TABLE IF NOT EXISTS Habit (\
-        name	TEXT NOT NULL,\
-        note	TEXT,\
-        frequency	TEXT NOT NULL,\
-        color	TEXT NOT NULL DEFAULT \'#000\',\
-        tagID	INTEGER COLLATE BINARY,\
-        frequencyType	TEXT NOT NULL CHECK(frequencyType IN (\'Day\', \'Week\', \'Month\')),\
-        timeRange	TEXT NOT NULL CHECK(timeRange IN (\'Anytime\', \'Morning\', \'Afternoon\', \'Evening\')),\
-        reminderMessage	TEXT,\
-        showMemo	INTEGER NOT NULL CHECK(showMemo IN (0, 1)),\
-        chartType	INTEGER NOT NULL CHECK(chartType IN (0, 1)),\
-        habitStartDate	TEXT NOT NULL,\
-        habitEndDate	TEXT,\
-        goalNo	INTEGER NOT NULL DEFAULT 1,\
-        goalPeriod	TEXT NOT NULL CHECK(goalPeriod IN (\'Day\', \'Week\', \'Month\')),\
-        unitID	INTEGER,\
-        icon TEXT,\
-        iconFamily TEXT,\
-        PRIMARY KEY(name))',
-        [], 
-        (txObj, resultSet) => {
-            console.log("Initialize habit table")
-            console.log(resultSet);
-        },
-        (txObj, error) => console.log(error)
-        );
-});
-
-db.transaction(tx => {
-    tx.executeSql('CREATE TABLE IF NOT EXISTS Memo (\
-        habitName TEXT,\
-        date	TEXT,\
-        content	TEXT,\
-        progress INTERGER,\
-        PRIMARY KEY(habitName,date))',
-        [], 
-        (txObj, resultSet) => {
-            console.log("Initialize Memo table")
-            console.log(resultSet);
-        },
-        (txObj, error) => console.log(error)
-    );
+    db.transaction(tx => {
+        tx.executeSql('CREATE TABLE IF NOT EXISTS Habit (\
+            name	TEXT NOT NULL,\
+            note	TEXT,\
+            frequency	TEXT NOT NULL,\
+            color	TEXT NOT NULL DEFAULT \'#000\',\
+            tagID	INTEGER COLLATE BINARY,\
+            frequencyType	TEXT NOT NULL CHECK(frequencyType IN (\'Day\', \'Week\', \'Month\')),\
+            timeRange	TEXT NOT NULL CHECK(timeRange IN (\'Anytime\', \'Morning\', \'Afternoon\', \'Evening\')),\
+            reminderMessage	TEXT,\
+            showMemo	INTEGER NOT NULL CHECK(showMemo IN (0, 1)),\
+            chartType	INTEGER NOT NULL CHECK(chartType IN (0, 1)),\
+            habitStartDate	TEXT NOT NULL,\
+            habitEndDate	TEXT,\
+            goalNo	INTEGER NOT NULL DEFAULT 1,\
+            goalPeriod	TEXT NOT NULL CHECK(goalPeriod IN (\'Day\', \'Week\', \'Month\')),\
+            unitID	INTEGER,\
+            icon TEXT,\
+            iconFamily TEXT,\
+            PRIMARY KEY(name))',
+            [], 
+            (txObj, resultSet) => {
+                console.log("Initialize habit table")
+                console.log(resultSet);
+            },
+            (txObj, error) => console.log(error)
+            );
     });
+
+    db.transaction(tx => {
+        tx.executeSql('CREATE TABLE IF NOT EXISTS Memo (\
+            habitName TEXT,\
+            date	TEXT,\
+            content	TEXT,\
+            progress INTERGER,\
+            PRIMARY KEY(habitName,date))',
+            [], 
+            (txObj, resultSet) => {
+                console.log("Initialize Memo table")
+                console.log(resultSet);
+            },
+            (txObj, error) => console.log(error)
+        );
+        });
 
     db.transaction(tx => {
     tx.executeSql('CREATE TABLE IF NOT EXISTS Reminder (habitName TEXT, time TEXT, PRIMARY KEY(habitName,time))',
@@ -214,21 +225,55 @@ db.transaction(tx => {
         (txObj, error) => console.log(error)
         );
     }); 
+
+    db.transaction(tx => {
+        tx.executeSql('CREATE TABLE IF NOT EXISTS Setting (\
+            language TEXT CHECK(language IN (\'English\', \'German\', \'Vietnamese\', \'French\')),\
+            theme    TEXT CHECK(theme IN (\'Dark\', \'Light\')),\
+            dateBarStyle TEXT CHECK(theme IN (\'DateWeek\', \'Week\', \'Date\')),\
+            habitBarSize TEXT CHECK(habitBarSize IN (\'Large\', \'Small\')),\
+            dailyReminderText TEXT,\
+            dailyReminderTime TEXT,\
+            habitStat INTERGER CHECK(habitStat IN (0, 1))\
+        )',
+        [], 
+        (txObj, resultSet) => {
+            console.log("Initialize setting table")
+            console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    }); 
 }
 
 const addHabit = (habit) => {    
     console.log("Adding Habit to db");
 
     db.transaction(tx => {
-        tx.executeSql('INSERT INTO Habit (name, note, frequency, color, tagID, frequencyType, timeRange, reminderMessage, showMemo, chartType, habitStartDate, habitEndDate, goalNo, goalPeriod, unitID) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
-        [habit.name, habit.note, habit.frequency, habit.color, habit.tagID, habit.frequencyType, habit.timeRange, habit.reminderMessage, habit.showMemo, habit.chartType, habit.habitStartDate, habit.habitEndDate, habit.goalNo, habit.goalPeriod, habit.unitID],
+        tx.executeSql('INSERT INTO Habit (name, note, frequency, color, tagID, frequencyType, timeRange, reminderMessage, showMemo, chartType, habitStartDate, habitEndDate, goalNo, goalPeriod, unitID, icon, iconFamily) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+        [habit.name, habit.note, habit.frequency, habit.color, habit.tagID, habit.frequencyType, habit.timeRange, habit.reminderMessage, habit.showMemo, habit.chartType, habit.habitStartDay, habit.habitEndDate, habit.goalNo, habit.goalPeriod, habit.unitID, habit.iconName, habit.iconFamily],
         (txObj, resultSet) => {
             console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
     })
-    }
+
+}
+
+const addSetting = (state) => {    
+    console.log("Adding Setting to db");
+
+    db.transaction(tx => {
+        tx.executeSql('INSERT INTO Setting (language, theme, habitBarStyle, dateBarStyle, habitStat, dailyReminderTime, dailyReminderText) values (?, ?, ?, ?, ?, ?, ?)', 
+        [state.stateLanguage, state.theme, state.habitBarStyle, state.dateBarStyle, state.habitStat, state.dailyReminderTime, state.dailyReminderText],
+        (txObj, resultSet) => {
+            console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+}
 
     const loadHabit = (listHabit, dispatch) => {
 
@@ -240,16 +285,37 @@ const addHabit = (habit) => {
         tx.executeSql('SELECT * FROM Habit', 
         [],
         (txObj, resultSet) => {
-            console.log("Loading data into habit list");
+            /* console.log("Loading data into habit list");
             console.log("List habit state");
             console.log(listHabit);
             console.log("Database resultset");
-            console.log(resultSet.rows);
+            console.log(resultSet.rows); */
             if (listHabit.length < resultSet.rows.length) {
                 for (let i = 0; i < resultSet.rows.length; i++) {
-                    dispatch(addHabitList(resultSet.rows[i]));
+                    console.log("Database resultset", resultSet.rows)
+                    dispatch(addHabitList(resultSet.rows._array[i]));
                 } 
             }
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+
+}
+
+const loadSetting = (state, dispatch) => {
+
+    console.log("Loading setting from db");
+
+    /* db.transaction(tx => {"DROP TABLE Habit"}); */
+
+    db.transaction(tx => {
+        tx.executeSql('SELECT * FROM setting', 
+        [],
+        (txObj, resultSet) => {
+            console.log("Loading setting into global state");
+            console.log("resultSet.rows");
+            dispatch(addStateSetting(resultSet.rows));
         },
         (txObj, error) => console.log(error)
         );
@@ -453,4 +519,4 @@ const calculateOverallRate = () => {
 
 }
 
-export {db, loadHabit, addHabit, refreshDatabase, initDatabase, loadUnit, deleteHabit, updateHabit, calculateDayDoneInMonth}
+export {db, loadHabit, addHabit, refreshDatabase, initDatabase, loadUnit, deleteHabit, updateHabit, loadSetting, calculateDayDoneInMonth}

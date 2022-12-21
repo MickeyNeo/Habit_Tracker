@@ -221,11 +221,11 @@ const AddHabit = ({navigation, route}) => {
                             <View style = {{flexDirection: 'row', flex: 1}}>
                                 <View style ={{ flexDirection: 'column', alignItems: 'center',flex: 0.5, padding: 10 }}>
                                     <Text>Start</Text>
-                                    {ShowTimePicker(startDay, setStartDay,endDay, setEndDay, 1)}
+                                    {ShowTimePicker(startDay, setStartDay, endDay, setEndDay, 1)}
                                 </View>
                                 <View style ={{ flexDirection: 'column', alignItems: 'center',flex: 0.5, padding: 10 }}>
                                     <Text>End</Text>
-                                    {ShowTimePicker(startDay, setStartDay,endDay, setEndDay, 0)}
+                                    {ShowTimePicker(startDay, setStartDay, endDay, setEndDay, 0)}
                                 </View>
                             </View>
                     </View> 
@@ -238,6 +238,7 @@ const AddHabit = ({navigation, route}) => {
                     // dispatch(addHabitOfaDay(name.toLowerCase()));
                     // dispatch(setHabitInput(habit));
                     //dispatch(addHabitList(habit));
+
                     addHabit(state.habit);
                     navigation.navigate('Home', {
                         screen: 'AddHabit',

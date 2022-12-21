@@ -2,6 +2,7 @@ import { useReducer } from 'react'
 import Context from './Context'
 import reducer , { globalState } from './reducer'
 import {createStore} from 'redux' 
+
 function Provider ({children}) {
     const [state, dispatch] = useReducer(reducer, globalState);
     
