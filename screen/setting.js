@@ -9,11 +9,10 @@ import Theme from './settingsScreen/Theme';
 import WidgetTheme from './settingsScreen/WidgetTheme';
 import HabitManager from './settingsScreen/HabitManager';
 import Export from './settingsScreen/Export';
-import MoreSettings from './settingsScreen/MoreSettings'
-import UsageTips from './settingsScreen/UsageTips';
 import DailyNotification from './settingsScreen/DailyNotification';
 import TabBar from './settingsScreen/TabBar';
 import VactionMode from './settingsScreen/VactionMode';
+import TagManager from './settingsScreen/TagManager';
 
 
 export default function Settings({navigation}){
@@ -46,14 +45,13 @@ export default function Settings({navigation}){
                 {tabButton(navigation,"Tab Bar")}
                 {line()}
                 {tabButton(navigation,"Habit Manager")}
+                {tabButton(navigation,"Tag Manager")}
                 {tabButton(navigation,"Daily Notification",1)}
                 {tabButton(navigation,"Safety Lock",1)}
                 {tabButton(navigation,"Vacation Mode",1)}
                 {tabButton(navigation,"Sound",1)}
-                {tabButton(navigation,"Export")}
-                {tabButton(navigation,"More Settings")}
                 {line()}
-                {tabButton(navigation,"Usage Tips")}
+                
         
 
                 
@@ -87,14 +85,12 @@ const tabButton = (navigation,name, nb=0)=>{
                             case 'Habit Manager':
                                 navigation.navigate("HabitManager")
                             break;
-                            case 'More Settings':
-                                navigation.navigate("MoreSettings")
-                            break;
+                            
                             case 'Export':
                                 navigation.navigate("Export")
                             break;
-                            case 'Usage Tips':
-                                navigation.navigate("UsageTips")
+                            case 'Tag Manager':
+                                navigation.navigate("TagManager")
                             break;
                             default :
                                 break;
