@@ -73,6 +73,17 @@ db.transaction(tx => {
     (txObj, error) => console.log(error)
     );
 })
+
+db.transaction(tx => {
+    tx.executeSql("DROP TABLE Setting",
+    [],
+    (txObj, resultSet) => {
+        console.log("Dropped Tag setting")
+        console.log(resultSet);
+    },
+    (txObj, error) => console.log(error)
+    );
+})
 }
 
 const initDatabase = () => {
@@ -214,46 +225,98 @@ db.transaction(tx => {
         (txObj, error) => console.log(error)
         );
     }); 
+
+    db.transaction(tx => {
+        tx.executeSql('CREATE TABLE IF NOT EXISTS Setting (\
+            language TEXT CHECK(language IN (\'English\', \'German\', \'Vietnamese\', \'French\')),\
+            theme    TEXT CHECK(theme IN (\'Dark\', \'Light\')),\
+            dateBarStyle TEXT CHECK(theme IN (\'DateWeek\', \'Week\', \'Date\'))\
+            habitBarSize TEXT CHECK(habitBarSize IN (\'Large\', \'Small\')\
+            dailyReminderText TEXT,\
+            dailyReminderTime TEXT,\
+            habitStat INTERGER CHECK(habitStat IN (0, 1))\
+        )',
+        [], 
+        (txObj, resultSet) => {
+            console.log("Initialize setting table")
+            console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    }); 
 }
 
 const addHabit = (habit) => {    
-console.log("Adding Habit to db");
+    console.log("Adding Habit to db");
 
-db.transaction(tx => {
-    tx.executeSql('INSERT INTO Habit (name, note, frequency, color, tagID, frequencyType, timeRange, reminderMessage, showMemo, chartType, habitStartDate, habitEndDate, goalNo, goalPeriod, unitID) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
-    [habit.name, habit.note, habit.frequency, habit.color, habit.tagID, habit.frequencyType, habit.timeRange, habit.reminderMessage, habit.showMemo, habit.chartType, habit.habitStartDate, habit.habitEndDate, habit.goalNo, habit.goalPeriod, habit.unitID],
-    (txObj, resultSet) => {
-        console.log(resultSet);
-    },
-    (txObj, error) => console.log(error)
-    );
-})
+    db.transaction(tx => {
+        tx.executeSql('INSERT INTO Habit (name, note, frequency, color, tagID, frequencyType, timeRange, reminderMessage, showMemo, chartType, habitStartDate, habitEndDate, goalNo, goalPeriod, unitID, icon, iconFamily) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+        [habit.name, habit.note, habit.frequency, habit.color, habit.tagID, habit.frequencyType, habit.timeRange, habit.reminderMessage, habit.showMemo, habit.chartType, habit.habitStartDate, habit.habitEndDate, habit.goalNo, habit.goalPeriod, habit.unitID, habit.iconName, habit.iconFamily],
+        (txObj, resultSet) => {
+            console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+}
+
+const addSetting = (state) => {    
+    console.log("Adding Setting to db");
+
+    db.transaction(tx => {
+        tx.executeSql('INSERT INTO Setting (language, theme, habitBarStyle, dateBarStyle, habitStat, dailyReminderTime, dailyReminderText) values (?, ?, ?, ?, ?, ?, ?)', 
+        [state.stateLanguage, state.theme, state.habitBarStyle, state.dateBarStyle, state.habitStat, state.dailyReminderTime, state.dailyReminderText],
+        (txObj, resultSet) => {
+            console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
 }
 
 const loadHabit = (listHabit, dispatch) => {
 
-console.log("Loading habit from db");
+    console.log("Loading habit from db");
 
-/* db.transaction(tx => {"DROP TABLE Habit"}); */
+    /* db.transaction(tx => {"DROP TABLE Habit"}); */
 
-db.transaction(tx => {
-    tx.executeSql('SELECT * FROM Habit', 
-    [],
-    (txObj, resultSet) => {
-        console.log("Loading data into habit list");
-        console.log("List habit state");
-        console.log(listHabit);
-        console.log("Database resultset");
-        console.log(resultSet.rows);
-        if (listHabit.length < resultSet.rows.length) {
-            for (let i = 0; i < resultSet.rows.length; i++) {
-                dispatch(addHabitList(resultSet.rows[i]));
-            } 
-        }
-    },
-    (txObj, error) => console.log(error)
-    );
-})
+    db.transaction(tx => {
+        tx.executeSql('SELECT * FROM Habit', 
+        [],
+        (txObj, resultSet) => {
+            console.log("Loading data into habit list");
+            console.log("List habit state");
+            console.log(listHabit);
+            console.log("Database resultset");
+            console.log(resultSet.rows);
+            if (listHabit.length < resultSet.rows.length) {
+                for (let i = 0; i < resultSet.rows.length; i++) {
+                    dispatch(addHabitList(resultSet.rows[i]));
+                } 
+            }
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+}
+
+const loadSetting = (state, dispatch) => {
+
+    console.log("Loading setting from db");
+
+    /* db.transaction(tx => {"DROP TABLE Habit"}); */
+
+    db.transaction(tx => {
+        tx.executeSql('SELECT * FROM setting', 
+        [],
+        (txObj, resultSet) => {
+            console.log("Loading setting into global state");
+            console.log("resultSet.rows");
+            dispatch(addSetting(resultSet.rows));
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
 }
 
 const loadUnit = () => {
@@ -438,4 +501,4 @@ const calculateOverallRate = () => {
 
 }
 
-export {db, loadHabit, addHabit, refreshDatabase, initDatabase, loadUnit, deleteHabit, updateHabit}
+export {db, loadHabit, addHabit, refreshDatabase, initDatabase, loadUnit, deleteHabit, updateHabit, loadSetting}

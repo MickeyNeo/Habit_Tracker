@@ -1,4 +1,4 @@
-import { EMPTY_HABIT_LIST, SET_HABIT_INPUT} from './constants'
+import { ADD_STATE_SETTING, EMPTY_HABIT_LIST, SET_DAILY_REMINDER_TEXT, SET_DAILY_REMINDER_TIME, SET_DATE_BAR_STYLE, SET_HABIT_BAR_STYLE, SET_HABIT_INPUT} from './constants'
 import { SET_LANGUAGE } from './constants'
 import { ADD_HABIT_OF_ADAY } from './constants'
 
@@ -25,7 +25,7 @@ const globalState = {
         goalNo: '1',
         goalPeriod: 'Day',
         unitID: 0,
-        icon:'',
+        iconName:'',
         iconFamily: '',
     },
     listHabit: [],
@@ -55,6 +55,10 @@ const globalState = {
     stateHabitOfDay: ["running", "walking"],
     currentTheme: theme.dark,
     stateHabitStat: true,
+    dateBarStyle: 'Date',
+    habitBarStyle: 'Small',
+    dailyReminderTime: '',
+    dailyReminderText: '',
 }
 
 function reducer (state , action) {
@@ -98,7 +102,7 @@ function reducer (state , action) {
                 listHabit: []
             }
         case SET_THEME:
-            const newThemeKey = state.currentTheme.id === "dark" ? "light" : "dark";
+            const newThemeKey = state.currentTheme.id === "Dark" ? "Light" : "Dark";
             return {
                 ...state,
                 currentTheme:theme[newThemeKey]
@@ -107,6 +111,37 @@ function reducer (state , action) {
             return{
                 ...state,
                 stateHabitStat: action.payload,
+            }
+        case SET_DAILY_REMINDER_TEXT:
+            return{
+                ...state,
+                dailyReminderText: action.payload,
+            }
+        case SET_DAILY_REMINDER_TIME:
+            return{
+                ...state,
+                dailyReminderTime: action.payload,
+            }
+        case SET_HABIT_BAR_STYLE:
+            return{
+                ...state,
+                habitBarStyle: action.payload,
+            }
+        case SET_DATE_BAR_STYLE:
+            return{
+                ...state,
+                dateBarStyle: action.payload,
+            }
+        case ADD_STATE_SETTING:
+            return{
+                ...state,
+                stateLanguage: action.payload.stateLanguage,
+                currentTheme: action.payload.theme,
+                habitBarStyle: action.payload.habitBarStyle,
+                dateBarStyle: action.payload.dateBarStyle,
+                stateHabitStat: action.payload.habitStat,
+                dailyReminderTime: action.payload.dailyReminderTime,
+                dailyReminderText: action.payload.dailyReminderText
             }
         default:
             throw new Error('sai goi ne')
