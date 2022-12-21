@@ -258,6 +258,7 @@ const addHabit = (habit) => {
         (txObj, error) => console.log(error)
         );
     })
+
 }
 
 const addSetting = (state) => {    
@@ -274,7 +275,7 @@ const addSetting = (state) => {
     })
 }
 
-const loadHabit = (listHabit, dispatch) => {
+    const loadHabit = (listHabit, dispatch) => {
 
     console.log("Loading habit from db");
 
@@ -299,6 +300,7 @@ const loadHabit = (listHabit, dispatch) => {
         (txObj, error) => console.log(error)
         );
     })
+
 }
 
 const loadSetting = (state, dispatch) => {
@@ -483,6 +485,21 @@ const calculateTotalVolumn  = (habit) => {
     })
 }
 
+const calculateDayDoneInMonth  = (habit) => {
+    db.transaction(tx => {
+        tx.executeSql('SELECT COUNT(*) \
+        FROM Memo\
+        WHERE habitName = ? AND progress != 0 AND MONTH(date_time) = MONTH(CURRENT_DATE()))', 
+        [habit.name],
+        (txObj, resultSet) => {
+            console.log("Calculated Total Volumn");
+            console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+}
+
 /* const calculateDailyAverage = () => {
     db.transaction(tx => {
         tx.executeSql('SELECT SUM(progress) \
@@ -502,4 +519,4 @@ const calculateOverallRate = () => {
 
 }
 
-export {db, loadHabit, addHabit, refreshDatabase, initDatabase, loadUnit, deleteHabit, updateHabit, loadSetting}
+export {db, loadHabit, addHabit, refreshDatabase, initDatabase, loadUnit, deleteHabit, updateHabit, loadSetting, calculateDayDoneInMonth}
