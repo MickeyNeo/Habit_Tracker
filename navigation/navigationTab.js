@@ -13,10 +13,9 @@ import { View, Button, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaV
 import Theme from "../screen/settingsScreen/Theme";
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import HabitManager from "../screen/settingsScreen/HabitManager";
-import MoreSettings from "../screen/settingsScreen/MoreSettings";
 import Export from "../screen/settingsScreen/Export";
-import UsageTips from "../screen/settingsScreen/UsageTips";
 import HabitOfADay from "../screen/HabitOfADay";
+import TagManager from "../screen/settingsScreen/TagManager";
 import { useStore } from "../Store";
 
 const Tab = createBottomTabNavigator();
@@ -84,9 +83,8 @@ function MainTabNavigator () {
         <Stack.Screen options={{ headerTitle: 'Habit Detail' }} name="HabitDetail" component={HabitDetail} />
         <Stack.Screen name='Theme' component={Theme}/>
         <Stack.Screen option ={{headerTitle: 'All Habit'}} name='HabitManager' component={HabitManager}/>
-        <Stack.Screen name="MoreSettings" component={MoreSettings} />
         <Stack.Screen name="Export" component={Export} />
-        <Stack.Screen name="UsageTips" component={UsageTips}/>
+        <Stack.Screen name="TagManager" component={TagManager} />
         <Stack.Screen options={{ headerTitle: 'Habit Details' }} name="HabitOfADay" component={HabitOfADay}/>
       </Stack.Navigator>
   );
