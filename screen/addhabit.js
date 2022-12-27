@@ -236,7 +236,7 @@ const AddHabit = ({navigation, route}) => {
             <TouchableOpacity 
                 onPress={() => {
                     // dispatch(addHabitOfaDay(name.toLowerCase()));
-                    // dispatch(setHabitInput(habit));
+                    dispatch(setHabitInput(habit));
                     //dispatch(addHabitList(habit));
 
                     addHabit(state.habit);
