@@ -12,5 +12,8 @@ export const SET_DAILY_REMINDER_TEXT = "set_daily_reminder_text"
 export const SET_HABIT_STAT="set_habit_state";
 export const CHANGE_NOTE = "change_note";
 export const ADD_STATE_SETTING = 'add_state_setting';
+export const INIT_DAY_DONE_IN_MONTH = 'init_day_done_in_month';
+export const SET_DAY_DONE_IN_MONTH = 'set_day_done_in_month';
+
 
 

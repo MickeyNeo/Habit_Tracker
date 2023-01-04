@@ -1,12 +1,12 @@
 import { EMPTY_HABIT_LIST, SET_DAILY_REMINDER_TIME, SET_HABIT_BAR_STYLE, SET_HABIT_INPUT } from './constants'
 import { SET_LANGUAGE } from './constants'
 import { ADD_HABIT_OF_ADAY } from './constants'
-
 import { ADD_HABIT_LIST } from './constants'
-
 import { SET_THEME } from './constants'
 import { SET_HABIT_STAT} from './constants'
 import {CHANGE_NOTE } from './constants'
+import {INIT_DAY_DONE_IN_MONTH, SET_DAY_DONE_IN_MONTH} from './constants'
+
 export const setHabitInput = payload => ({
     type: SET_HABIT_INPUT,
     payload 
@@ -71,3 +71,11 @@ export const setDailyReminderText = payload => ({
     payload
 })
 
+export const initDayDoneInMonth = payload => ({
+    type: INIT_DAY_DONE_IN_MONTH,
+    payload
+})
+export const setDayDoneInMonth = payload => ({
+    type: SET_DAY_DONE_IN_MONTH,
+    payload
+})
