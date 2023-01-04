@@ -8,7 +8,7 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Foundation,Octicons,Entypo } from '@expo/vector-icons'; 
-import {useStore} from '../Store'
+import {useStore,initDayDoneInMonth,setDayDoneInMonth} from '../Store'
 import {
     LineChart,
     BarChart,
@@ -20,6 +20,7 @@ import {
 
 export default function Statistic({navigation}){
     const[state, dispatch] =useStore()
+    
     let list_of_habit = []
     for (let i = 0; i < state.listHabit.length; i++){
         list_of_habit.push(state.listHabit[i]['name'].toLowerCase())
@@ -48,16 +49,17 @@ export default function Statistic({navigation}){
                     name="graph-pie" size={27} color="pink" />
                 
                 <ScrollView style={style.scroll} horizontal={true}> 
-                    {list_of_habit.map((value,index) =>(
+                    {state.listHabit.map((habit,index) =>(
                         
                         <TouchableOpacity key={index}
                             onPress={() => {
+                                dispatch(initDayDoneInMonth(0))
                                 navigation.navigate('HabitOfADay', {
-                                    iconName: value,
+                                    habit: habit,
                                     
                                 })
                             }}>
-                            <FontAwesome5 style={style.iconTitle} name={value} size={27} color='crimson' />
+                            <FontAwesome5 style={style.iconTitle} name={habit.name.toLowerCase()} size={27} color='crimson' />
                         </TouchableOpacity>
                     ))}
                 </ScrollView>

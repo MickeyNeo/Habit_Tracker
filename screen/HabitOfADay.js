@@ -2,6 +2,7 @@ import React, { useState, Component, useContext,useReducer } from "react";
 import { View,Dimensions , Button, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Image, TextInput, Alert, } from "react-native";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import {useStore,initDayDoneInMonth,setDayDoneInMonth} from '../Store';
 import {
     LineChart,
     BarChart,
@@ -10,8 +11,12 @@ import {
     ContributionGraph,
     StackedBarChart
   } from "react-native-chart-kit";
+import {calculateDayDoneInMonth, calculateDayTotalDone, calculateMonthlyVolumn,calculateTotalVolumn} from '../Store/database';
+
 const HabitOfADay = ({navigation,route}) =>{
-    const {iconName} = route.params;
+    const {habit} = route.params;
+    console.log(habit)
+    const[state, dispatch] = useStore()
     const data = {
         labels: ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"],
         datasets: [
@@ -32,20 +37,22 @@ const HabitOfADay = ({navigation,route}) =>{
         useShadowColorFromDataset: false, // optional,
         fillShadowGradientFrom: 'black'
     };
+
+    calculateDayDoneInMonth(habit)
     return(
         <View style = {styles.container}>
             <View style = {styles.header}>
-                <FontAwesome5 style={styles.iconTitle} name={iconName} size={27} color='crimson' />
-                <Text style ={{marginTop: 10, fontSize: 20, fontWeight : "bold"}}>{iconName[0].toUpperCase()+iconName.slice(1)}</Text>
+                <FontAwesome5 style={styles.iconTitle} name={habit.name.toLowerCase()} size={27} color='crimson' />
+                <Text style ={{marginTop: 10, fontSize: 20, fontWeight : "bold"}}>{habit.name}</Text>
             </View>
             <View style={{flex: 1,alignItems: 'stretch'}}>
                 <ScrollView style ={{marginBottom: 10, flex:1 }}>
                     <Calendar style={styles.calendar} firstDay={1}/>
                     
                     {/* Yearly Status */}
-                    <View style = {styles.part}>
+                    {/* <View style = {styles.part}>
                         <Text style = {styles.headText}>Yearly Status</Text>
-                    </View>
+                    </View> */}
 
                     {/* Records */}
                     <View style = {styles.part}>
@@ -54,7 +61,8 @@ const HabitOfADay = ({navigation,route}) =>{
                             <View style = {styles.column}>
                                 <View style={styles.iconRecords}>
                                     <FontAwesome5  name="calendar-alt" size={50} color="#7fb7fa" />
-                                    <Text>0 Day</Text>
+                                    <Text>{state.DayDoneInMonth} Day</Text>
+                                    <View></View>
                                     <Text>Done in December</Text>
                                 </View>
                                 <View style={styles.iconRecords}>
