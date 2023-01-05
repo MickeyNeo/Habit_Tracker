@@ -35,7 +35,14 @@ return (
     <View style={styles.container}>
 
         <View style = {styles.addHabit}>
-            <TouchableOpacity  onPress ={() => navigation.navigate("CustomHabit")} style ={styles.customHabit}> 
+            <TouchableOpacity  onPress= {() => {
+            navigation.navigate('AddHabit', {
+                name: 'Enter your name habit here!',
+                colors: 'green',
+                image: add,
+                IconInfo: ['add','Ionicons'],
+                unitHabit: 'count',})
+            }}  style ={styles.customHabit}> 
                 <Image
                     source={require('./Icon/add.png')}
                     style={{ width: 40, height: 40,}}

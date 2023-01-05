@@ -6,7 +6,6 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { useStore,setLanguage } from "../../Store";
 export default function SelectUnit (params){
     const[state, dispatch] = useStore()
-    const [lg,setLg] = useState('Monday')
     const [count, setCount] = useState(0)
     console.log(count)
     return(         
@@ -14,10 +13,10 @@ export default function SelectUnit (params){
             <Modal isVisible={params.myIsmodalVisible} 
                 useNativeDriver={true}
                 onBackdropPress={() => params.setModalVisible(false)}
-                animationIn = 'bounceIn'
-                animationInTiming = {600}
-                animationOut ='bounceOut'
-                animationOutTiming = {500}
+                // animationIn = 'bounceIn'
+                // animationInTiming = {600}
+                // animationOut ='bounceOut'
+                // animationOutTiming = {500}
                 >
                     <View style={{
                                 height: '20%',
@@ -34,18 +33,18 @@ export default function SelectUnit (params){
                                 <Text style={styles.tilte}>Select Unit</Text>
                                 <PreviewLayout
                                     values = {['count','steps','m','km','mile']}
-                                    selectedValue={lg}
-                                    setSelectedValue={setLg}
+                                    selectedValue={params.unit}
+                                    setSelectedValue={params.setunit}
                                 />
                                 <PreviewLayout
                                     values = {['sec','min','hr','ml','oz']}
-                                    selectedValue={lg}
-                                    setSelectedValue={setLg}
+                                    selectedValue={params.unit}
+                                    setSelectedValue={params.setunit}
                                 />
                                 <PreviewLayout
                                     values = {['Cal']}
-                                    selectedValue={lg}
-                                    setSelectedValue={setLg}
+                                    selectedValue={params.unit}
+                                    setSelectedValue={params.setunit}
                                 />
                             </View>
                         </View>

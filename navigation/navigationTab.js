@@ -17,6 +17,7 @@ import Export from "../screen/settingsScreen/Export";
 import HabitOfADay from "../screen/HabitOfADay";
 import TagManager from "../screen/settingsScreen/TagManager";
 import { useStore } from "../Store";
+import { useIsFocused } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -31,46 +32,82 @@ function getHeaderTitle(route) {
       return 'Settings';
   }
 }
-
 function HomeTabs({navigation}) {
+  const isFocused = useIsFocused();
   const [state, dispatch] = useStore()
   const {stateHabitStat} = state
-  return (
-      <Tab.Navigator
-              initialRouteName="Home"
-              screenOptions={({ route }) => ({
-              tabBarShowLabel: false,
-              headerShown: false,
-              tabBarIcon: ({ focused, color, size }) => {
-              let iconName;
-              if (route.name === 'Home') {
-                iconName = focused
-                  ? 'add'
-                  : 'ios-home-outline';
-              if (iconName === 'add' && !focused) { 
-                {navigation.navigate('Habit')}
-              }
-              } else if (route.name === 'Settings') {
-                iconName = focused ? 'ios-list' : 'ios-list-outline';
-              }
-              else if (route.name === 'Statistic') {
-                  iconName = focused ? 'ios-bar-chart' : 'ios-bar-chart-outline';
-              }
-              return <Ionicons name={iconName} size={size} color={color} />;
-            },
-            tabBarActiveTintColor: 'black',
-            tabBarInactiveTintColor: 'gray',
-            tabBarActiveBackgroundColor: '#F3ACB4',
-            tabBarInactiveBackgroundColor: 'white',
-          })}>
-        <Tab.Screen  option = {{headerShown: false}} name="Home" component={Home} /> 
-        {stateHabitStat && <Tab.Screen  option = {{headerShown: false}}  name="Statistic" component={Statistic} />}
-        <Tab.Screen  option = {{headerShown: false}}  name="Settings" component={Setting} />
+  if (stateHabitStat==true)
+    return (
+      <Tab.Navigator 
+            initialRouteName="Home"
+            screenOptions={({ route }) => ({
+            tabBarShowLabel: false,
+            headerShown: false,
+            tabBarIcon: ({ focused, color, size, navigation }) => {
+            let iconName;
+            if (route.name === 'Home') {
+              iconName = focused
+                ? 'add'
+                : 'ios-home-outline';
+            }
+            else if (route.name === 'Settings') {
+              iconName = focused ? 'ios-list' : 'ios-list-outline';
+            }
+            else if (route.name === 'Statistic') {
+                iconName = focused ? 'ios-bar-chart' : 'ios-bar-chart-outline';
+            }
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+          // tabBarButton: () => (
+          //   <TouchableOpacity onPress = {() => navigation.navigate('AddHabit')} >
+          //   </TouchableOpacity>
+          //   ),
+          tabBarActiveTintColor: '#0c5776',
+          tabBarInactiveTintColor: 'gray',
+          tabBarActiveBackgroundColor: '#bcfefe',
+          tabBarInactiveBackgroundColor: 'white',
+        })}
+        >
+        <Tab.Screen  name= "Home" component={Home} /> 
+        <Tab.Screen  name="Statistic" component={Statistic} />
+        <Tab.Screen  name="Settings" component={Setting} />
       </Tab.Navigator>
   );
+  else
+  return (
+    <Tab.Navigator
+            initialRouteName="Home"
+            screenOptions={({ route }) => ({
+            tabBarShowLabel: false,
+            headerShown: false,
+            tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+            if (route.name === 'Home') {
+              iconName = focused
+                ? 'add'
+                : 'ios-home-outline';
+            if (iconName === 'add' && !focused) { 
+              {navigation.navigate('Habit')}
+            }
+            } else if (route.name === 'Settings') {
+              iconName = focused ? 'ios-list' : 'ios-list-outline';
+            }
+            else if (route.name === 'Statistic') {
+                iconName = focused ? 'ios-bar-chart' : 'ios-bar-chart-outline';
+            }
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: '#0c5776',
+          tabBarInactiveTintColor: 'gray',
+          tabBarActiveBackgroundColor: '#bcfefe',
+          tabBarInactiveBackgroundColor: 'white',
+        })}>
+      <Tab.Screen  option = {{headerShown: false}} name="Home" component={Home} /> 
+      <Tab.Screen  option = {{headerShown: false}}  name="Settings" component={Setting} />
+    </Tab.Navigator>
+);
 
 }
-
 function MainTabNavigator () {
   return (
       <Stack.Navigator >
@@ -79,7 +116,7 @@ function MainTabNavigator () {
           headerTitle: getHeaderTitle(route), })} 
           name="Home" component={HomeTabs} />
         <Stack.Screen name="Habit" component={Habit} />
-        <Stack.Screen options={{ headerTitle: 'Add Your Habit' }}name="AddHabit" component={AddHabit} />
+        <Stack.Screen options={{ headerTitle: 'Add Your Habit' }} name="AddHabit" component={AddHabit} />
         <Stack.Screen options={{ headerTitle: 'Habit Detail' }} name="HabitDetail" component={HabitDetail} />
         <Stack.Screen name='Theme' component={Theme}/>
         <Stack.Screen option ={{headerTitle: 'All Habit'}} name='HabitManager' component={HabitManager}/>
