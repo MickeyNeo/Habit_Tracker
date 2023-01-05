@@ -5,65 +5,75 @@ import Modal from "react-native-modal";
 import { FontAwesome5 } from '@expo/vector-icons'; 
 import { useStore,setLanguage } from "../../Store";
 export default function SelectFreq (params){
-    const[state, dispatch] = useStore()
-    const [lg,setLg] = useState('Monday')
-    const [count, setCount] = useState(0)
-    console.log(count)
-    console.log(params.freq);
-    var week = ['MON','TUE','WED','THU','FRI','SAT','SUN']
+    const [state, dispatch] = useStore()
+    const [count, setCount] = useState(0);
+    const buttonPressed = ( item) => {
+        const tmpState = params.select.map((val) => {
+            if (val.id === item.id ) {
+                return {...val, selected: !val.selected};
+            }
+            return val; 
+        });
+        params.setSelect(tmpState);
+}
     return(         
         <View >
             <Modal isVisible={params.myIsmodalVisible} 
                 useNativeDriver={true}
                 onBackdropPress={() => params.setModalVisible(false)}
-                animationIn = 'bounceIn'
-                animationInTiming = {600}
-                animationOut ='bounceOut'
-                animationOutTiming = {500}
                 >
-                    <View style={{
-                        height: params.freq == 'Week' ? '28%' : '35%', 
-                        borderRadius: 30, 
-                        borderWidth: 1,
-                        backgroundColor: '#FFFFFF',}}>
+                     <View style={{
+                            height: params.freq == 'Week' ? '28%' : '35%', 
+                            borderRadius: 30, 
+                            borderWidth: 1,
+                            backgroundColor: '#FFFFFF',}}>
                         <View style={styles.container}>
                             <View style ={{
-                                backgroundColor: '#00FFF6',
+                                backgroundColor: '#FFFFFF',
                                 borderWidth: 1, 
                                 borderRadius: 20, 
                                 marginLeft: 20, 
                                 marginRight: 20, 
                                 marginTop: 10, 
-                                //flex: params.freq == 'Week' ? 0.3 : 0.5, 
                                 justifyContent: 'center', 
                                 alignItems: 'center'}}>
                                 <Text style={styles.tilte}>Track Habit on</Text>
-                                { 
-                                    params.freq == 'Week' &&
-                                    <SelectZone
-                                        values = {week}
-                                        selectedValue={lg}
-                                        setSelectedValue={setLg}
-                                        condition = {params.freq}
+                                { params.freq == 'Week' && <SelectZone
+                                    values = {params.select}
+                                    buttonPressed = {buttonPressed}
+                                    condition = {params.freq}
+                                    color = {params.color}
                                     />
                                 }
-                                {
-                                    params.freq == 'Month' && <View>
-                                    <SelectZone
-                                        values = {['1','2','3','4','5','6','7','8','9','10']}
+                                { params.freq == 'Month' &&
+                                <View>
+                                <SelectZoneMonth
+                                    values = {params.select}
+                                    buttonPressed = {buttonPressed}
+                                    condition = {params.freq}
+                                    color = {params.color}
+                                    flag = {0}
                                     />
-                                    <SelectZone
-                                        values = {['11','12','13','14','15','16','17','18','19','20']}
+                                <SelectZoneMonth
+                                    values = {params.select}
+                                    buttonPressed = {buttonPressed}
+                                    condition = {params.freq}
+                                    color = {params.color}
+                                    flag = {1}
                                     />
-                                    <SelectZone
-                                        values = {['21','22','23','24','25','26','27','28','29','30']}
+                                <SelectZoneMonth
+                                    values = {params.select}
+                                    buttonPressed = {buttonPressed}
+                                    condition = {params.freq}
+                                    color = {params.color}
+                                    flag = {2}
                                     />
-                                    </View>
-                                }       
+                                </View>
+                            }
                                 <Text style ={{fontSize: 10}}> Complete 1000 steps each day </Text>
                             </View>
                             <View style ={{
-                                backgroundColor: '#00FFF6',
+                                backgroundColor: '#FFFFFF',
                                 borderWidth: 1, 
                                 borderRadius: 20, 
                                 marginLeft: 20, 
@@ -73,19 +83,32 @@ export default function SelectFreq (params){
                                 alignItems: 'center'}}>
                                 <Text style={styles.tilte}>Complete on any</Text>
                                 <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                                    <Button style = {{ backgroundColor: 'white'}} title = '-' onPress = {() => setCount(count-1)}/>
+                                    <TouchableOpacity 
+                                        style = {{ 
+                                            height: 20, 
+                                            width: 20 }} 
+                                            onPress = {() => setCount(count-1)}>
+                                        <Text>-</Text>
+                                    </TouchableOpacity>
                                     <TextInput
-                                        style ={{  
+                                        style = {{  
                                             height: 20, 
                                             width: '50%', 
                                             borderRadius: 5,
                                             backgroundColor: '#f5f5f5', 
-                                            color: '#a9a9a9',}}
+                                            color: '#a9a9a9',
+                                        }}
                                             value ={count}
                                     />
-                                    <Button style = {{ backgroundColor: 'white', color: 'white'}} title = '+' onPress = {() => setCount(count+1)}/>
+                                     <TouchableOpacity 
+                                        style = {{ 
+                                            height: 20, 
+                                            width: 20 }} 
+                                            onPress = {() => setCount(count+1)}>
+                                        <Text>+</Text>
+                                    </TouchableOpacity>
                                 </View>
-                                <Text style ={{fontSize: 10}}> Complete 1000 steps each day, any {count} in a week </Text>
+                                <Text style ={{fontSize: 10}}> Complete {params.goal} steps each day, any {count} in a week </Text>
                             </View>
                         </View>
                     </View>
@@ -94,33 +117,111 @@ export default function SelectFreq (params){
         </View>
     )
 }
-const SelectZone =({
+const SelectZone = ({
     values,
-    selectedValue,
-    setSelectedValue, 
+    buttonPressed,
     condition,
-})=> 
-    (   
-        <View style = {{flexDirection: 'row', /*flex: condition == 'Day' ? 1 : 0.8*/ }}>
-            {values.map((value) =>(
-                <TouchableOpacity style = 
+    color})=> 
+        (   
+        <View style ={{flexDirection: 'row'}}>
+            {values.map((value) => {
+                if (condition == 'Week')
+                return (
+                <TouchableOpacity 
+                onPress = {() => buttonPressed(value)}
+                style = 
                 {{ 
                     borderRadius: 10, 
                     width: condition == 'Week' ? 40 : 20,
                     height: 20, 
                     alignItems: 'center',
-                    backgroundColor: '#FFAEAE',
+                    backgroundColor: value.selected ? color : 'white',
                     justifyContent: condition == 'Week' ? 'center' : 'space-evenly',
                 }}
-                    key={value}
+                    key={value.title}
                 >
                     <Text style = {{fontSize: 10 }}>
-                        {value}
+                        {value.title}
                     </Text>
                 </TouchableOpacity>
-            ))}
+            )
+           
+                    })}
         </View>
-    );
+        );
+const SelectZoneMonth = ({
+    values,
+    buttonPressed,
+    condition,
+    color,
+    flag})=> 
+        (   
+        <View style ={{flexDirection: 'row'}}>
+            {values.map((value) => {
+                if (value.title <= 10 && flag == 0) 
+                   return (
+                        <TouchableOpacity 
+                        onPress = {() => buttonPressed(value)}
+                        style = 
+                        {{ 
+                            borderRadius: 10, 
+                            width: condition == 'Week' ? 40 : 20,
+                            height: 20, 
+                            alignItems: 'center',
+                            backgroundColor: value.selected ? color : 'white',
+                            justifyContent: condition == 'Week' ? 'center' : 'space-evenly',
+                        }}
+                            key={value.title}
+                        >
+                            <Text style = {{fontSize: 10 }}>
+                                {value.title}
+                            </Text>
+                        </TouchableOpacity>
+                        )
+                if (value.title >= 11 && value.title <= 20 && flag == 1)
+                    return (
+                        <TouchableOpacity 
+                        onPress = {() => buttonPressed(value)}
+                        style = 
+                        {{ 
+                            borderRadius: 10, 
+                            width: condition == 'Week' ? 40 : 20,
+                            height: 20, 
+                            alignItems: 'center',
+                            backgroundColor: value.selected ? color : 'white',
+                            justifyContent: condition == 'Week' ? 'center' : 'space-evenly',
+                        }}
+                            key={value.title}
+                        >
+                            <Text style = {{fontSize: 10 }}>
+                                {value.title}
+                            </Text>
+                        </TouchableOpacity>
+                        )
+                if (value.title >= 21 && flag == 2 )
+                    return (
+                        <TouchableOpacity 
+                        onPress = {() => buttonPressed(value)}
+                        style = 
+                        {{ 
+                            borderRadius: 10, 
+                            width: condition == 'Week' ? 40 : 20,
+                            height: 20, 
+                            alignItems: 'center',
+                            backgroundColor: value.selected ? color : 'white',
+                            justifyContent: condition == 'Week' ? 'center' : 'space-evenly',
+                        }}
+                            key={value.title}
+                        >
+                            <Text style = {{fontSize: 10 }}>
+                                {value.title}
+                            </Text>
+                        </TouchableOpacity>
+                        )    
+                        
+                    })}
+        </View>
+        );
 const styles=StyleSheet.create({
     container:{
         flex: 1,

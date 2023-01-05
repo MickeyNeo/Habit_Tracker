@@ -12,9 +12,10 @@ import { refreshDatabase, loadHabit, initDatabase, loadUnit } from '../Store/dat
 
 const Home = ({ navigation }) => {
   const [state,dispatch] = useStore();
+  console.log(state.habit.showMemo);
   const [day, setDay] = useState('');
   const db = SQLite.openDatabase('Habit_tracker.db');
-  console.log(state.habit)
+  //console.log(state.habit)
   // refreshDatabase();
   // initDatabase();
 
