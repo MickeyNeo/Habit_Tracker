@@ -57,7 +57,7 @@ const HabitZone =(
                     alignItems: 'center',
                     //padding: 10,
                     }}>
-                        <Icons type = {value.iconFamily} name = {value.iconName} size = {25} color = 'black' />
+                        <Icons type = {value.iconFamily} name = {value.icon} size = {25} color = 'black' />
                         <View style ={{flexDirection: 'column'}}>
                           <Text style = {{fontSize: 10}}>{value.name}</Text>
                           <Text style = {{fontSize: 8}}>{value.note}</Text>
