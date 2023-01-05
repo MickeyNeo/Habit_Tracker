@@ -27,7 +27,7 @@ const globalState = {
         goalNo: '1',
         goalPeriod: 'Day',
         unitID: 0,
-        iconName:'',
+        icon:'',
         iconFamily: '',
     },
     listHabit: [],
