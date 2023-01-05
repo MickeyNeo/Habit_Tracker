@@ -2,6 +2,7 @@ import React, { useState, Component, useContext,useReducer } from "react";
 import { View,Dimensions , Button, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Image, TextInput, Alert, } from "react-native";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import {useStore,initDayDoneInMonth,setDayDoneInMonth} from '../Store';
 import {
     LineChart,
     BarChart,
@@ -10,8 +11,12 @@ import {
     ContributionGraph,
     StackedBarChart
   } from "react-native-chart-kit";
+import {calculateDayDoneInMonth, calculateDayTotalDone, calculateMonthlyVolumn,calculateTotalVolumn} from '../Store/database';
+
 const HabitOfADay = ({navigation,route}) =>{
-    const {iconName} = route.params;
+    const {habit} = route.params;
+    console.log(habit)
+    const[state, dispatch] = useStore()
     const data = {
         labels: ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"],
         datasets: [
@@ -32,20 +37,22 @@ const HabitOfADay = ({navigation,route}) =>{
         useShadowColorFromDataset: false, // optional,
         fillShadowGradientFrom: 'black'
     };
+
+    calculateDayDoneInMonth(habit)
     return(
         <View style = {styles.container}>
             <View style = {styles.header}>
-                <FontAwesome5 style={styles.iconTitle} name={iconName} size={27} color='crimson' />
-                <Text style ={{marginTop: 10, fontSize: 20, fontWeight : "bold"}}>{iconName[0].toUpperCase()+iconName.slice(1)}</Text>
+                <FontAwesome5 style={styles.iconTitle} name={habit.name.toLowerCase()} size={27} color='crimson' />
+                <Text style ={{marginTop: 10, fontSize: 20, fontWeight : "bold"}}>{habit.name}</Text>
             </View>
             <View style={{flex: 1,alignItems: 'stretch'}}>
                 <ScrollView style ={{marginBottom: 10, flex:1 }}>
                     <Calendar style={styles.calendar} firstDay={1}/>
                     
                     {/* Yearly Status */}
-                    <View style = {styles.part}>
+                    {/* <View style = {styles.part}>
                         <Text style = {styles.headText}>Yearly Status</Text>
-                    </View>
+                    </View> */}
 
                     {/* Records */}
                     <View style = {styles.part}>
@@ -53,37 +60,48 @@ const HabitOfADay = ({navigation,route}) =>{
                         <View style={{flexDirection:'row',justifyContent:'center',alignContent: "space-around"}}>
                             <View style = {styles.column}>
                                 <View style={styles.iconRecords}>
-                                    <FontAwesome5  name="calendar-alt" size={50} color="#d8c3c3" />
-                                    <Text>0 Day</Text>
+                                    <FontAwesome5  name="calendar-alt" size={50} color="#7fb7fa" />
+                                    <Text>{state.DayDoneInMonth} Day</Text>
+                                    <View></View>
                                     <Text>Done in December</Text>
                                 </View>
                                 <View style={styles.iconRecords}>
-                                    <FontAwesome5  name="layer-group" size={50} color="#d8c3c3" />
+                                    <FontAwesome5  name="layer-group" size={50} color="#a6acf0" />
                                     <Text>0 Day</Text>
                                     <Text>Current Streak</Text>
                                 </View>
                                 <View style={styles.iconRecords}>
-                                    <FontAwesome5  name="medal" size={50} color="#d8c3c3" />
-                                    <Text>0 Day</Text>
-                                    <Text>Best Streak</Text>
+                                    <FontAwesome5  name="poll" size={50} color="#10cc7a" />
+                                    <Text>0</Text>
+                                    <Text>Vol. in</Text>
+                                </View>
+                                <View style={styles.iconRecords}>
+                                    <FontAwesome5  name="cubes" size={50} color="#f8b2b3" />
+                                    <Text>0</Text>
+                                    <Text>Daily Avg.</Text>
                                 </View>
                             </View>
 
                             <View style = {styles.column}>
                                 <View style={styles.iconRecords}>
-                                    <FontAwesome5  name="clipboard-list" size={50} color="#d8c3c3" />
+                                    <FontAwesome5  name="clipboard-list" size={50} color="#4be1a9" />
                                     <Text>0 Day</Text>
                                     <Text>Total Done</Text>
                                 </View>
                                 <View style={styles.iconRecords}>
-                                    <FontAwesome5  name="medal" size={50} color="#d8c3c3" />
-                                    <Text>Day</Text>
+                                    <FontAwesome5  name="medal" size={50} color="#f8b043" />
+                                    <Text>0 Day</Text>
                                     <Text>Best Streaks</Text>
                                 </View>
                                 <View style={styles.iconRecords}>
-                                    <FontAwesome5  name="medal" size={50} color="#d8c3c3" />
-                                    <Text>Day</Text>
-                                    <Text>Best Streaks</Text>
+                                    <FontAwesome5  name="receipt" size={50} color="#81b6f8" />
+                                    <Text>0</Text>
+                                    <Text>Vol. Total</Text>
+                                </View>
+                                <View style={styles.iconRecords}>
+                                    <FontAwesome5  name="percent" size={50} color="#fca133" />
+                                    <Text>0%</Text>
+                                    <Text>Overall Rate</Text>
                                 </View>
                                 
                             </View>
@@ -97,7 +115,7 @@ const HabitOfADay = ({navigation,route}) =>{
                             <Text style = {styles.headText}>Memos</Text>
                             <Text style = {{marginTop: '1.25%'}}>More</Text>
                         </View>
-                        <View style = {{padding: 10, backgroundColor: '#c5acac' , borderRadius: 6, marginHorizontal: 10, marginBottom: 5}}>
+                        <View style = {{padding: 10, backgroundColor: '#F9BBAE' , borderRadius: 6, marginHorizontal: 10, marginBottom: 5}}>
                             <TextInput placeholder="No memos yet."/>
                         </View>
                     </View>
@@ -119,15 +137,16 @@ const HabitOfADay = ({navigation,route}) =>{
                         </View>
                     </View>
 
+                    {/* Buttons */}
                     <View style = {{flex: 1, marginHorizontal: 10, flexDirection: 'row', justifyContent: 'space-around', marginBottom: 20}}>
-                        <TouchableOpacity style = {{ backgroundColor: '#c5bebe', borderRadius: 8, width: '40%',height: '140%', justifyContent: 'center'}} onPress={()=> {}}>
+                        <TouchableOpacity style = {{ backgroundColor: '#F3ACB4', borderRadius: 8, width: '40%',height: '140%', justifyContent: 'center'}} onPress={()=> {}}>
                             <View style = {{flexDirection: 'row',justifyContent: 'center'}}>
                                 <FontAwesome5 style = {{marginHorizontal: 5}} name='pencil-alt' size={15} color='black' />
                                 <Text>Edit</Text>
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style = {{ backgroundColor: '#c5bebe', borderRadius: 8, width: '40%',height: '140%', justifyContent: 'center'}} onPress={()=> {}}>
+                        <TouchableOpacity style = {{ backgroundColor: '#F3ACB4', borderRadius: 8, width: '40%',height: '140%', justifyContent: 'center'}} onPress={()=> {}}>
                             <View style = {{flexDirection: 'row',justifyContent: 'center'}}>
                                 <FontAwesome5 style = {{marginHorizontal: 5}} name='trash-alt' size={15} color='black' />
                                 <Text>Delete</Text>
@@ -136,7 +155,6 @@ const HabitOfADay = ({navigation,route}) =>{
                     </View>
                     
                 </ScrollView>
-                {/* Buttons */}
                 
             </View>
            

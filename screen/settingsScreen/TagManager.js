@@ -3,11 +3,11 @@ import { useState } from 'react';
 import {Text,  View } from 'react-native';
 
 
-export default function MoreSettings (params){
+export default function TagManager (params){
     return(         
         <View >
             <View>
-                <Text>Habit Manager</Text>
+                <Text>Tag Manager</Text>
             </View>    
             
         </View>

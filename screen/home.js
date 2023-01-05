@@ -7,7 +7,7 @@ import walking from './Icon/walking.png';
 import { addHabitList, useStore } from '../Store'
 import * as SQLite from 'expo-sqlite';
 import { CalendarProvider, WeekCalendar } from "react-native-calendars";
-import { refreshDatabase, loadHabit, initDatabase, loadUnit } from '../Store/database';
+import { refreshDatabase, loadHabit, initDatabase, loadUnit, loadSetting } from '../Store/database';
 
 
 const Home = ({ navigation }) => {
@@ -15,11 +15,11 @@ const Home = ({ navigation }) => {
   console.log(state.habit.showMemo);
   const [day, setDay] = useState('');
   const db = SQLite.openDatabase('Habit_tracker.db');
-  //console.log(state.habit)
   // refreshDatabase();
   // initDatabase();
 
   loadHabit(state.listHabit, dispatch);
+  //loadSetting(state, dispatch);
 
   /* loadUnit(); */
 

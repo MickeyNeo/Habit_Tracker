@@ -1,24 +1,25 @@
-import { EMPTY_HABIT_LIST, SET_HABIT_INPUT} from './constants'
+import { ADD_STATE_SETTING, EMPTY_HABIT_LIST, SET_DAILY_REMINDER_TEXT, 
+    SET_DAILY_REMINDER_TIME, SET_DATE_BAR_STYLE, SET_HABIT_BAR_STYLE, 
+    SET_HABIT_INPUT} from './constants'
 import { SET_LANGUAGE } from './constants'
 import { ADD_HABIT_OF_ADAY } from './constants'
-
 import { ADD_HABIT_LIST } from './constants'
-
-import theme from '../screen/styles/theme'
 import { SET_THEME } from './constants'
 import { SET_HABIT_STAT } from './constants'
 import { CHANGE_NOTE } from './constants'
+import {INIT_DAY_DONE_IN_MONTH, SET_DAY_DONE_IN_MONTH} from './constants'
 import { emptyHabitList } from './action'
+import theme from '../screen/styles/theme'
+
 const globalState = {
     habit: {
         name: 'Habit',
         note: '',
         frequency: '1',
         color: '',
-        tagID: 0,
         frequencyType: 'Day',
         timeRange: 'Anytime',
-        remainderMessage: '',
+        reminderMessage: '',
         showMemo: 0,
         chartType: 0,
         habitStartDay: '',
@@ -26,13 +27,15 @@ const globalState = {
         goalNo: '1',
         goalPeriod: 'Day',
         unitID: 0,
-        image:'',
+        iconName:'',
+        iconFamily: '',
     },
     listHabit: [],
     memo: {
         habitID: 0,
         date: '',
         content: '',
+        progress: 0
     },
     remainder: {
         habitID: 0,
@@ -46,13 +49,18 @@ const globalState = {
         id: 0,
         name: '',
     },
-    progress: {
-
+    haveTag: {
+        habitName: '',
+        tagID: 1
     },
     stateLanguage:"English",
-    stateHabitOfDay: ["running", "walking"],
     currentTheme: theme.dark,
     stateHabitStat: true,
+    dateBarStyle: 'Date',
+    habitBarStyle: 'Small',
+    dailyReminderTime: '',
+    dailyReminderText: '',
+    DayDoneInMonth: null,
 }
 
 function reducer (state , action) {
@@ -67,13 +75,9 @@ function reducer (state , action) {
                 ...state,
                 stateLanguage: action.payload,
             }
-        case ADD_HABIT_OF_ADAY:
-            return {
-                ...state,
-                stateHabitOfDay: [...state.stateHabitOfDay, action.payload]
-            }
         case ADD_HABIT_LIST:
             for (let i = 0; i < state.listHabit.length; i++) {
+                console.log("habit payload: ", action.payload.name)
                 if (state.listHabit[i].name == action.payload.name) {
                     return {
                         ...state
@@ -96,7 +100,7 @@ function reducer (state , action) {
                 listHabit: []
             }
         case SET_THEME:
-            const newThemeKey = state.currentTheme.id === "dark" ? "light" : "dark";
+            const newThemeKey = state.currentTheme.id === "Dark" ? "Light" : "Dark";
             return {
                 ...state,
                 currentTheme:theme[newThemeKey]
@@ -105,6 +109,47 @@ function reducer (state , action) {
             return{
                 ...state,
                 stateHabitStat: action.payload,
+            }
+        case SET_DAILY_REMINDER_TEXT:
+            return{
+                ...state,
+                dailyReminderText: action.payload,
+            }
+        case SET_DAILY_REMINDER_TIME:
+            return{
+                ...state,
+                dailyReminderTime: action.payload,
+            }
+        case SET_HABIT_BAR_STYLE:
+            return{
+                ...state,
+                habitBarStyle: action.payload,
+            }
+        case SET_DATE_BAR_STYLE:
+            return{
+                ...state,
+                dateBarStyle: action.payload,
+            }
+        case ADD_STATE_SETTING:
+            return{
+                ...state,
+                stateLanguage: action.payload.stateLanguage,
+                currentTheme: action.payload.theme,
+                habitBarStyle: action.payload.habitBarStyle,
+                dateBarStyle: action.payload.dateBarStyle,
+                stateHabitStat: action.payload.habitStat,
+                dailyReminderTime: action.payload.dailyReminderTime,
+                dailyReminderText: action.payload.dailyReminderText
+            }
+        case INIT_DAY_DONE_IN_MONTH:
+            return{
+                ...state,
+                DayDoneInMonth:action.payload
+            }
+        case SET_DAY_DONE_IN_MONTH:
+            return{
+                ...state,
+                DayDoneInMonth:action.payload
             }
         default:
             throw new Error('sai goi ne')

@@ -25,7 +25,7 @@ export default function DailyNotification (params){
                             />  
                             <Text style={styles.tilte}>Time</Text>
                             <View style={{flex:1}}>
-                                <TimePickerDialog style={{alignSelf:'center'}} mode="time" value={new Date()} />
+                                <TimePickerDialog style={{alignSelf :'center'}} mode="time" value={new Date()} />
                             </View>
                              
                         </View>

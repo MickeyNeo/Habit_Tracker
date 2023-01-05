@@ -7,7 +7,6 @@ import { useStore,setHabitStat} from "../../Store";
 export default function TabBar (params){
     const [state, dispatch] =useStore()
     const {stateHabitStat} =state
-    //console.log(stateHabitStat)
     const [isEnabledSwitch, setIsEnabledSwitch] =useState(stateHabitStat)
     const toggleSwitch = () => {setIsEnabledSwitch(previousState => !previousState)};
     

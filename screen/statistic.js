@@ -8,7 +8,7 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Foundation,Octicons,Entypo } from '@expo/vector-icons'; 
-import {useStore} from '../Store'
+import {useStore,initDayDoneInMonth,setDayDoneInMonth} from '../Store'
 import {
     LineChart,
     BarChart,
@@ -20,7 +20,13 @@ import {
 
 export default function Statistic({navigation}){
     const[state, dispatch] =useStore()
-    console.log(state.stateHabitOfDay)
+    
+    let list_of_habit = []
+    for (let i = 0; i < state.listHabit.length; i++){
+        list_of_habit.push(state.listHabit[i]['name'].toLowerCase())
+    }
+    // console.log('statistic',state.listHabit[0]['name'])
+    console.log('statistic',list_of_habit)
     const dataPro = {
         labels: ['Monthly_rate'], // optional
         data: [0.8]
@@ -30,7 +36,7 @@ export default function Statistic({navigation}){
         backgroundGradientFromOpacity: 1,
         backgroundGradientTo: "white",
         backgroundGradientToOpacity: 1,
-        color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+        color: (opacity = 1) => `rgba(249, 187, 174, ${opacity})`,
         // strokeWidth: 2, // optional, default 3
         barPercentage: 0.5,
         useShadowColorFromDataset: false // optional
@@ -43,17 +49,17 @@ export default function Statistic({navigation}){
                     name="graph-pie" size={27} color="pink" />
                 
                 <ScrollView style={style.scroll} horizontal={true}> 
-                    {state.stateHabitOfDay.map((value,index) =>(
+                    {state.listHabit.map((habit,index) =>(
                         
                         <TouchableOpacity key={index}
                             onPress={() => {
+                                dispatch(initDayDoneInMonth(0))
                                 navigation.navigate('HabitOfADay', {
-                                    iconName: value,
-                                    // colors: color,
-                                    // image: image,
+                                    habit: habit,
+                                    
                                 })
                             }}>
-                            <FontAwesome5 style={style.iconTitle} name={value} size={27} color='crimson' />
+                            <FontAwesome5 style={style.iconTitle} name={habit.name.toLowerCase()} size={27} color='crimson' />
                         </TouchableOpacity>
                     ))}
                 </ScrollView>
@@ -67,7 +73,7 @@ export default function Statistic({navigation}){
                                 data={dataPro}
                                 width={Dimensions.get('window').width-40}
                                 height={220}
-                                strokeWidth={20}
+                                strokeWidth={30}
                                 radius={90}
                                 chartConfig={chartConfig}
                                 hideLegend={true}
@@ -78,12 +84,12 @@ export default function Statistic({navigation}){
                             <View style={{flexDirection:'row',justifyContent:'center'}}>
                                 <View style={style.colum}>
                                     <View style={style.iconRecord}>
-                                        <FontAwesome5  name="medal" size={50} color="orange" />
+                                        <FontAwesome5  name="medal" size={50} color="#fcac44" />
                                         <Text>0 Day</Text>
                                         <Text>Best Streaks</Text>
                                     </View>
                                     <View style={style.iconRecord}>
-                                        <Octicons name="checklist" size={50} color="green" />
+                                        <Octicons name="checklist" size={50} color="#3ee7a8" />
                                         <Text>0</Text>
                                         <Text>Habits Done</Text>
                                     </View>
@@ -91,12 +97,12 @@ export default function Statistic({navigation}){
                                 </View>
                                 <View style={style.colum}>
                                     <View style={style.iconRecord}>
-                                        <FontAwesome5 name="calendar-check" size={50} color="blue" />
+                                        <FontAwesome5 name="calendar-check" size={50} color="#84b5f7" />
                                         <Text>0 Day</Text>
                                         <Text>Perfect Days</Text>
                                     </View>
                                     <View style={style.iconRecord}>
-                                        <Entypo name="dots-three-vertical" size={50} color="purle" />
+                                        <Entypo name="dots-three-vertical" size={50} color="#b697ff" />
                                         <Text>0</Text>
                                         <Text>Daily Average</Text> 
                                     </View>
