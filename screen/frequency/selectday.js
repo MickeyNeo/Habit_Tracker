@@ -1,11 +1,8 @@
 import React from "react";
 import { useState } from 'react';
-import {Text,  View ,StyleSheet,Button,TouchableOpacity, TextInput} from 'react-native';
-import Modal from "react-native-modal";
-import { FontAwesome5 } from '@expo/vector-icons'; 
-import { useStore,setLanguage } from "../../Store";
+import {Text,  View ,StyleSheet,TouchableOpacity, TextInput} from 'react-native';
+import Modal from "react-native-modal"; 
 export default function SelectFreq (params){
-    const [state, dispatch] = useStore()
     const [count, setCount] = useState(0);
     const buttonPressed = ( item) => {
         const tmpState = params.select.map((val) => {
@@ -47,21 +44,21 @@ export default function SelectFreq (params){
                                 }
                                 { params.freq == 'Month' &&
                                 <View>
-                                <SelectZoneMonth
+                                <SelectZone
                                     values = {params.select}
                                     buttonPressed = {buttonPressed}
                                     condition = {params.freq}
                                     color = {params.color}
                                     flag = {0}
                                     />
-                                <SelectZoneMonth
+                                <SelectZone
                                     values = {params.select}
                                     buttonPressed = {buttonPressed}
                                     condition = {params.freq}
                                     color = {params.color}
                                     flag = {1}
                                     />
-                                <SelectZoneMonth
+                                <SelectZone
                                     values = {params.select}
                                     buttonPressed = {buttonPressed}
                                     condition = {params.freq}
@@ -113,115 +110,37 @@ export default function SelectFreq (params){
                         </View>
                     </View>
                 </Modal>       
-            
         </View>
     )
 }
-const SelectZone = ({
-    values,
-    buttonPressed,
-    condition,
-    color})=> 
-        (   
+const SelectZone = ({ values, buttonPressed, condition, color, flag })=> 
+    (   
         <View style ={{flexDirection: 'row'}}>
             {values.map((value) => {
-                if (condition == 'Week')
+                if (condition == 'Week'|| value.title <= 10 && flag == 0 || value.title >= 11 && value.title <= 20 && flag == 1 || 
+                value.title >= 21 && flag == 2)
                 return (
                 <TouchableOpacity 
-                onPress = {() => buttonPressed(value)}
-                style = 
-                {{ 
+                    onPress = {() => buttonPressed(value)}
+                    style = 
+                    {{ 
                     borderRadius: 10, 
                     width: condition == 'Week' ? 40 : 20,
                     height: 20, 
                     alignItems: 'center',
                     backgroundColor: value.selected ? color : 'white',
                     justifyContent: condition == 'Week' ? 'center' : 'space-evenly',
-                }}
+                    }}
                     key={value.title}
                 >
-                    <Text style = {{fontSize: 10 }}>
-                        {value.title}
-                    </Text>
+                <Text style = {{fontSize: 10 }}>
+                    {value.title}
+                </Text>
                 </TouchableOpacity>
-            )
-           
-                    })}
+                )
+            })}
         </View>
-        );
-const SelectZoneMonth = ({
-    values,
-    buttonPressed,
-    condition,
-    color,
-    flag})=> 
-        (   
-        <View style ={{flexDirection: 'row'}}>
-            {values.map((value) => {
-                if (value.title <= 10 && flag == 0) 
-                   return (
-                        <TouchableOpacity 
-                        onPress = {() => buttonPressed(value)}
-                        style = 
-                        {{ 
-                            borderRadius: 10, 
-                            width: condition == 'Week' ? 40 : 20,
-                            height: 20, 
-                            alignItems: 'center',
-                            backgroundColor: value.selected ? color : 'white',
-                            justifyContent: condition == 'Week' ? 'center' : 'space-evenly',
-                        }}
-                            key={value.title}
-                        >
-                            <Text style = {{fontSize: 10 }}>
-                                {value.title}
-                            </Text>
-                        </TouchableOpacity>
-                        )
-                if (value.title >= 11 && value.title <= 20 && flag == 1)
-                    return (
-                        <TouchableOpacity 
-                        onPress = {() => buttonPressed(value)}
-                        style = 
-                        {{ 
-                            borderRadius: 10, 
-                            width: condition == 'Week' ? 40 : 20,
-                            height: 20, 
-                            alignItems: 'center',
-                            backgroundColor: value.selected ? color : 'white',
-                            justifyContent: condition == 'Week' ? 'center' : 'space-evenly',
-                        }}
-                            key={value.title}
-                        >
-                            <Text style = {{fontSize: 10 }}>
-                                {value.title}
-                            </Text>
-                        </TouchableOpacity>
-                        )
-                if (value.title >= 21 && flag == 2 )
-                    return (
-                        <TouchableOpacity 
-                        onPress = {() => buttonPressed(value)}
-                        style = 
-                        {{ 
-                            borderRadius: 10, 
-                            width: condition == 'Week' ? 40 : 20,
-                            height: 20, 
-                            alignItems: 'center',
-                            backgroundColor: value.selected ? color : 'white',
-                            justifyContent: condition == 'Week' ? 'center' : 'space-evenly',
-                        }}
-                            key={value.title}
-                        >
-                            <Text style = {{fontSize: 10 }}>
-                                {value.title}
-                            </Text>
-                        </TouchableOpacity>
-                        )    
-                        
-                    })}
-        </View>
-        );
+    );
 const styles=StyleSheet.create({
     container:{
         flex: 1,

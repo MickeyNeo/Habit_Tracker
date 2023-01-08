@@ -6,7 +6,7 @@ import memo from '../Icon/memo.png';
 import stat from '../Icon/stat.png';
 import sound from '../Icon/sound.png';
 import style from '../Icon/style.png';
-import CountDown from 'react-native-countdown-component';
+import CountDown from './countdown/countdown'
 import Stat from './Stat';
 import Memo from './Memo';
 import plus from '../Icon/plus.png';

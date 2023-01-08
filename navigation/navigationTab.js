@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, Component, useContext,useReducer,useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer, DarkTheme } from '@react-navigation/native';
@@ -17,10 +17,11 @@ import Export from "../screen/settingsScreen/Export";
 import HabitOfADay from "../screen/HabitOfADay";
 import TagManager from "../screen/settingsScreen/TagManager";
 import { useStore } from "../Store";
-import { useIsFocused } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
+const HomeStack = createStackNavigator();
+ 
 function getHeaderTitle(route) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
   switch (routeName) {
@@ -32,8 +33,15 @@ function getHeaderTitle(route) {
       return 'Settings';
   }
 }
+function HomeTab() {
+  return (
+    <HomeStack.Navigator>
+      <HomeStack.Screen options = {{headerShown: false}} name="Habit" component={Habit} />
+      <HomeStack.Screen options = {{headerShown: false}} name="None" component={Home} />
+    </HomeStack.Navigator>
+  )
+}
 function HomeTabs({navigation}) {
-  const isFocused = useIsFocused();
   const [state, dispatch] = useStore()
   const {stateHabitStat} = state
   if (stateHabitStat==true)
@@ -58,17 +66,22 @@ function HomeTabs({navigation}) {
             }
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-          // tabBarButton: () => (
-          //   <TouchableOpacity onPress = {() => navigation.navigate('AddHabit')} >
-          //   </TouchableOpacity>
-          //   ),
           tabBarActiveTintColor: '#0c5776',
           tabBarInactiveTintColor: 'gray',
           tabBarActiveBackgroundColor: '#bcfefe',
           tabBarInactiveBackgroundColor: 'white',
         })}
         >
-        <Tab.Screen  name= "Home" component={Home} /> 
+        <Tab.Screen 
+        options = {{headerShown: false,
+        tabBarButton: (props) => <TouchableOpacity {...props} 
+        onPress = {() => {
+          if (props.accessibilityState.selected == true)
+          navigation.navigate('Habit')
+          else navigation.navigate('Home')
+          //console.log(props.accessibilityState.selected)
+        }}/>
+        }} name= "Home" component={Home} /> 
         <Tab.Screen  name="Statistic" component={Statistic} />
         <Tab.Screen  name="Settings" component={Setting} />
       </Tab.Navigator>
@@ -102,19 +115,18 @@ function HomeTabs({navigation}) {
           tabBarActiveBackgroundColor: '#bcfefe',
           tabBarInactiveBackgroundColor: 'white',
         })}>
-      <Tab.Screen  option = {{headerShown: false}} name="Home" component={Home} /> 
-      <Tab.Screen  option = {{headerShown: false}}  name="Settings" component={Setting} />
+      <Tab.Screen  options = {{headerShown: false}} name="Home" component={HomeTab} /> 
+      <Tab.Screen  options = {{headerShown: false}}  name="Settings" component={Setting} />
     </Tab.Navigator>
 );
-
 }
 function MainTabNavigator () {
   return (
       <Stack.Navigator >
         <Stack.Screen   
           options={({ route }) => ({
-          headerTitle: getHeaderTitle(route), })} 
-          name="Home" component={HomeTabs} />
+          headerTitle: getHeaderTitle(route)})} 
+          name="None" component={HomeTabs} />
         <Stack.Screen name="Habit" component={Habit} />
         <Stack.Screen options={{ headerTitle: 'Add Your Habit' }} name="AddHabit" component={AddHabit} />
         <Stack.Screen options={{ headerTitle: 'Habit Detail' }} name="HabitDetail" component={HabitDetail} />
