@@ -57,7 +57,7 @@ const HabitZone = (values,navigation,date) => {
                 pickDay[4].selected == true && pickDay[4].title == day ||
                 pickDay[5].selected == true && pickDay[5].title == day ||
                 pickDay[6].selected == true && pickDay[6].title == day)
-            return (
+           return (
               <TouchableOpacity style ={{padding: 5}} key={value.name} onPress = {() => navigation.navigate("HabitDetail")}>
                 <Progress.Bar progress={0.3} width = {null} height={35} color = {value.color}>
                   <View style={{
