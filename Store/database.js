@@ -60,8 +60,8 @@ db.transaction(tx => {
     tx.executeSql("DROP TABLE HaveTag",
     [],
     (txObj, resultSet) => {
-        console.log("Dropped HaveTag table")
-        console.log(resultSet);
+        // console.log("Dropped HaveTag table")
+        // console.log(resultSet);
     },
     (txObj, error) => console.log(error)
     );
@@ -71,8 +71,8 @@ db.transaction(tx => {
     tx.executeSql("DROP TABLE Tag",
     [],
     (txObj, resultSet) => {
-        console.log("Dropped Tag table")
-        console.log(resultSet);
+        // console.log("Dropped Tag table")
+        // console.log(resultSet);
     },
     (txObj, error) => console.log(error)
     );
@@ -82,8 +82,8 @@ db.transaction(tx => {
     tx.executeSql("DROP TABLE Setting",
     [],
     (txObj, resultSet) => {
-        console.log("Dropped Tag setting")
-        console.log(resultSet);
+        // console.log("Dropped Tag setting")
+        // console.log(resultSet);
     },
     (txObj, error) => console.log(error)
     );
@@ -113,8 +113,8 @@ const initDatabase = () => {
             PRIMARY KEY(name))',
             [], 
             (txObj, resultSet) => {
-                console.log("Initialize habit table")
-                console.log(resultSet);
+                // console.log("Initialize habit table")
+                // console.log(resultSet);
             },
             (txObj, error) => console.log(error)
             );
@@ -129,8 +129,8 @@ const initDatabase = () => {
             PRIMARY KEY(habitName,date))',
             [], 
             (txObj, resultSet) => {
-                console.log("Initialize Memo table")
-                console.log(resultSet);
+                // console.log("Initialize Memo table")
+                // console.log(resultSet);
             },
             (txObj, error) => console.log(error)
         );
@@ -140,8 +140,8 @@ const initDatabase = () => {
     tx.executeSql('CREATE TABLE IF NOT EXISTS Reminder (habitName TEXT, time TEXT, PRIMARY KEY(habitName,time))',
     [], 
     (txObj, resultSet) => {
-        console.log("Initialize Reminder table")
-        console.log(resultSet);
+        // console.log("Initialize Reminder table")
+        // console.log(resultSet);
     },
     (txObj, error) => console.log(error)
     );
@@ -155,8 +155,8 @@ const initDatabase = () => {
     )',
     [], 
     (txObj, resultSet) => {
-        console.log("Initialize Tag table")
-        console.log(resultSet);
+        // console.log("Initialize Tag table")
+        // console.log(resultSet);
     },
     (txObj, error) => console.log(error)
     );
@@ -169,8 +169,8 @@ const initDatabase = () => {
         ('Productivity')",
         [], 
         (txObj, resultSet) => {
-            console.log("Initialize tag data")
-            console.log(resultSet);
+            // console.log("Initialize tag data")
+            // console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -185,8 +185,8 @@ const initDatabase = () => {
         )',
         [], 
         (txObj, resultSet) => {
-            console.log("Initialize unit table")
-            console.log(resultSet);
+            // console.log("Initialize unit table")
+            // console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -207,8 +207,8 @@ const initDatabase = () => {
         ('mile')",
         [], 
         (txObj, resultSet) => {
-            console.log("Initialize unit data")
-            console.log(resultSet);
+            // console.log("Initialize unit data")
+            // console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -223,8 +223,8 @@ const initDatabase = () => {
         )',
         [], 
         (txObj, resultSet) => {
-            console.log("Initialize haveTag table")
-            console.log(resultSet);
+            // console.log("Initialize haveTag table")
+            // console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -242,8 +242,8 @@ const initDatabase = () => {
         )',
         [], 
         (txObj, resultSet) => {
-            console.log("Initialize setting table")
-            console.log(resultSet);
+            // console.log("Initialize setting table")
+            // console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -255,9 +255,9 @@ const addHabit = (habit) => {
 
     db.transaction(tx => {
         tx.executeSql('INSERT INTO Habit (name, note, frequency, color, tagID, frequencyType, timeRange, reminderMessage, showMemo, chartType, habitStartDate, habitEndDate, goalNo, goalPeriod, unitID, icon, iconFamily) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
-        [habit.name, habit.note, habit.frequency, habit.color, habit.tagID, habit.frequencyType, habit.timeRange, habit.reminderMessage, habit.showMemo, habit.chartType, habit.habitStartDay, habit.habitEndDate, habit.goalNo, habit.goalPeriod, habit.unitID, habit.iconName, habit.iconFamily],
+        [habit.name, habit.note, habit.frequency, habit.color, habit.tagID, habit.frequencyType, habit.timeRange, habit.reminderMessage, habit.showMemo, habit.chartType, habit.habitStartDay, habit.habitEndDay, habit.goalNo, habit.goalPeriod, habit.unitID, habit.iconName, habit.iconFamily],
         (txObj, resultSet) => {
-            console.log(resultSet);
+            // console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -272,7 +272,7 @@ const addSetting = (state) => {
         tx.executeSql('INSERT INTO Setting (language, theme, habitBarStyle, dateBarStyle, habitStat, dailyReminderTime, dailyReminderText) values (?, ?, ?, ?, ?, ?, ?)', 
         [state.stateLanguage, state.theme, state.habitBarStyle, state.dateBarStyle, state.habitStat, state.dailyReminderTime, state.dailyReminderText],
         (txObj, resultSet) => {
-            console.log(resultSet);
+            // console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -327,7 +327,7 @@ const loadHabit = (listHabit, dispatch) => {
             console.log(resultSet.rows); */
             if (listHabit.length < resultSet.rows.length) {
                 for (let i = 0; i < resultSet.rows.length; i++) {
-                    console.log("Database resultset", resultSet.rows)
+                    // console.log("Database resultset", resultSet.rows)
                     dispatch(addHabitList(resultSet.rows[i]));
                 } 
             }

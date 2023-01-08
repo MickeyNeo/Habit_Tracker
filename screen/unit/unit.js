@@ -2,21 +2,13 @@ import React from "react";
 import { useState } from 'react';
 import {Text,  View ,StyleSheet,Button,TouchableOpacity, TextInput} from 'react-native';
 import Modal from "react-native-modal";
-import { FontAwesome5 } from '@expo/vector-icons'; 
-import { useStore,setLanguage } from "../../Store";
+import { useStore} from "../../Store";
 export default function SelectUnit (params){
-    const[state, dispatch] = useStore()
-    const [count, setCount] = useState(0)
-    console.log(count)
     return(         
         <View >
             <Modal isVisible={params.myIsmodalVisible} 
                 useNativeDriver={true}
                 onBackdropPress={() => params.setModalVisible(false)}
-                // animationIn = 'bounceIn'
-                // animationInTiming = {600}
-                // animationOut ='bounceOut'
-                // animationOutTiming = {500}
                 >
                     <View style={{
                                 height: '20%',
