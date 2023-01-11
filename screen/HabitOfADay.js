@@ -14,6 +14,12 @@ import {
 import {calculateDayDoneInMonth, calculateDayTotalDone, calculateMonthlyVolumn,calculateTotalVolumn} from '../Store/database';
 
 const HabitOfADay = ({navigation,route}) =>{
+    const date = new Date();
+    const currentMonth = date.getMonth() + 1
+    const nameOfMonth = date.toLocaleString(
+        'default',
+        {month: 'long'}
+    );
     const {habit} = route.params;
     console.log(habit)
     const[state, dispatch] = useStore()
@@ -39,6 +45,9 @@ const HabitOfADay = ({navigation,route}) =>{
     };
 
     calculateDayDoneInMonth(habit)
+    calculateDayTotalDone(habit)
+    calculateMonthlyVolumn(habit)
+    calculateTotalVolumn(habit)
     return(
         <View style = {styles.container}>
             <View style = {styles.header}>
@@ -63,7 +72,7 @@ const HabitOfADay = ({navigation,route}) =>{
                                     <FontAwesome5  name="calendar-alt" size={50} color="#7fb7fa" />
                                     <Text>{state.DayDoneInMonth} Day</Text>
                                     <View></View>
-                                    <Text>Done in December</Text>
+                                    <Text>Done in {nameOfMonth}</Text>
                                 </View>
                                 <View style={styles.iconRecords}>
                                     <FontAwesome5  name="layer-group" size={50} color="#a6acf0" />
@@ -72,8 +81,8 @@ const HabitOfADay = ({navigation,route}) =>{
                                 </View>
                                 <View style={styles.iconRecords}>
                                     <FontAwesome5  name="poll" size={50} color="#10cc7a" />
-                                    <Text>0</Text>
-                                    <Text>Vol. in</Text>
+                                    <Text>{state.MonthlyVolumn}</Text>
+                                    <Text>Vol. in {nameOfMonth}</Text>
                                 </View>
                                 <View style={styles.iconRecords}>
                                     <FontAwesome5  name="cubes" size={50} color="#f8b2b3" />
@@ -95,7 +104,7 @@ const HabitOfADay = ({navigation,route}) =>{
                                 </View>
                                 <View style={styles.iconRecords}>
                                     <FontAwesome5  name="receipt" size={50} color="#81b6f8" />
-                                    <Text>0</Text>
+                                    <Text>{state.TotalVolumn}</Text>
                                     <Text>Vol. Total</Text>
                                 </View>
                                 <View style={styles.iconRecords}>

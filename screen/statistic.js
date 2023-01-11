@@ -8,7 +8,7 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Foundation,Octicons,Entypo } from '@expo/vector-icons'; 
-import {useStore,initDayDoneInMonth,initDayTotalDone} from '../Store'
+import {useStore,initDayDoneInMonth,initDayTotalDone, initMonthlyVolumn,initTotalVolumn} from '../Store'
 import {
     LineChart,
     BarChart,
@@ -55,6 +55,8 @@ export default function Statistic({navigation}){
                             onPress={() => {
                                 dispatch(initDayDoneInMonth(0))
                                 dispatch(initDayTotalDone(0))
+                                dispatch(initMonthlyVolumn(0))
+                                dispatch(initTotalVolumn(0))
                                 navigation.navigate('HabitOfADay', {
                                     habit: habit,
                                 })
