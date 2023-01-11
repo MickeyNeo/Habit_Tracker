@@ -9,6 +9,9 @@ import { SET_HABIT_STAT } from './constants'
 import { CHANGE_NOTE } from './constants'
 import {INIT_DAY_DONE_IN_MONTH, SET_DAY_DONE_IN_MONTH} from './constants'
 import {INIT_DAY_TOTAL_DONE, SET_DAY_DAY_TOTAL_DONE} from './constants'
+import {INIT_MONTHLY_VOLUMN, SET_MONTHLY_VOLUMN} from './constants'
+import {INIT_TOTAL_VOLUMN, SET_TOTAL_VOLUMN} from './constants'
+
 
 import { emptyHabitList } from './action'
 import theme from '../screen/styles/theme'
@@ -65,6 +68,9 @@ const globalState = {
     dailyReminderText: '',
     DayDoneInMonth: null,
     DayTotalDone: null,
+    MonthlyVolumn: null,
+    TotalVolumn: null,
+
 }
 
 function reducer (state , action) {
@@ -164,6 +170,26 @@ function reducer (state , action) {
             return{
                 ...state,
                 DayTotalDone:action.payload
+            }
+        case INIT_MONTHLY_VOLUMN:
+            return{
+                ...state,
+                MonthlyVolumn:action.payload
+            }
+        case SET_MONTHLY_VOLUMN:
+            return{
+                ...state,
+                MonthlyVolumn:action.payload
+            }
+        case INIT_TOTAL_VOLUMN:
+            return{
+                ...state,
+                TotalVolumn:action.payload
+            }
+        case SET_TOTAL_VOLUMN:
+            return{
+                ...state,
+                TotalVolumn:action.payload
             }
         default:
             throw new Error('sai goi ne')

@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import Context from './Context';
 import reducer, { globalState } from './reducer';
 import { addHabitList, emptyHabitList } from './action';
-import {useStore,setDayDoneInMonth,setDayTotalDone} from '../Store'
+import {useStore,setDayDoneInMonth,setDayTotalDone,setMonthlyVolumn,setTotalVolumn} from '../Store'
 import {React, useState } from 'react';
 
     
@@ -327,7 +327,7 @@ const loadHabit = (listHabit, dispatch) => {
             console.log(resultSet.rows); */
             if (listHabit.length < resultSet.rows.length) {
                 for (let i = 0; i < resultSet.rows.length; i++) {
-                    // console.log("Database resultset", resultSet.rows)
+                    console.log("Database resultset", resultSet.rows)
                     dispatch(addHabitList(resultSet.rows[i]));
                 } 
             }
@@ -502,14 +502,18 @@ const updateHabit = (habit, newHabit) => {
 }
 
 const calculateMonthlyVolumn = (habit) => {
+    const[state, dispatch] = useStore()
     db.transaction(tx => {
         tx.executeSql("SELECT SUM(progress) \
         FROM Memo\
         WHERE habitName = ? AND strftime('%m',date) = strftime('%m','now')", 
         [habit.name],
         (txObj, resultSet) => {
-            console.log("Calculated Total Volumn");
+            console.log("Calculated Monthly Volumn");
             console.log(resultSet);
+            if(state.MonthlyVolumn != resultSet.rows[0]['COUNT(*)']){
+                dispatch(setMonthlyVolumn(resultSet.rows[0]['COUNT(*)']))
+            }
         },
         (txObj, error) => console.log(error)
         );
@@ -517,6 +521,7 @@ const calculateMonthlyVolumn = (habit) => {
 }
 
 const calculateTotalVolumn  = (habit) => {
+    const[state, dispatch] = useStore()
     db.transaction(tx => {
         tx.executeSql('SELECT SUM(progress) \
         FROM Memo\
@@ -525,7 +530,9 @@ const calculateTotalVolumn  = (habit) => {
         (txObj, resultSet) => {
             console.log("Calculated Total Volumn");
             console.log(resultSet);
-            // console.log(resultSet["length"]);
+            if(state.TotalVolumn != resultSet.rows[0]['COUNT(*)']){
+                dispatch(setTotalVolumn(resultSet.rows[0]['COUNT(*)']))
+            }
         },
         (txObj, error) => console.log(error)
         );
@@ -556,12 +563,12 @@ const calculateDayDoneInMonth = (habit) => {
 const calculateDayTotalDone  = (habit) => {
     const[state, dispatch] = useStore()
     db.transaction(tx => {
-        tx.executeSql('SELECT COUNT(*) \
+        tx.executeSql("SELECT COUNT(*)\
         FROM Memo\
-        WHERE habitName = ? AND progress != 0)', 
+        WHERE habitName = ? AND progress != 0", 
         [habit.name],
         (txObj, resultSet) => {
-            console.log("calculateDayTotalDone");
+            console.log("Calculate Day Total Done");
             console.log(resultSet);
             if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
                 dispatch(setDayTotalDone(resultSet.rows[0]['COUNT(*)']))

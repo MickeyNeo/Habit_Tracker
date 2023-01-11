@@ -16,5 +16,7 @@ export const INIT_DAY_DONE_IN_MONTH = 'init_day_done_in_month';
 export const SET_DAY_DONE_IN_MONTH = 'set_day_done_in_month';
 export const INIT_DAY_TOTAL_DONE = 'init_day_total_done';
 export const SET_DAY_DAY_TOTAL_DONE = 'set_day_day_total_done';
-
-
+export const INIT_MONTHLY_VOLUMN = 'init_monthly_volumn';
+export const SET_MONTHLY_VOLUMN = 'set_monthly_volumn';
+export const INIT_TOTAL_VOLUMN = 'init_total_volumn';
+export const SET_TOTAL_VOLUMN = 'set_total_volumn';
