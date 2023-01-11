@@ -2,7 +2,7 @@ import React, { useState, Component, useContext,useReducer } from "react";
 import { View,Dimensions , Button, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Image, TextInput, Alert, } from "react-native";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
-import {useStore,initDayDoneInMonth,setDayDoneInMonth} from '../Store';
+import {useStore} from '../Store';
 import {
     LineChart,
     BarChart,
@@ -85,7 +85,7 @@ const HabitOfADay = ({navigation,route}) =>{
                             <View style = {styles.column}>
                                 <View style={styles.iconRecords}>
                                     <FontAwesome5  name="clipboard-list" size={50} color="#4be1a9" />
-                                    <Text>0 Day</Text>
+                                    <Text>{state.DayTotalDone} Day</Text>
                                     <Text>Total Done</Text>
                                 </View>
                                 <View style={styles.iconRecords}>

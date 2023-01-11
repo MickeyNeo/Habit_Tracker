@@ -6,6 +6,7 @@ import { SET_THEME } from './constants'
 import { SET_HABIT_STAT} from './constants'
 import {CHANGE_NOTE } from './constants'
 import {INIT_DAY_DONE_IN_MONTH, SET_DAY_DONE_IN_MONTH} from './constants'
+import {INIT_DAY_TOTAL_DONE, SET_DAY_DAY_TOTAL_DONE} from './constants'
 
 export const setHabitInput = payload => ({
     type: SET_HABIT_INPUT,
@@ -77,5 +78,14 @@ export const initDayDoneInMonth = payload => ({
 })
 export const setDayDoneInMonth = payload => ({
     type: SET_DAY_DONE_IN_MONTH,
+    payload
+})
+
+export const initDayTotalDone = payload => ({
+    type: INIT_DAY_TOTAL_DONE,
+    payload
+})
+export const setDayTotalDone = payload => ({
+    type: SET_DAY_DAY_TOTAL_DONE,
     payload
 })
