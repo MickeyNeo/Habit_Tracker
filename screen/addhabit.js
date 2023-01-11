@@ -49,7 +49,8 @@ const AddHabit = ({navigation, route}) => {
     const date = [{title: day.toUpperCase(), selected: true}]
     const [select, setSelect] = useState(date);
     const showday = []
-    select.forEach((item) => {if (item.selected == 1) showday.push(item.title)})
+    select.forEach((item) => showday.push(item.selected))
+    console.log(showday)
     const [value, setState] = useState({
         goal: "1",
         currentTabPeriod: "Day",
