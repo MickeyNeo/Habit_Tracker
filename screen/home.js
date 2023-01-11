@@ -47,38 +47,34 @@ const HabitZone = (values,navigation,date) => {
     return (
     <View>
       <View style = {{flexDirection: 'column', padding: 10, justifyContent: 'space-evenly'}}>
-        {values.map((value) => { 
-            let pickDay = value.week;
-            console.log(pickDay)
-            if (pickDay[0].selected == true && pickDay[0].title == day ||
-                pickDay[1].selected == true && pickDay[1].title == day ||
-                pickDay[2].selected == true && pickDay[2].title == day ||
-                pickDay[3].selected == true && pickDay[3].title == day ||
-                pickDay[4].selected == true && pickDay[4].title == day ||
-                pickDay[5].selected == true && pickDay[5].title == day ||
-                pickDay[6].selected == true && pickDay[6].title == day)
-            return (
-              <TouchableOpacity style ={{padding: 5}} key={value.name} onPress = {() => navigation.navigate("HabitDetail")}>
-                <Progress.Bar progress={0.3} width = {null} height={35} color = {value.color}>
+        {values.map((value) => {
+          let pickDay = value.week;
+          for (let i = 0; i < pickDay.length; i++) {
+            if (pickDay[i] == day) {
+              return (
+                <TouchableOpacity style={{ padding: 5 }} key={value.name} onPress={() => navigation.navigate("HabitDetail")}>
+                  <Progress.Bar progress={0.3} width={null} height={35} color={value.color}>
                   <View style={{
                     flex: 1,
-                    position: 'absolute', 
-                    flexDirection: 'row', 
+                    position: 'absolute',
+                    flexDirection: 'row',
                     alignItems: 'center',
                   }}>
-                    <Icons type = {value.iconFamily} name = {value.icon} size = {25} color = 'black' />
-                    <View style ={{flexDirection: 'column'}}>
-                      <Text style = {{fontSize: 10}}>{value.name}</Text>
-                      <Text style = {{fontSize: 8}}>{value.note}</Text>
+                      <Icons type={value.iconFamily} name={value.icon} size={25} color='black' />
+                      <View style={{ flexDirection: 'column' }}>
+                        <Text style={{ fontSize: 10 }}>{value.name}</Text>
+                        <Text style={{ fontSize: 8 }}>{value.note}</Text>
+                      </View>
+                      <View style={{ alignItems: 'flex-end', flex: 1 }}>
+                        <Text>0/{value.goalNo}</Text>
+                      </View>
                     </View>
-                    <View style={{ alignItems: 'flex-end', flex: 1}}>
-                      <Text>0/{value.goalNo}</Text>
-                    </View>
-                  </View>
-                </Progress.Bar>
-              </TouchableOpacity>
-            )
-          })}
+                  </Progress.Bar>
+                </TouchableOpacity>
+              );
+            }
+        }
+  })}
       </View>
     </View>
   )

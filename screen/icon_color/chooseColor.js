@@ -21,8 +21,8 @@ const ChooseColor = (params) => {
                         //ref={r => { picker = r }}
                         color= {params.color}
                         //swatchesOnly={swatchesOnly}
-                        onColorChange={(color) => params.setColor(color)}
-                        onColorChangeComplete={(color) => params.setColor(color)}
+                        onColorChange={(color) => params.setColor(prevState => ({ ...prevState, changecolor: color}))}
+                        onColorChangeComplete={(color) => params.setColor(prevState => ({ ...prevState, changecolor: color}))}
                         thumbSize={30}
                         sliderSize={30}
                         noSnap={true}

@@ -42,7 +42,7 @@ const ChooseIcon = (params) => {
                             { family: "MaterialIcons", icons: ["wallet-travel"] }
                             ]
                         }
-                        onSelect={(icon) => params.seticon(icon)}
+                        onSelect={(icon) => params.seticon(prevState => ({ ...prevState, icon: icon}))}
                     />
                 </Modal>  
         </View>
