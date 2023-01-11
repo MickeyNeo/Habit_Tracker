@@ -63,7 +63,7 @@ const PreviewLayout =({
                 justifyContent: 'center',
             }}
                 key={value}
-                onPress={() => setSelectedValue(value)}
+                onPress={() => setSelectedValue(prevState => ({ ...prevState, unit: value}))}
             >
                 <Text style = {{fontSize: 10 }}>
                     {value}
