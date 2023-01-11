@@ -8,6 +8,8 @@ import { SET_THEME } from './constants'
 import { SET_HABIT_STAT } from './constants'
 import { CHANGE_NOTE } from './constants'
 import {INIT_DAY_DONE_IN_MONTH, SET_DAY_DONE_IN_MONTH} from './constants'
+import {INIT_DAY_TOTAL_DONE, SET_DAY_DAY_TOTAL_DONE} from './constants'
+
 import { emptyHabitList } from './action'
 import theme from '../screen/styles/theme'
 
@@ -62,6 +64,7 @@ const globalState = {
     dailyReminderTime: '',
     dailyReminderText: '',
     DayDoneInMonth: null,
+    DayTotalDone: null,
 }
 
 function reducer (state , action) {
@@ -151,6 +154,16 @@ function reducer (state , action) {
             return{
                 ...state,
                 DayDoneInMonth:action.payload
+            }
+        case INIT_DAY_TOTAL_DONE:
+            return{
+                ...state,
+                DayTotalDone:action.payload
+            }
+        case SET_DAY_DAY_TOTAL_DONE:
+            return{
+                ...state,
+                DayTotalDone:action.payload
             }
         default:
             throw new Error('sai goi ne')

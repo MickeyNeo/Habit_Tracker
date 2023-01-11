@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import Context from './Context';
 import reducer, { globalState } from './reducer';
 import { addHabitList, emptyHabitList } from './action';
-import {useStore,initDayDoneInMonth,setDayDoneInMonth} from '../Store'
+import {useStore,setDayDoneInMonth,setDayTotalDone} from '../Store'
 import {React, useState } from 'react';
 
     
@@ -554,6 +554,7 @@ const calculateDayDoneInMonth = (habit) => {
 
 
 const calculateDayTotalDone  = (habit) => {
+    const[state, dispatch] = useStore()
     db.transaction(tx => {
         tx.executeSql('SELECT COUNT(*) \
         FROM Memo\
@@ -562,6 +563,9 @@ const calculateDayTotalDone  = (habit) => {
         (txObj, resultSet) => {
             console.log("calculateDayTotalDone");
             console.log(resultSet);
+            if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
+                dispatch(setDayTotalDone(resultSet.rows[0]['COUNT(*)']))
+            }
         },
         (txObj, error) => console.log(error)
         );
