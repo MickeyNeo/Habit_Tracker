@@ -256,7 +256,7 @@ const addHabit = (habit) => {
 
     db.transaction(tx => {
         tx.executeSql('INSERT INTO Habit (name, note, frequency, color, tagID, frequencyType, timeRange, reminderMessage, showMemo, chartType, habitStartDate, habitEndDate, goalNo, goalPeriod, unitID, icon, iconFamily, week) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)', 
-        [habit.name, habit.note, habit.frequency, habit.color, habit.tagID, habit.frequencyType, habit.timeRange, habit.reminderMessage, habit.showMemo, habit.chartType, habit.habitStartDay, habit.habitEndDay, habit.goalNo, habit.goalPeriod, habit.unitID, habit.iconName, habit.iconFamily, habit.week],
+        [habit.name, habit.note, habit.frequency, habit.color, habit.tagID, habit.frequencyType, habit.timeRange, habit.reminderMessage, habit.showMemo, habit.chartType, habit.habitStartDay, habit.habitEndDay, habit.goalNo, habit.goalPeriod, habit.unitID, habit.icon, habit.iconFamily, habit.week],
         (txObj, resultSet) => {
             // console.log(resultSet);
         },

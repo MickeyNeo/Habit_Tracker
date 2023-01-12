@@ -17,7 +17,7 @@ const Home = ({ navigation }) => {
   //refreshDatabase();
   initDatabase();
   loadHabit(state.listHabit, dispatch);
-  console.log(state.listHabit)
+  //console.log(state.listHabit)
   //loadSetting(state, dispatch);
 
   /* loadUnit(); */
@@ -41,19 +41,20 @@ const Home = ({ navigation }) => {
 };
 const HabitZone = (values,navigation,date) => {
     //console.log(date)
-    let day = moment(date.dateString).format('e')
-    //day = day.toUpperCase()
-
-    console.log(day)
+    let day = moment(date.dateString).format('ddd')
+    day = day.toUpperCase()
+    //console.log(day)
     if (values != '')
     return (
     <View>
       <View style = {{flexDirection: 'column', padding: 10, justifyContent: 'space-evenly'}}>
         {values.map((value) => {
           let pickDay = value.week;
-          console.log(pickDay[0])
+          pickDay = pickDay.split(',')
+          //console.log(pickDay[5])
+           //if (pickDay[day] == 1)
           for (let i = 0; i < pickDay.length; i++) {
-            if (i == day && pickDay[i] == 1 ) {
+            if (pickDay[i] == day ) {
               return (
                 <TouchableOpacity style={{ padding: 5 }} key={value.name} onPress={() => navigation.navigate("HabitDetail")}>
                   <Progress.Bar progress={0.3} width={null} height={35} color={value.color}>
