@@ -49,8 +49,11 @@ const HabitZone = (values,navigation,date) => {
       <View style = {{flexDirection: 'column', padding: 10, justifyContent: 'space-evenly'}}>
         {values.map((value) => {
           let pickDay = value.week;
+          pickDay = pickDay.split(',')
+          //console.log(pickDay[5])
+           //if (pickDay[day] == 1)
           for (let i = 0; i < pickDay.length; i++) {
-            if (pickDay[i] == day) {
+            if (pickDay[i] == day ) {
               return (
                 <TouchableOpacity style={{ padding: 5 }} key={value.name} onPress={() => navigation.navigate("HabitDetail")}>
                   <Progress.Bar progress={0.3} width={null} height={35} color={value.color}>
