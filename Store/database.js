@@ -5,7 +5,7 @@ import reducer, { globalState } from './reducer';
 import { addHabitList, emptyHabitList } from './action';
 import {useStore,setDayDoneInMonth,setDayTotalDone,setMonthlyVolumn,setTotalVolumn} from '../Store'
 import {React, useState } from 'react';
-import { memoInit, habitInit } from './init_data';
+import { memoInit, habitInit, reminderInit, unitInit, tagInit, haveTagInit } from './init_data';
     
   
 const db = SQLite.openDatabase('Habit_tracker.db');
@@ -97,7 +97,6 @@ const initDatabase = () => {
             note	TEXT,\
             frequency	TEXT NOT NULL,\
             color	TEXT NOT NULL DEFAULT \'#000\',\
-            tagID	INTEGER COLLATE BINARY,\
             frequencyType	TEXT NOT NULL CHECK(frequencyType IN (\'Day\', \'Week\', \'Month\')),\
             timeRange	TEXT NOT NULL CHECK(timeRange IN (\'Anytime\', \'Morning\', \'Afternoon\', \'Evening\')),\
             reminderMessage	TEXT,\
@@ -186,11 +185,7 @@ const initDatabase = () => {
     });
 
     db.transaction(tx => {
-        tx.executeSql("INSERT INTO Tag (\"name\") VALUES \
-        ('Health'),\
-        ('Fitness'),\
-        ('Productivity')\
-        ('Mental')",
+        tx.executeSql(tagInit,
         [], 
         (txObj, resultSet) => {
             // console.log("Initialize tag data")
@@ -217,18 +212,7 @@ const initDatabase = () => {
     }); 
 
     db.transaction(tx => {
-        tx.executeSql("INSERT INTO Unit (\"name\") VALUES \
-        ('sec'),\
-        ('min'),\
-        ('hr'),\
-        ('ml'),\
-        ('oz'),\
-        ('cal'),\
-        ('count'),\
-        ('steps'),\
-        ('m'),\
-        ('km'),\
-        ('mile')",
+        tx.executeSql(unitInit,
         [], 
         (txObj, resultSet) => {
             // console.log("Initialize unit data")
