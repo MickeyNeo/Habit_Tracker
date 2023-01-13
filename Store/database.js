@@ -60,8 +60,8 @@ db.transaction(tx => {
     tx.executeSql("DROP TABLE HaveTag",
     [],
     (txObj, resultSet) => {
-        // console.log("Dropped HaveTag table")
-        // console.log(resultSet);
+        console.log("Dropped HaveTag table")
+        console.log(resultSet);
     },
     (txObj, error) => console.log(error)
     );
@@ -124,8 +124,8 @@ const initDatabase = () => {
         tx.executeSql(habitInit,
         [],
         (txObj, resultSet) => {
-            // console.log("Initialize habit table")
-            // console.log(resultSet);
+             console.log("Initialize habit data")
+             console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -151,8 +151,8 @@ const initDatabase = () => {
         tx.executeSql(memoInit,
             [], 
             (txObj, resultSet) => {
-                // console.log("Initialize Memo table")
-                // console.log(resultSet);
+                console.log("Initialize Memo data")
+                console.log(resultSet);
             },
             (txObj, error) => console.log(error)
         );
@@ -188,8 +188,8 @@ const initDatabase = () => {
         tx.executeSql(tagInit,
         [], 
         (txObj, resultSet) => {
-            // console.log("Initialize tag data")
-            // console.log(resultSet);
+            console.log("Initialize tag data")
+            console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -215,8 +215,8 @@ const initDatabase = () => {
         tx.executeSql(unitInit,
         [], 
         (txObj, resultSet) => {
-            // console.log("Initialize unit data")
-            // console.log(resultSet);
+            console.log("Initialize unit data")
+            console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -233,6 +233,17 @@ const initDatabase = () => {
         (txObj, resultSet) => {
             // console.log("Initialize haveTag table")
             // console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    }); 
+
+    db.transaction(tx => {
+        tx.executeSql(haveTagInit,
+        [], 
+        (txObj, resultSet) => {
+            console.log("Initialize haveTag data")
+            console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
