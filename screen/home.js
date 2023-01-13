@@ -8,6 +8,7 @@ import { CalendarProvider, WeekCalendar } from "react-native-calendars";
 import { refreshDatabase, loadHabit, initDatabase, loadUnit, loadSetting } from '../Store/database';
 import moment from 'moment';
 import { format} from 'date-fns';
+import { TextInput } from 'react-native-gesture-handler';
 
 const Home = ({ navigation }) => {
   const [state,dispatch] = useStore();

@@ -13,6 +13,7 @@ export default function SelectFreq (params){
         });
         params.setSelect(tmpState);
 }
+    console.log(params.freq)
     return(         
         <View >
             <Modal isVisible={params.myIsmodalVisible} 
@@ -35,14 +36,14 @@ export default function SelectFreq (params){
                                 justifyContent: 'center', 
                                 alignItems: 'center'}}>
                                 <Text style={styles.tilte}>Track Habit on</Text>
-                                { params.freq == 'Week' && <SelectZone
+                                { params.freq == 'Weekly' && <SelectZone
                                     values = {params.select}
                                     buttonPressed = {buttonPressed}
                                     condition = {params.freq}
                                     color = {params.color}
                                     />
                                 }
-                                { params.freq == 'Month' &&
+                                { params.freq == 'Monthly' &&
                                 <View>
                                 <SelectZone
                                     values = {params.select}
@@ -117,7 +118,7 @@ const SelectZone = ({ values, buttonPressed, condition, color, flag })=>
     (   
         <View style ={{flexDirection: 'row'}}>
             {values.map((value) => {
-                if (condition == 'Week'|| value.title <= 10 && flag == 0 || value.title >= 11 && value.title <= 20 && flag == 1 || 
+                if (condition == 'Weekly'|| value.title <= 10 && flag == 0 || value.title >= 11 && value.title <= 20 && flag == 1 || 
                 value.title >= 21 && flag == 2)
                 return (
                 <TouchableOpacity 
@@ -125,11 +126,11 @@ const SelectZone = ({ values, buttonPressed, condition, color, flag })=>
                     style = 
                     {{ 
                     borderRadius: 10, 
-                    width: condition == 'Week' ? 40 : 20,
+                    width: condition == 'Weekly' ? 40 : 20,
                     height: 20, 
                     alignItems: 'center',
                     backgroundColor: value.selected ? color : 'white',
-                    justifyContent: condition == 'Week' ? 'center' : 'space-evenly',
+                    justifyContent: condition == 'Weekly' ? 'center' : 'space-evenly',
                     }}
                     key={value.title}
                 >
