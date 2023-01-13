@@ -110,7 +110,6 @@ const initDatabase = () => {
             unitID	INTEGER,\
             icon TEXT,\
             iconFamily TEXT,\
-            week TEXT,\
             PRIMARY KEY(name))',
             [], 
             (txObj, resultSet) => {
@@ -120,6 +119,19 @@ const initDatabase = () => {
             (txObj, error) => console.log(error)
             );
     });
+    // unitID: min = 1; km = 9
+    // tagID: Health = 0; Fitness = 1; Productivity = 2; Mental = 3
+    db.transaction(tx => {
+        tx.executeSql("INSERT INTO Habit (name, note, frequency, color, tagID, frequencyType, timeRange,\
+         reminderMessage, showMemo, chartType, habitStartDate, habitEndDate, goalNo, goalPeriod, unitID, icon, iconFamily) VALUES\
+         ('Dancing', 'Nothing to note', 'Mon, Tue, Thurs', '#000', '1', 'Week', 'Evening', 'Remember to dance', '1', '0', '00:00:00 00:00:00.000', '00:00:00 00:00:00.000'\
+         '30', 'Week', '1', NULL, NULL),\
+         ('Meditate', 'Nothing to note', '1', '#000', '3', 'Day', 'Morning', 'Remember to meditate', '0', '0', '00:00:00 00:00:00.000', '00:00:00 00:00:00.000'\
+         '10', 'Day', '1', NULL, NULL),\
+         ('Run', 'Nothing to note', 'Sun', '#000', '1', 'Week', 'Morning', 'Remember to run', '1', '0', '00:00:00 00:00:00.000', '00:00:00 00:00:00.000'\
+         '2', 'Week', '2', NULL, NULL),\
+         ")
+    })
 
     db.transaction(tx => {
         tx.executeSql('CREATE TABLE IF NOT EXISTS Memo (\
@@ -167,7 +179,8 @@ const initDatabase = () => {
         tx.executeSql("INSERT INTO Tag (\"name\") VALUES \
         ('Health'),\
         ('Fitness'),\
-        ('Productivity')",
+        ('Productivity')\
+        ('Mental')",
         [], 
         (txObj, resultSet) => {
             // console.log("Initialize tag data")
