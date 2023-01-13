@@ -29,7 +29,6 @@ const globalState = {
         unitID: 0,
         icon:'',
         iconFamily: '',
-        week: '',
     },
     listHabit: [],
     memo: {

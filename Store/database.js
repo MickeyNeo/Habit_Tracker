@@ -110,7 +110,6 @@ const initDatabase = () => {
             unitID	INTEGER,\
             icon TEXT,\
             iconFamily TEXT,\
-            week TEXT,\
             PRIMARY KEY(name))',
             [], 
             (txObj, resultSet) => {

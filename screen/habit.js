@@ -113,7 +113,7 @@ return (
     </View>
     );
 };
-const TabButton = (navigation, title, image, color, IconInfo, unit) => {
+const TabButton = (navigation, title, image, color, IconInfo, unit, tag) => {
   return (
     <TouchableOpacity onPress={() => {
         navigation.navigate('AddHabit', {
@@ -122,6 +122,7 @@ const TabButton = (navigation, title, image, color, IconInfo, unit) => {
             colors: color,
             IconInfo: IconInfo,
             unitHabit: unit,
+            tag: tag,
         })
     }} style = {styles.btnHabit}>
     <Image

@@ -8,6 +8,7 @@ import { CalendarProvider, WeekCalendar } from "react-native-calendars";
 import { refreshDatabase, loadHabit, initDatabase, loadUnit, loadSetting } from '../Store/database';
 import moment from 'moment';
 import { format} from 'date-fns';
+import { TextInput } from 'react-native-gesture-handler';
 
 const Home = ({ navigation }) => {
   const [state,dispatch] = useStore();
@@ -15,8 +16,8 @@ const Home = ({ navigation }) => {
   const [selectedDay, setSelectedDay] = useState('');
   const db = SQLite.openDatabase('Habit_tracker.db');
   //refreshDatabase();
-  initDatabase();
-  loadHabit(state.listHabit, dispatch);
+  //initDatabase();
+  //loadHabit(state.listHabit, dispatch);
   //console.log(state.listHabit)
   //loadSetting(state, dispatch);
 
@@ -49,7 +50,7 @@ const HabitZone = (values,navigation,date) => {
     <View>
       <View style = {{flexDirection: 'column', padding: 10, justifyContent: 'space-evenly'}}>
         {values.map((value) => {
-          let pickDay = value.week;
+          let pickDay = value.frequency;
           pickDay = pickDay.split(',')
           //console.log(pickDay[5])
            //if (pickDay[day] == 1)
