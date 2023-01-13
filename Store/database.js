@@ -5,7 +5,7 @@ import reducer, { globalState } from './reducer';
 import { addHabitList, emptyHabitList } from './action';
 import {useStore,setDayDoneInMonth,setDayTotalDone,setMonthlyVolumn,setTotalVolumn} from '../Store'
 import {React, useState } from 'react';
-
+import { memoInit, habitInit } from './init_data';
     
   
 const db = SQLite.openDatabase('Habit_tracker.db');
@@ -122,15 +122,14 @@ const initDatabase = () => {
     // unitID: min = 1; km = 9
     // tagID: Health = 0; Fitness = 1; Productivity = 2; Mental = 3
     db.transaction(tx => {
-        tx.executeSql("INSERT INTO Habit (name, note, frequency, color, tagID, frequencyType, timeRange,\
-         reminderMessage, showMemo, chartType, habitStartDate, habitEndDate, goalNo, goalPeriod, unitID, icon, iconFamily) VALUES\
-         ('Dancing', 'Nothing to note', 'Mon, Tue, Thurs', '#000', '1', 'Week', 'Evening', 'Remember to dance', '1', '0', '00:00:00 00:00:00.000', '00:00:00 00:00:00.000'\
-         '30', 'Week', '1', NULL, NULL),\
-         ('Meditate', 'Nothing to note', '1', '#000', '3', 'Day', 'Morning', 'Remember to meditate', '0', '0', '00:00:00 00:00:00.000', '00:00:00 00:00:00.000'\
-         '10', 'Day', '1', NULL, NULL),\
-         ('Run', 'Nothing to note', 'Sun', '#000', '1', 'Week', 'Morning', 'Remember to run', '1', '0', '00:00:00 00:00:00.000', '00:00:00 00:00:00.000'\
-         '2', 'Week', '2', NULL, NULL),\
-         ")
+        tx.executeSql(habitInit,
+        [],
+        (txObj, resultSet) => {
+            // console.log("Initialize habit table")
+            // console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
     })
 
     db.transaction(tx => {
@@ -147,7 +146,18 @@ const initDatabase = () => {
             },
             (txObj, error) => console.log(error)
         );
-        });
+    });
+
+    db.transaction(tx => {
+        tx.executeSql(memoInit,
+            [], 
+            (txObj, resultSet) => {
+                // console.log("Initialize Memo table")
+                // console.log(resultSet);
+            },
+            (txObj, error) => console.log(error)
+        );
+    });
 
     db.transaction(tx => {
     tx.executeSql('CREATE TABLE IF NOT EXISTS Reminder (habitName TEXT, time TEXT, PRIMARY KEY(habitName,time))',
