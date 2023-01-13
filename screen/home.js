@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { View,Text, StyleSheet, TouchableOpacity, Image, } from "react-native";
 import Icons from "./icon_color/Icon";
 import * as Progress from 'react-native-progress';
@@ -15,11 +15,14 @@ const Home = ({ navigation }) => {
   const today = new Date();
   const [selectedDay, setSelectedDay] = useState('');
   const db = SQLite.openDatabase('Habit_tracker.db');
-  // refreshDatabase();
-  // initDatabase();
+
+  /* useEffect(() => {
+    loadHabit(state.listHabit, dispatch);
+    //loadSetting(state, dispatch);
+  }, []); // 👈️ empty dependencies array */
+  
   loadHabit(state.listHabit, dispatch);
   //loadSetting(state, dispatch);
-
   /* loadUnit(); */
   return (
     <View style={{backgroundColor: 'white', flex: 1, flexDirection: 'column'}}>

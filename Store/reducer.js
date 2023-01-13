@@ -20,7 +20,7 @@ const globalState = {
     habit: {
         name: 'Habit',
         note: '',
-        frequency: '1',
+        frequency: 'Daily',
         color: '',
         frequencyType: 'Day',
         timeRange: 'Anytime',

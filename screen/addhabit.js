@@ -67,7 +67,7 @@ const AddHabit = ({navigation, route}) => {
         unit: unitHabit,
         tag: tag,
         habitname: name,
-        selectedItem: "Daily",
+        selectedItem: "Day",
     });
     const theme = useContext(themeContext);
     const toggleSwitch = () => setState(prevState => ({ ...prevState, isEnabled: !prevState.isEnabled}));
@@ -76,7 +76,6 @@ const AddHabit = ({navigation, route}) => {
         note: value.note,
         frequency: showday,
         color: value.changecolor,
-        tagID: 0,
         frequencyType: value.selectedItem,
         timeRange: value.currentTabTime,
         remainderMessage: value.mess,
