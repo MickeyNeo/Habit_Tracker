@@ -17,3 +17,11 @@ export {changenote} from './action'
 export {initDayDoneInMonth} from './action'
 export {setDayDoneInMonth} from './action'
 
+export {initDayTotalDone} from './action'
+export {setDayTotalDone} from './action'
+
+export {initMonthlyVolumn} from './action'
+export {setMonthlyVolumn} from './action'
+
+export {initTotalVolumn} from './action'
+export {setTotalVolumn} from './action'

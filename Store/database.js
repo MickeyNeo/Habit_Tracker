@@ -3,9 +3,9 @@ import { useContext } from 'react';
 import Context from './Context';
 import reducer, { globalState } from './reducer';
 import { addHabitList, emptyHabitList } from './action';
-import {useStore,initDayDoneInMonth,setDayDoneInMonth} from '../Store'
+import {useStore,setDayDoneInMonth,setDayTotalDone,setMonthlyVolumn,setTotalVolumn} from '../Store'
 import {React, useState } from 'react';
-
+import { memoInit, habitInit, reminderInit, unitInit, tagInit, haveTagInit } from './init_data';
     
   
 const db = SQLite.openDatabase('Habit_tracker.db');
@@ -60,8 +60,8 @@ db.transaction(tx => {
     tx.executeSql("DROP TABLE HaveTag",
     [],
     (txObj, resultSet) => {
-        // console.log("Dropped HaveTag table")
-        // console.log(resultSet);
+        console.log("Dropped HaveTag table")
+        console.log(resultSet);
     },
     (txObj, error) => console.log(error)
     );
@@ -97,7 +97,6 @@ const initDatabase = () => {
             note	TEXT,\
             frequency	TEXT NOT NULL,\
             color	TEXT NOT NULL DEFAULT \'#000\',\
-            tagID	INTEGER COLLATE BINARY,\
             frequencyType	TEXT NOT NULL CHECK(frequencyType IN (\'Day\', \'Week\', \'Month\')),\
             timeRange	TEXT NOT NULL CHECK(timeRange IN (\'Anytime\', \'Morning\', \'Afternoon\', \'Evening\')),\
             reminderMessage	TEXT,\
@@ -119,6 +118,18 @@ const initDatabase = () => {
             (txObj, error) => console.log(error)
             );
     });
+    // unitID: min = 1; km = 9
+    // tagID: Health = 0; Fitness = 1; Productivity = 2; Mental = 3
+    db.transaction(tx => {
+        tx.executeSql(habitInit,
+        [],
+        (txObj, resultSet) => {
+             console.log("Initialize habit data")
+             console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
 
     db.transaction(tx => {
         tx.executeSql('CREATE TABLE IF NOT EXISTS Memo (\
@@ -134,7 +145,18 @@ const initDatabase = () => {
             },
             (txObj, error) => console.log(error)
         );
-        });
+    });
+
+    db.transaction(tx => {
+        tx.executeSql(memoInit,
+            [], 
+            (txObj, resultSet) => {
+                console.log("Initialize Memo data")
+                console.log(resultSet);
+            },
+            (txObj, error) => console.log(error)
+        );
+    });
 
     db.transaction(tx => {
     tx.executeSql('CREATE TABLE IF NOT EXISTS Reminder (habitName TEXT, time TEXT, PRIMARY KEY(habitName,time))',
@@ -163,14 +185,11 @@ const initDatabase = () => {
     });
 
     db.transaction(tx => {
-        tx.executeSql("INSERT INTO Tag (\"name\") VALUES \
-        ('Health'),\
-        ('Fitness'),\
-        ('Productivity')",
+        tx.executeSql(tagInit,
         [], 
         (txObj, resultSet) => {
-            // console.log("Initialize tag data")
-            // console.log(resultSet);
+            console.log("Initialize tag data")
+            console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -193,22 +212,11 @@ const initDatabase = () => {
     }); 
 
     db.transaction(tx => {
-        tx.executeSql("INSERT INTO Unit (\"name\") VALUES \
-        ('sec'),\
-        ('min'),\
-        ('hr'),\
-        ('ml'),\
-        ('oz'),\
-        ('cal'),\
-        ('count'),\
-        ('steps'),\
-        ('m'),\
-        ('km'),\
-        ('mile')",
+        tx.executeSql(unitInit,
         [], 
         (txObj, resultSet) => {
-            // console.log("Initialize unit data")
-            // console.log(resultSet);
+            console.log("Initialize unit data")
+            console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -225,6 +233,17 @@ const initDatabase = () => {
         (txObj, resultSet) => {
             // console.log("Initialize haveTag table")
             // console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    }); 
+
+    db.transaction(tx => {
+        tx.executeSql(haveTagInit,
+        [], 
+        (txObj, resultSet) => {
+            console.log("Initialize haveTag data")
+            console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -327,7 +346,7 @@ const loadHabit = (listHabit, dispatch) => {
             console.log(resultSet.rows); */
             if (listHabit.length < resultSet.rows.length) {
                 for (let i = 0; i < resultSet.rows.length; i++) {
-                    // console.log("Database resultset", resultSet.rows)
+                    console.log("Database resultset", resultSet.rows)
                     dispatch(addHabitList(resultSet.rows[i]));
                 } 
             }
@@ -502,14 +521,18 @@ const updateHabit = (habit, newHabit) => {
 }
 
 const calculateMonthlyVolumn = (habit) => {
+    const[state, dispatch] = useStore()
     db.transaction(tx => {
         tx.executeSql("SELECT SUM(progress) \
         FROM Memo\
         WHERE habitName = ? AND strftime('%m',date) = strftime('%m','now')", 
         [habit.name],
         (txObj, resultSet) => {
-            console.log("Calculated Total Volumn");
+            console.log("Calculated Monthly Volumn");
             console.log(resultSet);
+            if(state.MonthlyVolumn != resultSet.rows[0]['COUNT(*)']){
+                dispatch(setMonthlyVolumn(resultSet.rows[0]['COUNT(*)']))
+            }
         },
         (txObj, error) => console.log(error)
         );
@@ -517,6 +540,7 @@ const calculateMonthlyVolumn = (habit) => {
 }
 
 const calculateTotalVolumn  = (habit) => {
+    const[state, dispatch] = useStore()
     db.transaction(tx => {
         tx.executeSql('SELECT SUM(progress) \
         FROM Memo\
@@ -525,7 +549,9 @@ const calculateTotalVolumn  = (habit) => {
         (txObj, resultSet) => {
             console.log("Calculated Total Volumn");
             console.log(resultSet);
-            // console.log(resultSet["length"]);
+            if(state.TotalVolumn != resultSet.rows[0]['COUNT(*)']){
+                dispatch(setTotalVolumn(resultSet.rows[0]['COUNT(*)']))
+            }
         },
         (txObj, error) => console.log(error)
         );
@@ -554,14 +580,18 @@ const calculateDayDoneInMonth = (habit) => {
 
 
 const calculateDayTotalDone  = (habit) => {
+    const[state, dispatch] = useStore()
     db.transaction(tx => {
-        tx.executeSql('SELECT COUNT(*) \
+        tx.executeSql("SELECT COUNT(*)\
         FROM Memo\
-        WHERE habitName = ? AND progress != 0)', 
+        WHERE habitName = ? AND progress != 0", 
         [habit.name],
         (txObj, resultSet) => {
-            console.log("calculateDayTotalDone");
+            console.log("Calculate Day Total Done");
             console.log(resultSet);
+            if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
+                dispatch(setDayTotalDone(resultSet.rows[0]['COUNT(*)']))
+            }
         },
         (txObj, error) => console.log(error)
         );

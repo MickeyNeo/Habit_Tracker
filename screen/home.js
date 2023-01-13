@@ -15,10 +15,9 @@ const Home = ({ navigation }) => {
   const today = new Date();
   const [selectedDay, setSelectedDay] = useState('');
   const db = SQLite.openDatabase('Habit_tracker.db');
-  //refreshDatabase();
-  //initDatabase();
-  //loadHabit(state.listHabit, dispatch);
-  //console.log(state.listHabit)
+  // refreshDatabase();
+  // initDatabase();
+  loadHabit(state.listHabit, dispatch);
   //loadSetting(state, dispatch);
 
   /* loadUnit(); */
