@@ -530,8 +530,8 @@ const calculateMonthlyVolumn = (habit) => {
         (txObj, resultSet) => {
             console.log("Calculated Monthly Volumn");
             console.log(resultSet);
-            if(state.MonthlyVolumn != resultSet.rows[0]['COUNT(*)']){
-                dispatch(setMonthlyVolumn(resultSet.rows[0]['COUNT(*)']))
+            if(state.MonthlyVolumn != resultSet.rows[0]['SUM(progress)']){
+                dispatch(setMonthlyVolumn(resultSet.rows[0]['SUM(progress)']))
             }
         },
         (txObj, error) => console.log(error)
@@ -548,9 +548,10 @@ const calculateTotalVolumn  = (habit) => {
         [habit.name],
         (txObj, resultSet) => {
             console.log("Calculated Total Volumn");
+            console.log(resultSet.rows[0]['SUM(progress)']);
             console.log(resultSet);
-            if(state.TotalVolumn != resultSet.rows[0]['COUNT(*)']){
-                dispatch(setTotalVolumn(resultSet.rows[0]['COUNT(*)']))
+            if(state.TotalVolumn != resultSet.rows[0]['SUM(progress)']){
+                dispatch(setTotalVolumn(resultSet.rows[0]['SUM(progress)']))
             }
         },
         (txObj, error) => console.log(error)
@@ -588,7 +589,9 @@ const calculateDayTotalDone  = (habit) => {
         [habit.name],
         (txObj, resultSet) => {
             console.log("Calculate Day Total Done");
+            console.log(resultSet.rows[0]['COUNT(*)']);
             console.log(resultSet);
+
             if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
                 dispatch(setDayTotalDone(resultSet.rows[0]['COUNT(*)']))
             }

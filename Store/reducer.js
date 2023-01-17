@@ -69,6 +69,7 @@ const globalState = {
     DayTotalDone: null,
     MonthlyVolumn: null,
     TotalVolumn: null,
+    progressData: 0.5
 
 }
 
@@ -176,6 +177,7 @@ function reducer (state , action) {
                 MonthlyVolumn:action.payload
             }
         case SET_MONTHLY_VOLUMN:
+            // console.log("da vao",action.payload)
             return{
                 ...state,
                 MonthlyVolumn:action.payload

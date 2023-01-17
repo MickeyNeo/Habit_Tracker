@@ -44,9 +44,9 @@ const HabitOfADay = ({navigation,route}) =>{
         fillShadowGradientFrom: 'black'
     };
 
-    calculateDayDoneInMonth(habit)
+    // calculateDayDoneInMonth(habit)
     calculateDayTotalDone(habit)
-    calculateMonthlyVolumn(habit)
+    // calculateMonthlyVolumn(habit)
     calculateTotalVolumn(habit)
     return(
         <View style = {styles.container}>
