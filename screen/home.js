@@ -15,7 +15,8 @@ const Home = ({ navigation }) => {
   const today = new Date();
   const [selectedDay, setSelectedDay] = useState('');
   const db = SQLite.openDatabase('Habit_tracker.db');
-
+  // refreshDatabase();
+  // initDatabase();
   /* useEffect(() => {
     loadHabit(state.listHabit, dispatch);
     //loadSetting(state, dispatch);
@@ -59,7 +60,10 @@ const HabitZone = (values,navigation,date) => {
           for (let i = 0; i < pickDay.length; i++) {
             if (pickDay[i] == day ) {
               return (
-                <TouchableOpacity style={{ padding: 5 }} key={value.name} onPress={() => navigation.navigate("HabitDetail")}>
+                <TouchableOpacity 
+                  style={{ padding: 5 }} 
+                  key={value.name} 
+                  onPress={() => navigation.navigate('HabitDetail', {habit: value})}>
                   <Progress.Bar progress={0.3} width={null} height={35} color={value.color}>
                   <View style={{
                     flex: 1,
