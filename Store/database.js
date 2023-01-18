@@ -564,7 +564,7 @@ const calculateDayDoneInMonth = (habit) => {
     db.transaction(function(tx) {
             tx.executeSql("SELECT COUNT(*) \
                 FROM Memo\
-                WHERE habitName = ? AND progress != 0 AND strftime('%m',date) = strftime('%m','now')", 
+                WHERE habitName = ? AND progress != 0 AND strftime('%m', date) = strftime('%m', 'now')", 
                 [habit.name],
                 (txObj, resultSet) => {
                     console.log("Calculated Day Done in month");
