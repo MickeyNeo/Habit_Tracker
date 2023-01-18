@@ -3,30 +3,77 @@ import { useContext } from 'react';
 import Context from './Context';
 import reducer, { globalState } from './reducer';
 import { addHabitList, emptyHabitList } from './action';
-import {useStore,setDayDoneInMonth,setDayTotalDone,setMonthlyVolumn,setTotalVolumn} from '../Store'
+import {useStore,setDayDoneInMonth,setDayTotalDone,setMonthlyVolumn,setTotalVolumn, setCurrentStreak, setBestStreak} from '../Store'
 import {React, useState } from 'react';
 import { memoInit, habitInit, reminderInit, unitInit, tagInit, haveTagInit } from './init_data';
-import { findDOMNode } from 'react-dom';
-import { interpolate } from 'react-native-reanimated';
     
 const streakRetain = (date, followingDate) => {
-    y, m, d = date.split('-').map((x) => {
-        return int(x)
-    });
-    fy, fm, fd = followingDate.split('-').map((x) => {
-        return int(x)
-    });
+    let y, m, d, fy, fm, fd;
+    let lastDayInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-    print(streakRetain);
+    [y, m, d] = [...date.split('-').map((x) => parseInt(x))];
+    [fy, fm, fd] = [...followingDate.split('-').map((x) => parseInt(x))];
+    
+    if (y == fy) {
+        if (m == fm) {
+            if (fd - d == 1) {
+                return true;
+            }
+        }
+        else if (fm - m == 1) {
+            if (fd == 1) {
+                if (m == 2 && (d == 28 || d == 29)) {
+                    return true;
+                }
+                else if (d == lastDayInMonth[m - 1]) {
+                        return true;
+                }
+            }
+        }
+    }
+    else if (fy - y == 1 && fm == 1 && fd == 1 && m == 12 && d == lastDayInMonth[m - 1]) {
+        return true;
+    }
+    return false;
 }
 
-const calculateStreak = (dates) => {
-    count = 0;
-    before = dates[0]
-    for (let i = 1; i < length(dates); i++) {
-        after = dates[i];
-
+const CurrentStreak = (dates) => {
+    let currentDate = new Date(2023, 1, 8);
+    let [y, m, d] = [...dates[0].date.split('-').map((x) => parseInt(x))];
+    if (currentDate.getDate() != d || currentDate.getMonth() + 1 != m && currentDate.getFullYear() != y) {
+        return 0;
     }
+    let count = 1;
+    for (let i = 1; i < dates.length; i++) {
+        let date = dates[i];
+        let followingDate = dates[i - 1]
+        if (streakRetain(date.date, followingDate.date)) {
+            count++;
+        }
+        else {
+            break;
+        }
+    }
+    return count;
+}
+
+const BestStreak = (dates) => {
+    let count = 1;
+    let bestStreak = 1;
+    for (let i = 1; i < dates.length; i++) {
+        let date = dates[i];
+        let followingDate = dates[i - 1]
+        if (streakRetain(date.date, followingDate.date)) {
+            count++;
+            if (count > bestStreak) {
+                bestStreak = count;
+            }
+        }
+        else {
+            count = 1;
+        }
+    }
+    return bestStreak;
 }
   
 const db = SQLite.openDatabase('Habit_tracker.db');
@@ -623,6 +670,7 @@ const calculateDayTotalDone  = (habit) => {
 }
 
 const calculateCurrentStreak = (habit) => {
+    const[state, dispatch] = useStore()
     db.transaction(tx => {
         tx.executeSql('SELECT date \
         FROM Memo\
@@ -631,7 +679,37 @@ const calculateCurrentStreak = (habit) => {
         [habit.name],
         (txObj, resultSet) => {
             console.log("Calculated Current Streak");
-            console.log(resultSet);
+            console.log(resultSet.rows);
+
+            let streak = CurrentStreak(resultSet.rows);
+
+            if(state.CurrentStreak != streak){
+                dispatch(setCurrentStreak(streak))
+            }
+        },
+        (txObj, error) => console.log(error)
+        );
+    })  
+}
+
+const calculateBestStreak = (habit) => {
+    const[state, dispatch] = useStore()
+    db.transaction(tx => {
+        tx.executeSql('SELECT date \
+        FROM Memo\
+        WHERE habitName = ? AND progress != 0\
+        ORDER BY date DESC', 
+        [habit.name],
+        (txObj, resultSet) => {
+            console.log("Calculated Best Streak");
+            console.log(resultSet.rows);
+
+            let streak = BestStreak(resultSet.rows);
+            console.log(streak);
+
+            if(state.BestStreak != streak){
+                dispatch(setBestStreak(streak))
+            }
         },
         (txObj, error) => console.log(error)
         );
@@ -640,4 +718,4 @@ const calculateCurrentStreak = (habit) => {
 
 export {db, loadHabit, addHabit, refreshDatabase, initDatabase, loadUnit, deleteHabit, 
     updateHabit, loadSetting, calculateDayDoneInMonth, calculateMonthlyVolumn, 
-    calculateTotalVolumn, calculateDayTotalDone, calculateCurrentStreak}
+    calculateTotalVolumn, calculateDayTotalDone, calculateCurrentStreak, calculateBestStreak}

@@ -25,3 +25,5 @@ export {setMonthlyVolumn} from './action'
 
 export {initTotalVolumn} from './action'
 export {setTotalVolumn} from './action'
+
+export {setCurrentStreak, setBestStreak} from './action'

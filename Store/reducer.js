@@ -1,6 +1,6 @@
-import { ADD_STATE_SETTING, EMPTY_HABIT_LIST, SET_DAILY_REMINDER_TEXT, 
+import { ADD_STATE_SETTING, EMPTY_HABIT_LIST, SET_CURRENT_STREAK, SET_DAILY_REMINDER_TEXT, 
     SET_DAILY_REMINDER_TIME, SET_DATE_BAR_STYLE, SET_HABIT_BAR_STYLE, 
-    SET_HABIT_INPUT} from './constants'
+    SET_HABIT_INPUT, SET_BEST_STREAK} from './constants'
 import { SET_LANGUAGE } from './constants'
 import { ADD_HABIT_OF_ADAY } from './constants'
 import { ADD_HABIT_LIST } from './constants'
@@ -68,6 +68,8 @@ const globalState = {
     DayDoneInMonth: null,
     DayTotalDone: null,
     MonthlyVolumn: null,
+    CurrentStreak: 0,
+    BestStreak: 0,
     TotalVolumn: null,
     progressData: 0.5
 
@@ -191,6 +193,16 @@ function reducer (state , action) {
             return{
                 ...state,
                 TotalVolumn:action.payload
+            }
+        case SET_CURRENT_STREAK:
+            return{
+                ...state,
+                CurrentStreak: action.payload
+            }
+        case SET_BEST_STREAK:
+            return{
+                ...state,
+                BestStreak: action.payload
             }
         default:
             throw new Error('sai goi ne')
