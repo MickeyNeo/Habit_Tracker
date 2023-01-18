@@ -6,7 +6,28 @@ import { addHabitList, emptyHabitList } from './action';
 import {useStore,setDayDoneInMonth,setDayTotalDone,setMonthlyVolumn,setTotalVolumn} from '../Store'
 import {React, useState } from 'react';
 import { memoInit, habitInit, reminderInit, unitInit, tagInit, haveTagInit } from './init_data';
+import { findDOMNode } from 'react-dom';
+import { interpolate } from 'react-native-reanimated';
     
+const streakRetain = (date, followingDate) => {
+    y, m, d = date.split('-').map((x) => {
+        return int(x)
+    });
+    fy, fm, fd = followingDate.split('-').map((x) => {
+        return int(x)
+    });
+
+    print(streakRetain);
+}
+
+const calculateStreak = (dates) => {
+    count = 0;
+    before = dates[0]
+    for (let i = 1; i < length(dates); i++) {
+        after = dates[i];
+
+    }
+}
   
 const db = SQLite.openDatabase('Habit_tracker.db');
 
@@ -600,25 +621,23 @@ const calculateDayTotalDone  = (habit) => {
         );
     })
 }
-/* const calculateDailyAverage = () => {
+
+const calculateCurrentStreak = (habit) => {
     db.transaction(tx => {
-        tx.executeSql('SELECT SUM(progress) \
+        tx.executeSql('SELECT date \
         FROM Memo\
-        WHERE habitName = ?', 
+        WHERE habitName = ? AND progress != 0\
+        ORDER BY date DESC', 
         [habit.name],
         (txObj, resultSet) => {
-            console.log("Calculated Total Volumn");
+            console.log("Calculated Current Streak");
             console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
-    })
-} */
-
-const calculateOverallRate = () => {
-
+    })  
 }
 
 export {db, loadHabit, addHabit, refreshDatabase, initDatabase, loadUnit, deleteHabit, 
     updateHabit, loadSetting, calculateDayDoneInMonth, calculateMonthlyVolumn, 
-    calculateTotalVolumn, calculateDayTotalDone}
+    calculateTotalVolumn, calculateDayTotalDone, calculateCurrentStreak}

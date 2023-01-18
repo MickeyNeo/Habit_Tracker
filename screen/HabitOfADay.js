@@ -11,7 +11,7 @@ import {
     ContributionGraph,
     StackedBarChart
   } from "react-native-chart-kit";
-import {calculateDayDoneInMonth, calculateDayTotalDone, calculateMonthlyVolumn,calculateTotalVolumn} from '../Store/database';
+import {calculateDayDoneInMonth, calculateDayTotalDone, calculateMonthlyVolumn,calculateTotalVolumn, calculateCurrentStreak} from '../Store/database';
 
 const HabitOfADay = ({navigation,route}) =>{
     const date = new Date();
@@ -48,6 +48,11 @@ const HabitOfADay = ({navigation,route}) =>{
     calculateDayTotalDone(habit)
     calculateMonthlyVolumn(habit)
     calculateTotalVolumn(habit)
+    calculateCurrentStreak(habit)
+    const dailyAverage = Math.round(state.TotalVolumn / state.DayTotalDone * 100) / 100;
+    const overallRate = Math.round(dailyAverage / habit.goalNo * 100) / 100 
+    
+    
     return(
         <View style = {styles.container}>
             <View style = {styles.header}>
@@ -86,7 +91,7 @@ const HabitOfADay = ({navigation,route}) =>{
                                 </View>
                                 <View style={styles.iconRecords}>
                                     <FontAwesome5  name="cubes" size={50} color="#f8b2b3" />
-                                    <Text>0</Text>
+                                    <Text>{dailyAverage}</Text>
                                     <Text>Daily Avg.</Text>
                                 </View>
                             </View>
@@ -109,7 +114,7 @@ const HabitOfADay = ({navigation,route}) =>{
                                 </View>
                                 <View style={styles.iconRecords}>
                                     <FontAwesome5  name="percent" size={50} color="#fca133" />
-                                    <Text>0%</Text>
+                                    <Text>{overallRate}</Text>
                                     <Text>Overall Rate</Text>
                                 </View>
                                 
