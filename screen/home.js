@@ -21,8 +21,8 @@ const Home = ({ navigation }) => {
     loadHabit(state.listHabit, dispatch);
     //loadSetting(state, dispatch);
   }, []); // 👈️ empty dependencies array */
-  
-  loadHabit(state.listHabit, dispatch);
+  //refreshDatabase(state.listHabit, dispatch)
+  //loadHabit(state.listHabit, dispatch);
   //loadSetting(state, dispatch);
   /* loadUnit(); */
   return (
@@ -53,8 +53,10 @@ const HabitZone = (values,navigation,date) => {
     <View>
       <View style = {{flexDirection: 'column', padding: 10, justifyContent: 'space-evenly'}}>
         {values.map((value) => {
+          //console.log(value.id)
           let pickDay = value.frequency;
-          pickDay = pickDay.split(',')
+          //pickDay = pickDay.split(',')
+          console.log(pickDay)
           //console.log(pickDay[5])
            //if (pickDay[day] == 1)
           for (let i = 0; i < pickDay.length; i++) {
@@ -97,8 +99,8 @@ const HabitZone = (values,navigation,date) => {
             <Image
               source={require('./Icon/rocket.png')}
               style={{ width: 100, height: 100,}} />
-            <Text style = {{color: 'black', fontFamily: 'monospace'}} >No Habits</Text>
-            <Text style = {{color: 'black', fontFamily: 'monospace'}} >Press '+' to add new habit </Text>
+            <Text style = {{color: 'black' }} >No Habits</Text>
+            <Text style = {{color: 'black' }} >Press '+' to add new habit </Text>
             </TouchableOpacity>
         </View>
       </View>
@@ -135,9 +137,6 @@ const styles = StyleSheet.create({
       disabledArrowColor: '#d9e1e8',
       monthTextColor: 'blue',
       indicatorColor: '#F3ACB4',
-      textDayFontFamily: 'monospace',
-      textMonthFontFamily: 'monospace',
-      textDayHeaderFontFamily: 'monospace',
       textDayFontWeight: '300',
       textMonthFontWeight: 'bold',
       textDayHeaderFontWeight: '300',
