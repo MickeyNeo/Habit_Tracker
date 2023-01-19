@@ -1,4 +1,4 @@
-import React from "react";
+import React , { useState} from "react";
 import { View, Button, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Image } from "react-native";
 // import hinh 
 import eat from './Icon/eat.png';
@@ -27,13 +27,256 @@ import clear from './Icon/clear.png';
 import lowfat from './Icon/lowfat.png';
 import sleep from './Icon/sleep.png';
 import add from './Icon/add.png';
-
+import { useStore } from '../Store'
+import tick from './Icon/tick.png'
 
 
 const Habit = ({navigation}) => {
-return (
+    const [state, dispatch] = useStore();
+    
+    const habit = [ 
+        {
+            id: 'wk',
+            name: 'Walking',
+            image: walking,
+            color: '#FFAEAE',
+            iconInfor: ['walking', 'FontAwesome5'],
+            unit: 'km',
+            tag: 'Sport',
+            flag: 0,
+            number: 0,
+        },
+        {
+            id: 'rn',
+            name: 'Running',
+            image: running,
+            color: 'green',
+            iconInfor: ['running','FontAwesome5'],
+            unit: 'km',
+            tag: 'Sport',
+            flag: 0,
+            number: 1,
+        },
+        {
+            id: 'ch',
+            name: 'Chess',
+            image: chess,
+            color: 'grey',
+            iconInfor: ['chess-king','MaterialCommunityIcons'],
+            unit: 'hr',
+            tag: 'Sport',
+            flag: 0,
+            number: 2,
+        },
+        {
+            id: 'st',
+            name: 'Stretch',
+            image: stretch,
+            color: '#dc143c',
+            iconInfor: ['running','FontAwesome5'],
+            unit: 'km',
+            tag: 'Sport',
+            flag: 0,
+            number: 3,
+        },
+        {
+            id: 'yo',
+            name: 'Yoga',
+            image: yoga,
+            color: '#ffb6c1',
+            iconInfor: ['yoga','MaterialCommunityIcons'],
+            unit: 'hr',
+            tag: 'Sport',
+            flag: 0,
+            number: 4,
+        },
+        {
+            id: 'cy',
+            name: 'Cycling',
+            image: cycling,
+            color: '#a0522d',
+            iconInfor: ['md-bicycle-sharp','Ionicons'],
+            unit: 'km',
+            tag: 'Sport',
+            flag: 0,
+            number: 5,
+        },
+        {
+            id: 'sw',
+            name: 'Swimming',
+            image: swim,
+            color:  '#00ffff', 
+            iconInfor: ['swimmer','FontAwesome5'],
+            unit: 'mile',
+            tag: 'Sport',
+            flag: 0,
+            number: 6,
+        },
+        {
+            id: 'bn',
+            name: 'Burn Calo',
+            image: burn,
+            color:  '#00ffff', 
+            iconInfor: ['burn','FontAwesome5'],
+            unit: 'Cal',
+            tag: 'Sport',
+            flag: 0,
+            number: 7,
+        },
+        {
+            id: 'ex',
+            name: 'Excercise',
+            image: exercise,
+            color:  '#00ffff', 
+            iconInfor: ['fitness-center','MaterialIcons'],
+            unit: 'hr',
+            tag: 'Sport',
+            flag: 0,
+            number: 8,
+        },
+        {
+            id: 'bre',
+            name: "Breathe",
+            image: breathe,
+            color:  '#00ffff', 
+            iconInfor: ['running','FontAwesome5'],
+            unit: 'min',
+            tag: 'Health',
+            flag: 0,
+            number: 9,
+        },
+        {
+            id: 'md',
+            name: 'Meditation',
+            image: meditation,
+            color:  '#00ffff', 
+            iconInfor: ['meditation','MaterialCommunityIcons'],
+            unit: 'min',
+            tag: 'Health',
+            flag: 0,
+            number: 10,
+        },
+        {
+            id: 'rb',
+            name: 'Read book',
+            image: read,
+            color:  '#00ffff', 
+            iconInfor: ['book-reader','FontAwesome5'],
+            unit: 'min',
+            tag: 'Mind',
+            flag: 0,
+            number: 11,
+        },
+        {
+            id: 'ln',
+            name: 'Learning',
+            image: learning,
+            color:  '#00ffff', 
+            iconInfor: ['brain','MaterialCommunityIcons'],
+            unit: 'min',
+            tag: 'Mind',
+            flag: 0,
+            number: 12,
+        },
+        {
+            id: 'rv',
+            name: 'Review',
+            image: review,
+            color:  '#00ffff', 
+            iconInfor: ['preview','Fontisto'],
+            unit: 'min',
+            tag: 'Mind',
+            flag: 0,
+            number: 13,
+        },
+        {
+            id: 'mcl',
+            name: 'Mind Clear',
+            image: clear,
+            color:  '#00ffff', 
+            iconInfor: ['clear','MaterialIcons'],
+            unit: 'min',
+            tag: 'Mind',
+            flag: 0,
+            number: 14,
+        },
+        {
+            id: 'wt',
+            name: "Workout",
+            image: workout,
+            color:  '#00ffff', 
+            iconInfor: ['fitness','Ionicons'],
+            unit: 'min',
+            tag: 'Health',
+            flag: 0,
+            number: 15,
+        },
+        {
+            id: 'ef',
+            name: 'Eat Fruit',
+            image: fruit,
+            color:  '#00ffff', 
+            iconInfor: ['fruit-grapes-outline','MaterialCommunityIcons'],
+            unit: 'Cal',
+            tag: 'Health',
+            flag: 0,
+            number: 16,
+        },
+        {
+            id: 'ev',
+            name: 'Eat Vegetable',
+            image: vege,
+            color:  '#00ffff', 
+            iconInfor: ['running','FontAwesome5'],
+            unit: 'Cal',
+            tag: 'Health',
+            flag: 0,
+            number: 17,
+        },
+        {
+            id: 'ng',
+            name: 'No Sugar',
+            image: nosugar,
+            color:  '#00ffff', 
+            iconInfor: ['spoon-sugar','MaterialCommunityIcons'],
+            unit: 'Cal',
+            tag: 'Health',
+            flag: 0,
+            number: 18,
+        },
+        {
+            id: 'sl',
+            name: 'Sleep Early',
+            image: sleep,
+            color:  '#00ffff', 
+            iconInfor: ['sleep','MaterialCommunityIcons'],
+            unit: 'min',
+            tag: 'Health',
+            flag: 0,
+            number: 19,
+        },
+        {
+            id: 'el',
+            name: 'Eat Low-Fat',
+            image: lowfat,
+            color:  '#00ffff', 
+            iconInfor: ['running','FontAwesome5'],
+            unit: 'Cal',
+            tag: 'Health',
+            flag: 0,
+            number: 20,
+        },
+    ]
+    const value = state.listHabit;
+    const checkFlag = []
+    {value.map((item) => checkFlag.push(item.id))}
+    for (let i = 0; i < habit.length; i++) 
+    {
+        habit[i].flag = checkFlag.includes(habit[i].id) ? 1 : habit[i].flag;
+    }
+    console.log(checkFlag)
+    return (
     <View style={styles.container}>
-
         <View style = {styles.addHabit}>
             <TouchableOpacity  onPress= {() => {
             navigation.navigate('AddHabit', {
@@ -50,93 +293,64 @@ return (
                 <Text> Create Your Custom Habit </Text>
             </TouchableOpacity>
         </View>
-
+        {/* Habit Zone */}
         <View style ={styles.Habit}>
             <ScrollView>
                 <Text style = {{ fontSize: 20, padding: 10, fontWeight: 'bold'}}>Sports</Text>
                 <View style = { styles.habitZone}>
-                    <View style = {styles.zone}>
-                        {TabButton(navigation,"Walking", walking, '#FFAEAE', ['walking', 'FontAwesome5'], 'km', 'Health')}
-                        {TabButton(navigation,"Running", running, 'green', ['running','FontAwesome5'], 'km')}
-                        {TabButton(navigation,"Chess", chess, 'grey', ['chess-king','MaterialCommunityIcons'])}
+                    <TabButton navigation={navigation} habit={habit} flag = {0} />
+                    <TabButton navigation={navigation} habit={habit} flag = {1} />
+                    <TabButton navigation={navigation} habit={habit} flag = {2} />
                     </View>
-
-                    <View style = {styles.zone}>
-                        {TabButton(navigation,"Stretch", stretch, '#dc143c', ['running','FontAwesome5'], 'hr')}
-                        {TabButton(navigation,"Yoga", yoga, '#ffb6c1', ['yoga','MaterialCommunityIcons'], 'hr')}
-                        {TabButton(navigation,"Cycling", cycling, '#a0522d', ['md-bicycle-sharp','Ionicons'],'km')}
-                    </View>
-
-                    <View style = { styles.zone}>
-                        {TabButton(navigation,"Swim", swim, '#00ffff', ['swimmer','FontAwesome5'], 'mile')}
-                        {TabButton(navigation,"Burn Calo", burn, '#ff6347', ['burn','FontAwesome5'], 'Cal')}
-                        {TabButton(navigation,"Exercise", exercise, '#00ff7f', ['fitness-center','MaterialIcons'], 'hr')}
-                    </View>
-
-                    </View>
-
                 <Text style = {{ fontSize: 20, padding: 10, fontWeight: 'bold'}}>Thought</Text>
-                <View style = { styles.habitZone} >
-                    <View style = {styles.zone}> 
-                        {TabButton(navigation,"Breathe", breathe, '#98fb98', ['running','FontAwesome5'], 'min')}
-                        {TabButton(navigation,"Meditation", meditation, '#ffa500', ['meditation','MaterialCommunityIcons'], 'min')}
-                        {TabButton(navigation,"Read book", read, '#7b68ee', ['book-reader','FontAwesome5'], 'count')}
-                    </View>
-
-                    <View style = {styles.zone}>
-                        {TabButton(navigation,"Learning", learning, '#ff8c00', ['brain','MaterialCommunityIcons'], 'min')}
-                        {TabButton(navigation,"Review", review, '#ffb6c1', ['preview','Fontisto'], 'min')}
-                        {TabButton(navigation,"Mind Clear", clear, '#ffe4e1', ['clear','MaterialIcons'], 'min')}
-                    </View>
+                <View style = { styles.habitZone}>
+                    <TabButton navigation={navigation} habit={habit} flag = {3} />
+                    <TabButton navigation={navigation} habit={habit} flag = {4} />
                 </View>
-
                 <Text style = {{ fontSize: 20, padding: 10, fontWeight: 'bold'}}>Health</Text>
-                <View style = { styles.habitZone} >
-                    <View style = {styles.zone}> 
-                        {TabButton(navigation,"Workout", workout, '#ffff00', ['fitness','Ionicons'],'hr')}
-                        {TabButton(navigation,"Eat Fruit", fruit, '#9acd32', ['fruit-grapes-outline','MaterialCommunityIcons'],'Cal')}
-                        {TabButton(navigation,"Eat Vegetable", vege, '#98fb98', ['running','FontAwesome5'],'Cal')}
-                    </View>
-
-                    <View style = {styles.zone}>
-                        {TabButton(navigation,"No Sugar", nosugar, '#afeeee', ['spoon-sugar','MaterialCommunityIcons'],'Cal')}
-                        {TabButton(navigation,"Sleep Early", sleep, '#cd853f', ['sleep','MaterialCommunityIcons'],'hr')}
-                        {TabButton(navigation,"Eat Low-Fat", lowfat, '#dda0dd', ['running','FontAwesome5'],'Cal')}
-                    </View>
-
-                    <View style = { styles.zone}>
-                        {TabButton(navigation,"Eat Breakfast", breakfast, '#db7093', ['breakfast-dining','MaterialIcons'],'Cal')}
-                    </View>
-                </View>
+                <View style = { styles.habitZone}>
+                    <TabButton navigation={navigation} habit={habit} flag = {5} />
+                    <TabButton navigation={navigation} habit={habit} flag = {6} />
+                </View> 
             </ScrollView>
         </View>
     </View>
     );
 };
-const TabButton = (navigation, title, image, color, IconInfo, unit, tag) => {
-  return (
-    <TouchableOpacity onPress={() => {
-        navigation.navigate('AddHabit', {
-            name: title,
-            image: image,
-            colors: color,
-            IconInfo: IconInfo,
-            unitHabit: unit,
-            tag: tag,
-        })
-    }} style = {styles.btnHabit}>
-    <Image
-        source={image}
-        style={{ width: 40, height: 40,}}
-    />
-    <Text style = {{fontSize: 10}}>{title}</Text>
-    </TouchableOpacity>
-  );
-}
+const TabButton = ({navigation, habit, flag }) => 
+    <View style = {styles.zone}>
+    {habit.map((value) => { 
+        //console.log(value.flag)
+        if (value.number <= 2 && flag == 0 || value.number >= 3 && value.number < 6 && flag == 1
+            || value.number >= 6 && value.number < 9 && flag == 2 || value.number >= 9 && value.number < 12 && flag == 3
+            || value.number >= 12 && value.number < 15 && flag == 4 || value.number >= 15 && value.number < 18 && flag == 5 
+            || value.number >= 18 && value.number < 21 && flag == 6) 
+        return (
+        <TouchableOpacity
+            key = {value.id}
+            onPress={() => {
+                navigation.navigate('AddHabit', {
+                    id: value.id,
+                    name: value.name,
+                    image: value.image,
+                    colors: value.color,
+                    IconInfo: value.iconInfor,
+                    unitHabit: value.unit,
+                    tag: value.tag,
+                    flag: !value.flag
+                })
+            }}
+            style={[styles.btnHabit, {backgroundColor: value.flag == 1 ? 'red' : '#F3ACB4'}]}
+            disabled = {value.flag == 1 ? true : false}
+        >
+            <Image source={ value.flag == 1 ? tick : value.image} style={{ width: 40, height: 40 }} />
+            <Text style={{ fontSize: 10 }}>{value.name}</Text>
+        </TouchableOpacity>
+    )})}
+    </View>
 const styles = StyleSheet.create({
     container:{
       flex: 1, 
-      //backgroundColor: '#B3D5F2',
       flexDirection: 'column',
     },
     addHabit: { 

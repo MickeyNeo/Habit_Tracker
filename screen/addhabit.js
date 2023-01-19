@@ -23,8 +23,8 @@ import { db, addHabit } from '../Store/database'
 const AddHabit = ({navigation, route}) => {
     const frequency_of_day = ["Daily", "Weekly", "Monthly"]
     const frequency_of_week = ["Weekly", "Monthly"]
-    const [state,dispatch] = useStore();
-    const { name, colors, IconInfo, unitHabit, tag } = route.params;
+    const [state, dispatch] = useStore();
+    const {id, name, colors, IconInfo, unitHabit, tag, flag } = route.params;
     const IconDetail = {
         iconName: IconInfo[0],
         iconFamily: IconInfo[1],
@@ -35,14 +35,14 @@ const AddHabit = ({navigation, route}) => {
         const day = {
             id: i + 1,
             title: days[i],
-            selected: 0
+            selected: 1
         };
         Week.push(day);
     }
     const month = [];
     for ( var i = 0; i < 30; i++)
     {
-        month.push({id:i+1 , title: i+1, selected: 0})
+        month.push({id:i+1 , title: i+1, selected: 1})
     }
     const today = new Date();
     const day = moment(today).format('ddd')
@@ -57,7 +57,6 @@ const AddHabit = ({navigation, route}) => {
         currentTabTime: "Anytime",
         changecolor: colors,
         note: "",
-        freq: "",
         mess: "",
         startDay: new Date(),
         endDay: new Date(),
@@ -67,15 +66,17 @@ const AddHabit = ({navigation, route}) => {
         unit: unitHabit,
         tag: tag,
         habitname: name,
-        selectedItem: "Day",
+        selectedItem: "Daily",
     });
     const theme = useContext(themeContext);
     const toggleSwitch = () => setState(prevState => ({ ...prevState, isEnabled: !prevState.isEnabled}));
     const habit = {
+        id: id,
         name: value.habitname,
         note: value.note,
         frequency: showday,
         color: value.changecolor,
+        tagID: 0,
         frequencyType: value.selectedItem,
         timeRange: value.currentTabTime,
         remainderMessage: value.mess,
@@ -88,6 +89,7 @@ const AddHabit = ({navigation, route}) => {
         unitID: '',
         icon: IconInfo[0],
         iconFamily: IconInfo[1],
+        flag : flag,
     }
     return (
         <View style={{ flex: 1, flexDirection : 'column'}}>
@@ -124,24 +126,24 @@ const AddHabit = ({navigation, route}) => {
                                 }}>
                                 <Text style = {{fontSize: 12, alignSelf: 'center' }}>Icon</Text>
                                 <TabChoose 
-                                    title = 'Icon' 
-                                    changecolor = {value.changecolor}
-                                    unit = {value.unit} 
-                                    tag = {value.tag} 
-                                    IconDetail = {IconDetail}
-                                    setState = {setState}
-                                    flag = {1} 
+                                  title = 'Icon' 
+                                  changecolor = {value.changecolor}
+                                  unit = {value.unit} 
+                                  tag = {value.tag} 
+                                  IconDetail = {IconDetail}
+                                  setState = {setState}
+                                  flag = {1} 
                                 />
                                 <Text>|</Text>
                                 <Text style = {{fontSize: 12, alignSelf: 'center' }}>Color</Text>
                                 <TabChoose 
-                                    title = 'Color' 
-                                    changecolor = {value.changecolor}
-                                    unit = {value.unit} 
-                                    tag = {value.tag} 
-                                    IconDetail = {IconDetail}
-                                    setState = {setState}
-                                    flag = {2} 
+                                  title = 'Color' 
+                                  changecolor = {value.changecolor}
+                                  unit = {value.unit} 
+                                  tag = {value.tag} 
+                                  IconDetail = {IconDetail}
+                                  setState = {setState}
+                                  flag = {2} 
                                 />
                             </View>
                         </View>
@@ -169,19 +171,19 @@ const AddHabit = ({navigation, route}) => {
                                         onChangeText={(value) => setState(prevState => ({ ...prevState, goal: value }))}
                                     />
                                 <TabChoose 
-                                    title = 'count' 
-                                    changecolor = {value.changecolor}
-                                    unit = {value.unit} 
-                                    tag = {value.tag} 
-                                    IconDetail = {IconDetail}
-                                    setState = {setState}
-                                    flag = {4} 
+                                  title = 'count' 
+                                  changecolor = {value.changecolor}
+                                  unit = {value.unit} 
+                                  tag = {value.tag} 
+                                  IconDetail = {IconDetail}
+                                  setState = {setState}
+                                  flag = {4} 
                                 />
                             </View>
                             <View style = {{flexDirection: 'row', padding: 10, alignSelf: 'center'}}>
-                                {TabButton(value.currentTabPeriod, setState, "Day", value.changecolor)}
-                                {TabButton(value.currentTabPeriod, setState, "Week", value.changecolor)}
-                                {TabButton(value.currentTabPeriod, setState, "Month", value.changecolor)}
+                              {TabButton(value.currentTabPeriod, setState, "Day", value.changecolor, setSelect, date)}
+                              {TabButton(value.currentTabPeriod, setState, "Week", value.changecolor, setSelect, Week)}
+                              {TabButton(value.currentTabPeriod, setState, "Month", value.changecolor, setSelect, month)}
                             </View>
                         </View>
                     </View>
@@ -196,7 +198,7 @@ const AddHabit = ({navigation, route}) => {
                                 <SelectDropdown
                                   buttonStyle={{width: 75, height: 15, backgroundColor: 'white'}}
                                   buttonTextStyle= {{fontSize: 8}}
-                                  defaultButtonText={value.selectedItem}
+                                  defaultButtonText={ value.selectedItem}
                                   data={value.currentTabPeriod == 'Week' ? frequency_of_week: frequency_of_day}
                                   onSelect={(selectedItem, index) => 
                                     {
@@ -235,11 +237,11 @@ const AddHabit = ({navigation, route}) => {
                     </View>
 
                     <View style = {{flexDirection: 'column', padding: 10}}>
-                        <Text style ={{fontWeight: 'bold', color: theme.color }}>Remainder</Text>
+                        <Text style ={{fontWeight: 'bold', color: theme.color }}>Reminder</Text>
                     </View>
 
                     <View style = {{flexDirection: 'column', padding: 10}}>
-                        <Text style ={{fontWeight: 'bold', color: theme.color }}>Remainder Messages</Text>
+                        <Text style ={{fontWeight: 'bold', color: theme.color }}>Reminder Messages</Text>
                         <TextInput
                             style={[styles.textInput]}
                             value={value.mess}
@@ -297,8 +299,8 @@ const AddHabit = ({navigation, route}) => {
                 onPress={() => {
                     // dispatch(addHabitOfaDay(name.toLowerCase()));
                     dispatch(setHabitInput(habit));
-                    //dispatch(addHabitList(habit));
-                    addHabit(state.habit);
+                    dispatch(addHabitList(habit));
+                    //addHabit(state.habit);
                     navigation.navigate('Home', {
                         screen: 'AddHabit',
                     });
@@ -313,13 +315,14 @@ const AddHabit = ({navigation, route}) => {
     );
 };
 
-const TabButton = (currentTabPeriod, setState, title, color) => {
+const TabButton = (currentTabPeriod, setState, title, color,setSelect, time) => {
     return (
         <TouchableOpacity onPress={() => {
             setState(prevState => ({ ...prevState, currentTabPeriod: title }))
+            setSelect(time)
         }}>
         <View style={[styles.btnTouch, 
-            { backgroundColor: currentTabPeriod == title ? color : '#f5f5f5'}
+            {backgroundColor: currentTabPeriod == title ? color : '#f5f5f5'}
         ]}>
             <Text style={{
             fontSize: 12,
@@ -336,7 +339,7 @@ const TabButtontime = (currentTabTime, setState, title, color) => {
         setState(prevState => ({ ...prevState, currentTabTime: title }))
     }}>
       <View style={[styles.btnTouchTime, 
-        { backgroundColor: currentTabTime == title ? color : '#f5f5f5'}
+        {backgroundColor: currentTabTime == title ? color : '#f5f5f5'}
       ]}>
         <Text style={{
           fontSize: 12,
@@ -354,8 +357,7 @@ const TabChoose = ({title, changecolor, unit, tag, IconDetail, setState, flag, s
       style={[styles.btnTouch, flag === 2 && { backgroundColor: changecolor }, flag === 3 && [styles.freq]]}
       onPress={() => {
         setIsEnabled(!isEnabled)
-      }}
-    >
+      }}>
       {flag === 1 && (
         <Icons type={IconDetail.iconFamily} name={IconDetail.iconName} size={18} color={changecolor} />
       )}
@@ -402,7 +404,6 @@ const TabChoose = ({title, changecolor, unit, tag, IconDetail, setState, flag, s
         <Text style={{ fontSize: 12 }}>{unit}</Text>
       )}
     </TouchableOpacity>
-    
   )
 }
 
@@ -448,12 +449,12 @@ const ShowTimePicker = (startDay, endDay, setState, flag) => {
   );
 };
 const DisplayNote = (select,goal,unit) => {
+
     return (
     <View style = {{flexDirection: 'row'}}>
-        <Text style ={{fontSize: 10}}>Complete {goal} {unit} in</Text>
-        
+        <Text style ={{fontSize: 10, color: 'red' }}> *Complete {goal} {unit} in</Text>
         {select.map((value) => 
-        <Text style = {{fontSize: 10}}key = {value.id} > {value.selected ? value.title : null}</Text> 
+        <Text style = {{fontSize: 10, color: 'red'}}key = {value.id} > {value.selected ? value.title : null}</Text> 
     )}
     </View>
     )

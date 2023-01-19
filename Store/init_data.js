@@ -1,6 +1,6 @@
 export const habitInit = "INSERT INTO Habit (name, note, frequency, color, frequencyType, timeRange,\
     reminderMessage, showMemo, chartType, habitStartDate, habitEndDate, goalNo, goalPeriod, unitID, icon, iconFamily) VALUES\
-    ('Dancing', 'Nothing to note', 'MON, TUE, THU', '#FFAEAE', 'Week', 'Evening', 'Remember to dance', '1', '0', '2021:01:01', NULL,\
+    ('Dancing', 'Nothing to note', 'MON,TUE,WED', '#FFAEAE', 'Week', 'Evening', 'Remember to dance', '1', '0', '2021:01:01', NULL,\
     '30', 'Week', '', 'walking', 'FontAwesome5'),\
     ('Meditate', 'Nothing to note', 'Daily', '#FFAEAE', 'Day', 'Morning', 'Remember to meditate', '0', '0', '2021:01:01', NULL,\
     '10', 'Day', '', 'walking', 'FontAwesome5'),\
