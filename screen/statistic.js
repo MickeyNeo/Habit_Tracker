@@ -26,7 +26,7 @@ export default function Statistic({navigation}){
         list_of_habit.push(state.listHabit[i]['name'].toLowerCase())
     }
     // console.log('statistic',state.listHabit[0]['name'])
-    console.log('statistic',list_of_habit)
+    // console.log('statistic',list_of_habit)
     const dataPro = {
         labels: ['Monthly_rate'], // optional
         data: [0.8]

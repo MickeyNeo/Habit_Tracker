@@ -9,6 +9,7 @@ import {INIT_DAY_DONE_IN_MONTH, SET_DAY_DONE_IN_MONTH} from './constants'
 import {INIT_DAY_TOTAL_DONE, SET_DAY_DAY_TOTAL_DONE} from './constants'
 import {INIT_MONTHLY_VOLUMN, SET_MONTHLY_VOLUMN} from './constants'
 import {INIT_TOTAL_VOLUMN, SET_TOTAL_VOLUMN} from './constants'
+import { SET_CURRENT_STREAK, SET_BEST_STREAK } from './constants'
 
 export const setHabitInput = payload => ({
     type: SET_HABIT_INPUT,
@@ -107,5 +108,15 @@ export const initTotalVolumn = payload => ({
 })
 export const setTotalVolumn = payload => ({
     type: SET_TOTAL_VOLUMN,
+    payload
+})
+
+export const setCurrentStreak = payload => ({
+    type: SET_CURRENT_STREAK,
+    payload
+})
+
+export const setBestStreak = payload => ({
+    type: SET_BEST_STREAK,
     payload
 })

@@ -11,7 +11,8 @@ import {
     ContributionGraph,
     StackedBarChart
   } from "react-native-chart-kit";
-import {calculateDayDoneInMonth, calculateDayTotalDone, calculateMonthlyVolumn,calculateTotalVolumn} from '../Store/database';
+import {calculateDayDoneInMonth, calculateDayTotalDone, calculateMonthlyVolumn,
+    calculateTotalVolumn, calculateCurrentStreak, calculateBestStreak} from '../Store/database';
 
 const HabitOfADay = ({navigation,route}) =>{
     const date = new Date();
@@ -44,10 +45,16 @@ const HabitOfADay = ({navigation,route}) =>{
         fillShadowGradientFrom: 'black'
     };
 
-    calculateDayDoneInMonth(habit)
-    calculateDayTotalDone(habit)
-    calculateMonthlyVolumn(habit)
-    calculateTotalVolumn(habit)
+    calculateDayDoneInMonth(habit);
+    calculateDayTotalDone(habit);
+    calculateMonthlyVolumn(habit);
+    calculateTotalVolumn(habit);
+    calculateCurrentStreak(habit);
+    calculateBestStreak(habit);
+    const dailyAverage = Math.round(state.TotalVolumn / state.DayTotalDone * 100) / 100;
+    const overallRate = Math.round(dailyAverage / habit.goalNo * 100) / 100 ;
+    
+    
     return(
         <View style = {styles.container}>
             <View style = {styles.header}>
@@ -76,7 +83,7 @@ const HabitOfADay = ({navigation,route}) =>{
                                 </View>
                                 <View style={styles.iconRecords}>
                                     <FontAwesome5  name="layer-group" size={50} color="#a6acf0" />
-                                    <Text>0 Day</Text>
+                                    <Text>{state.CurrentStreak} Day</Text>
                                     <Text>Current Streak</Text>
                                 </View>
                                 <View style={styles.iconRecords}>
@@ -86,7 +93,7 @@ const HabitOfADay = ({navigation,route}) =>{
                                 </View>
                                 <View style={styles.iconRecords}>
                                     <FontAwesome5  name="cubes" size={50} color="#f8b2b3" />
-                                    <Text>0</Text>
+                                    <Text>{dailyAverage}</Text>
                                     <Text>Daily Avg.</Text>
                                 </View>
                             </View>
@@ -99,7 +106,7 @@ const HabitOfADay = ({navigation,route}) =>{
                                 </View>
                                 <View style={styles.iconRecords}>
                                     <FontAwesome5  name="medal" size={50} color="#f8b043" />
-                                    <Text>0 Day</Text>
+                                    <Text>{state.BestStreak} Day</Text>
                                     <Text>Best Streaks</Text>
                                 </View>
                                 <View style={styles.iconRecords}>
@@ -109,7 +116,7 @@ const HabitOfADay = ({navigation,route}) =>{
                                 </View>
                                 <View style={styles.iconRecords}>
                                     <FontAwesome5  name="percent" size={50} color="#fca133" />
-                                    <Text>0%</Text>
+                                    <Text>{overallRate}</Text>
                                     <Text>Overall Rate</Text>
                                 </View>
                                 

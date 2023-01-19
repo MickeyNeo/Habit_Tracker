@@ -20,3 +20,7 @@ export const INIT_MONTHLY_VOLUMN = 'init_monthly_volumn';
 export const SET_MONTHLY_VOLUMN = 'set_monthly_volumn';
 export const INIT_TOTAL_VOLUMN = 'init_total_volumn';
 export const SET_TOTAL_VOLUMN = 'set_total_volumn';
+export const SET_CURRENT_STREAK = 'set_current_streak';
+export const SET_BEST_STREAK = 'set_best_streak';
+
+
