@@ -340,7 +340,7 @@ const TabButton = ({navigation, habit, flag }) =>
                     flag: !value.flag
                 })
             }}
-            style={[styles.btnHabit, {backgroundColor: value.flag == 1 ? 'red' : '#F3ACB4'}]}
+            style={[styles.btnHabit, {backgroundColor: value.flag == 1 ? '#F8D1CC' : '#F3ACB4'}]}
             disabled = {value.flag == 1 ? true : false}
         >
             <Image source={ value.flag == 1 ? tick : value.image} style={{ width: 40, height: 40 }} />

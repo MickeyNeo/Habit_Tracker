@@ -15,14 +15,14 @@ const Home = ({ navigation }) => {
   const today = new Date();
   const [selectedDay, setSelectedDay] = useState('');
   const db = SQLite.openDatabase('Habit_tracker.db');
-  // refreshDatabase();
+  //refreshDatabase();
   // initDatabase();
   /* useEffect(() => {
     loadHabit(state.listHabit, dispatch);
     //loadSetting(state, dispatch);
   }, []); // 👈️ empty dependencies array */
   //refreshDatabase(state.listHabit, dispatch)
-  //loadHabit(state.listHabit, dispatch);
+  loadHabit(state.listHabit, dispatch);
   //loadSetting(state, dispatch);
   /* loadUnit(); */
   return (
@@ -55,7 +55,7 @@ const HabitZone = (values,navigation,date) => {
         {values.map((value) => {
           //console.log(value.id)
           let pickDay = value.frequency;
-          //pickDay = pickDay.split(',')
+          pickDay = pickDay.split(',')
           console.log(pickDay)
           //console.log(pickDay[5])
            //if (pickDay[day] == 1)
