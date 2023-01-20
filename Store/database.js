@@ -6,6 +6,7 @@ import { addHabitList, emptyHabitList } from './action';
 import {useStore,setDayDoneInMonth,setDayTotalDone,setMonthlyVolumn,setTotalVolumn, setCurrentStreak, setBestStreak} from '../Store'
 import {React, useState } from 'react';
 import { memoInit, habitInit, reminderInit, unitInit, tagInit, haveTagInit } from './init_data';
+
     
 const streakRetain = (date, followingDate) => {
     let y, m, d, fy, fm, fd;
@@ -367,38 +368,36 @@ const addSetting = (state) => {
     })
 }
 
-// Trên đt
-// const loadHabit = (listHabit, dispatch) => {
+const loadHabit_on_fone = (listHabit, dispatch) => {
+    console.log("Loading habit from db");
 
-//     console.log("Loading habit from db");
+    /* db.transaction(tx => {"DROP TABLE Habit"}); */
 
-//     /* db.transaction(tx => {"DROP TABLE Habit"}); */
+    db.transaction(tx => {
+        tx.executeSql('SELECT * FROM Habit', 
+        [],
+        (txObj, resultSet) => {
+            /* console.log("Loading data into habit list");
+            console.log("List habit state");
+            console.log(listHabit);
+            console.log("Database resultset");
+            console.log(resultSet.rows); */
+            if (listHabit.length < resultSet.rows.length) {
+                for (let i = 0; i < resultSet.rows.length; i++) {
+                    console.log("Database resultset", resultSet.rows)
+                    dispatch(addHabitList(resultSet.rows._array[i]));
+                } 
+            }
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
 
-//     db.transaction(tx => {
-//         tx.executeSql('SELECT * FROM Habit', 
-//         [],
-//         (txObj, resultSet) => {
-//             /* console.log("Loading data into habit list");
-//             console.log("List habit state");
-//             console.log(listHabit);
-//             console.log("Database resultset");
-//             console.log(resultSet.rows); */
-//             if (listHabit.length < resultSet.rows.length) {
-//                 for (let i = 0; i < resultSet.rows.length; i++) {
-//                     console.log("Database resultset", resultSet.rows)
-//                     dispatch(addHabitList(resultSet.rows._array[i]));
-//                 } 
-//             }
-//         },
-//         (txObj, error) => console.log(error)
-//         );
-//     })
-
-// }
+}
 
 
 //Trên web
-const loadHabit = (listHabit, dispatch) => {
+const loadHabit_on_web = (listHabit, dispatch) => {
 
     console.log("Loading habit from db");
 
@@ -717,6 +716,6 @@ const calculateBestStreak = (habit) => {
     })  
 }
 
-export {db, loadHabit, addHabit, refreshDatabase, initDatabase, loadUnit, deleteHabit, 
+export {db, loadHabit_on_fone,loadHabit_on_web , addHabit, refreshDatabase, initDatabase, loadUnit, deleteHabit, 
     updateHabit, loadSetting, calculateDayDoneInMonth, calculateMonthlyVolumn, 
     calculateTotalVolumn, calculateDayTotalDone, calculateCurrentStreak, calculateBestStreak}
