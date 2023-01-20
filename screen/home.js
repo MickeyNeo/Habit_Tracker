@@ -5,10 +5,11 @@ import * as Progress from 'react-native-progress';
 import { addHabitList, useStore } from '../Store'
 import * as SQLite from 'expo-sqlite';
 import { CalendarProvider, WeekCalendar } from "react-native-calendars";
-import { refreshDatabase, loadHabit, initDatabase, loadUnit, loadSetting } from '../Store/database';
+import { refreshDatabase, loadHabit_on_fone, loadHabit_on_web, initDatabase, loadUnit, loadSetting } from '../Store/database';
 import moment from 'moment';
 import { format} from 'date-fns';
 import { TextInput } from 'react-native-gesture-handler';
+import { Platform } from 'react-native';
 
 const Home = ({ navigation }) => {
   const [state,dispatch] = useStore();
@@ -22,7 +23,11 @@ const Home = ({ navigation }) => {
     //loadSetting(state, dispatch);
   }, []); // 👈️ empty dependencies array */
   //refreshDatabase(state.listHabit, dispatch)
-  loadHabit(state.listHabit, dispatch);
+  if (Platform.OS === 'ios' || Platform.OS === 'android') {
+    loadHabit_on_fone(state.listHabit, dispatch)
+  } else {
+    loadHabit_on_web(state.listHabit, dispatch)
+  }
   //loadSetting(state, dispatch);
   /* loadUnit(); */
   return (
