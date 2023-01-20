@@ -72,23 +72,26 @@ const AddHabit = ({navigation, route}) => {
     const theme = useContext(themeContext);
     const toggleSwitch = () => setState(prevState => ({ ...prevState, isEnabled: !prevState.isEnabled}));
     const habit = {
-        name: value.habitname,
-        note: value.note,
-        frequency: showday,
-        color: value.changecolor,
-        frequencyType: value.selectedItem,
-        timeRange: value.currentTabTime,
-        remainderMessage: value.mess,
-        showMemo: value.isEnabled,
-        chartType: 0,
-        habitStartDay: value.formattedDateStart,
-        habitEndDay: value.formattedDateEnd,
-        goalNo: value.goal,
-        goalPeriod: value.currentTabPeriod,
-        unitID: '',
-        icon: IconInfo[0],
-        iconFamily: IconInfo[1],
-    }
+      id: id,
+      name: value.habitname,
+      note: value.note,
+      frequency: showday.join(),
+      color: value.changecolor,
+      tagID: 0,
+      frequencyType: value.selectedItem,
+      timeRange: value.currentTabTime,
+      remainderMessage: value.mess,
+      showMemo: value.isEnabled,
+      chartType: 0,
+      habitStartDay: value.formattedDateStart,
+      habitEndDay: value.formattedDateEnd,
+      goalNo: value.goal,
+      goalPeriod: value.currentTabPeriod,
+      unitID: '',
+      icon: IconInfo[0],
+      iconFamily: IconInfo[1],
+      flag : flag,
+  }
     return (
         <View style={{ flex: 1, flexDirection : 'column'}}>
             <View style ={styles.Habit}>

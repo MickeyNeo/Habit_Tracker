@@ -22,7 +22,7 @@ const Home = ({ navigation }) => {
     //loadSetting(state, dispatch);
   }, []); // 👈️ empty dependencies array */
   
-  loadHabit(state.listHabit, dispatch);
+  //loadHabit(state.listHabit, dispatch);
   //loadSetting(state, dispatch);
   /* loadUnit(); */
   return (
@@ -97,8 +97,6 @@ const HabitZone = (values,navigation,date) => {
             <Image
               source={require('./Icon/rocket.png')}
               style={{ width: 100, height: 100,}} />
-            <Text style = {{color: 'black', fontFamily: 'monospace'}} >No Habits</Text>
-            <Text style = {{color: 'black', fontFamily: 'monospace'}} >Press '+' to add new habit </Text>
             </TouchableOpacity>
         </View>
       </View>
@@ -135,9 +133,6 @@ const styles = StyleSheet.create({
       disabledArrowColor: '#d9e1e8',
       monthTextColor: 'blue',
       indicatorColor: '#F3ACB4',
-      textDayFontFamily: 'monospace',
-      textMonthFontFamily: 'monospace',
-      textDayHeaderFontFamily: 'monospace',
       textDayFontWeight: '300',
       textMonthFontWeight: 'bold',
       textDayHeaderFontWeight: '300',

@@ -31,13 +31,13 @@ export default function VactionMode (params){
                                     </View>  
                                 </View>
                                 <ScrollView>
-                                    {state.stateHabitOfDay.map((value,index) =>( 
+                                    {/* {state.stateHabitOfDay.map((value,index) =>( 
                                         <TouchableOpacity key={index}>
                                         <View style={styles.iconTitle}>
                                             <FontAwesome5  name={value} size={27} color='crimson' />
                                         </View>
                                         </TouchableOpacity>
-                                    ))}
+                                    ))} */}
                                 </ScrollView>
                                 
                             </View>

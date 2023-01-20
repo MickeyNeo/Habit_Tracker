@@ -366,37 +366,7 @@ const addSetting = (state) => {
     })
 }
 
-// Trên đt
-// const loadHabit = (listHabit, dispatch) => {
-
-//     console.log("Loading habit from db");
-
-//     /* db.transaction(tx => {"DROP TABLE Habit"}); */
-
-//     db.transaction(tx => {
-//         tx.executeSql('SELECT * FROM Habit', 
-//         [],
-//         (txObj, resultSet) => {
-//             /* console.log("Loading data into habit list");
-//             console.log("List habit state");
-//             console.log(listHabit);
-//             console.log("Database resultset");
-//             console.log(resultSet.rows); */
-//             if (listHabit.length < resultSet.rows.length) {
-//                 for (let i = 0; i < resultSet.rows.length; i++) {
-//                     console.log("Database resultset", resultSet.rows)
-//                     dispatch(addHabitList(resultSet.rows._array[i]));
-//                 } 
-//             }
-//         },
-//         (txObj, error) => console.log(error)
-//         );
-//     })
-
-// }
-
-
-//Trên web
+//Trên đt
 const loadHabit = (listHabit, dispatch) => {
 
     console.log("Loading habit from db");
@@ -415,7 +385,7 @@ const loadHabit = (listHabit, dispatch) => {
             if (listHabit.length < resultSet.rows.length) {
                 for (let i = 0; i < resultSet.rows.length; i++) {
                     console.log("Database resultset", resultSet.rows)
-                    dispatch(addHabitList(resultSet.rows[i]));
+                    dispatch(addHabitList(resultSet.rows._array[i]));
                 } 
             }
         },
@@ -424,6 +394,36 @@ const loadHabit = (listHabit, dispatch) => {
     })
 
 }
+
+
+// //Trên web
+// const loadHabit = (listHabit, dispatch) => {
+
+//     console.log("Loading habit from db");
+
+//     /* db.transaction(tx => {"DROP TABLE Habit"}); */
+
+//     db.transaction(tx => {
+//         tx.executeSql('SELECT * FROM Habit', 
+//         [],
+//         (txObj, resultSet) => {
+//             /* console.log("Loading data into habit list");
+//             console.log("List habit state");
+//             console.log(listHabit);
+//             console.log("Database resultset");
+//             console.log(resultSet.rows); */
+//             if (listHabit.length < resultSet.rows.length) {
+//                 for (let i = 0; i < resultSet.rows.length; i++) {
+//                     console.log("Database resultset", resultSet.rows)
+//                     dispatch(addHabitList(resultSet.rows[i]));
+//                 } 
+//             }
+//         },
+//         (txObj, error) => console.log(error)
+//         );
+//     })
+
+// }
 
 const loadSetting = (state, dispatch) => {
 
