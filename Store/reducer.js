@@ -18,6 +18,7 @@ import theme from '../screen/styles/theme'
 
 const globalState = {
     habit: {
+        id : '',
         name: 'Habit',
         note: '',
         frequency: 'Daily',
@@ -34,6 +35,7 @@ const globalState = {
         unitID: 0,
         icon:'',
         iconFamily: '',
+        flag: 0,
     },
     listHabit: [],
     memo: {

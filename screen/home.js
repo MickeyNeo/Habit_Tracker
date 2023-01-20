@@ -5,24 +5,30 @@ import * as Progress from 'react-native-progress';
 import { addHabitList, useStore } from '../Store'
 import * as SQLite from 'expo-sqlite';
 import { CalendarProvider, WeekCalendar } from "react-native-calendars";
-import { refreshDatabase, loadHabit, initDatabase, loadUnit, loadSetting } from '../Store/database';
+import { refreshDatabase, loadHabit_on_fone, loadHabit_on_web, initDatabase, loadUnit, loadSetting } from '../Store/database';
 import moment from 'moment';
 import { format} from 'date-fns';
 import { TextInput } from 'react-native-gesture-handler';
+import { Platform } from 'react-native';
 
 const Home = ({ navigation }) => {
   const [state,dispatch] = useStore();
   const today = new Date();
   const [selectedDay, setSelectedDay] = useState('');
   const db = SQLite.openDatabase('Habit_tracker.db');
-  // refreshDatabase();
+  //refreshDatabase();
   // initDatabase();
   /* useEffect(() => {
     loadHabit(state.listHabit, dispatch);
     //loadSetting(state, dispatch);
   }, []); // 👈️ empty dependencies array */
-  
-  //loadHabit(state.listHabit, dispatch);
+
+  //refreshDatabase(state.listHabit, dispatch)
+  if (Platform.OS === 'ios' || Platform.OS === 'android') {
+    loadHabit_on_fone(state.listHabit, dispatch)
+  } else {
+    loadHabit_on_web(state.listHabit, dispatch)
+  }
   //loadSetting(state, dispatch);
   /* loadUnit(); */
   return (
@@ -53,8 +59,10 @@ const HabitZone = (values,navigation,date) => {
     <View>
       <View style = {{flexDirection: 'column', padding: 10, justifyContent: 'space-evenly'}}>
         {values.map((value) => {
+          //console.log(value.id)
           let pickDay = value.frequency;
           pickDay = pickDay.split(',')
+          console.log(pickDay)
           //console.log(pickDay[5])
            //if (pickDay[day] == 1)
           for (let i = 0; i < pickDay.length; i++) {
@@ -97,6 +105,9 @@ const HabitZone = (values,navigation,date) => {
             <Image
               source={require('./Icon/rocket.png')}
               style={{ width: 100, height: 100,}} />
+
+            <Text style = {{color: 'black' }} >No Habits</Text>
+            <Text style = {{color: 'black' }} >Press '+' to add new habit </Text>
             </TouchableOpacity>
         </View>
       </View>
