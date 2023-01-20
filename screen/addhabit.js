@@ -74,7 +74,7 @@ const AddHabit = ({navigation, route}) => {
         id: id,
         name: value.habitname,
         note: value.note,
-        frequency: showday,
+        frequency: showday.join(),
         color: value.changecolor,
         tagID: 0,
         frequencyType: value.selectedItem,
