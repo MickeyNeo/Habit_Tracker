@@ -22,6 +22,7 @@ const Home = ({ navigation }) => {
     loadHabit(state.listHabit, dispatch);
     //loadSetting(state, dispatch);
   }, []); // 👈️ empty dependencies array */
+
   //refreshDatabase(state.listHabit, dispatch)
   if (Platform.OS === 'ios' || Platform.OS === 'android') {
     loadHabit_on_fone(state.listHabit, dispatch)
@@ -104,6 +105,7 @@ const HabitZone = (values,navigation,date) => {
             <Image
               source={require('./Icon/rocket.png')}
               style={{ width: 100, height: 100,}} />
+
             <Text style = {{color: 'black' }} >No Habits</Text>
             <Text style = {{color: 'black' }} >Press '+' to add new habit </Text>
             </TouchableOpacity>

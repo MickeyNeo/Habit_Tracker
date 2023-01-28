@@ -8,10 +8,10 @@ const valueDBS =['Week only','Day + Week','Date only'];
 export default function Theme (){
     const [state, dispatch] =useStore()
     const {currentTheme} =state
-    console.log(currentTheme.id)
+    //console.log(currentTheme.id)
     const [HBSize, setHBSize] =useState('Normal')
     const [DBS, setDBS] =useState('Normal')
-    const flag = (currentTheme.id =='light')? false:true
+    const flag = (currentTheme.id =='light')? true:false
     const [isEnabledSwitch, setIsEnabledSwitch] =useState(flag)
     const toggleSwitch = () => {setIsEnabledSwitch(previousState => !previousState),dispatch(setTheme())};
     const [HBS,setHBS] = useState('Simple')

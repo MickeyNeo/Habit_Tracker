@@ -91,6 +91,17 @@ const AddHabit = ({navigation, route}) => {
         iconFamily: IconInfo[1],
         flag : flag,
     }
+    const [iTag, setiTag] = useState([])
+    const [newTag, setNewTag] = useState('');
+    const handleAddTag = () => {
+      setiTag([...iTag, newTag]);
+      setNewTag('');
+    };
+    const handleRemoveTag = (index) => {
+      const newList = [...iTag];
+      newList.splice(index, 1);
+      setiTag(newList);
+    };
     return (
         <View style={{ flex: 1, flexDirection : 'column'}}>
             <View style ={styles.Habit}>
@@ -151,7 +162,23 @@ const AddHabit = ({navigation, route}) => {
 
                     <View style = {{flexDirection: 'column', padding: 10}}>
                             <Text style ={{fontWeight: 'bold', color: theme.color }}>Tag</Text>
-                            <Text>{value.tag}</Text>
+                            <View style={{flexDirection:'row'}}>  
+                              <Text style={[styles.boder,{backgroundColor:value.changecolor}]}>{value.tag}</Text>
+                              {iTag.map((todo, index) => (
+                                <View key={index}>
+                                  <Text>{todo}</Text>
+                                  <Button
+                                    title="Remove"
+                                    onPress={() => handleRemoveTag(index)}
+                                  />
+                                </View>
+                              ))}
+                              <TouchableOpacity onPress={handleAddTag}>
+                                <Text style={[styles.boder, {backgroundColor:'gray'}]}>+</Text>
+                              </TouchableOpacity>
+                              
+                            </View>
+                           
                     </View>
 
                     <View style = {{flexDirection: 'column',padding: 10}}>
@@ -534,6 +561,13 @@ const styles = StyleSheet.create({
         flexDirection :'row',
         justifyContent : 'space-evenly',
         padding: 10,
+    },
+    boder:{
+      width: 50,
+      height: 17,
+      borderRadius: 30,
+      //padding: 10,
+      textAlign: 'center',
     }
 });
 export default AddHabit;

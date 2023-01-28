@@ -114,7 +114,7 @@ function reducer (state , action) {
                 listHabit: []
             }
         case SET_THEME:
-            const newThemeKey = state.currentTheme.id === "Dark" ? "Light" : "Dark";
+            const newThemeKey = state.currentTheme.id === "dark" ? "light" : "dark"
             return {
                 ...state,
                 currentTheme:theme[newThemeKey]
