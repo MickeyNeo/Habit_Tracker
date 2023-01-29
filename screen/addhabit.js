@@ -93,6 +93,7 @@ const AddHabit = ({navigation, route}) => {
     }
     const [iTag, setiTag] = useState([])
     const [newTag, setNewTag] = useState('');
+    const [showTextInput, setShowTextInput] = useState(false)
     const handleAddTag = () => {
       setiTag([...iTag, newTag]);
       setNewTag('');
@@ -164,18 +165,22 @@ const AddHabit = ({navigation, route}) => {
                             <Text style ={{fontWeight: 'bold', color: theme.color }}>Tag</Text>
                             <View style={{flexDirection:'row'}}>  
                               <Text style={[styles.boder,{backgroundColor:value.changecolor}]}>{value.tag}</Text>
-                              {iTag.map((todo, index) => (
-                                <View key={index}>
-                                  <Text>{todo}</Text>
-                                  <Button
-                                    title="Remove"
-                                    onPress={() => handleRemoveTag(index)}
-                                  />
-                                </View>
-                              ))}
-                              <TouchableOpacity onPress={handleAddTag}>
-                                <Text style={[styles.boder, {backgroundColor:'gray'}]}>+</Text>
-                              </TouchableOpacity>
+                              <ScrollView horizontal={true}>
+                                {iTag.map((todo, index) => (
+                                  <View key={index}>
+                                    <Text>{todo}</Text>
+                                    <Button
+                                      title="Remove"
+                                      onPress={() => handleRemoveTag(index)}
+                                    />
+                                  </View>
+                                ))}
+                                <TouchableOpacity onPress={handleAddTag}>
+                                  <Text style={[styles.boder, {backgroundColor:'gray'}]}>+</Text>
+                                  
+                                </TouchableOpacity>
+                              </ScrollView>
+                              
                               
                             </View>
                            
