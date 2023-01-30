@@ -13,15 +13,18 @@ import DailyNotification from './settingsScreen/DailyNotification';
 import TabBar from './settingsScreen/TabBar';
 import VactionMode from './settingsScreen/VactionMode';
 import TagManager from './settingsScreen/TagManager';
-
+import { useStore } from '../Store';
 
 export default function Settings({navigation}){
+    const [state, dispatch] =useStore()
+    const {currentTheme} =state
     const [currentTab, setCurrentTab] = useState('');
     // const [isEnabled, setIsEnabled] = useState(false);
     const [isModalVisible, setModalVisible] = useState(false);
-    
+    const [inputValue, setInputValue] = useState('No Name');
+
     return(
-        <SafeAreaView style={style.container}> 
+        <SafeAreaView style={[style.container,{backgroundColor: currentTheme.backgroundColor}]}> 
             <ScrollView>
                 <View style={{ justifyContent: 'flex-start', padding: 15, flexDirection: "row" }}>
                     <Image 
@@ -33,24 +36,26 @@ export default function Settings({navigation}){
                         }}
                     ></Image>
                     <TextInput 
-                        style={style.nameText}
-                        placeholder="No Name"
+                        style={[style.nameText,{color: currentTheme.color}]}
+                        value={inputValue}
+                        onChangeText={text => {setInputValue(text)}}
                         
                     ></TextInput>
-                    <FontAwesome5 name="pen" size={10} color="black" style={{marginTop: 32, marginLeft: 5}} />
+                    <FontAwesome5  name="pen" size={10} style={{marginTop: 32, marginLeft: 5,color: currentTheme.color}} />
                 </View>
                 
                 {tabButton(navigation,"Language")}
                 {tabButton(navigation,"Theme")}
                 {tabButton(navigation,"Tab Bar")}
-                {line()}
+                <Separator />
                 {tabButton(navigation,"Habit Manager")}
                 {tabButton(navigation,"Tag Manager")}
                 {tabButton(navigation,"Daily Notification",1)}
                 {tabButton(navigation,"Safety Lock",1)}
                 {tabButton(navigation,"Vacation Mode",1)}
                 {tabButton(navigation,"Sound",1)}
-                {line()}
+                
+                <Separator />
                 
         
 
@@ -71,7 +76,8 @@ const tabButton = (navigation,name, nb=0)=>{
         setIsEnabledSwitch(previousState => !previousState);
         
     }
-        
+    const [state, dispatch] =useStore()
+    const {currentTheme} =state  
     if (nb==0)
         return(
                 <View>
@@ -103,9 +109,9 @@ const tabButton = (navigation,name, nb=0)=>{
                                 marginTop: 20,
                                 marginLeft: 10,
                                 fontSize: 20,
-                                color: 'black'
+                                color: currentTheme.color
                             }}>{name}</Text>
-                                {tail()}
+                                {tail(currentTheme.color)}
                     </TouchableOpacity>
                     {isEnabled && name == 'Language' && <Language 
                         myIsmodalVisible = {isEnabled}
@@ -130,7 +136,7 @@ const tabButton = (navigation,name, nb=0)=>{
                         marginTop: 20,
                         marginLeft: 10,
                         fontSize: 20,
-                        color: 'black'
+                        color: currentTheme.color
                     }}>{name}</Text>
                 
                     <Switch 
@@ -154,16 +160,17 @@ const tabButton = (navigation,name, nb=0)=>{
         );
        
 }
-const line = () =>{
+const Separator = () => <View style={style.separator} />;
+const line = () =>{ 
     return(
-        <View style={{flexDirection: 'row',alignItems: 'center', marginLeft:'5%', marginRight:'5%', marginTop: 20,}}> 
+        <View style={{flexDirection: 'row',alignItems: 'center', marginLeft:'5%', marginRight:'5%', marginTop: 20}}> 
                 <View style ={{flex: 1,height:1,borderWidth: 0.3}}></View>
         </View>
     )
 }
-const tail =()=>{
+const tail =(color)=>{
     return(
-        <Text style={{marginTop: 20,AlignItems: 'flex-end', marginRight:5}}>{'>'}</Text>
+        <Text style={{marginTop: 20,AlignItems: 'flex-end', marginRight:5,color:color}}>{'>'}</Text>
     )
 }
 const style = StyleSheet.create({
@@ -199,5 +206,11 @@ const style = StyleSheet.create({
         borderRadius: 30,
         borderWidth: 1,
         justifyContent: 'center'
-    }
+    },
+    separator: {
+        marginVertical: 8,
+        borderBottomColor: '#737373',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        marginLeft:'5%', marginRight:'5%', marginTop: 20
+      },
 })

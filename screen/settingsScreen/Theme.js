@@ -27,7 +27,7 @@ export default function Theme (){
                 
                 <TouchableOpacity onPress={handleHBS}>
                     <View style={{flexDirection:'row'}}>
-                        <Text style={[styles.text,,{color: currentTheme.color}]}>Habit Bar Style</Text>
+                        <Text style={[styles.text,{color: currentTheme.color}]}>Habit Bar Style</Text>
                         <Text style={[styles.textCheck,{color: currentTheme.color}]}>{HBS}</Text>                        
                     </View>
                 </TouchableOpacity>

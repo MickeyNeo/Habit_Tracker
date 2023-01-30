@@ -61,7 +61,7 @@ const globalState = {
         tagID: 1
     },
     stateLanguage:"English",
-    currentTheme: theme.dark,
+    currentTheme: theme.light,
     stateHabitStat: true,
     dateBarStyle: 'Date',
     habitBarStyle: 'Small',

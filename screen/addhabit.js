@@ -13,6 +13,7 @@ import SelectDropdown from 'react-native-select-dropdown';
 import SelectFreq from './frequency/selectday';
 import SelectUnit from './unit/unit';
 import moment from 'moment';
+import Modal from "react-native-modal";
 
 
 // import addName from ./''
@@ -91,9 +92,11 @@ const AddHabit = ({navigation, route}) => {
         iconFamily: IconInfo[1],
         flag : flag,
     }
+    //Tag
     const [iTag, setiTag] = useState([])
     const [newTag, setNewTag] = useState('');
-    const [showTextInput, setShowTextInput] = useState(false)
+    const [isModalVisible, setModalVisible] = useState(false);
+    const [inputValue, setInputValue] = useState('');
     const handleAddTag = () => {
       setiTag([...iTag, newTag]);
       setNewTag('');
@@ -160,29 +163,57 @@ const AddHabit = ({navigation, route}) => {
                             </View>
                         </View>
                     </View>
-
+                    {/* Tag */}
                     <View style = {{flexDirection: 'column', padding: 10}}>
                             <Text style ={{fontWeight: 'bold', color: theme.color }}>Tag</Text>
-                            <View style={{flexDirection:'row'}}>  
+                            
+                            <View style={{flexDirection:'row',padding: 10,justifyContent: 'space-between' }}>  
                               <Text style={[styles.boder,{backgroundColor:value.changecolor}]}>{value.tag}</Text>
-                              <ScrollView horizontal={true}>
+                              <ScrollView style={{marginLeft:30}} horizontal={true}>
                                 {iTag.map((todo, index) => (
                                   <View key={index}>
-                                    <Text>{todo}</Text>
+                                    <Text style={[styles.boder,{backgroundColor:value.changecolor}]}>{todo}</Text>
                                     <Button
+                                
                                       title="Remove"
                                       onPress={() => handleRemoveTag(index)}
                                     />
                                   </View>
                                 ))}
-                                <TouchableOpacity onPress={handleAddTag}>
+                                {/* onPress={handleAddTag} */}
+                                <TouchableOpacity 
+                                  onPress={() => setModalVisible(true)}
+                                  //style={styles.button}
+                                >
                                   <Text style={[styles.boder, {backgroundColor:'gray'}]}>+</Text>
-                                  
                                 </TouchableOpacity>
+                                <Modal
+                                  isVisible={isModalVisible}
+                                  onBackdropPress={() => {setModalVisible(false); if (newTag!='') handleAddTag()}}
+                                >
+                                  <View style={styles.modalContainer}>
+                                    <TextInput
+                                      style={styles.input}
+                                      placeholder="Enter text here"
+                                      value={newTag}
+                                      onChangeText={text => {setNewTag(text)}}
+                                      
+                                      
+                                    />
+                                    <TouchableOpacity
+                                      onPress={() => {setModalVisible(false); if (newTag!='') handleAddTag()}}
+                                      style={[styles.button,{backgroundColor:value.changecolor}]}
+                                    >
+                                      <Text style={styles.text}>Xong</Text>
+                                    </TouchableOpacity>
+                                  </View>
+
+                                </Modal>
                               </ScrollView>
                               
                               
                             </View>
+                            
                            
                     </View>
 
@@ -570,10 +601,33 @@ const styles = StyleSheet.create({
     boder:{
       width: 50,
       height: 17,
-      borderRadius: 30,
-      //padding: 10,
+      borderRadius: 20,
       textAlign: 'center',
-    }
+    },
+    button: {
+      //backgroundColor: 'blue',
+      padding: 10,
+      borderRadius: 5,
+      marginTop: 20,
+    },
+    text: {
+      color: 'white',
+      fontWeight: 'bold',
+    },
+    modalContainer: {
+      backgroundColor: 'white',
+      padding: 20,
+      borderRadius: 5,
+      alignItems: 'center',
+    },
+    input: {
+      width: '80%',
+      height: 40,
+      borderWidth: 1,
+      borderColor: 'gray',
+      padding: 10,
+      marginTop: 20,
+    },
 });
 export default AddHabit;
 

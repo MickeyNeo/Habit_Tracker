@@ -8,6 +8,7 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Foundation,Octicons,Entypo } from '@expo/vector-icons'; 
+import Icons from "./icon_color/Icon";
 import {useStore,initDayDoneInMonth,initDayTotalDone, initMonthlyVolumn,initTotalVolumn} from '../Store'
 import {
     LineChart,
@@ -61,7 +62,8 @@ export default function Statistic({navigation}){
                                     habit: habit,
                                 })
                             }}>
-                            <FontAwesome5 style={style.iconTitle} name={habit.name.toLowerCase()} size={27} color='crimson' />
+                            {/* <FontAwesome5 style={style.iconTitle} name={habit.name.toLowerCase()} size={27} color='crimson' /> */}
+                            <Icons style={style.iconTitle} type={habit.iconFamily} name={habit.icon} size={27} color='crimson' />
                         </TouchableOpacity>
                     ))}
                 </ScrollView>
