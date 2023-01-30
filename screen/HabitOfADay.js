@@ -2,6 +2,7 @@ import React, { useState, Component, useContext,useReducer } from "react";
 import { View,Dimensions , Button, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Image, TextInput, Alert, } from "react-native";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import Icons from "./icon_color/Icon";
 import {useStore} from '../Store';
 import {
     LineChart,
@@ -60,7 +61,8 @@ const HabitOfADay = ({navigation,route}) =>{
     return(
         <View style = {styles.container}>
             <View style = {styles.header}>
-                <FontAwesome5 style={styles.iconTitle} name={habit.name.toLowerCase()} size={27} color='crimson' />
+                {/* <FontAwesome5 style={styles.iconTitle} name={habit.name.toLowerCase()} size={27} color='crimson' /> */}
+                <Icons style={styles.iconTitle} type={habit.iconFamily} name={habit.icon} size={27} color='crimson' />
                 <Text style ={{marginTop: 10, fontSize: 20, fontWeight : "bold"}}>{habit.name}</Text>
             </View>
             <View style={{flex: 1,alignItems: 'stretch'}}>
