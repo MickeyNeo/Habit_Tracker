@@ -9,7 +9,8 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Foundation,Octicons,Entypo } from '@expo/vector-icons'; 
 import Icons from "./icon_color/Icon";
-import {useStore,initDayDoneInMonth,initDayTotalDone, initMonthlyVolumn,initTotalVolumn} from '../Store'
+import {useStore,setUnit, initDayDoneInMonth,initDayTotalDone, initMonthlyVolumn,initTotalVolumn, initDataOfCurWeek} from '../Store'
+
 import {
     LineChart,
     BarChart,
@@ -58,6 +59,9 @@ export default function Statistic({navigation}){
                                 dispatch(initDayTotalDone(0))
                                 dispatch(initMonthlyVolumn(0))
                                 dispatch(initTotalVolumn(0))
+                                dispatch(initDataOfCurWeek([]))
+                                
+
                                 navigation.navigate('HabitOfADay', {
                                     habit: habit,
                                 })

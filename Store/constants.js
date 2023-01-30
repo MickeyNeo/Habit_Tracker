@@ -22,5 +22,9 @@ export const INIT_TOTAL_VOLUMN = 'init_total_volumn';
 export const SET_TOTAL_VOLUMN = 'set_total_volumn';
 export const SET_CURRENT_STREAK = 'set_current_streak';
 export const SET_BEST_STREAK = 'set_best_streak';
+export const SET_UNIT = 'set_unit';
+export const SET_UNIT_HOAD = 'set_unit_hoad';
+export const SET_DATA_OF_CURRENT_WEEK = 'set_data_of_current_week';
+export const INIT_DATA_OF_CURRENT_WEEK = 'init_data_of_current_week';
 
 
