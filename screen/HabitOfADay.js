@@ -49,12 +49,12 @@ const HabitOfADay = ({navigation,route}) =>{
     };
 
     getDataOfCurWeek(habit)
-    // calculateDayDoneInMonth(habit);
-    // calculateDayTotalDone(habit);
-    // calculateMonthlyVolumn(habit);
-    // calculateTotalVolumn(habit);
-    // calculateCurrentStreak(habit);
-    // calculateBestStreak(habit);
+    calculateDayDoneInMonth(habit);
+    calculateDayTotalDone(habit);
+    calculateMonthlyVolumn(habit);
+    calculateTotalVolumn(habit);
+    calculateCurrentStreak(habit);
+    calculateBestStreak(habit);
     const dailyAverage = Math.round(state.TotalVolumn / state.DayTotalDone * 100) / 100;
     const overallRate = Math.round(dailyAverage / habit.goalNo * 100) / 100 ;
     return(
