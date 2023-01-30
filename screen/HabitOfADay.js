@@ -12,23 +12,26 @@ import {
     StackedBarChart
   } from "react-native-chart-kit";
 import {calculateDayDoneInMonth, calculateDayTotalDone, calculateMonthlyVolumn,
-    calculateTotalVolumn, calculateCurrentStreak, calculateBestStreak} from '../Store/database';
+    calculateTotalVolumn, calculateCurrentStreak, calculateBestStreak, 
+    getDataOfCurWeek, getUnitNameforHOAD} from '../Store/database';
 
 const HabitOfADay = ({navigation,route}) =>{
+    const {habit} = route.params;
+    getUnitNameforHOAD(habit)
     const date = new Date();
     const currentMonth = date.getMonth() + 1
     const nameOfMonth = date.toLocaleString(
         'default',
         {month: 'long'}
     );
-    const {habit} = route.params;
+    
     console.log(habit)
     const[state, dispatch] = useStore()
     const data = {
         labels: ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"],
         datasets: [
           {
-            data: [20, 30, 40, 10, 5, 30,45]
+            data: state.DataOfCurWeek
           }
         ],
         color :["black"]
@@ -45,16 +48,15 @@ const HabitOfADay = ({navigation,route}) =>{
         fillShadowGradientFrom: 'black'
     };
 
-    calculateDayDoneInMonth(habit);
-    calculateDayTotalDone(habit);
-    calculateMonthlyVolumn(habit);
-    calculateTotalVolumn(habit);
-    calculateCurrentStreak(habit);
-    calculateBestStreak(habit);
+    getDataOfCurWeek(habit)
+    // calculateDayDoneInMonth(habit);
+    // calculateDayTotalDone(habit);
+    // calculateMonthlyVolumn(habit);
+    // calculateTotalVolumn(habit);
+    // calculateCurrentStreak(habit);
+    // calculateBestStreak(habit);
     const dailyAverage = Math.round(state.TotalVolumn / state.DayTotalDone * 100) / 100;
     const overallRate = Math.round(dailyAverage / habit.goalNo * 100) / 100 ;
-    
-    
     return(
         <View style = {styles.container}>
             <View style = {styles.header}>
@@ -144,7 +146,7 @@ const HabitOfADay = ({navigation,route}) =>{
                                 data={data}
                                 width= {Dimensions.get('window').width -40}
                                 height={220}
-                                yAxisSuffix="mins"
+                                yAxisSuffix= {state.unitHOAD}
                                 chartConfig={chartConfig}
                                 fillShadowGradientFrom =  'black'
                                 

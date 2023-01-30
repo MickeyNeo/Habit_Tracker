@@ -27,3 +27,11 @@ export {initTotalVolumn} from './action'
 export {setTotalVolumn} from './action'
 
 export {setCurrentStreak, setBestStreak} from './action'
+
+export {setUnit} from './action'
+export {setUnitHOAD} from './action'
+
+export {setDataOfCurWeek} from './action'
+export {initDataOfCurWeek} from './action'
+
+

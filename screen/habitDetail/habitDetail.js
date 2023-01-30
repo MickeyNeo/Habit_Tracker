@@ -3,7 +3,7 @@ import { View, Dimensions, Text, StyleSheet, TouchableOpacity, ScrollView, SafeA
 import {
     ProgressChart,
   } from "react-native-chart-kit";
-import {useStore} from '../../Store';
+import {useStore,setUnit} from '../../Store';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
 // import hinh 
@@ -20,9 +20,10 @@ import play from '../Icon/play.png';
 import replay from '../Icon/replay.png';
 const HabitDetail = ({navigation,route}) => {
     const [onClock, setOnClock] = useState(false);
-    const {habit} = route.params;
-    const [showCountdown, setshowCountdown] = useState(false)
+    const {habit, checkShow} = route.params;
     const[state, dispatch] = useStore()
+
+    const [showCountdown, setshowCountdown] = useState(checkShow)
 
     const data = {
         label: ['Progress'],
@@ -39,7 +40,8 @@ const HabitDetail = ({navigation,route}) => {
         barPercentage: 0.5,
         useShadowColorFromDataset: false // optional
     };
-    // if(habit.)
+    
+    
     console.log(habit)
     return (
         <View style={styles.container}>

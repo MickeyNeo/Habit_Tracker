@@ -10,13 +10,14 @@ import moment from 'moment';
 import { format} from 'date-fns';
 import { TextInput } from 'react-native-gesture-handler';
 import { Platform } from 'react-native';
+import { getUnitName } from '../Store/database';
 
 const Home = ({ navigation }) => {
   const [state,dispatch] = useStore();
   const today = new Date();
   const [selectedDay, setSelectedDay] = useState('');
   const db = SQLite.openDatabase('Habit_tracker.db');
-  //refreshDatabase();
+  // refreshDatabase();
   // initDatabase();
   /* useEffect(() => {
     loadHabit(state.listHabit, dispatch);
@@ -54,6 +55,7 @@ const HabitZone = (values,navigation,date) => {
     let day = moment(date.dateString).format('ddd')
     day = day.toUpperCase()
     //console.log(day)
+    const [state,dispatch] = useStore();
     if (values != '')
     return (
     <View>
@@ -67,11 +69,18 @@ const HabitZone = (values,navigation,date) => {
            //if (pickDay[day] == 1)
           for (let i = 0; i < pickDay.length; i++) {
             if (pickDay[i] == day ) {
+              var checkShow = null 
+              getUnitName(value)
+              if (state.unit == 'sec' || state.unit == 'min' || state.unit == 'hr' ){
+                  checkShow = 1
+              }else{
+                  checkShow = 0
+              }
               return (
                 <TouchableOpacity 
                   style={{ padding: 5 }} 
                   key={value.name} 
-                  onPress={() => navigation.navigate('HabitDetail', {habit: value})}>
+                  onPress={() => navigation.navigate('HabitDetail', {habit: value, checkShow: checkShow})}>
                   <Progress.Bar progress={0.3} width={null} height={35} color={value.color}>
                   <View style={{
                     flex: 1,

@@ -1,11 +1,11 @@
 export const habitInit = "INSERT INTO Habit (name, note, frequency, color, frequencyType, timeRange,\
     reminderMessage, showMemo, chartType, habitStartDate, habitEndDate, goalNo, goalPeriod, unitID, icon, iconFamily, id) VALUES\
     ('Dancing', 'Nothing to note', 'MON,TUE,THU', '#FFAEAE', 'Week', 'Evening', 'Remember to dance', '1', '0', '2021-01-01', NULL,\
-    '30', 'Week', 'min', 'walking', 'FontAwesome5','dc'),\
+    '30', 'Week', '2', 'walking', 'FontAwesome5','dc'),\
     ('Meditate', 'Nothing to note', 'Daily', '#FFAEAE', 'Day', 'Morning', 'Remember to meditate', '0', '0', '2021-01-01', NULL,\
-    '10', 'Day', 'min', 'walking', 'FontAwesome5','md'),\
+    '10', 'Day', '2', 'walking', 'FontAwesome5','md'),\
     ('Run', 'Nothing to note', 'SUN', '#FFAEAE', 'Week', 'Morning', 'Remember to run', '1', '0', '2021-01-01', NULL,\
-    '2', 'Week', 'm', 'walking', 'FontAwesome5','rn')"
+    '2', 'Week', '9', 'walking', 'FontAwesome5','rn')"
 
 export const memoInit = "INSERT INTO Memo (habitName, date, content, progress) VALUES\
 ('Meditate', '2022-07-24', 'Feel so good', '2'),\
@@ -307,7 +307,15 @@ export const memoInit = "INSERT INTO Memo (habitName, date, content, progress) V
 ('Meditate', '2022-10-10', 'More to go', '2'),\
 ('Meditate', '2021-04-20', 'So happy', '4'),\
 ('Run', '2022-04-19', 'Feel so good', '2'),\
-('Meditate', '2023-01-08', 'Lets go', '9')"
+('Meditate', '2023-01-08', 'Lets go', '9'),\
+('Dancing', '2023-01-30', 'Im getting better everyday', '16'),\
+('Dancing', '2023-01-31', 'Im getting better everyday', '50'),\
+('Dancing', '2023-02-01', 'Im getting better everyday', '25'),\
+('Dancing', '2023-02-02', 'Im getting better everyday', '16'),\
+('Dancing', '2023-02-03', 'Im getting better everyday', '2'),\
+('Dancing', '2023-02-04', 'Im getting better everyday', '7'),\
+('Dancing', '2023-02-05', 'Im getting better everyday', '70')"
+
 
 export const reminderInit = "INSERT INTO Reminder (habitName, time) VALUES\
     ('Meditate', '20-31-20.000'),\
