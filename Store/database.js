@@ -3,7 +3,9 @@ import { useContext } from 'react';
 import Context from './Context';
 import reducer, { globalState } from './reducer';
 import { addHabitList, emptyHabitList } from './action';
-import {useStore,setDayDoneInMonth,setDayTotalDone,setMonthlyVolumn,setTotalVolumn, setCurrentStreak, setBestStreak} from '../Store'
+import {useStore,setDayDoneInMonth,setDayTotalDone,setMonthlyVolumn,
+    setTotalVolumn, setCurrentStreak, setBestStreak, setUnit,setUnitHOAD,
+    setDataOfCurWeek} from '../Store'
 import {React, useState } from 'react';
 import { memoInit, habitInit, reminderInit, unitInit, tagInit, haveTagInit } from './init_data';
 
@@ -593,7 +595,8 @@ const calculateMonthlyVolumn = (habit) => {
     db.transaction(tx => {
         tx.executeSql("SELECT SUM(progress) \
         FROM Memo\
-        WHERE habitName = ? AND strftime('%m',date) = strftime('%m','now')", 
+        WHERE habitName = ? AND strftime('%m',date) = strftime('%m','now')\
+        AND strftime('%Y',date) = strftime('%Y','now')", 
         [habit.name],
         (txObj, resultSet) => {
             console.log("Calculated Monthly Volumn");
@@ -632,7 +635,8 @@ const calculateDayDoneInMonth = (habit) => {
     db.transaction(function(tx) {
             tx.executeSql("SELECT COUNT(*) \
                 FROM Memo\
-                WHERE habitName = ? AND progress != 0 AND strftime('%m', date) = strftime('%m', 'now')", 
+                WHERE habitName = ? AND progress != 0 AND strftime('%m', date) = strftime('%m','now')\
+                AND strftime('%Y',date) = strftime('%Y','now')", 
                 [habit.name],
                 (txObj, resultSet) => {
                     console.log("Calculated Day Done in month");
@@ -643,7 +647,6 @@ const calculateDayDoneInMonth = (habit) => {
                 },
                 (txObj, error) => console.log(error)
                 );
-            
         })
 }
 
@@ -716,6 +719,80 @@ const calculateBestStreak = (habit) => {
     })  
 }
 
-export {db, loadHabit_on_fone,loadHabit_on_web , addHabit, refreshDatabase, initDatabase, loadUnit, deleteHabit, 
+const getUnitName = (habit) => {
+    const[state, dispatch] = useStore()
+    db.transaction(tx => {
+        tx.executeSql('SELECT Unit.name \
+        FROM Unit, Habit\
+        WHERE  Habit.unitID = Unit.id AND Habit.name = ?', 
+        [habit.name],
+        (txObj, resultSet) => {
+            console.log("Unit Name");
+            console.log(resultSet);
+            console.log(resultSet.rows[0]['name']);
+            if(state.unit != resultSet.rows[0]['name']){
+                dispatch(setUnit(resultSet.rows[0]['name']))
+            }
+        },
+        (txObj, error) => console.log(error)
+        );
+    })  
+}
+const getUnitNameforHOAD = (habit) => {
+    const[state, dispatch] = useStore()
+    db.transaction(tx => {
+        tx.executeSql('SELECT Unit.name \
+        FROM Unit, Habit\
+        WHERE  Habit.unitID = Unit.id AND Habit.name = ?', 
+        [habit.name],
+        (txObj, resultSet) => {
+            console.log("Unit Name",habit.name);
+            console.log(resultSet);
+            console.log(resultSet.rows[0]['name']);
+            if(state.unitHOAD != resultSet.rows[0]['name']){
+                dispatch(setUnitHOAD(resultSet.rows[0]['name']))
+            }
+        },
+        (txObj, error) => console.log(error)
+        );
+    })  
+}
+
+const getDataOfCurWeek = (habit) => {
+    const[state, dispatch] = useStore()
+    db.transaction(tx => {
+        tx.executeSql("SELECT progress \
+        FROM Memo\
+        WHERE habitName = ? AND\
+        strftime('%W', date) = strftime('%W', 'now')\
+        AND strftime('%Y',date) = strftime('%Y','now')", 
+        [habit.name],
+        (txObj, resultSet) => {
+            console.log('length',resultSet.rows.length);
+            console.log('res',resultSet);
+            console.log('state.DataOfCurWeek',state.DataOfCurWeek);
+            let temp = []
+            if(state.DataOfCurWeek.length == 0){
+                if(resultSet.rows.length != 0){
+                    for(let i = 0; i< 7; i++){
+                        temp.push(resultSet.rows[i]['progress'])
+                    }
+                    console.log('Done: ', temp)
+                    dispatch(setDataOfCurWeek(temp))
+                    console.log(1);
+                }
+                else{
+                    dispatch(setDataOfCurWeek([0,0,0,0,0,0,0]))
+                }
+                
+            }
+            
+        },
+        (txObj, error) => console.log(error)
+        );
+    })  
+}
+
+export {db,getUnitNameforHOAD, getDataOfCurWeek,getUnitName, loadHabit_on_fone,loadHabit_on_web , addHabit, refreshDatabase, initDatabase, loadUnit, deleteHabit, 
     updateHabit, loadSetting, calculateDayDoneInMonth, calculateMonthlyVolumn, 
     calculateTotalVolumn, calculateDayTotalDone, calculateCurrentStreak, calculateBestStreak}

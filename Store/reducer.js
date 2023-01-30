@@ -11,6 +11,8 @@ import {INIT_DAY_DONE_IN_MONTH, SET_DAY_DONE_IN_MONTH} from './constants'
 import {INIT_DAY_TOTAL_DONE, SET_DAY_DAY_TOTAL_DONE} from './constants'
 import {INIT_MONTHLY_VOLUMN, SET_MONTHLY_VOLUMN} from './constants'
 import {INIT_TOTAL_VOLUMN, SET_TOTAL_VOLUMN} from './constants'
+import { SET_UNIT,SET_UNIT_HOAD} from './constants'
+import { SET_DATA_OF_CURRENT_WEEK, INIT_DATA_OF_CURRENT_WEEK} from './constants'
 
 
 import { emptyHabitList } from './action'
@@ -73,7 +75,10 @@ const globalState = {
     CurrentStreak: 0,
     BestStreak: 0,
     TotalVolumn: null,
-    progressData: 0.5
+    progressData: 0.5,
+    unit:'',
+    unitHOAD:'',
+    DataOfCurWeek: []
 
 }
 
@@ -205,6 +210,28 @@ function reducer (state , action) {
             return{
                 ...state,
                 BestStreak: action.payload
+            }
+        case SET_UNIT:
+            // console.log('set unit: ', action.payload[1])
+            return{
+                ...state,
+                unit: action.payload
+            }
+        case SET_UNIT_HOAD:
+            // console.log('set unit: ', action.payload[1])
+            return{
+                ...state,
+                unitHOAD: action.payload
+            }
+        case INIT_DATA_OF_CURRENT_WEEK:
+            return{
+                ...state,
+                DataOfCurWeek: action.payload
+            }
+        case SET_DATA_OF_CURRENT_WEEK:
+            return{
+                ...state,
+                DataOfCurWeek: action.payload
             }
         default:
             throw new Error('sai goi ne')
