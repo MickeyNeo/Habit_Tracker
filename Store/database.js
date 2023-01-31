@@ -417,7 +417,7 @@ const loadHabit_on_web = (listHabit, dispatch) => {
             if (listHabit.length < resultSet.rows.length) {
                 for (let i = 0; i < resultSet.rows.length; i++) {
                     console.log("Database resultset", resultSet.rows)
-                    dispatch(addHabitList(resultSet.rows._array[i]));
+                    dispatch(addHabitList(resultSet.rows[i]));
                 } 
             }
         },
@@ -426,7 +426,6 @@ const loadHabit_on_web = (listHabit, dispatch) => {
     })
 
 }
-
 
 // //Trên web
 // const loadHabit = (listHabit, dispatch) => {
