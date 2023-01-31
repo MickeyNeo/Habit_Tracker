@@ -23,12 +23,6 @@ import {
 export default function Statistic({navigation}){
     const[state, dispatch] =useStore()
     
-    let list_of_habit = []
-    for (let i = 0; i < state.listHabit.length; i++){
-        list_of_habit.push(state.listHabit[i]['name'].toLowerCase())
-    }
-    // console.log('statistic',state.listHabit[0]['name'])
-    // console.log('statistic',list_of_habit)
     const dataPro = {
         labels: ['Monthly_rate'], // optional
         data: [0.8]

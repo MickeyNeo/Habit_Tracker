@@ -12,6 +12,8 @@ import {INIT_TOTAL_VOLUMN, SET_TOTAL_VOLUMN} from './constants'
 import { SET_CURRENT_STREAK, SET_BEST_STREAK } from './constants'
 import { SET_UNIT, SET_UNIT_HOAD} from './constants'
 import { SET_DATA_OF_CURRENT_WEEK, INIT_DATA_OF_CURRENT_WEEK,} from './constants'
+import { SET_MEMO_CUR_DAY, SET_LIST_MEMO} from './constants'
+
 
 export const setHabitInput = payload => ({
     type: SET_HABIT_INPUT,
@@ -139,5 +141,15 @@ export const setDataOfCurWeek = payload => ({
 })
 export const initDataOfCurWeek = payload => ({
     type: INIT_DATA_OF_CURRENT_WEEK,
+    payload 
+})
+
+export const setMemmoCurDay = payload => ({
+    type: SET_MEMO_CUR_DAY,
+    payload 
+})
+
+export const setListMemmo = payload => ({
+    type: SET_LIST_MEMO,
     payload 
 })
