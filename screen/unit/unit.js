@@ -1,9 +1,8 @@
 import React from "react";
-import { useState } from 'react';
-import {Text,  View ,StyleSheet,Button,TouchableOpacity, TextInput} from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import Modal from "react-native-modal";
-import { useStore} from "../../Store";
 export default function SelectUnit (params){
+    console.log(params.unit)
     return(         
         <View >
             <Modal isVisible={params.myIsmodalVisible} 
@@ -24,17 +23,31 @@ export default function SelectUnit (params){
                                 }}>
                                 <Text style={styles.tilte}>Select Unit</Text>
                                 <PreviewLayout
-                                    values = {['count','steps','m','km','mile']}
+                                    values = {[
+                                    { id: 0, title: 'count'},
+                                    { id: 1, title: 'steps'},
+                                    { id: 2, title: 'm'},
+                                    { id: 3, title: 'km'},
+                                    { id: 4, title: 'mile'}
+                                ]}
                                     selectedValue={params.unit}
                                     setSelectedValue={params.setunit}
                                 />
                                 <PreviewLayout
-                                    values = {['sec','min','hr','ml','oz']}
+                                    values = {[
+                                    { id: 5, title: 'sec'},
+                                    { id: 6, title: 'min'},
+                                    { id: 7, title: 'hr'},
+                                    { id: 8, title: 'ml'},
+                                    { id: 9, title: 'oz'}
+                                ]}
                                     selectedValue={params.unit}
                                     setSelectedValue={params.setunit}
                                 />
                                 <PreviewLayout
-                                    values = {['Cal']}
+                                    values = {[
+                                    { id: 10, title: 'Cal'},
+                                ]}
                                     selectedValue={params.unit}
                                     setSelectedValue={params.setunit}
                                 />
@@ -45,7 +58,6 @@ export default function SelectUnit (params){
             
         </View>
     )
-
 }
 const PreviewLayout =({
     values,
@@ -59,14 +71,14 @@ const PreviewLayout =({
                 width: 40,
                 height: 20, 
                 alignItems: 'center',
-                backgroundColor: 'grey',
+                backgroundColor:  value.title == selectedValue.title ? 'grey' : 'white',
                 justifyContent: 'center',
             }}
-                key={value}
-                onPress={() => setSelectedValue(prevState => ({ ...prevState, unit: value}))}
+                key={value.id}
+                   onPress={() => setSelectedValue(prevState => ({ ...prevState, unit: value}))}
             >
                 <Text style = {{fontSize: 10 }}>
-                    {value}
+                    {value.title}
                 </Text>
             </TouchableOpacity>
         ))}

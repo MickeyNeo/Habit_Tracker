@@ -30,6 +30,7 @@ const Home = ({ navigation }) => {
   } else {
     loadHabit_on_web(state.listHabit, dispatch)
   }
+  //console.log(state.listHabit)
   //loadSetting(state, dispatch);
   /* loadUnit(); */
   return (
@@ -64,7 +65,7 @@ const HabitZone = (values,navigation,date) => {
           //console.log(value.id)
           let pickDay = value.frequency;
           pickDay = pickDay.split(',')
-          console.log(pickDay)
+          //console.log(pickDay)
           //console.log(pickDay[5])
            //if (pickDay[day] == 1)
           for (let i = 0; i < pickDay.length; i++) {
