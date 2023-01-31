@@ -49,7 +49,8 @@ const AddHabit = ({navigation, route}) => {
     const date = [{title: day.toUpperCase(), selected: true}]
     const [select, setSelect] = useState(date);
     const showday = []
-
+    let unit = {}
+    unitHabit.forEach((item) => unit = item)
     select.forEach((item) => { if (item.selected == true ) showday.push(item.title)})
     const [value, setState] = useState({
         goal: "1",
@@ -63,10 +64,11 @@ const AddHabit = ({navigation, route}) => {
         formattedDateStart: moment(new Date()).format('YYYY-MM-DD'),
         formattedDateEnd: moment(new Date()).format('YYYY-MM-DD'),
         isEnabled: 0,
-        unit: unitHabit,
+        unit: unit,
         tag: tag,
         habitname: name,
         selectedItem: "Daily",
+        showday: [],
     });
     const theme = useContext(themeContext);
     const toggleSwitch = () => setState(prevState => ({ ...prevState, isEnabled: !prevState.isEnabled}));
@@ -86,7 +88,7 @@ const AddHabit = ({navigation, route}) => {
         habitEndDay: value.formattedDateEnd,
         goalNo: value.goal,
         goalPeriod: value.currentTabPeriod,
-        unitID: '',
+        unitID: value.unit.id,
         icon: IconInfo[0],
         iconFamily: IconInfo[1],
         flag : flag,
@@ -401,7 +403,7 @@ const TabChoose = ({title, changecolor, unit, tag, IconDetail, setState, flag, s
       )}
       {flag === 3 && <Text>{title}</Text>}
       {flag === 4 && (
-        <Text style={{ fontSize: 12 }}>{unit}</Text>
+        <Text style={{ fontSize: 12 }}>{unit.title}</Text>
       )}
     </TouchableOpacity>
   )
@@ -452,7 +454,7 @@ const DisplayNote = (select,goal,unit) => {
 
     return (
     <View style = {{flexDirection: 'row'}}>
-        <Text style ={{fontSize: 10, color: 'red' }}> *Complete {goal} {unit} in</Text>
+        <Text style ={{fontSize: 10, color: 'red' }}> *Complete {goal} {unit.title} in</Text>
         {select.map((value) => 
         <Text style = {{fontSize: 10, color: 'red'}}key = {value.id} > {value.selected ? value.title : null}</Text> 
     )}

@@ -13,7 +13,6 @@ export default function SelectFreq (params){
         });
         params.setSelect(tmpState);
 }
-    console.log(params.freq)
     return(         
         <View >
             <Modal isVisible={params.myIsmodalVisible} 
@@ -67,7 +66,12 @@ export default function SelectFreq (params){
                                     flag = {2}
                                     />
                                 </View>
-                            }
+                                }
+                                {params.freq == 'Daily' && 
+                                    <View>ahihi 
+                                    
+                                    </View>
+                                }
                                 <Text style ={{fontSize: 10}}> Complete 1000 steps each day </Text>
                             </View>
                             <View style ={{

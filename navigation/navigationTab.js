@@ -66,9 +66,9 @@ function HomeTabs({navigation}) {
             }
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-          tabBarActiveTintColor: '#0c5776',
-          tabBarInactiveTintColor: 'gray',
-          tabBarActiveBackgroundColor: '#bcfefe',
+          tabBarActiveTintColor: '#4E3B43',
+          tabBarInactiveTintColor: '#AEAC99',
+          tabBarActiveBackgroundColor: '#FFB2D1',
           tabBarInactiveBackgroundColor: 'white',
         })}
         >
