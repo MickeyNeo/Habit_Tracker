@@ -14,7 +14,8 @@ import {
   } from "react-native-chart-kit";
 import {calculateDayDoneInMonth, calculateDayTotalDone, calculateMonthlyVolumn,
     calculateTotalVolumn, calculateCurrentStreak, calculateBestStreak, 
-    getDataOfCurWeek, getUnitNameforHOAD} from '../Store/database';
+    getDataOfCurWeek, getUnitNameforHOAD, getMemmoCurDay} from '../Store/database';
+import MoreMemo from './HOADChildScreens/MoreMemo'
 
 const HabitOfADay = ({navigation,route}) =>{
     const {habit} = route.params;
@@ -27,6 +28,7 @@ const HabitOfADay = ({navigation,route}) =>{
     );
     
     console.log(habit)
+    const [isEnabled, setIsEnabled] = useState(false);
     const[state, dispatch] = useStore()
     const data = {
         labels: ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"],
@@ -48,7 +50,7 @@ const HabitOfADay = ({navigation,route}) =>{
         useShadowColorFromDataset: false, // optional,
         fillShadowGradientFrom: 'black'
     };
-
+    getMemmoCurDay(habit)
     getDataOfCurWeek(habit)
     calculateDayDoneInMonth(habit);
     calculateDayTotalDone(habit);
@@ -133,10 +135,20 @@ const HabitOfADay = ({navigation,route}) =>{
                     <View style = {styles.part}>
                         <View style = {{flexDirection: 'row',justifyContent: 'space-between', marginHorizontal: 5 }}>
                             <Text style = {styles.headText}>Memos</Text>
-                            <Text style = {{marginTop: '1.25%'}}>More</Text>
+                            <TouchableOpacity style = {{marginTop: '1.25%'}}
+                                onPress ={() =>{
+                                    setIsEnabled(!isEnabled)
+                                }}>
+                                <Text>More</Text>
+                                {isEnabled && <MoreMemo 
+                                    myIsmodalVisible = {isEnabled}
+                                    habit = {habit}
+                                    setModalVisible = {setIsEnabled}
+                                ></MoreMemo> }
+                            </TouchableOpacity>
                         </View>
                         <View style = {{padding: 10, backgroundColor: '#F9BBAE' , borderRadius: 6, marginHorizontal: 10, marginBottom: 5}}>
-                            <TextInput placeholder="No memos yet."/>
+                            <Text>{state.memoCurDay}</Text>
                         </View>
                     </View>
 

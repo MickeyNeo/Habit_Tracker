@@ -308,13 +308,13 @@ export const memoInit = "INSERT INTO Memo (habitName, date, content, progress) V
 ('Meditate', '2021-04-20', 'So happy', '4'),\
 ('Run', '2022-04-19', 'Feel so good', '2'),\
 ('Meditate', '2023-01-08', 'Lets go', '9'),\
-('Dancing', '2023-01-30', 'Im getting better everyday', '16'),\
-('Dancing', '2023-01-31', 'Im getting better everyday', '50'),\
-('Dancing', '2023-02-01', 'Im getting better everyday', '25'),\
-('Dancing', '2023-02-02', 'Im getting better everyday', '16'),\
-('Dancing', '2023-02-03', 'Im getting better everyday', '2'),\
-('Dancing', '2023-02-04', 'Im getting better everyday', '7'),\
-('Dancing', '2023-02-05', 'Im getting better everyday', '70')"
+('Dancing', '2023-01-30', 'Im getting better 1 everyday', '16'),\
+('Dancing', '2023-01-31', 'Im getting better 2 everyday', '50'),\
+('Dancing', '2023-02-01', 'Im getting better 3 everyday', '25'),\
+('Dancing', '2023-02-02', 'Im getting better 4 everyday', '16'),\
+('Dancing', '2023-02-03', 'Im getting better 5 everyday', '2'),\
+('Dancing', '2023-02-04', 'Im getting better 6 everyday', '7'),\
+('Dancing', '2023-02-05', 'Im getting better 7 everyday', '70')"
 
 
 export const reminderInit = "INSERT INTO Reminder (habitName, time) VALUES\
