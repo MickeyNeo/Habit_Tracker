@@ -1,35 +1,30 @@
 import React from "react";
 import { useState } from 'react';
 import {Text,  View, StyleSheet,ScrollView,TouchableOpacity,SafeAreaView,TouchableWithoutFeedback } from 'react-native';
-import { useStore } from "../../Store";
+import { useStore,delHabit} from "../../Store";
 import { FontAwesome5,MaterialCommunityIcons } from "@expo/vector-icons";
 import Modal from "react-native-modal";
 import SelectDropdown from 'react-native-select-dropdown'
+import Icons from "../icon_color/Icon";
 export default function HabitManager (){
     const[state, dispatch] =useStore()
     const [test, setList] =useState(['Action 1',' Action 2', 'Action 3'])
 
     const [modalVisible, setModalVisible] = useState(false);
-    const [popUpPosition, setPopUpPosition] = useState({x:0, y:0});
-    const onPress = (event) => {
-        const {pageX, pageY} = event.nativeEvent;
-        setPopUpPosition({x:pageX, y:pageY});
-        console.log(`Tapped at x: ${pageX}, y: ${pageY}`);
-    }
-    const option = ["Edit", "Reset All Data", "Delete"]
+    const option = ["Edit", "Delete"]
     return(         
         <SafeAreaView style={styles.container}>
            <ScrollView style={styles.scroll} >
-                    {test.map((value,index) =>( 
+                    {state.listHabit.map((habit,index) =>( 
                         <View key={index}>
-                            
                             <View style={styles.iconTitle}>
+                            <Icons type={habit.iconFamily} name={habit.icon} size={27} color={habit.color} />
                                         <View style={styles.viewText}>
                                             <Text style={styles.textName}>
-                                                {value}
+                                                {habit.name}
                                             </Text>
                                             <Text style={styles.textRemind}>
-                                                loi nhac
+                                                {habit.reminderMessage}
                                             </Text>
                                         </View>
                                         <TouchableWithoutFeedback onPress={()=> {setModalVisible(true) }}>
@@ -50,13 +45,13 @@ export default function HabitManager (){
                                                     //style={{ width: 100, height: 100}}
                                                     dropdownStyle={{
                                                         marginLeft:'-13%',
-                                                        width: 180, height: 150, backgroundColor: 'white'
+                                                        width: 180, height: 100, backgroundColor: 'white'
                                                     }}
                                                     onSelect={(selectedItem, index) => 
                                                         {
                                                           if (selectedItem == option[0]) console.log(selectedItem)
-                                                          else if (selectedItem == option[1]) console.log(selectedItem)
-                                                          else console.log(selectedItem)
+                                                          else if (selectedItem == option[1]) dispatch(delHabit(habit.id))
+                                                          
                                                         }}
                                                     
                 

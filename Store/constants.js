@@ -26,5 +26,5 @@ export const SET_UNIT = 'set_unit';
 export const SET_UNIT_HOAD = 'set_unit_hoad';
 export const SET_DATA_OF_CURRENT_WEEK = 'set_data_of_current_week';
 export const INIT_DATA_OF_CURRENT_WEEK = 'init_data_of_current_week';
-
+export const DEL_HABIT = 'del_habit'
 
