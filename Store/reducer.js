@@ -13,6 +13,7 @@ import {INIT_MONTHLY_VOLUMN, SET_MONTHLY_VOLUMN} from './constants'
 import {INIT_TOTAL_VOLUMN, SET_TOTAL_VOLUMN} from './constants'
 import { SET_UNIT,SET_UNIT_HOAD} from './constants'
 import { SET_DATA_OF_CURRENT_WEEK, INIT_DATA_OF_CURRENT_WEEK} from './constants'
+import { SET_MEMO_CUR_DAY, SET_LIST_MEMO, SET_EVERY_HABIT_DONE  } from './constants'
 
 
 import { emptyHabitList } from './action'
@@ -71,6 +72,7 @@ const globalState = {
     dailyReminderText: '',
     DayDoneInMonth: null,
     DayTotalDone: null,
+    EveryHabitDone: 0,
     MonthlyVolumn: null,
     CurrentStreak: 0,
     BestStreak: 0,
@@ -78,7 +80,12 @@ const globalState = {
     progressData: 0.5,
     unit:'',
     unitHOAD:'',
-    DataOfCurWeek: []
+    DataOfCurWeek: [],
+    memoCurDay: '',
+    memoCurDate: '',
+    listMemo: [],
+    listMemoDate: [],
+
 
 }
 
@@ -180,6 +187,11 @@ function reducer (state , action) {
                 ...state,
                 DayTotalDone:action.payload
             }
+        case SET_EVERY_HABIT_DONE:
+            return{
+                ...state,
+                EveryHabitDone:action.payload
+            }
         case INIT_MONTHLY_VOLUMN:
             return{
                 ...state,
@@ -232,6 +244,18 @@ function reducer (state , action) {
             return{
                 ...state,
                 DataOfCurWeek: action.payload
+            }
+        case SET_MEMO_CUR_DAY:
+            return{
+                ...state,
+                memoCurDay: action.payload[0],
+                memoCurDate: action.payload[1],
+            }
+        case SET_LIST_MEMO:
+            return{
+                ...state,
+                listMemo: action.payload[0],
+                listMemoDate: action.payload[1],
             }
         default:
             throw new Error('sai goi ne')

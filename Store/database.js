@@ -5,10 +5,9 @@ import reducer, { globalState } from './reducer';
 import { addHabitList, emptyHabitList } from './action';
 import {useStore,setDayDoneInMonth,setDayTotalDone,setMonthlyVolumn,
     setTotalVolumn, setCurrentStreak, setBestStreak, setUnit,setUnitHOAD,
-    setDataOfCurWeek} from '../Store'
+    setDataOfCurWeek, setMemmoCurDay, setListMemmo, setEveryHabitDone} from '../Store'
 import {React, useState } from 'react';
 import { memoInit, habitInit, reminderInit, unitInit, tagInit, haveTagInit } from './init_data';
-
     
 const streakRetain = (date, followingDate) => {
     let y, m, d, fy, fm, fd;
@@ -668,8 +667,8 @@ const calculateDayDoneInMonth = (habit) => {
                 AND strftime('%Y',date) = strftime('%Y','now')", 
                 [habit.name],
                 (txObj, resultSet) => {
-                    console.log("Calculated Day Done in month");
-                    console.log(resultSet);
+                    // console.log("Calculated Day Done in month");
+                    // console.log(resultSet);
                     if(state.DayDoneInMonth != resultSet.rows[0]['COUNT(*)']){
                         dispatch(setDayDoneInMonth(resultSet.rows[0]['COUNT(*)']))
                     }
@@ -682,23 +681,50 @@ const calculateDayDoneInMonth = (habit) => {
 
 const calculateDayTotalDone  = (habit) => {
     const[state, dispatch] = useStore()
-    db.transaction(tx => {
-        tx.executeSql("SELECT COUNT(*)\
-        FROM Memo\
-        WHERE habitName = ? AND progress != 0", 
-        [habit.name],
-        (txObj, resultSet) => {
-            console.log("Calculate Day Total Done");
-            console.log(resultSet.rows[0]['COUNT(*)']);
-            console.log(resultSet);
+    if (habit instanceof Array) {
+        let count = 0;
+        for (let i = 0; i < habit.length; i++) {
+            db.transaction(tx => {
+                tx.executeSql("SELECT COUNT(*)\
+                FROM Memo\
+                WHERE habitName = ? AND progress == ?", 
+                [habit[i].name, habit[i].goalNo],
+                (txObj, resultSet) => {
+                    // console.log("Calculate Day Total Done");
+                    // console.log(resultSet.rows[0]['COUNT(*)']);
+                    // console.log(resultSet);
 
-            if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
-                dispatch(setDayTotalDone(resultSet.rows[0]['COUNT(*)']))
-            }
-        },
-        (txObj, error) => console.log(error)
-        );
-    })
+                    if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
+                        count += resultSet.rows[0]['COUNT(*)'];
+                        if (i == habit.length - 1) {
+                            dispatch(setEveryHabitDone(count));
+                        }
+                    }
+                },
+                (txObj, error) => console.log(error)
+                );
+            })
+        }
+    }
+    else {
+        db.transaction(tx => {
+            tx.executeSql("SELECT COUNT(*)\
+            FROM Memo\
+            WHERE habitName = ? AND progress == ?", 
+            [habit.name, habit.goalNo],
+            (txObj, resultSet) => {
+                // console.log("Calculate Day Total Done");
+                // console.log(resultSet.rows[0]['COUNT(*)']);
+                // console.log(resultSet);
+
+                if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
+                    dispatch(setDayTotalDone(resultSet.rows[0]['COUNT(*)']))
+                }
+            },
+            (txObj, error) => console.log(error)
+            );
+        })
+    }
 }
 
 const calculateCurrentStreak = (habit) => {
@@ -822,6 +848,63 @@ const getDataOfCurWeek = (habit) => {
     })  
 }
 
-export {db,getUnitNameforHOAD, getDataOfCurWeek,getUnitName, loadHabit_on_fone,loadHabit_on_web , addHabit, refreshDatabase, initDatabase, loadUnit, deleteHabit, 
+const getMemmoCurDay = (habit) => {
+    const[state, dispatch] = useStore()
+    db.transaction(tx => {
+        tx.executeSql("SELECT content,date \
+        FROM Memo\
+        WHERE habitName = ? \
+        AND strftime('%d',date) = strftime('%d','now')\
+        AND strftime('%m',date) = strftime('%m','now')\
+        AND strftime('%Y',date) = strftime('%Y','now')", 
+        [habit.name],
+        (txObj, resultSet) => {
+            console.log("Memo current day");
+            console.log(resultSet);
+            if(resultSet.rows.length != 0){
+                if(state.memoCurDay != resultSet.rows[0]['content'] && 
+                   state.memoCurDate != resultSet.rows[0]['date']){
+                    dispatch(setMemmoCurDay([resultSet.rows[0]['content'], resultSet.rows[0]['date']]))
+                }
+            }
+            
+        },
+        (txObj, error) => console.log(error)
+        );
+    })  
+}
+
+const getAllMemmo = (habit) => {
+    const[state, dispatch] = useStore()
+    db.transaction(tx => {
+        tx.executeSql("SELECT content,date \
+        FROM Memo\
+        WHERE habitName = ?\
+        ORDER BY date DESC", 
+        [habit.name],
+        (txObj, resultSet) => {
+            console.log("Memo current day", );
+            console.log(resultSet);
+            let tempMem = []
+            let tempMemDate = []
+            if(resultSet.rows.length != 0){
+                if(state.listMemo.length == 0 && state.listMemoDate.length == 0 ){
+                    if(resultSet.rows.length != 0){
+                        for(let i = 0; i< resultSet.rows.length; i++){
+                            tempMem.push(resultSet.rows[i]['content'])
+                            tempMemDate.push(resultSet.rows[i]['date'].replace(/-/g,'/'))
+                        }
+                        dispatch(setListMemmo([tempMem, tempMemDate]))
+    
+                    }
+                }
+            }
+        },
+        (txObj, error) => console.log(error)
+        );
+    })  
+}
+export {db,getAllMemmo,getMemmoCurDay,getUnitNameforHOAD, getDataOfCurWeek,getUnitName, loadHabit_on_fone,
+    loadHabit_on_web , addHabit, refreshDatabase, initDatabase, loadUnit, deleteHabit, 
     updateHabit, loadSetting, calculateDayDoneInMonth, calculateMonthlyVolumn, 
     calculateTotalVolumn, calculateDayTotalDone, calculateCurrentStreak, calculateBestStreak}

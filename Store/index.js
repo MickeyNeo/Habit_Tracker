@@ -33,4 +33,6 @@ export {setUnitHOAD} from './action'
 
 export {setDataOfCurWeek} from './action'
 export {initDataOfCurWeek} from './action'
+export {setMemmoCurDay, setListMemmo} from './action'
 
+export {setEveryHabitDone} from './action'

@@ -11,6 +11,10 @@ import {INIT_MONTHLY_VOLUMN, SET_MONTHLY_VOLUMN} from './constants'
 import {INIT_TOTAL_VOLUMN, SET_TOTAL_VOLUMN} from './constants'
 import { SET_CURRENT_STREAK, SET_BEST_STREAK } from './constants'
 import { DEL_HABIT } from './constants'
+import { SET_UNIT, SET_UNIT_HOAD} from './constants'
+import { SET_DATA_OF_CURRENT_WEEK, INIT_DATA_OF_CURRENT_WEEK,} from './constants'
+import { SET_MEMO_CUR_DAY, SET_LIST_MEMO, SET_EVERY_HABIT_DONE} from './constants'
+
 export const setHabitInput = payload => ({
     type: SET_HABIT_INPUT,
     payload 
@@ -123,4 +127,37 @@ export const setBestStreak = payload => ({
 export const delHabit = payload => ({
     type: DEL_HABIT,
     payload
+
+export const setUnit = payload => ({
+    type: SET_UNIT,
+    payload 
+})
+
+export const setUnitHOAD = payload => ({
+    type: SET_UNIT_HOAD,
+    payload 
+})
+
+export const setDataOfCurWeek = payload => ({
+    type: SET_DATA_OF_CURRENT_WEEK,
+    payload 
+})
+export const initDataOfCurWeek = payload => ({
+    type: INIT_DATA_OF_CURRENT_WEEK,
+    payload 
+})
+
+export const setMemmoCurDay = payload => ({
+    type: SET_MEMO_CUR_DAY,
+    payload 
+})
+
+export const setListMemmo = payload => ({
+    type: SET_LIST_MEMO,
+    payload 
+})
+
+export const setEveryHabitDone = payload => ({
+    type: SET_EVERY_HABIT_DONE,
+    payload 
 })
