@@ -108,6 +108,10 @@ const AddHabit = ({navigation, route}) => {
       newList.splice(index, 1);
       setiTag(newList);
     };
+    //Daly
+    const itemWeek = ['MON', 'TUE', 'WED','THU','FRI','SAT','SUN'];
+    const itemMoth = Array.from({length: 31}, (_, index) => (index + 1).toString());
+    
     return (
         <View style={{ flex: 1, flexDirection : 'column'}}>
             <View style ={styles.Habit}>
@@ -260,7 +264,7 @@ const AddHabit = ({navigation, route}) => {
                                 {DisplayNote(select,value.goal,value.unit)}
                             </View>
                             <View style = {{flexDirection: 'row', justifyContent: 'center'}}>
-                                <SelectDropdown
+                                {/* <SelectDropdown
                                   buttonStyle={{width: 75, height: 15, backgroundColor: 'white'}}
                                   buttonTextStyle= {{fontSize: 8}}
                                   defaultButtonText={ value.selectedItem}
@@ -284,12 +288,12 @@ const AddHabit = ({navigation, route}) => {
                                     selectedItem = {value.selectedItem}
                                     goal = {value.goal}
                                     select = {select}
-                                    setSelect = {setSelect} />
+                                    setSelect = {setSelect} /> */}
                             </View>
                         </View>
                     </View>
 
-                    <View style = {{flexDirection: 'column', padding: 10}}>
+                    {/* <View style = {{flexDirection: 'column', padding: 10}}>
                         <Text style ={{fontWeight: 'bold', color: theme.color }}>Time Range</Text>
                             <View style = {{flexDirection: 'row', flex: 1, padding: 10}}>
                                 <View style ={{ flexDirection: 'row', justifyContent: 'space-evenly', flex: 0.8}}>
@@ -299,7 +303,7 @@ const AddHabit = ({navigation, route}) => {
                                 {TabButtontime(value.currentTabTime, setState, "Evening", value.changecolor)}
                                 </View>
                         </View> 
-                    </View>
+                    </View> */}
 
                     <View style = {{flexDirection: 'column', padding: 10}}>
                         <Text style ={{fontWeight: 'bold', color: theme.color }}>Reminder</Text>

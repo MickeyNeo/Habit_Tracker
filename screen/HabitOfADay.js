@@ -3,7 +3,7 @@ import { View,Dimensions , Button, Text, StyleSheet, TouchableOpacity, ScrollVie
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import Icons from "./icon_color/Icon";
-import {useStore} from '../Store';
+import {useStore,delHabit} from '../Store';
 import {
     LineChart,
     BarChart,
@@ -17,7 +17,7 @@ import {calculateDayDoneInMonth, calculateDayTotalDone, calculateMonthlyVolumn,
     getDataOfCurWeek, getUnitNameforHOAD, getMemmoCurDay} from '../Store/database';
 import MoreMemo from './HOADChildScreens/MoreMemo'
 
-const HabitOfADay = ({navigation,route}) =>{
+const HabitOfADay = ({navigation :{goBack},route}) =>{
     const {habit} = route.params;
     getUnitNameforHOAD(habit)
     const date = new Date();
@@ -60,11 +60,15 @@ const HabitOfADay = ({navigation,route}) =>{
     calculateBestStreak(habit);
     const dailyAverage = Math.round(state.TotalVolumn / state.DayTotalDone * 100) / 100;
     const overallRate = Math.round(dailyAverage / habit.goalNo * 100) / 100 ;
+    
+    const handleDelHablit =(id)=> {
+        dispatch(delHabit(state.listHabit.filter(item => item.id !== id)))
+    }
     return(
         <View style = {styles.container}>
             <View style = {styles.header}>
                 {/* <FontAwesome5 style={styles.iconTitle} name={habit.name.toLowerCase()} size={27} color='crimson' /> */}
-                <Icons style={styles.iconTitle} type={habit.iconFamily} name={habit.icon} size={27} color='crimson' />
+                <Icons style={styles.iconTitle} type={habit.iconFamily} name={habit.icon} size={27} color={habit.color} />
                 <Text style ={{marginTop: 10, fontSize: 20, fontWeight : "bold"}}>{habit.name}</Text>
             </View>
             <View style={{flex: 1,alignItems: 'stretch'}}>
@@ -178,7 +182,7 @@ const HabitOfADay = ({navigation,route}) =>{
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style = {{ backgroundColor: '#F3ACB4', borderRadius: 8, width: '40%',height: '140%', justifyContent: 'center'}} onPress={()=> {}}>
+                        <TouchableOpacity style = {{ backgroundColor: '#F3ACB4', borderRadius: 8, width: '40%',height: '140%', justifyContent: 'center'}} onPress={()=> {handleDelHablit(habit.id),goBack()}}>
                             <View style = {{flexDirection: 'row',justifyContent: 'center'}}>
                                 <FontAwesome5 style = {{marginHorizontal: 5}} name='trash-alt' size={15} color='black' />
                                 <Text>Delete</Text>

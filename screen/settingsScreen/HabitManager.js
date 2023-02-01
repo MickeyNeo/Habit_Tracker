@@ -1,17 +1,25 @@
 import React from "react";
 import { useState } from 'react';
-import {Text,  View, StyleSheet,ScrollView,TouchableOpacity,SafeAreaView,TouchableWithoutFeedback } from 'react-native';
-import { useStore,delHabit} from "../../Store";
+import {Text,  View, StyleSheet,ScrollView,TouchableOpacity,SafeAreaView,TouchableWithoutFeedback,Button } from 'react-native';
+import { useStore} from "../../Store";
+import { delHabit } from "../../Store";
 import { FontAwesome5,MaterialCommunityIcons } from "@expo/vector-icons";
 import Modal from "react-native-modal";
 import SelectDropdown from 'react-native-select-dropdown'
 import Icons from "../icon_color/Icon";
+
+
 export default function HabitManager (){
     const[state, dispatch] =useStore()
     const [test, setList] =useState(['Action 1',' Action 2', 'Action 3'])
 
     const [modalVisible, setModalVisible] = useState(false);
     const option = ["Edit", "Delete"]
+    const [isModalVisibleDel, setModalVisibleDel] = useState(true);
+    console.log(state.listHabit)
+    const handleDelHablit =(id)=> {
+        dispatch(delHabit(state.listHabit.filter(item => item.id !== id)))
+    }
     return(         
         <SafeAreaView style={styles.container}>
            <ScrollView style={styles.scroll} >
@@ -50,8 +58,11 @@ export default function HabitManager (){
                                                     onSelect={(selectedItem, index) => 
                                                         {
                                                           if (selectedItem == option[0]) console.log(selectedItem)
-                                                          else if (selectedItem == option[1]) dispatch(delHabit(habit.id))
-                                                          
+                                                          else if (selectedItem == option[1]) 
+                                                            {
+                                                                handleDelHablit(habit.id)
+                                                                
+                                                            }
                                                         }}
                                                     
                 
@@ -73,6 +84,7 @@ export default function HabitManager (){
     );
 
 }
+
 const styles=StyleSheet.create({
     container:{
         flex:1,
@@ -129,5 +141,11 @@ const styles=StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
+      },
+      modalContainer: {
+        backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 5,
+        alignItems: 'center',
       },
 })
