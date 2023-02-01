@@ -127,7 +127,7 @@ export const setBestStreak = payload => ({
 export const delHabit = payload => ({
     type: DEL_HABIT,
     payload
-
+})
 export const setUnit = payload => ({
     type: SET_UNIT,
     payload 
