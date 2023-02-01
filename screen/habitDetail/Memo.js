@@ -4,11 +4,16 @@ import Modal from "react-native-modal";
 
 export default function Memo (params){
     const [text, setText] = useState('');
-    return(         
+    return( 
+                
         <View>
             <Modal isVisible={params.myIsmodalVisible} 
                 useNativeDriver={true}
                 onBackdropPress={() => params.setModalVisible(false)}
+                animationIn = 'bounceIn'
+                animationInTiming = {600}
+                animationOut ='bounceOut'
+                animationOutTiming = {500}
                 >
                     <View style={{height: '38%', backgroundColor: 'white', 
                             borderRadius: 30, borderWidth: 1,
@@ -17,7 +22,7 @@ export default function Memo (params){
                         <TextInput
                             style = {{ height: 40, 
                             width: '90%', 
-                            left: '5%',
+                            margin: '5%',
                             //flex: 0.2,
                             borderRadius: 10,
                             padding: 10,
@@ -29,7 +34,7 @@ export default function Memo (params){
                             onChangeText={newText => setText(newText)}
                             defaultValue={text}
                         />
-                        <Text>{text}</Text>
+                        <Text>avcbv</Text>
                     </View>
                 </Modal>       
         </View>

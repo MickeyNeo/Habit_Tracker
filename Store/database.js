@@ -813,10 +813,29 @@ const getUnitNameforHOAD = (habit) => {
     })  
 }
 
+// const getDayName = (date) => {
+//     db.transaction(tx => {
+//         tx.executeSql('SELECT Unit.name \
+//         FROM Unit, Habit\
+//         WHERE  Habit.unitID = Unit.id AND Habit.name = ?', 
+//         [date],
+//         (txObj, resultSet) => {
+//             console.log("Unit Name");
+//             console.log(resultSet);
+//             console.log(resultSet.rows[0]['name']);
+//             if(state.unit != resultSet.rows[0]['name']){
+//                 dispatch(setUnit(resultSet.rows[0]['name']))
+//             }
+//         },
+//         (txObj, error) => console.log(error)
+//         );
+//     })
+// }
+
 const getDataOfCurWeek = (habit) => {
     const[state, dispatch] = useStore()
     db.transaction(tx => {
-        tx.executeSql("SELECT progress \
+        tx.executeSql("SELECT progress, strftime('%w',date) \
         FROM Memo\
         WHERE habitName = ? AND\
         strftime('%W', date) = strftime('%W', 'now')\
@@ -826,11 +845,16 @@ const getDataOfCurWeek = (habit) => {
             console.log('length',resultSet.rows.length);
             console.log('res',resultSet);
             console.log('state.DataOfCurWeek',state.DataOfCurWeek);
-            let temp = []
+            let temp = [0,0,0,0,0,0,0]
             if(state.DataOfCurWeek.length == 0){
                 if(resultSet.rows.length != 0){
-                    for(let i = 0; i< 7; i++){
-                        temp.push(resultSet.rows[i]['progress'])
+                    for(let i = 0; i< resultSet.rows.length; i++){
+                        if(resultSet.rows[i]["strftime('%w',date)"] == 0){
+                            temp[6] = resultSet.rows[i]['progress']
+                        }
+                        else{
+                            temp[resultSet.rows[i]["strftime('%w',date)"]-1] = resultSet.rows[i]['progress']
+                        }
                     }
                     console.log('Done: ', temp)
                     dispatch(setDataOfCurWeek(temp))
@@ -904,6 +928,8 @@ const getAllMemmo = (habit) => {
         );
     })  
 }
+
+
 export {db,getAllMemmo,getMemmoCurDay,getUnitNameforHOAD, getDataOfCurWeek,getUnitName, loadHabit_on_fone,
     loadHabit_on_web , addHabit, refreshDatabase, initDatabase, loadUnit, deleteHabit, 
     updateHabit, loadSetting, calculateDayDoneInMonth, calculateMonthlyVolumn, 

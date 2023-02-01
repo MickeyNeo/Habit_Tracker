@@ -1,5 +1,5 @@
 import React ,{useState} from "react";
-import { View, Dimensions, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Image } from "react-native";
+import { View, Dimensions, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Image, TextInput } from "react-native";
 import {
     ProgressChart,
   } from "react-native-chart-kit";
@@ -92,7 +92,7 @@ const HabitDetail = ({navigation,route}) => {
                             {TabButton(navigation,"Sound", sound)}
                             {TabButton(navigation,"Stopwatch", stopwatch)}
                             {TabButton(navigation,"Memo", memo)}
-                            {TabButton(navigation,"Stat", stat)}
+                            {/* {TabButton(navigation,"Stat", stat)} */}
                         </View>
                     </View>
                 ):(
@@ -108,6 +108,7 @@ const HabitDetail = ({navigation,route}) => {
                                 hideLegend={true}
                             />
                             <Text>Progress rate: {data.data[0]*100}%</Text>
+                            
                         </View>
                         <View style = {styles.insideCircle}>
                             <View style = {{flexDirection: 'column'}}>
@@ -121,7 +122,23 @@ const HabitDetail = ({navigation,route}) => {
                                             color='gray' />
                             </TouchableOpacity>
                         </View>
-                        <View style = {{top: '15%',flexDirection: 'row', justifyContent: 'center', alignItems: 'stretch',}}> 
+                        <View style = {{top: '8%',flexDirection: 'column', justifyContent: 'center', alignItems: 'center',}}>
+                            <TextInput
+                                    style = {{ height: 40, 
+                                    width: '50%', 
+                                    margin: 5,
+                                    //flex: 0.2,
+                                    borderRadius: 10,
+                                    padding: 10,
+                                    backgroundColor: '#f5f5f5', 
+                                    color: '#a9a9a9',
+                                    top: '5%',
+                                    }}
+                                    placeholder="Type your memo here!!!"
+                                    onChangeText={newText => setText(newText)}
+                                    defaultValue='0'
+                            /> 
+                            <View style = {{flexDirection: 'row'}}>
                                 <TouchableOpacity >
                                 <Image
                                     source={plus}
@@ -134,7 +151,9 @@ const HabitDetail = ({navigation,route}) => {
                                     style={{ width: 30, height: 30,borderRadius: 100, backgroundColor: '#f5f5f5', left: 10}}
                                 />
                                 </TouchableOpacity>
-                            </View> 
+                                </View>
+                                
+                        </View> 
                         <View style={styles.functionZone}>
                             {TabButton(navigation,"Memo", memo)}
                             {TabButton(navigation,"Stat", stat)}
@@ -180,7 +199,7 @@ const styles = StyleSheet.create({
     },
     showView:{
         flex: 1,
-        flexDirection: 'column'
+        flexDirection: 'column',
     },
     countdown: {
         flex: 1,
