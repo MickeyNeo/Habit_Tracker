@@ -14,7 +14,7 @@ import {INIT_TOTAL_VOLUMN, SET_TOTAL_VOLUMN} from './constants'
 import { SET_UNIT,SET_UNIT_HOAD} from './constants'
 import { SET_DATA_OF_CURRENT_WEEK, INIT_DATA_OF_CURRENT_WEEK} from './constants'
 import { SET_MEMO_CUR_DAY, SET_LIST_MEMO, SET_EVERY_HABIT_DONE  } from './constants'
-
+import { DEL_HABIT } from './constants'
 
 import { emptyHabitList } from './action'
 import theme from '../screen/styles/theme'
@@ -256,6 +256,11 @@ function reducer (state , action) {
                 ...state,
                 listMemo: action.payload[0],
                 listMemoDate: action.payload[1],
+            }
+        case DEL_HABIT:
+            return{
+                ...state,
+                listHabit: action.payload
             }
         default:
             throw new Error('sai goi ne')

@@ -65,7 +65,7 @@ export default function Statistic({navigation}){
                                 })
                             }}>
                             {/* <FontAwesome5 style={style.iconTitle} name={habit.name.toLowerCase()} size={27} color='crimson' /> */}
-                            <Icons style={style.iconTitle} type={habit.iconFamily} name={habit.icon} size={27} color='crimson' />
+                            <Icons style={style.iconTitle} type={habit.iconFamily} name={habit.icon} size={27} color={habit.color} />
                         </TouchableOpacity>
                     ))}
                 </ScrollView>
