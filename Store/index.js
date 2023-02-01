@@ -1,11 +1,11 @@
-import { setHabitStat, setLanguage } from './action'
+import { delHabit, delhabit } from './action'
 
 export { default as StoreProvider }  from './Provider'
 export { default as StoreContext } from './Context'
 export * from './hooks'
 
 //export * as actions from './action'
-export {setLanguage} from './action'
+export {setLanguage, delHabit} from './action'
 export {addHabitOfaDay} from './action'
 
 export {addHabitList} from './action'
@@ -33,11 +33,6 @@ export {setUnitHOAD} from './action'
 
 export {setDataOfCurWeek} from './action'
 export {initDataOfCurWeek} from './action'
-
 export {setMemmoCurDay, setListMemmo} from './action'
 
 export {setEveryHabitDone} from './action'
-
-
-
-
