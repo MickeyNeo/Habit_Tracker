@@ -13,7 +13,7 @@ import {INIT_MONTHLY_VOLUMN, SET_MONTHLY_VOLUMN} from './constants'
 import {INIT_TOTAL_VOLUMN, SET_TOTAL_VOLUMN} from './constants'
 import { SET_UNIT,SET_UNIT_HOAD} from './constants'
 import { SET_DATA_OF_CURRENT_WEEK, INIT_DATA_OF_CURRENT_WEEK} from './constants'
-import { SET_MEMO_CUR_DAY, SET_LIST_MEMO } from './constants'
+import { SET_MEMO_CUR_DAY, SET_LIST_MEMO, SET_EVERY_HABIT_DONE  } from './constants'
 
 
 import { emptyHabitList } from './action'
@@ -72,6 +72,7 @@ const globalState = {
     dailyReminderText: '',
     DayDoneInMonth: null,
     DayTotalDone: null,
+    EveryHabitDone: 0,
     MonthlyVolumn: null,
     CurrentStreak: 0,
     BestStreak: 0,
@@ -185,6 +186,11 @@ function reducer (state , action) {
             return{
                 ...state,
                 DayTotalDone:action.payload
+            }
+        case SET_EVERY_HABIT_DONE:
+            return{
+                ...state,
+                EveryHabitDone:action.payload
             }
         case INIT_MONTHLY_VOLUMN:
             return{

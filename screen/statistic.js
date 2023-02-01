@@ -10,7 +10,6 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Foundation,Octicons,Entypo } from '@expo/vector-icons'; 
 import Icons from "./icon_color/Icon";
 import {useStore,setUnit, initDayDoneInMonth,initDayTotalDone, initMonthlyVolumn,initTotalVolumn, initDataOfCurWeek} from '../Store'
-
 import {
     LineChart,
     BarChart,
@@ -19,9 +18,11 @@ import {
     ContributionGraph,
     StackedBarChart
   } from "react-native-chart-kit";
+import { calculateDayTotalDone } from '../Store/database';
+import { useEffect } from 'react';
 
 export default function Statistic({navigation}){
-    const[state, dispatch] =useStore()
+    const[state, dispatch] = useStore()
     
     const dataPro = {
         labels: ['Monthly_rate'], // optional
@@ -37,6 +38,9 @@ export default function Statistic({navigation}){
         barPercentage: 0.5,
         useShadowColorFromDataset: false // optional
     };
+
+    calculateDayTotalDone(state.listHabit);
+
     return(
         <View style={style.container}> 
             <View style={{flexDirection:'row',backgroundColor: 'white',}}>
@@ -92,7 +96,7 @@ export default function Statistic({navigation}){
                                     </View>
                                     <View style={style.iconRecord}>
                                         <Octicons name="checklist" size={50} color="#3ee7a8" />
-                                        <Text>0</Text>
+                                        <Text>{state.EveryHabitDone}</Text>
                                         <Text>Habits Done</Text>
                                     </View>
                                     

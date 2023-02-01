@@ -36,5 +36,8 @@ export {initDataOfCurWeek} from './action'
 
 export {setMemmoCurDay, setListMemmo} from './action'
 
+export {setEveryHabitDone} from './action'
+
+
 
 

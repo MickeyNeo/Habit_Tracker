@@ -5,10 +5,9 @@ import reducer, { globalState } from './reducer';
 import { addHabitList, emptyHabitList } from './action';
 import {useStore,setDayDoneInMonth,setDayTotalDone,setMonthlyVolumn,
     setTotalVolumn, setCurrentStreak, setBestStreak, setUnit,setUnitHOAD,
-    setDataOfCurWeek, setMemmoCurDay, setListMemmo} from '../Store'
+    setDataOfCurWeek, setMemmoCurDay, setListMemmo, setEveryHabitDone} from '../Store'
 import {React, useState } from 'react';
 import { memoInit, habitInit, reminderInit, unitInit, tagInit, haveTagInit } from './init_data';
-
     
 const streakRetain = (date, followingDate) => {
     let y, m, d, fy, fm, fd;
@@ -668,8 +667,8 @@ const calculateDayDoneInMonth = (habit) => {
                 AND strftime('%Y',date) = strftime('%Y','now')", 
                 [habit.name],
                 (txObj, resultSet) => {
-                    console.log("Calculated Day Done in month");
-                    console.log(resultSet);
+                    // console.log("Calculated Day Done in month");
+                    // console.log(resultSet);
                     if(state.DayDoneInMonth != resultSet.rows[0]['COUNT(*)']){
                         dispatch(setDayDoneInMonth(resultSet.rows[0]['COUNT(*)']))
                     }
@@ -682,23 +681,50 @@ const calculateDayDoneInMonth = (habit) => {
 
 const calculateDayTotalDone  = (habit) => {
     const[state, dispatch] = useStore()
-    db.transaction(tx => {
-        tx.executeSql("SELECT COUNT(*)\
-        FROM Memo\
-        WHERE habitName = ? AND progress != 0", 
-        [habit.name],
-        (txObj, resultSet) => {
-            console.log("Calculate Day Total Done");
-            console.log(resultSet.rows[0]['COUNT(*)']);
-            console.log(resultSet);
+    if (habit instanceof Array) {
+        let count = 0;
+        for (let i = 0; i < habit.length; i++) {
+            db.transaction(tx => {
+                tx.executeSql("SELECT COUNT(*)\
+                FROM Memo\
+                WHERE habitName = ? AND progress == ?", 
+                [habit[i].name, habit[i].goalNo],
+                (txObj, resultSet) => {
+                    // console.log("Calculate Day Total Done");
+                    // console.log(resultSet.rows[0]['COUNT(*)']);
+                    // console.log(resultSet);
 
-            if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
-                dispatch(setDayTotalDone(resultSet.rows[0]['COUNT(*)']))
-            }
-        },
-        (txObj, error) => console.log(error)
-        );
-    })
+                    if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
+                        count += resultSet.rows[0]['COUNT(*)'];
+                        if (i == habit.length - 1) {
+                            dispatch(setEveryHabitDone(count));
+                        }
+                    }
+                },
+                (txObj, error) => console.log(error)
+                );
+            })
+        }
+    }
+    else {
+        db.transaction(tx => {
+            tx.executeSql("SELECT COUNT(*)\
+            FROM Memo\
+            WHERE habitName = ? AND progress == ?", 
+            [habit.name, habit.goalNo],
+            (txObj, resultSet) => {
+                // console.log("Calculate Day Total Done");
+                // console.log(resultSet.rows[0]['COUNT(*)']);
+                // console.log(resultSet);
+
+                if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
+                    dispatch(setDayTotalDone(resultSet.rows[0]['COUNT(*)']))
+                }
+            },
+            (txObj, error) => console.log(error)
+            );
+        })
+    }
 }
 
 const calculateCurrentStreak = (habit) => {

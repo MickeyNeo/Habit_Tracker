@@ -28,5 +28,7 @@ export const SET_DATA_OF_CURRENT_WEEK = 'set_data_of_current_week';
 export const INIT_DATA_OF_CURRENT_WEEK = 'init_data_of_current_week';
 export const SET_MEMO_CUR_DAY = 'set_memmo_cur_day';
 export const SET_LIST_MEMO = 'set_list_ memmo';
+export const SET_EVERY_HABIT_DONE = 'set_every_habit_done';
+
 
 
