@@ -21,6 +21,7 @@ import Modal from "react-native-modal";
 import { useStore , addHabitOfaDay, addHabitList} from '../Store'
 import { setHabitInput } from '../Store/action'
 import { db, addHabit } from '../Store/database'
+import { Tile } from "@rneui/base";
 const AddHabit = ({navigation, route}) => {
     const frequency_of_day = ["Daily", "Weekly", "Monthly"]
     const frequency_of_week = ["Weekly", "Monthly"]
@@ -111,7 +112,8 @@ const AddHabit = ({navigation, route}) => {
     //Daly
     const itemWeek = ['MON', 'TUE', 'WED','THU','FRI','SAT','SUN'];
     const itemMoth = Array.from({length: 31}, (_, index) => (index + 1).toString());
-    
+    const [visModel, setVisModel] = useState(false)
+    //console.log(itemMoth)
     return (
         <View style={{ flex: 1, flexDirection : 'column'}}>
             <View style ={styles.Habit}>
@@ -210,7 +212,7 @@ const AddHabit = ({navigation, route}) => {
                                       onPress={() => {setModalVisible(false); if (newTag!='') handleAddTag()}}
                                       style={[styles.button,{backgroundColor:value.changecolor}]}
                                     >
-                                      <Text style={styles.text}>Xong</Text>
+                                      <Text style={styles.text}>Done</Text>
                                     </TouchableOpacity>
                                   </View>
 
@@ -257,14 +259,29 @@ const AddHabit = ({navigation, route}) => {
                         </View>
                     </View>
 
-                    <View style = {{flexDirection: 'column', padding: 10}}>
+                    <View style = {{padding: 10}}>
                         <View style = {{flexDirection: 'row' , justifyContent: 'space-between'}}>
-                            <View style = {{flexDirection: 'column'}}>
-                                <Text style ={{fontWeight: 'bold', color: theme.color}}>Frequency</Text>
-                                {DisplayNote(select,value.goal,value.unit)}
-                            </View>
-                            <View style = {{flexDirection: 'row', justifyContent: 'center'}}>
-                                {/* <SelectDropdown
+                          <Text style ={{fontWeight: 'bold', color: theme.color}}>Frequency</Text>
+                          <TouchableOpacity onPress={()=>setVisModel(true)}>
+                            <Text>{value.selectedItem} {'>'}</Text>
+                          </TouchableOpacity>  
+                          <Modal
+                                  isVisible={visModel}
+                                  onBackdropPress={() => {setVisModel(false)}}
+                                >
+                                  <View style={styles.modalFe}>
+                                    <TouchableOpacity
+                                      onPress={() => {setVisModel(false)}}
+                                      style={[styles.button,{backgroundColor:value.changecolor}]}
+                                    >
+                                      <Text style={styles.text}>Confirm</Text>
+                                    </TouchableOpacity>
+                                  </View>
+
+                          </Modal>
+                        </View>
+                            {/* <View style = {{flexDirection: 'row', justifyContent: 'center'}}>
+                                <SelectDropdown
                                   buttonStyle={{width: 75, height: 15, backgroundColor: 'white'}}
                                   buttonTextStyle= {{fontSize: 8}}
                                   defaultButtonText={ value.selectedItem}
@@ -288,11 +305,19 @@ const AddHabit = ({navigation, route}) => {
                                     selectedItem = {value.selectedItem}
                                     goal = {value.goal}
                                     select = {select}
-                                    setSelect = {setSelect} /> */}
-                            </View>
-                        </View>
+                                    setSelect = {setSelect} />
+                            </View> */}
                     </View>
-
+                    <View style = {{padding: 10}}>
+                            
+                            {DisplayNote(select,value.goal,value.unit)}
+                            <View style = {{flexDirection: 'row'}}>
+                                <Text style ={{fontSize: 10, color: 'red' }}> *Complete {value.goal} {value.unit.title} in total on</Text>
+                                {itemWeek.map((value,index)=>{
+                                  <Text style = {{fontSize: 10, color: 'red'}} key = {index}> 1 </Text>
+                                })}
+                          </View>
+                    </View>
                     {/* <View style = {{flexDirection: 'column', padding: 10}}>
                         <Text style ={{fontWeight: 'bold', color: theme.color }}>Time Range</Text>
                             <View style = {{flexDirection: 'row', flex: 1, padding: 10}}>
@@ -389,6 +414,9 @@ const TabButton = (currentTabPeriod, setState, title, color,setSelect, time) => 
         <TouchableOpacity onPress={() => {
             setState(prevState => ({ ...prevState, currentTabPeriod: title }))
             setSelect(time)
+            if (title=='Day') setState(prevState => ({ ...prevState, selectedItem: 'Daily' }))
+            else if (title=='Week') setState(prevState => ({ ...prevState, selectedItem: 'Weekly' }))
+            else setState(prevState => ({ ...prevState, selectedItem: 'Monthly' }))
         }}>
         <View style={[styles.btnTouch, 
             {backgroundColor: currentTabPeriod == title ? color : '#f5f5f5'}
@@ -528,6 +556,20 @@ const DisplayNote = (select,goal,unit) => {
     </View>
     )
 }
+const Frequency =({
+  goal,
+  currentTabTime,
+  unit,
+  status,
+}
+)=>{
+  <View style = {{flexDirection: 'row'}}>
+        <Text style ={{fontSize: 10, color: 'red' }}> *Complete {goal} {unit} in total on</Text>
+        {status.map((value,index)=>{
+          <Text style = {{fontSize: 10, color: 'red'}} key = {index}> {value}</Text>
+        })}
+  </View>
+}
 const styles = StyleSheet.create({
     addHabit: { 
         alignItems: 'stretch',
@@ -634,6 +676,19 @@ const styles = StyleSheet.create({
       padding: 10,
       marginTop: 20,
     },
+    modalFe: {
+      backgroundColor: 'white',
+      padding: 20,
+      borderRadius: 5,
+      alignItems: 'center',
+    },
+    boderWeek:{
+
+    },
+    boderMoth:{
+
+    },
+
 });
 export default AddHabit;
 
