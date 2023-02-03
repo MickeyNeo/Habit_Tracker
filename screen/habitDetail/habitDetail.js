@@ -1,11 +1,11 @@
 import React ,{useState} from "react";
-import { View, Dimensions, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Image, TextInput } from "react-native";
+import { View, Dimensions, Text, StyleSheet, TouchableOpacity,Button, ScrollView, SafeAreaView,Image, TextInput,Alert } from "react-native";
 import {
     ProgressChart,
   } from "react-native-chart-kit";
 import {useStore,setUnit} from '../../Store';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-
+import Modal from "react-native-modal";
 // import hinh 
 import stopwatch from '../Icon/stopwatch.png';
 import memo from '../Icon/memo.png';
@@ -13,22 +13,28 @@ import stat from '../Icon/stat.png';
 import sound from '../Icon/sound.png';
 import style from '../Icon/style.png';
 import CountDown from './countdown/countdown'
-import Stat from './Stat';  
-import Memo from './Memo';
 import plus from '../Icon/plus.png';
 import play from '../Icon/play.png';
 import replay from '../Icon/replay.png';
+
+
 const HabitDetail = ({navigation,route}) => {
     const [onClock, setOnClock] = useState(false);
     const {habit, checkShow} = route.params;
     const[state, dispatch] = useStore()
-
     const [showCountdown, setshowCountdown] = useState(checkShow)
+    //Count
+    const [count,setCount] =useState(0)
+    const [value, setValue] = useState(0);
+    
+    const [modalVisible, setModalVisible] = useState(false);
+    //Memo
+    const [memoText,setMemoText] =useState('')
 
     const data = {
         label: ['Progress'],
         // data: state.progressData
-        data: [state.progressData]
+        data: [count/habit.goalNo]
     }
     const chartConfig = {
         backgroundGradientFrom: "white",
@@ -37,29 +43,45 @@ const HabitDetail = ({navigation,route}) => {
         backgroundGradientToOpacity: 1,
         color: (opacity = 1) => `rgba(138, 126, 164, ${opacity})`,
         // strokeWidth: 2, // optional, default 3
-        barPercentage: 0.5,
+        //barPercentage: count/habit.goalNo,
         useShadowColorFromDataset: false // optional
     };
     
-    
-    console.log(habit)
+    //console.log(checkShow)
+    //console.log(habit)
+    const showAlert = () => {
+        Alert.alert(
+            'Confirm',
+            'Do you want to reset this habit for today?',
+          [
+            {
+              text: 'Cancel',
+              //onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+            {text: 'OK', onPress: () => setCount(0)},
+          ],
+          {cancelable: false},
+        );
+      };
     return (
         <View style={styles.container}>
             {
+                
                 showCountdown ? (
                     <View style = {styles.showView}>
                         <View style = {{flex: 0.85}}>
                             <View style={styles.countdown} >
                                 <CountDown
-                                    until={60 * 10 + 30}
-                                    size={30}
+                                    until={3600}
+                                    size={35}
                                     onFinish={() => alert('Finished')}
                                     digitStyle={{backgroundColor: '#FFF', borderWidth: 2, borderColor: '#1CC625'}}
                                     digitTxtStyle={{color: '#1CC625'}}
                                     timeLabelStyle={{color: 'red', fontWeight: 'bold'}}
                                     //separatorStyle={{color: '#1CC625'}}
-                                    timeToShow={['M', 'S']}
-                                    timeLabels={{m: 'MM', s: 'SS'}}
+                                    timeToShow={['H', 'M', 'S']}
+                                    timeLabels={{h:'HH',m: 'MM', s: 'SS'}}
                                     running = {onClock}
                                     //showSeparator
                                 />
@@ -88,11 +110,11 @@ const HabitDetail = ({navigation,route}) => {
                         </View>
                         
                         <View style={styles.functionZone}>
-                            {TabButton(navigation,"Style", style)}
+                            {/* {TabButton(navigation,"Style", style)}
                             {TabButton(navigation,"Sound", sound)}
-                            {TabButton(navigation,"Stopwatch", stopwatch)}
-                            {TabButton(navigation,"Memo", memo)}
-                            {/* {TabButton(navigation,"Stat", stat)} */}
+                            {TabButton(navigation,"Stopwatch", stopwatch)} */}
+                           {TabButtonMemo(memoText,setMemoText,memo)}
+                           {TabButtonStat(navigation,"Stat", stat,habit)}
                         </View>
                     </View>
                 ):(
@@ -101,7 +123,7 @@ const HabitDetail = ({navigation,route}) => {
                             <ProgressChart
                                 data={data}
                                 width={Dimensions.get('window').width-40}
-                                height={320}
+                                height={420}
                                 strokeWidth={10}
                                 radius={140}
                                 chartConfig={chartConfig}
@@ -111,11 +133,17 @@ const HabitDetail = ({navigation,route}) => {
                             
                         </View>
                         <View style = {styles.insideCircle}>
+                            {count!=0 &&(<TouchableOpacity  onPress={() => setCount(count - 1)}>
+                                    <FontAwesome5 style={{marginHorizontal: 5}} 
+                                                name={'minus'} 
+                                                size={20} 
+                                                color='gray' />
+                            </TouchableOpacity>)}
                             <View style = {{flexDirection: 'column'}}>
-                                <Text style = {{color: 'black', fontSize: 27}}>0 steps</Text>
-                                <Text>/1000</Text>
+                                <Text style = {{color: 'black', fontSize: 27}}>{count} {habit.unitID.title}</Text>
+                                <Text>/{habit.goalNo}</Text>
                             </View>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => setCount(count + 1)}>
                                 <FontAwesome5 style={{marginHorizontal: 5}} 
                                             name={'plus'} 
                                             size={20} 
@@ -123,7 +151,7 @@ const HabitDetail = ({navigation,route}) => {
                             </TouchableOpacity>
                         </View>
                         <View style = {{top: '8%',flexDirection: 'column', justifyContent: 'center', alignItems: 'center',}}>
-                            <TextInput
+                            {/* <TextInput
                                     style = {{ height: 40, 
                                     width: '50%', 
                                     margin: 5,
@@ -136,16 +164,37 @@ const HabitDetail = ({navigation,route}) => {
                                     }}
                                     placeholder="Type your memo here!!!"
                                     onChangeText={newText => setText(newText)}
-                                    defaultValue='0'
-                            /> 
+                                    //defaultValue='0'
+                            />  */}
                             <View style = {{flexDirection: 'row'}}>
-                                <TouchableOpacity >
+                                <TouchableOpacity onPress={() => setModalVisible(true)}>
                                 <Image
                                     source={plus}
                                     style={{ width: 30, height: 30, borderRadius: 100, backgroundColor: '#f5f5f5',right: 10}}
                                 />
+                                <Modal
+                                    isVisible={modalVisible}
+                                    onBackdropPress={() => {setModalVisible(false)}}
+                                >
+                                    <View style={styles.modalContainer}>
+                                    <TextInput
+                                      style={styles.input}
+                                        //placeholder={Value} {habit.unitID.title}
+                                        keyboardType="numeric"
+                                        value={value}
+                                        onChangeText={number => setValue(number)}
+                                    />
+                                    <TouchableOpacity
+                                      onPress={() => {setModalVisible(false),setCount(count+value*1),setValue(0)}}
+                                      style={[styles.button,{backgroundColor:habit.color}]}
+                                    >
+                                      <Text style={styles.text}>Done</Text>
+                                    </TouchableOpacity>
+                                    </View>
+
+                                </Modal>
                                 </TouchableOpacity>
-                                <TouchableOpacity >
+                                <TouchableOpacity  onPress={showAlert}>
                                 <Image
                                     source={replay}
                                     style={{ width: 30, height: 30,borderRadius: 100, backgroundColor: '#f5f5f5', left: 10}}
@@ -155,8 +204,8 @@ const HabitDetail = ({navigation,route}) => {
                                 
                         </View> 
                         <View style={styles.functionZone}>
-                            {TabButton(navigation,"Memo", memo)}
-                            {TabButton(navigation,"Stat", stat)}
+                            {TabButtonMemo(memoText,setMemoText,memo)}
+                            {TabButtonStat(navigation,"Stat", stat,habit)}
                         </View>
                     </View>
                 )
@@ -167,30 +216,56 @@ const HabitDetail = ({navigation,route}) => {
             </View>
         );
 };
-const TabButton = (navigation, title, image) => {
+const TabButtonMemo = (memo, setMemo,pic) => {
 const [isEnabled, setIsEnabled] = useState(false);
   return (
     <TouchableOpacity style = {styles.btnTouch}
-        onPress ={() => {
-                    setIsEnabled(!isEnabled)
-                    }}
-                    > 
-                    {isEnabled && title == 'Memo' && <Memo
-                        myIsmodalVisible = {isEnabled}
-                        setModalVisible = {setIsEnabled}
-                    ></Memo> }
-                    {isEnabled && title == 'Stat' && <Stat 
-                        myIsmodalVisible = {isEnabled}
-                        setModalVisible = {setIsEnabled}
-                    ></Stat> }   
+        onPress ={() => {setIsEnabled(true)}}>
+        <Modal
+            isVisible={isEnabled}
+            onBackdropPress={() => {setIsEnabled(false)}}
+            >
+            <View style={styles.modalContainer}>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Input your memo here"
+                    value={memo}
+                    onChangeText={text => setMemo(text)}
+                />
+                <TouchableOpacity
+                    onPress={() => {setIsEnabled(false)}}
+                    style={[styles.button,{backgroundColor:'blue'}]}
+                >
+                    <Text style={styles.text}>Done</Text>
+                </TouchableOpacity>
+            </View>
+            
+            
+            </Modal>  
     <Image
-        source={image}
+        source={pic}
         style={{ width: 30, height: 30, borderRadius: 100, backgroundColor: '#f5f5f5',}}
     />
-    <Text style = {{fontSize: 10}}>{title}</Text>
+    <Text style = {{fontSize: 10}}>Memo</Text>
     </TouchableOpacity>
   );
 }
+const TabButtonStat =(navigation, title, pic,habit)=>{
+    return (
+        <TouchableOpacity style = {styles.btnTouch} 
+        onPress={() => 
+        navigation.navigate('HabitOfADay', {
+                                    habit: habit,
+                                })}>  
+        <Image
+            source={pic}
+            style={{ width: 30, height: 30, borderRadius: 100, backgroundColor: '#f5f5f5',}}
+        />
+        <Text style = {{fontSize: 10}}>{title}</Text>
+        </TouchableOpacity>
+    );
+}
+
 const styles = StyleSheet.create({
     container:{
       flex: 1, 
@@ -226,11 +301,35 @@ const styles = StyleSheet.create({
     insideCircle: {
         flexDirection: 'row',
         position: 'relative',
-        bottom: 150,
-        left: '2%',
+        bottom: 170,
+        left: '1%',
         justifyContent: 'center',
         alignItems: 'center',
-    }
+    },
+    modalContainer: {
+        backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 5,
+        alignItems: 'center',
+    },
+    input: {
+        width: '80%',
+        height: 40,
+        borderWidth: 1,
+        borderColor: 'gray',
+        padding: 10,
+        marginTop: 20,
+    },
+    text: {
+    color: 'white',
+    fontWeight: 'bold',
+    },
+    button: {
+        //backgroundColor: 'blue',
+        padding: 10,
+        borderRadius: 5,
+        marginTop: 20,
+      },
 });
 
 export default HabitDetail;

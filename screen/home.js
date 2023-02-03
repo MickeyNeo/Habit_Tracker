@@ -56,7 +56,7 @@ const HabitZone = (values,navigation,date) => {
     //console.log(date)
     let day = moment(date.dateString).format('ddd')
     day = day.toUpperCase()
-    //console.log(day)
+    //console.log(values)
     const [state,dispatch] = useStore();
     if (values != '')
     return (
@@ -66,14 +66,13 @@ const HabitZone = (values,navigation,date) => {
           //console.log(value.id)
           let pickDay = value.frequency;
           pickDay = pickDay.split(',')
-          //console.log(pickDay)
-          //console.log(pickDay[5])
+          console.log(value.unitID.title)
            //if (pickDay[day] == 1)
           for (let i = 0; i < pickDay.length; i++) {
             if (pickDay[i] == day ) {
               var checkShow = null 
               getUnitName(value)
-              if (state.unit == 'sec' || state.unit == 'min' || state.unit == 'hr' ){
+              if (value.unitID.title == 'sec' || value.unitID.title == 'min' || value.unitID.title == 'hr' ){
                   checkShow = 1
               }else{
                   checkShow = 0
@@ -83,23 +82,26 @@ const HabitZone = (values,navigation,date) => {
                   style={{ padding: 5 }} 
                   key={value.name} 
                   onPress={() => navigation.navigate('HabitDetail', {habit: value, checkShow: checkShow})}>
-                  <Progress.Bar progress={0.3} width={null} height={35} color={value.color}>
+                  <Progress.Bar progress={0.5} width={null} height={35} color={value.color}>
+                  
+                  </Progress.Bar>
                   <View style={{
                     flex: 1,
                     position: 'absolute',
                     flexDirection: 'row',
                     alignItems: 'center',
+                    top:9,
+                    left:10
                   }}>
                       <Icons type={value.iconFamily} name={value.icon} size={25} color='black' />
                       <View style={{ flexDirection: 'column' }}>
                         <Text style={{ fontSize: 10 }}>{value.name}</Text>
                         <Text style={{ fontSize: 8 }}>{value.note}</Text>
                       </View>
-                      <View style={{ alignItems: 'flex-end', flex: 1 }}>
+                      <View style={{ alignItems: 'flex-end', flex: 1,right:10}}>
                         <Text>0/{value.goalNo}</Text>
                       </View>
                     </View>
-                  </Progress.Bar>
                 </TouchableOpacity>
               );
             }
