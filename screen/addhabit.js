@@ -90,7 +90,7 @@ const AddHabit = ({navigation, route}) => {
         habitEndDay: value.formattedDateEnd,
         goalNo: value.goal,
         goalPeriod: value.currentTabPeriod,
-        unitID: value.unit.id,
+        unitID: value.unit,
         icon: IconInfo[0],
         iconFamily: IconInfo[1],
         flag : flag,
@@ -237,6 +237,7 @@ const AddHabit = ({navigation, route}) => {
                                         borderRadius: 20,
                                         textAlign: 'center'
                                         }}
+                                        keyboardType="numeric"
                                         value={value.goal}
                                         placeholder={value.goal}
                                         onChangeText={(value) => setState(prevState => ({ ...prevState, goal: value }))}
