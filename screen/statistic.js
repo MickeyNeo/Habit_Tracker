@@ -18,11 +18,13 @@ import {
     ContributionGraph,
     StackedBarChart
   } from "react-native-chart-kit";
-import { calculateDayTotalDone } from '../Store/database';
+import { calculateDayTotalDone, CalculateOverallRate, CountPerfectDay, CalculateDailyAverage } from '../Store/database';
 import { useEffect } from 'react';
 
-export default function Statistic({navigation}){
+const Statistic = ({navigation}) => {
     const[state, dispatch] = useStore()
+    
+    
     
     const dataPro = {
         labels: ['Monthly_rate'], // optional
@@ -39,7 +41,14 @@ export default function Statistic({navigation}){
         useShadowColorFromDataset: false // optional
     };
 
+    /* useEffect(() => {
+        calculateDayTotalDone(state.listHabit);
+        CountPerfectDay(state.listHabit);
+    }, []); // 👈️ empty dependencies array */
     calculateDayTotalDone(state.listHabit);
+    CountPerfectDay(state.listHabit);
+    CalculateOverallRate(state.listHabit);
+    CalculateDailyAverage();
 
     return(
         <View style={style.container}> 
@@ -84,7 +93,7 @@ export default function Statistic({navigation}){
                                 chartConfig={chartConfig}
                                 hideLegend={true}
                             />
-                            <Text>Monthly rate: {dataPro.data[0]*100}%</Text>
+                            <Text>Monthly rate: {state.OverallRate*100}%</Text>
                         </View>
                         <View style={{marginTop: '10%'}}>
                             <View style={{flexDirection:'row',justifyContent:'center'}}>
@@ -104,12 +113,12 @@ export default function Statistic({navigation}){
                                 <View style={style.colum}>
                                     <View style={style.iconRecord}>
                                         <FontAwesome5 name="calendar-check" size={50} color="#84b5f7" />
-                                        <Text>0 Day</Text>
+                                        <Text>{state.PerfectDayCount} Day</Text>
                                         <Text>Perfect Days</Text>
                                     </View>
                                     <View style={style.iconRecord}>
                                         <Entypo name="dots-three-vertical" size={50} color="#b697ff" />
-                                        <Text>0</Text>
+                                        <Text>{state.DailyAverage}</Text>
                                         <Text>Daily Average</Text> 
                                     </View>
                                 </View>
@@ -158,3 +167,5 @@ const style = StyleSheet.create({
     },
 
 })
+
+export default Statistic

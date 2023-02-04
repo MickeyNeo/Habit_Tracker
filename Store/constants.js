@@ -30,5 +30,11 @@ export const DEL_HABIT = 'del_habit'
 export const SET_MEMO_CUR_DAY = 'set_memmo_cur_day';
 export const SET_LIST_MEMO = 'set_list_ memmo';
 export const SET_EVERY_HABIT_DONE = 'set_every_habit_done';
+export const SET_PERFECT_DAY_COUNT = 'set_perfect_day_count';
+export const SET_OVERALL_RATE = 'set_overall_rate'
+export const SET_DAILY_AVERAGE = 'set_daily_average'
+
+
+
 
 
