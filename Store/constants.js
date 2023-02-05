@@ -37,4 +37,7 @@ export const SET_DAILY_AVERAGE = 'set_daily_average'
 
 
 
+export const SET_LIST_PROGRESS_DAY = 'set_list_progress_day';
+export const EDIT_LIST_PROGRESS_DAY = 'edit_list_progress_day'
+export const DEL_LIST_PROGRESS_DAY = 'del_list_progress_day'
 

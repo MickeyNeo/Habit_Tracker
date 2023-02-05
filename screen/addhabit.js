@@ -18,7 +18,7 @@ import Modal from "react-native-modal";
 
 // import addName from ./''
 
-import { useStore , addHabitOfaDay, addHabitList} from '../Store'
+import { useStore , addHabitOfaDay, addHabitList, setListProgressDay} from '../Store'
 import { setHabitInput } from '../Store/action'
 import { db, addHabit } from '../Store/database'
 import { Tile } from "@rneui/base";
@@ -85,8 +85,8 @@ const AddHabit = ({navigation, route}) => {
         remainderMessage: value.mess,
         showMemo: value.isEnabled,
         chartType: 0,
-        habitStartDay: value.formattedDateStart,
-        habitEndDay: value.formattedDateEnd,
+        habitStartDay: value.startDay,
+        habitEndDay: value.endDay,
         goalNo: value.goal,
         goalPeriod: value.currentTabPeriod,
         unitID: value.unit.id,
@@ -113,6 +113,23 @@ const AddHabit = ({navigation, route}) => {
     const itemMoth = Array.from({length: 31}, (_, index) => (index + 1).toString());
     const [visModel, setVisModel] = useState(false)
     //console.log(itemMoth)
+    //Danh sách các ngày được chọn
+    const handleProgressDay=()=>{
+      const startDate = moment(value.startDay);
+      const endDate = moment(value.endDay);
+      const dateRange = [];
+      const list = [];
+      while (startDate <= endDate) {
+        dateRange.push(moment(startDate).format('YYYY-MM-DD'));
+        //console.log(1)
+        //list.push({id:id, day: moment(startDate).format('YYYY-MM-DD'), process:0, memo:''})
+        dispatch(setListProgressDay({id:id, day: moment(startDate).format('YYYY-MM-DD'), process:0, memo:''}))
+        startDate.add(1, 'days');
+      }
+      //console.log(list)
+     // dispatch(setListProgressDay(list))
+    }
+    //console.log(value.startDay,value.endDay)
     return (
         <View style={{ flex: 1, flexDirection : 'column'}}>
             <View style ={styles.Habit}>
@@ -365,11 +382,11 @@ const AddHabit = ({navigation, route}) => {
                         <View style = {{flexDirection: 'row', flex: 1}}>
                             <View style ={{ flexDirection: 'column', alignItems: 'center',flex: 0.5, padding: 10 }}>
                                 <Text>Start</Text>
-                                {ShowTimePicker(value.formattedDateStart, value.formattedDateEnd,setState,1)}
+                                {ShowTimePicker(value.startDay, value.endDay,setState,value.changecolor ,1)}
                             </View>
                             <View style ={{ flexDirection: 'column', alignItems: 'center',flex: 0.5, padding: 10 }}>
                                 <Text>End</Text>
-                                {ShowTimePicker(value.formattedDateStart, value.formattedDateEnd,setState,0)}
+                                {ShowTimePicker(value.startDay, value.endDay,setState,value.changecolor,0)}
                             </View>
                         </View>
                     </View> 
@@ -382,6 +399,7 @@ const AddHabit = ({navigation, route}) => {
                     // dispatch(addHabitOfaDay(name.toLowerCase()));
                     dispatch(setHabitInput(habit));
                     dispatch(addHabitList(habit));
+                    handleProgressDay();
                     //addHabit(state.habit);
                     navigation.navigate('Home', {
                         screen: 'AddHabit',
@@ -495,47 +513,52 @@ const TabChoose = ({title, changecolor, unit, tag, IconDetail, setState, flag, s
   )
 }
 
-const ShowTimePicker = (startDay, endDay, setState, flag) => {
-  const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(false);
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate;
-    setShow(false);
+const ShowTimePicker = (startDay, endDay, setState,color ,flag) => {
+  // const [mode, setMode] = useState('date');
+  // const [show, setShow] = useState(false);
+  // const onChange = (event, selectedDate) => {
+  //   const currentDate = selectedDate;
+  //   setShow(false);
+  //   if (flag === 1) {
+  //     setState(prevState => ({ ...prevState, formattedDateStart: title }))
+  //   } else {
+  //     setState(prevState => ({ ...prevState, formattedDateEnd: title }))
+  //   }
+  // };
+  // const showMode = (currentMode) => {
+  //   setShow(true);
+  //   setMode(currentMode);
+  // };
+  // const showDatepicker = () => {
+  //   showMode('date');
+  // };
+  //const [day,setDay]= useState(new Date(flag?startDay:endDay))
+  const handleChange=(event, date) => {
+    // setDay(date)
     if (flag === 1) {
-      setState(prevState => ({ ...prevState, formattedDateStart: title }))
-    } else {
-      setState(prevState => ({ ...prevState, formattedDateEnd: title }))
-    }
+          setState(prevState => ({ ...prevState, startDay: date }))
+        } else {
+          setState(prevState => ({ ...prevState, endDay: date }))
+        }
   };
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-  const showDatepicker = () => {
-    showMode('date');
-  };
-
+  
   return (
-    <View>
-      <TouchableOpacity
-        onPress={showDatepicker}
-        style={{ flexDirection: 'row', borderRadius: 10, backgroundColor: 'green' }}
+    <View
+        style={{ flexDirection: 'row', borderRadius: 10, backgroundColor: color }}
       >
-        <Text>{flag === 1 ? startDay.toLocaleString() : endDay.toLocaleString()}</Text>
-        {show && (
+        {/* <Text>{flag === 1 ? startDay.toLocaleString() : endDay.toLocaleString()}</Text> */}
           <TimePickerDialog
-            testID="dateTimePicker"
-            value={flag === 1 ? startDay : endDay}
-            mode={mode}
-            is24Hour
-            positiveButton={{ label: 'OK', textColor: 'green' }}
-            onChange={onChange}
+            //testID="dateTimePicker"
+            value={flag?startDay:endDay}
+            mode='date'
+            //is24Hour
+            //positiveButton={{ label: 'OK', textColor: 'green' }}
+            onChange={handleChange}
           />
-        )}
-      </TouchableOpacity>
     </View>
   );
 };
+//{(flag? setState(prevState => ({ ...prevState, startDay: time })):setState(prevState => ({ ...prevState, endDay: time }))) }
 const DisplayNote = (select,goal,unit) => {
 
     return (
@@ -547,20 +570,7 @@ const DisplayNote = (select,goal,unit) => {
     </View>
     )
 }
-const Frequency =({
-  goal,
-  currentTabTime,
-  unit,
-  status,
-}
-)=>{
-  <View style = {{flexDirection: 'row'}}>
-        <Text style ={{fontSize: 10, color: 'red' }}> *Complete {goal} {unit} in total on</Text>
-        {status.map((value,index)=>{
-          <Text style = {{fontSize: 10, color: 'red'}} key = {index}> {value}</Text>
-        })}
-  </View>
-}
+
 const styles = StyleSheet.create({
     addHabit: { 
         alignItems: 'stretch',

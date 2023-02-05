@@ -15,7 +15,7 @@ import { SET_UNIT,SET_UNIT_HOAD} from './constants'
 import { SET_DATA_OF_CURRENT_WEEK, INIT_DATA_OF_CURRENT_WEEK} from './constants'
 import { SET_MEMO_CUR_DAY, SET_LIST_MEMO, SET_EVERY_HABIT_DONE  } from './constants'
 import { DEL_HABIT } from './constants'
-
+import { SET_LIST_PROGRESS_DAY, DEL_LIST_PROGRESS_DAY, EDIT_LIST_PROGRESS_DAY } from './constants'
 import { emptyHabitList } from './action'
 import theme from '../screen/styles/theme'
 
@@ -63,6 +63,13 @@ const globalState = {
         habitName: '',
         tagID: 1
     },
+    progressDay:{
+        id:'',
+        day:'',
+        process:0,
+        memo:'',
+    },
+    listProgressDay:[],
     stateLanguage:"English",
     currentTheme: theme.light,
     stateHabitStat: true,
@@ -265,6 +272,25 @@ function reducer (state , action) {
                 ...state,
                 listHabit: action.payload
             }
+
+        case SET_LIST_PROGRESS_DAY:
+            return{
+                ...state,
+                listProgressDay: [...state.listProgressDay,action.payload]
+            }
+        case DEL_LIST_PROGRESS_DAY:
+            return{
+                ...state,
+                listProgressDay: action.payload
+            }
+        case EDIT_LIST_PROGRESS_DAY:
+            return{
+                ...state,
+                listProgressDay: listProgressDay.map(item => {
+                    if (item.id === action.payload[0] && item.day==action.payload[1]) {
+                      return { ...item, process: action.payload[2], memo:action.payload[3]};
+                    }})
+
         case SET_PERFECT_DAY_COUNT:
             return{
                 ...state,
@@ -279,6 +305,7 @@ function reducer (state , action) {
             return{
                 ...state,
                 DailyAverage: action.payload
+
             }
         default:
             throw new Error('sai goi ne')

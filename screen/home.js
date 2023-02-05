@@ -15,30 +15,35 @@ import { getUnitName } from '../Store/database';
 const Home = ({ navigation }) => {
   const [state,dispatch] = useStore();
   const today = new Date();
-  const [selectedDay, setSelectedDay] = useState('');
-  const db = SQLite.openDatabase('Habit_tracker.db');
-  // refreshDatabase();
-  // initDatabase();
+  const [selectedDay, setSelectedDay] = useState(format(today, 'MM/dd/yyyy'));
+  
+  // const db = SQLite.openDatabase('Habit_tracker.db');
+  // // refreshDatabase();
+  // // initDatabase();
 
-  // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
-  useEffect(() => {
-    if (Platform.OS === 'ios' || Platform.OS === 'android') {
-      loadHabit_on_fone(state.listHabit, dispatch)
-    } else {
-      loadHabit_on_web(state.listHabit, dispatch)
-    }
-  }, []); // 👈️ empty dependencies array
+  // // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
+  // useEffect(() => {
+  //   if (Platform.OS === 'ios' || Platform.OS === 'android') {
+  //     loadHabit_on_fone(state.listHabit, dispatch)
+  //   } else {
+  //     loadHabit_on_web(state.listHabit, dispatch)
+  //   }
+  // }, []); // 👈️ empty dependencies array
 
   //refreshDatabase(state.listHabit, dispatch)
   
   //console.log(state.listHabit)
+  //console.log(state.listProgressDay)
   //loadSetting(state, dispatch);
   /* loadUnit(); */
+  //console.log(selectedDay)
+  // }
   return (
     <View style={{backgroundColor: 'white', flex: 1, flexDirection: 'column'}}>
       <View style ={{height: 80 }}>
         <CalendarProvider date={format(today, 'MM/dd/yyyy')}>
           <WeekCalendar 
+            //initialDate={format(today, 'MM/dd/yyyy')}
             theme={styles.theme}
             onDayPress = {(day) => {
               setSelectedDay(day)}} 
@@ -56,20 +61,28 @@ const HabitZone = (values,navigation,date) => {
     // console.log(date)
     let day = moment(date.dateString).format('ddd')
     day = day.toUpperCase()
+    console.log(date.dateString)
     //console.log(values)
     const [state,dispatch] = useStore();
-    if (values != '')
+    const {listProgressDay} =state
+    console.log(listProgressDay)
+    const arr3 = values.map(obj => {
+      const arr2match = listProgressDay.find(x => x.id === obj.id && (x.day === date.dateString || date.dateString ==undefined));
+      return { ...obj, ...arr2match };
+    });
+    console.log(arr3)
+    if (arr3 != '')
     return (
     <View>
       <View style = {{flexDirection: 'column', padding: 10, justifyContent: 'space-evenly'}}>
-        {values.map((value) => {
-          //console.log(value.id)
-          let pickDay = value.frequency;
-          pickDay = pickDay.split(',')
-          //console.log(value.unitID.title)
-           //if (pickDay[day] == 1)
-          for (let i = 0; i < pickDay.length; i++) {
-            if (pickDay[i] == day ) {
+
+        {arr3.map((value) => {
+          // let pickDay = value.frequency;
+          // pickDay = pickDay.split(',')
+          // for (let i = 0; i < pickDay.length; i++) {
+          //   if (pickDay[i] == day ) {
+          if (value.day===date.dateString){
+
               var checkShow = null 
               getUnitName(value)
               if (value.unitID.title == 'sec' || value.unitID.title == 'min' || value.unitID.title == 'hr' ){
@@ -82,8 +95,8 @@ const HabitZone = (values,navigation,date) => {
                   style={{ padding: 5 }} 
                   key={value.name} 
                   onPress={() => navigation.navigate('HabitDetail', {habit: value, checkShow: checkShow})}>
-                  <Progress.Bar progress={0.5} width={null} height={35} color={value.color}>
-                  
+                  <Progress.Bar progress={(value.process)/(value.goalNo)} width={null} height={35} color={value.color}>
+                  {/* (value.process)/(value.goalNo) */}
                   </Progress.Bar>
                   <View style={{
                     flex: 1,
@@ -104,8 +117,7 @@ const HabitZone = (values,navigation,date) => {
                     </View>
                 </TouchableOpacity>
               );
-            }
-        }
+          }
   })}
       </View>
     </View>
