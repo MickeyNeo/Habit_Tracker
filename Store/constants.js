@@ -31,4 +31,7 @@ export const SET_MEMO_CUR_DAY = 'set_memmo_cur_day';
 export const SET_LIST_MEMO = 'set_list_ memmo';
 export const SET_EVERY_HABIT_DONE = 'set_every_habit_done';
 
+export const SET_LIST_PROGRESS_DAY = 'set_list_progress_day';
+export const EDIT_LIST_PROGRESS_DAY = 'edit_list_progress_day'
+export const DEL_LIST_PROGRESS_DAY = 'del_list_progress_day'
 

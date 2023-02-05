@@ -1,8 +1,12 @@
+//import { setListProgressDay } from './action'
+
+
 export { default as StoreProvider }  from './Provider'
 export { default as StoreContext } from './Context'
 export * from './hooks'
 
 //export * as actions from './action'
+export {setListProgressDay, delListProgrssDay,editListProgressDay} from './action'
 export {setLanguage, delHabit} from './action'
 export {addHabitOfaDay} from './action'
 

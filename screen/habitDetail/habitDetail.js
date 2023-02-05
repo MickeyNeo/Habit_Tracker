@@ -3,7 +3,8 @@ import { View, Dimensions, Text, StyleSheet, TouchableOpacity,Button, ScrollView
 import {
     ProgressChart,
   } from "react-native-chart-kit";
-import {useStore,setUnit} from '../../Store';
+import {useStore} from '../../Store';
+import { editListProgressDay } from "../../Store";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Modal from "react-native-modal";
 // import hinh 
@@ -15,21 +16,24 @@ import style from '../Icon/style.png';
 import CountDown from './countdown/countdown'
 import plus from '../Icon/plus.png';
 import play from '../Icon/play.png';
+import pause from '../Icon/pause.png';
 import replay from '../Icon/replay.png';
-
+import moment from 'moment';
 
 const HabitDetail = ({navigation,route}) => {
     const [onClock, setOnClock] = useState(false);
     const {habit, checkShow} = route.params;
     const[state, dispatch] = useStore()
     const [showCountdown, setshowCountdown] = useState(checkShow)
+    //CountDown
+    const [timeCountDown,setTimeCountDown] =useState(0)
     //Count
-    const [count,setCount] =useState(0)
+    const [count,setCount] =useState(habit.process)
     const [value, setValue] = useState(0);
     
     const [modalVisible, setModalVisible] = useState(false);
     //Memo
-    const [memoText,setMemoText] =useState('')
+    const [memoText,setMemoText] =useState(habit.memo)
 
     const data = {
         label: ['Progress'],
@@ -47,8 +51,9 @@ const HabitDetail = ({navigation,route}) => {
         useShadowColorFromDataset: false // optional
     };
     
-    //console.log(checkShow)
-    //console.log(habit)
+    console.log(habit.id,habit.day,count,memoText)
+    console.log(state.listProgressDay)
+    //Hiện thông báo confirm
     const showAlert = () => {
         Alert.alert(
             'Confirm',
@@ -59,11 +64,15 @@ const HabitDetail = ({navigation,route}) => {
               //onPress: () => console.log('Cancel Pressed'),
               style: 'cancel',
             },
-            {text: 'OK', onPress: () => setCount(0)},
+            {text: 'OK', onPress: () => {setCount(0)}},
           ],
           {cancelable: false},
         );
       };
+    const handleEdit=(id,day,count,memo)=>{
+        dispatch(editListProgressDay({id,day,count,memo}))
+    }
+    //handleEdit(habit.id,habit.day,count,memoText)
     return (
         <View style={styles.container}>
             {
@@ -96,7 +105,7 @@ const HabitDetail = ({navigation,route}) => {
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress = {() => setOnClock(!onClock)} >
                                 <Image
-                                    source={play}
+                                    source={onClock?pause:play}
                                     style={{ width: 40, height: 40,}}
                                 />
                                 </TouchableOpacity>
@@ -133,7 +142,7 @@ const HabitDetail = ({navigation,route}) => {
                             
                         </View>
                         <View style = {styles.insideCircle}>
-                            {count!=0 &&(<TouchableOpacity  onPress={() => setCount(count - 1)}>
+                            {count!=0 &&(<TouchableOpacity  onPress={() => {setCount(count - 1)}}>
                                     <FontAwesome5 style={{marginHorizontal: 5}} 
                                                 name={'minus'} 
                                                 size={20} 
@@ -143,7 +152,8 @@ const HabitDetail = ({navigation,route}) => {
                                 <Text style = {{color: 'black', fontSize: 27}}>{count} {habit.unitID.title}</Text>
                                 <Text>/{habit.goalNo}</Text>
                             </View>
-                            <TouchableOpacity onPress={() => setCount(count + 1)}>
+                            <TouchableOpacity onPress={() => {setCount(count + 1)}}>
+                                
                                 <FontAwesome5 style={{marginHorizontal: 5}} 
                                             name={'plus'} 
                                             size={20} 
