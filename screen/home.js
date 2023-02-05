@@ -58,7 +58,7 @@ const Home = ({ navigation }) => {
   )
 };
 const HabitZone = (values,navigation,date) => {
-    //console.log(date)
+    // console.log(date)
     let day = moment(date.dateString).format('ddd')
     day = day.toUpperCase()
     console.log(date.dateString)
@@ -75,12 +75,14 @@ const HabitZone = (values,navigation,date) => {
     return (
     <View>
       <View style = {{flexDirection: 'column', padding: 10, justifyContent: 'space-evenly'}}>
+
         {arr3.map((value) => {
           // let pickDay = value.frequency;
           // pickDay = pickDay.split(',')
           // for (let i = 0; i < pickDay.length; i++) {
           //   if (pickDay[i] == day ) {
           if (value.day===date.dateString){
+
               var checkShow = null 
               getUnitName(value)
               if (value.unitID.title == 'sec' || value.unitID.title == 'min' || value.unitID.title == 'hr' ){

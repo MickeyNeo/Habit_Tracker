@@ -2,12 +2,15 @@ import * as SQLite from 'expo-sqlite';
 import { useContext } from 'react';
 import Context from './Context';
 import reducer, { globalState } from './reducer';
-import { addHabitList, emptyHabitList } from './action';
+import { addHabitList, emptyHabitList, setOverallRate } from './action';
 import {useStore,setDayDoneInMonth,setDayTotalDone,setMonthlyVolumn,
     setTotalVolumn, setCurrentStreak, setBestStreak, setUnit,setUnitHOAD,
-    setDataOfCurWeek, setMemmoCurDay, setListMemmo, setEveryHabitDone} from '../Store'
+    setDataOfCurWeek, setMemmoCurDay, setListMemmo, setEveryHabitDone, setPerfectDayCount,
+    setDailyAverage} from '../Store'
 import {React, useState } from 'react';
 import { memoInit, habitInit, reminderInit, unitInit, tagInit, haveTagInit } from './init_data';
+import moment from 'moment';
+
     
 const streakRetain = (date, followingDate) => {
     let y, m, d, fy, fm, fd;
@@ -679,7 +682,7 @@ const calculateDayDoneInMonth = (habit) => {
 }
 
 
-const calculateDayTotalDone  = (habit) => {
+/* const calculateDayTotalDone  = (habit) => {
     const[state, dispatch] = useStore()
     if (habit instanceof Array) {
         let count = 0;
@@ -705,6 +708,47 @@ const calculateDayTotalDone  = (habit) => {
                 );
             })
         }
+    }
+    else {
+        db.transaction(tx => {
+            tx.executeSql("SELECT COUNT(*)\
+            FROM Memo\
+            WHERE habitName = ? AND progress == ?", 
+            [habit.name, habit.goalNo],
+            (txObj, resultSet) => {
+                // console.log("Calculate Day Total Done");
+                // console.log(resultSet.rows[0]['COUNT(*)']);
+                // console.log(resultSet);
+
+                if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
+                    dispatch(setDayTotalDone(resultSet.rows[0]['COUNT(*)']))
+                }
+            },
+            (txObj, error) => console.log(error)
+            );
+        })
+    }
+} */
+
+const calculateDayTotalDone  = (habit) => {
+    const[state, dispatch] = useStore()
+    if (habit instanceof Array) {
+        db.transaction(tx => {
+            tx.executeSql("SELECT COUNT(*)\
+            FROM Memo AS M, Habit AS H\
+            WHERE H.name == M.habitName\
+            AND M.progress == H.goalNo", 
+            [],
+            (txObj, resultSet) => {
+                // console.log("Calculate Day Total Done");
+                // console.log(resultSet.rows[0]['COUNT(*)']);
+                // console.log(resultSet);
+
+                dispatch(setEveryHabitDone(resultSet.rows[0]['COUNT(*)']));
+            },
+            (txObj, error) => console.log(error)
+            );
+        })
     }
     else {
         db.transaction(tx => {
@@ -929,8 +973,153 @@ const getAllMemmo = (habit) => {
     })  
 }
 
+const numberHabitInDay = (listHabit, date) => {
+    var count = 0;
+    for (var habit of listHabit) {
+        if (habit.frequencyType == 'Day') {
+            // console.log('Habit Day: ', date);
+            count += 1;
+        }
+        else if (habit.frequencyType == 'Week') {
+            let day = moment(date).format('ddd');
+            // console.log('Habit Week: ', day.toUpperCase() , habit.frequency.split(','));
+            if (habit.frequency.split(',').includes(day.toUpperCase())) {
+                // console.log('Habit Week: ', day.toUpperCase() , habit.frequency.split());
+                count += 1;
+            }
+        }
+        else if (habit.frequencyType == 'Month') {
+            // console.log('Habit Month: ', date.slice(8), habit.frequency.split());
+            if (date.slice(8) in habit.frequency.split()) {
+                count += 1;
+            }
+        }
+    }
+
+    return count;
+}
+
+const CountPerfectDay = (listHabit) => {
+    const[state, dispatch] = useStore()
+
+    db.transaction(tx => {
+        tx.executeSql("SELECT date, COUNT(*)\
+        FROM Memo AS M\
+        GROUP BY date\
+        ORDER BY date\
+        ", 
+        [],
+        (txObj, resultSet) => {
+            // console.log("Calculate Day Total Done");
+            // console.log(resultSet);
+
+            var count = 0;
+
+            for (var day of resultSet.rows){
+                if (day['COUNT(*)'] == numberHabitInDay(listHabit, day['date'])) {
+                    count += 1;
+                }
+            }
+
+            /* console.log('Counting perfect days: ', count); */
+
+            dispatch(setPerfectDayCount(count));
+
+            /* if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
+                count += resultSet.rows[0]['COUNT(*)'];
+                if (i == habit.length - 1) {
+                    dispatch(setEveryHabitDone(count));
+                }
+            } */
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+}
+
+const CalculateOverallRate = (listHabit) => {
+    const[state, dispatch] = useStore()
+
+    db.transaction(tx => {
+        tx.executeSql("SELECT date, COUNT(*)\
+        FROM Memo AS M\
+        GROUP BY date\
+        ORDER BY date\
+        ", 
+        [],
+        (txObj, resultSet) => {
+            // console.log("Calculate Day Total Done");
+            // console.log(resultSet);
+
+            var rates = [];
+
+            for (var day of resultSet.rows){
+                // console.log(day['COUNT(*)'], numberHabitInDay(listHabit, day['date']))
+                rates.push(day['COUNT(*)'] * 1.0 / numberHabitInDay(listHabit, day['date'])) 
+            }
+
+            const average = array => array.reduce((a, b) => a + b) / array.length;
+            // console.log(rates)
+            // console.log('Overall Rate: ', average(rates));
+            dispatch(setOverallRate(Math.round(average(rates) * 100)/100));
+
+
+            /* if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
+                count += resultSet.rows[0]['COUNT(*)'];
+                if (i == habit.length - 1) {
+                }
+            } */
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+}
+
+
+const CalculateDailyAverage = () => {
+    const[state, dispatch] = useStore()
+
+    db.transaction(tx => {
+        tx.executeSql("SELECT date, COUNT(*)\
+        FROM Memo AS M\
+        GROUP BY date\
+        ORDER BY date\
+        ", 
+        [],
+        (txObj, resultSet) => {
+            // console.log("Calculate Day Total Done");
+            // console.log(resultSet);
+
+            var counts = [];
+
+            for (var day of resultSet.rows){
+                // console.log(day['COUNT(*)'], numberHabitInDay(listHabit, day['date']))
+                counts.push(day['COUNT(*)']) 
+            }
+
+            const average = array => array.reduce((a, b) => a + b) / array.length;
+            // console.log(rates)
+            // console.log('Overall Rate: ', average(rates));
+            dispatch(setDailyAverage(Math.round(average(counts))));
+
+
+            /* if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
+                count += resultSet.rows[0]['COUNT(*)'];
+                if (i == habit.length - 1) {
+                }
+            } */
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+}
+
+
+
+
 
 export {db,getAllMemmo,getMemmoCurDay,getUnitNameforHOAD, getDataOfCurWeek,getUnitName, loadHabit_on_fone,
     loadHabit_on_web , addHabit, refreshDatabase, initDatabase, loadUnit, deleteHabit, 
     updateHabit, loadSetting, calculateDayDoneInMonth, calculateMonthlyVolumn, 
-    calculateTotalVolumn, calculateDayTotalDone, calculateCurrentStreak, calculateBestStreak}
+    calculateTotalVolumn, calculateDayTotalDone, calculateCurrentStreak, calculateBestStreak, CountPerfectDay,
+    CalculateOverallRate, CalculateDailyAverage}

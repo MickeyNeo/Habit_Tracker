@@ -20,7 +20,7 @@ export default function SelectFreq (params){
                 onBackdropPress={() => params.setModalVisible(false)}
                 >
                      <View style={{
-                            height: params.freq == 'Week' ? '28%' : '35%', 
+                            height: params.freq == 'Week' ? '10%' : '25%', 
                             borderRadius: 30, 
                             borderWidth: 1,
                             backgroundColor: '#FFFFFF',}}>
@@ -35,12 +35,13 @@ export default function SelectFreq (params){
                                 justifyContent: 'center', 
                                 alignItems: 'center'}}>
                                 <Text style={styles.tilte}>Track Habit on</Text>
-                                { params.freq == 'Weekly' && <SelectZone
+                                { params.freq == 'Weekly' && 
+                                <SelectZone
                                     values = {params.select}
                                     buttonPressed = {buttonPressed}
                                     condition = {params.freq}
                                     color = {params.color}
-                                    />
+                                />
                                 }
                                 { params.freq == 'Monthly' &&
                                 <View>
@@ -67,14 +68,39 @@ export default function SelectFreq (params){
                                     />
                                 </View>
                                 }
-                                {params.freq == 'Daily' && 
-                                    <View>ahihi 
-                                    
-                                    </View>
+                                {
+                                    params.freq == 'Daily' && 
+                                    <ChooseFreq
+                                        values = {[ "Daily", "Weekly", "Monthly"]}
+                                        color = {params.color}
+                                        selected = {params.freq}
+                                        setFreq = {params.setFreq}
+                                        setSelect = {params.setSelect}
+                                        week = {params.week}
+                                        month = {params.month}
+                                    />
                                 }
-                                <Text style ={{fontSize: 10}}> Complete 1000 steps each day </Text>
+                                {
+                                    params.freq == 'Weekly' &&
+                                    <TouchableOpacity
+                                        onPress={() => {params.setModalVisible(false)}}
+                                        style={[styles.button, {backgroundColor: params.color}]}
+                                        >
+                                        <Text style={styles.text}>Confirm</Text>
+                                    </TouchableOpacity>
+                                }
+                                {
+                                    params.freq == 'Monthly' &&
+                                    <TouchableOpacity
+                                        onPress={() => {params.setModalVisible(false)}}
+                                        style={[styles.button, {backgroundColor: params.color}]}
+                                        >
+                                        <Text style={styles.text}>Confirm</Text>
+                                    </TouchableOpacity>
+                                }
+                            {/* <Text style ={{fontSize: 10}}> Complete 1000 steps each day </Text> */}
                             </View>
-                            <View style ={{
+                            {/* <View style ={{
                                 backgroundColor: '#FFFFFF',
                                 borderWidth: 1, 
                                 borderRadius: 20, 
@@ -84,7 +110,7 @@ export default function SelectFreq (params){
                                 justifyContent: 'center', 
                                 alignItems: 'center'}}>
                                 <Text style={styles.tilte}>Complete on any</Text>
-                                <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                                {/* <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                                     <TouchableOpacity 
                                         style = {{ 
                                             height: 20, 
@@ -109,16 +135,16 @@ export default function SelectFreq (params){
                                             onPress = {() => setCount(count+1)}>
                                         <Text>+</Text>
                                     </TouchableOpacity>
-                                </View>
-                                <Text style ={{fontSize: 10}}> Complete {params.goal} steps each day, any {count} in a week </Text>
-                            </View>
+                                </View> 
+                                * <Text style ={{fontSize: 10}}> Complete {params.goal} steps each day, any {count} in a week </Text> 
+                            </View> */}
                         </View>
                     </View>
                 </Modal>       
         </View>
     )
 }
-const SelectZone = ({ values, buttonPressed, condition, color, flag })=> 
+const SelectZone = ({ values, buttonPressed, condition, color, flag }) => 
     (   
         <View style ={{flexDirection: 'row'}}>
             {values.map((value) => {
@@ -146,6 +172,36 @@ const SelectZone = ({ values, buttonPressed, condition, color, flag })=>
             })}
         </View>
     );
+const ChooseFreq = ({values, color, selected, setFreq, setSelect, week, month}) =>
+    (   
+        <View style ={{flexDirection: 'column '}}>
+            {values.map((value) => 
+                <TouchableOpacity 
+                onPress = {() => 
+                    {   console.log(value)
+                        if (value == 'Weekly') setSelect(prevState => ({ ...prevState, selectedFreq: week}))
+                        else if (value == 'Monthly') setSelect(prevState => ({ ...prevState, selectedFreq: month}))
+                        setFreq(prevState => ({ ...prevState, selectedItem: value}))}
+                    }
+                    style = 
+                    {{ 
+                    borderWidth: 1,
+                    borderRadius: 10, 
+                    width: 80,
+                    height: 20, 
+                    alignItems: 'center',
+                    backgroundColor: value == selected ? color : 'white',
+                    justifyContent: 'center',
+                    }}
+                    key={value}
+                >
+                <Text style = {{fontSize: 15 }}>
+                    {value}
+                </Text>
+                </TouchableOpacity>
+            )}
+        </View>
+    );
 const styles=StyleSheet.create({
     container:{
         flex: 1,
@@ -159,5 +215,19 @@ const styles=StyleSheet.create({
         //position: 'absolute',
         fontSize: 15,
         color: 'black',
+    },
+    button: {
+      //backgroundColor: 'blue',
+      padding: 10,
+      borderRadius: 5,
+      marginTop: 20,
+    },
+    button_switch :{
+        fontSize: 15, 
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        padding: 10,
+        borderRadius: 10,
     }
 })
