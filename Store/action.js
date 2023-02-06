@@ -1,4 +1,4 @@
-import { EMPTY_HABIT_LIST, SET_DAILY_REMINDER_TIME, SET_HABIT_BAR_STYLE, SET_HABIT_INPUT } from './constants'
+import { EMPTY_HABIT_LIST, SET_DAILY_AVERAGE, SET_DAILY_REMINDER_TIME, SET_HABIT_BAR_STYLE, SET_HABIT_INPUT, SET_OVERALL_RATE, SET_PERFECT_DAY_COUNT } from './constants'
 import { SET_LANGUAGE } from './constants'
 import { ADD_HABIT_OF_ADAY } from './constants'
 import { ADD_HABIT_LIST } from './constants'
@@ -162,6 +162,7 @@ export const setEveryHabitDone = payload => ({
     type: SET_EVERY_HABIT_DONE,
     payload 
 })
+
 export const setListProgressDay = payload =>({
     type: SET_LIST_PROGRESS_DAY,
     payload
@@ -174,3 +175,20 @@ export const editListProgressDay = payload =>({
     type: EDIT_LIST_PROGRESS_DAY,
     payload
 })
+
+
+export const setPerfectDayCount = payload => ({
+    type: SET_PERFECT_DAY_COUNT,
+    payload 
+})
+
+export const setOverallRate = payload => ({
+    type: SET_OVERALL_RATE,
+    payload 
+})
+
+export const setDailyAverage = payload => ({
+    type: SET_DAILY_AVERAGE,
+    payload 
+})
+
