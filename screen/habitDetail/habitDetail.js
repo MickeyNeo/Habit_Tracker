@@ -21,9 +21,10 @@ import replay from '../Icon/replay.png';
 import moment from 'moment';
 
 const HabitDetail = ({navigation,route}) => {
+    const[state, dispatch] = useStore()
     const [onClock, setOnClock] = useState(false);
     const {habit, checkShow} = route.params;
-    const[state, dispatch] = useStore()
+    
     const [showCountdown, setshowCountdown] = useState(checkShow)
     //CountDown
     const [timeCountDown,setTimeCountDown] =useState(0)
@@ -52,6 +53,7 @@ const HabitDetail = ({navigation,route}) => {
     };
     
     console.log(habit.id,habit.day,count,memoText)
+    console.log(habit)
     console.log(state.listProgressDay)
     //Hiện thông báo confirm
     const showAlert = () => {
@@ -70,8 +72,22 @@ const HabitDetail = ({navigation,route}) => {
         );
       };
     const handleEdit=(id,day,count,memo)=>{
-        dispatch(editListProgressDay({id,day,count,memo}))
+        dispatch(editListProgressDay(state.listProgressDay.map(item => {
+            if (item.id === id && item.day===day) {
+              return { ...item, process:count, memo:memo};
+            }
+            return item
+            })))
     }
+
+    // const test = state.listProgressDay.map(item => {
+    //         //console.log(item)
+    //         if (item.id === habit.id && item.day===habit.day) {
+    //           return { ...item, process: count, memo:memoText};
+    //         }
+    //         return item
+    //     })
+    // console.log(test)
     //handleEdit(habit.id,habit.day,count,memoText)
     return (
         <View style={styles.container}>
@@ -152,7 +168,7 @@ const HabitDetail = ({navigation,route}) => {
                                 <Text style = {{color: 'black', fontSize: 27}}>{count} {habit.unitID.title}</Text>
                                 <Text>/{habit.goalNo}</Text>
                             </View>
-                            <TouchableOpacity onPress={() => {setCount(count + 1)}}>
+                            <TouchableOpacity onPress={() => {setCount(count + 1),handleEdit(habit.id,habit.day,count,memoText)}}>
                                 
                                 <FontAwesome5 style={{marginHorizontal: 5}} 
                                             name={'plus'} 

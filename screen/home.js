@@ -18,8 +18,8 @@ const Home = ({ navigation }) => {
   const [selectedDay, setSelectedDay] = useState(format(today, 'MM/dd/yyyy'));
   
   // const db = SQLite.openDatabase('Habit_tracker.db');
-  // // refreshDatabase();
-  // // initDatabase();
+  // //refreshDatabase();
+  // //initDatabase();
 
   // // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
   // useEffect(() => {
@@ -33,7 +33,7 @@ const Home = ({ navigation }) => {
   //refreshDatabase(state.listHabit, dispatch)
   
   //console.log(state.listHabit)
-  //console.log(state.listProgressDay)
+  console.log(state.listProgressDay)
   //loadSetting(state, dispatch);
   /* loadUnit(); */
   //console.log(selectedDay)
@@ -43,7 +43,6 @@ const Home = ({ navigation }) => {
       <View style ={{height: 80 }}>
         <CalendarProvider date={format(today, 'MM/dd/yyyy')}>
           <WeekCalendar 
-            //initialDate={format(today, 'MM/dd/yyyy')}
             theme={styles.theme}
             onDayPress = {(day) => {
               setSelectedDay(day)}} 
@@ -57,6 +56,7 @@ const Home = ({ navigation }) => {
     </View>
   )
 };
+
 const HabitZone = (values,navigation,date) => {
     //console.log(date)
     let day = moment(date.dateString).format('ddd')
