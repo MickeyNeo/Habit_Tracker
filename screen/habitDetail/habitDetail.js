@@ -66,12 +66,14 @@ const HabitDetail = ({navigation,route}) => {
               //onPress: () => console.log('Cancel Pressed'),
               style: 'cancel',
             },
-            {text: 'OK', onPress: () => {setCount(0)}},
+            {text: 'OK', onPress: () => {setCount(0),handleEdit(habit.id,habit.day,0,memoText)}},
           ],
           {cancelable: false},
         );
       };
+    
     const handleEdit=(id,day,count,memo)=>{
+        console.log('dem')
         dispatch(editListProgressDay(state.listProgressDay.map(item => {
             if (item.id === id && item.day===day) {
               return { ...item, process:count, memo:memo};
@@ -158,7 +160,7 @@ const HabitDetail = ({navigation,route}) => {
                             
                         </View>
                         <View style = {styles.insideCircle}>
-                            {count!=0 &&(<TouchableOpacity  onPress={() => {setCount(count - 1)}}>
+                            {count!=0 &&(<TouchableOpacity  onPress={() => {setCount(count - 1),handleEdit(habit.id,habit.day,count-1,memoText)}}>
                                     <FontAwesome5 style={{marginHorizontal: 5}} 
                                                 name={'minus'} 
                                                 size={20} 
@@ -168,7 +170,7 @@ const HabitDetail = ({navigation,route}) => {
                                 <Text style = {{color: 'black', fontSize: 27}}>{count} {habit.unitID.title}</Text>
                                 <Text>/{habit.goalNo}</Text>
                             </View>
-                            <TouchableOpacity onPress={() => {setCount(count + 1),handleEdit(habit.id,habit.day,count,memoText)}}>
+                            <TouchableOpacity onPress={() => {setCount(prevState => prevState+1),handleEdit(habit.id,habit.day,count+1,memoText)}}>
                                 
                                 <FontAwesome5 style={{marginHorizontal: 5}} 
                                             name={'plus'} 
@@ -211,7 +213,7 @@ const HabitDetail = ({navigation,route}) => {
                                         onChangeText={number => setValue(number)}
                                     />
                                     <TouchableOpacity
-                                      onPress={() => {setModalVisible(false),setCount(count+value*1),setValue(0)}}
+                                      onPress={() => {setModalVisible(false),setCount(count+value*1),handleEdit(habit.id,habit.day,count+value*1,memoText),setValue(0)}}
                                       style={[styles.button,{backgroundColor:habit.color}]}
                                     >
                                       <Text style={styles.text}>Done</Text>
@@ -230,7 +232,7 @@ const HabitDetail = ({navigation,route}) => {
                                 
                         </View> 
                         <View style={styles.functionZone}>
-                            {TabButtonMemo(memoText,setMemoText,memo)}
+                            {TabButtonMemo(memoText,setMemoText,memo,handleEdit,habit,count,memoText)}
                             {TabButtonStat(navigation,"Stat", stat,habit)}
                         </View>
                     </View>
@@ -242,7 +244,7 @@ const HabitDetail = ({navigation,route}) => {
             </View>
         );
 };
-const TabButtonMemo = (memo, setMemo,pic) => {
+const TabButtonMemo = (memo, setMemo,pic,handleEdit,habit,count,memoText) => {
 const [isEnabled, setIsEnabled] = useState(false);
   return (
     <TouchableOpacity style = {styles.btnTouch}
@@ -259,7 +261,7 @@ const [isEnabled, setIsEnabled] = useState(false);
                     onChangeText={text => setMemo(text)}
                 />
                 <TouchableOpacity
-                    onPress={() => {setIsEnabled(false)}}
+                    onPress={() => {setIsEnabled(false),handleEdit(habit.id,habit.day,count,memoText)}}
                     style={[styles.button,{backgroundColor:'blue'}]}
                 >
                     <Text style={styles.text}>Done</Text>
