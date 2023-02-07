@@ -69,7 +69,7 @@ const globalState = {
         process:0,
         memo:'',
     },
-    listProgressDay:[],
+    listProgressDay: [],
     stateLanguage:"English",
     currentTheme: theme.light,
     stateHabitStat: true,
@@ -286,10 +286,9 @@ function reducer (state , action) {
         case EDIT_LIST_PROGRESS_DAY:
             return{
                 ...state,
-                listProgressDay: listProgressDay.map(item => {
-                    if (item.id === action.payload[0] && item.day==action.payload[1]) {
-                      return { ...item, process: action.payload[2], memo:action.payload[3]};
-                    }})
+                listProgressDay: action.payload
+             }
+       
 
         case SET_PERFECT_DAY_COUNT:
             return{
@@ -305,7 +304,6 @@ function reducer (state , action) {
             return{
                 ...state,
                 DailyAverage: action.payload
-
             }
         default:
             throw new Error('sai goi ne')
