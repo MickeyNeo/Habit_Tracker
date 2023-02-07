@@ -514,17 +514,60 @@ const TabChoose = ({title, changecolor, unit, tag, IconDetail, setState, flag, s
 }
 
 const ShowTimePicker = (startDay, endDay, setState,color ,flag) => {
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    setShow(false);
+    if (flag === 1) {
+      setState(prevState => ({ ...prevState, startDay: selectedDate  }))
+    } else {
+      setState(prevState => ({ ...prevState, endDay: selectedDate }))
+    }
+  };
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+  const showDatepicker = () => {
+    showMode('date');
+  };
+
+  return (
+    <View>
+      <TouchableOpacity
+        onPress={showDatepicker}
+        style={{ flexDirection: 'row', borderRadius: 10, backgroundColor: 'green' }}
+      >
+        <Text>{flag === 1 ? startDay.toDateString() : endDay.toDateString()}</Text>
+        {show && (
+          <TimePickerDialog
+            testID="dateTimePicker"
+            value={flag === 1 ? startDay : endDay}
+            mode={mode}
+            //is24Hour
+            positiveButton={{ label: 'OK', textColor: 'green' }}
+            onChange={onChange}
+          />
+        )}
+      </TouchableOpacity>
+    </View>
+  );
+  
+  
+  
+  
   // const [mode, setMode] = useState('date');
   // const [show, setShow] = useState(false);
-  // const onChange = (event, selectedDate) => {
-  //   const currentDate = selectedDate;
-  //   setShow(false);
-  //   if (flag === 1) {
-  //     setState(prevState => ({ ...prevState, formattedDateStart: title }))
-  //   } else {
-  //     setState(prevState => ({ ...prevState, formattedDateEnd: title }))
-  //   }
-  // };
+  // // const onChange = (event, selectedDate) => {
+  // //   const currentDate = selectedDate;
+  // //   setShow(false);
+  // //   if (flag === 1) {
+  // //     setState(prevState => ({ ...prevState, formattedDateStart: title }))
+  // //   } else {
+  // //     setState(prevState => ({ ...prevState, formattedDateEnd: title }))
+  // //   }
+  // // };
   // const showMode = (currentMode) => {
   //   setShow(true);
   //   setMode(currentMode);
@@ -532,33 +575,45 @@ const ShowTimePicker = (startDay, endDay, setState,color ,flag) => {
   // const showDatepicker = () => {
   //   showMode('date');
   // };
-  //const [day,setDay]= useState(new Date(flag?startDay:endDay))
-  const handleChange=(event, date) => {
-    // setDay(date)
-    if (flag === 1) {
-          setState(prevState => ({ ...prevState, startDay: date }))
-        } else {
-          setState(prevState => ({ ...prevState, endDay: date }))
-        }
-  };
+  // //const [day,setDay]= useState(new Date(flag?startDay:endDay))
+  // const handleChange=(event, date) => {
+  //   // setDay(date)
+  //   if (flag === 1) {
+  //         setState(prevState => ({ ...prevState, startDay: date }))
+  //       } else {
+  //         setState(prevState => ({ ...prevState, endDay: date }))
+  //       }
+  // };
   
-  return (
-    <View
-        style={{ flexDirection: 'row', borderRadius: 10, backgroundColor: color }}
-      >
-        {/* <Text>{flag === 1 ? startDay.toLocaleString() : endDay.toLocaleString()}</Text> */}
-          <TimePickerDialog
-            //testID="dateTimePicker"
-            value={flag?startDay:endDay}
-            mode='date'
-            //is24Hour
-            //positiveButton={{ label: 'OK', textColor: 'green' }}
-            onChange={handleChange}
-          />
-    </View>
-  );
+  // return (
+  //   <View
+  //       style={{ flexDirection: 'row', borderRadius: 10, backgroundColor: color }}
+  //     >
+  //       <TouchableOpacity onPress={showDatepicker}>
+  //       {show && (
+  //         <TimePickerDialog
+  //           testID="dateTimePicker"
+  //           value={flag === 1 ? startDay : endDay}
+  //           mode={mode}
+  //           is24Hour
+  //           positiveButton={{ label: 'OK', textColor: 'green' }}
+  //           onChange={handleChange}
+  //         />
+  //       )}
+  //       </TouchableOpacity>
+  //       {/* <Text>{flag === 1 ? startDay.toLocaleString() : endDay.toLocaleString()}</Text>
+  //         <TimePickerDialog
+  //           testID="dateTimePicker"
+  //           value={flag?startDay:endDay}
+  //           mode='date'
+  //           is24Hour
+  //           positiveButton={{ label: 'OK', textColor: 'green' }}
+  //           onChange={handleChange}
+  //         /> */}
+  //   </View>
+  // );
 };
-//{(flag? setState(prevState => ({ ...prevState, startDay: time })):setState(prevState => ({ ...prevState, endDay: time }))) }
+
 const DisplayNote = (select,goal,unit) => {
 
     return (

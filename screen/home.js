@@ -112,7 +112,7 @@ const HabitZone = (values,navigation,date) => {
                         <Text style={{ fontSize: 8 }}>{value.note}</Text>
                       </View>
                       <View style={{ alignItems: 'flex-end', flex: 1,right:10}}>
-                        <Text>0/{value.goalNo}</Text>
+                        <Text>{value.process}/{value.goalNo}</Text>
                       </View>
                     </View>
                 </TouchableOpacity>
