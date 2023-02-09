@@ -2,7 +2,7 @@ import * as SQLite from 'expo-sqlite';
 import { useContext } from 'react';
 import Context from './Context';
 import reducer, { globalState } from './reducer';
-import { addHabitList, emptyHabitList, setOverallRate } from './action';
+import { addHabitList, emptyHabitList, setOverallRate, setPerFectStreak } from './action';
 import {useStore,setDayDoneInMonth,setDayTotalDone,setMonthlyVolumn,
     setTotalVolumn, setCurrentStreak, setBestStreak, setUnit,setUnitHOAD,
     setDataOfCurWeek, setMemmoCurDay, setListMemmo, setEveryHabitDone, setPerfectDayCount,
@@ -780,8 +780,8 @@ const calculateCurrentStreak = (habit) => {
         ORDER BY date DESC', 
         [habit.name],
         (txObj, resultSet) => {
-            console.log("Calculated Current Streak");
-            console.log(resultSet.rows);
+            // console.log("Calculated Current Streak");
+            // console.log(resultSet.rows);
 
             let streak = CurrentStreak(resultSet.rows);
 
@@ -803,11 +803,11 @@ const calculateBestStreak = (habit) => {
         ORDER BY date DESC', 
         [habit.name],
         (txObj, resultSet) => {
-            console.log("Calculated Best Streak");
-            console.log(resultSet.rows);
+            // console.log("Calculated Best Streak");
+            // console.log(resultSet.rows);
 
             let streak = BestStreak(resultSet.rows);
-            console.log(streak);
+            // console.log(streak);
 
             if(state.BestStreak != streak){
                 dispatch(setBestStreak(streak))
@@ -826,9 +826,9 @@ const getUnitName = (habit) => {
         WHERE  Habit.unitID = Unit.id AND Habit.name = ?', 
         [habit.name],
         (txObj, resultSet) => {
-            console.log("Unit Name");
-            console.log(resultSet);
-            console.log(resultSet.rows[0]['name']);
+            // console.log("Unit Name");
+            // console.log(resultSet);
+            // console.log(resultSet.rows[0]['name']);
             if(state.unit != resultSet.rows[0]['name']){
                 dispatch(setUnit(resultSet.rows[0]['name']))
             }
@@ -845,9 +845,9 @@ const getUnitNameforHOAD = (habit) => {
         WHERE  Habit.unitID = Unit.id AND Habit.name = ?', 
         [habit.name],
         (txObj, resultSet) => {
-            console.log("Unit Name",habit.name);
-            console.log(resultSet);
-            console.log(resultSet.rows[0]['name']);
+            // console.log("Unit Name",habit.name);
+            // console.log(resultSet);
+            // console.log(resultSet.rows[0]['name']);
             if(state.unitHOAD != resultSet.rows[0]['name']){
                 dispatch(setUnitHOAD(resultSet.rows[0]['name']))
             }
@@ -1037,6 +1037,59 @@ const CountPerfectDay = (listHabit) => {
     })
 }
 
+const CountPerfectStreak = (listHabit) => {
+    const[state, dispatch] = useStore()
+
+    db.transaction(tx => {
+        tx.executeSql("SELECT date, COUNT(*)\
+        FROM Memo AS M\
+        GROUP BY date\
+        ORDER BY date\
+        ", 
+        [],
+        (txObj, resultSet) => {
+            // console.log("Calculate Perfect Streak");
+            // console.log(resultSet.rows)
+
+            var bestStreak = 0;
+            var count = 1;
+            var date = null;
+            var followingDate = null;
+
+            for (var day of resultSet.rows){
+                if (day['COUNT(*)'] == numberHabitInDay(listHabit, day['date'])) {
+                    // console.log(1);
+                    if (followingDate) {
+                        if (date&&streakRetain(date, followingDate)) {
+                            date = followingDate;
+                            followingDate = day['date'];
+                            count += 1;
+                            if (bestStreak < count) {
+                                bestStreak = count;
+                            }
+                        }
+                        else {
+                            count = 1
+                            date = followingDate;
+                            followingDate = day['date'];
+                        }
+                    }
+                    else {
+                        followingDate = day['date'];
+                    }
+                }
+            }
+
+            // console.log('Counting perfect days: ', bestStreak); 
+
+            dispatch(setPerFectStreak(bestStreak));
+
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+}
+
 const CalculateOverallRate = (listHabit) => {
     const[state, dispatch] = useStore()
 
@@ -1122,4 +1175,4 @@ export {db,getAllMemmo,getMemmoCurDay,getUnitNameforHOAD, getDataOfCurWeek,getUn
     loadHabit_on_web , addHabit, refreshDatabase, initDatabase, loadUnit, deleteHabit, 
     updateHabit, loadSetting, calculateDayDoneInMonth, calculateMonthlyVolumn, 
     calculateTotalVolumn, calculateDayTotalDone, calculateCurrentStreak, calculateBestStreak, CountPerfectDay,
-    CalculateOverallRate, CalculateDailyAverage}
+    CalculateOverallRate, CalculateDailyAverage, CountPerfectStreak}

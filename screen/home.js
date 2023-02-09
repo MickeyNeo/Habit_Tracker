@@ -18,22 +18,22 @@ const Home = ({ navigation }) => {
   const [selectedDay, setSelectedDay] = useState(format(today, 'MM/dd/yyyy'));
   
   // const db = SQLite.openDatabase('Habit_tracker.db');
-  // //refreshDatabase();
-  // //initDatabase();
+  //refreshDatabase();
+  //initDatabase();
 
-  // // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
-  // useEffect(() => {
-  //   if (Platform.OS === 'ios' || Platform.OS === 'android') {
-  //     loadHabit_on_fone(state.listHabit, dispatch)
-  //   } else {
-  //     loadHabit_on_web(state.listHabit, dispatch)
-  //   }
-  // }, []); // 👈️ empty dependencies array
+  // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
+  useEffect(() => {
+    if (Platform.OS === 'ios' || Platform.OS === 'android') {
+      loadHabit_on_fone(state.listHabit, dispatch)
+    } else {
+      loadHabit_on_web(state.listHabit, dispatch)
+    }
+  }, []); // 👈️ empty dependencies array
 
   //refreshDatabase(state.listHabit, dispatch)
   
   //console.log(state.listHabit)
-  console.log(state.listProgressDay)
+  // console.log(state.listProgressDay)
   //loadSetting(state, dispatch);
   /* loadUnit(); */
   //console.log(selectedDay)
@@ -61,16 +61,16 @@ const HabitZone = (values,navigation,date) => {
     // console.log(date)
     let day = moment(date.dateString).format('ddd')
     day = day.toUpperCase()
-    console.log(date.dateString)
+    // console.log(date.dateString)
     //console.log(values)
     const [state,dispatch] = useStore();
     const {listProgressDay} =state
-    console.log(listProgressDay)
+    // console.log(listProgressDay)
     const arr3 = values.map(obj => {
       const arr2match = listProgressDay.find(x => x.id === obj.id && (x.day === date.dateString || date.dateString ==undefined));
       return { ...obj, ...arr2match };
     });
-    console.log(arr3)
+    // console.log(arr3)
     if (arr3 != '')
     return (
     <View>
