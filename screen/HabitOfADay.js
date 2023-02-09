@@ -22,12 +22,10 @@ const HabitOfADay = ({navigation :{goBack},route}) =>{
     getUnitNameforHOAD(habit)
     const date = new Date();
     const currentMonth = date.getMonth() + 1
-    const nameOfMonth = date.toLocaleString(
-        'default',
-        {month: 'long'}
-    );
+    const nameOfMonth = date.toDateString().slice(4,-8)
     
     console.log(habit)
+    console.log(nameOfMonth)
     const [isEnabled, setIsEnabled] = useState(false);
     const[state, dispatch] = useStore()
     const data = {
@@ -73,8 +71,11 @@ const HabitOfADay = ({navigation :{goBack},route}) =>{
             </View>
             <View style={{flex: 1,alignItems: 'stretch'}}>
                 <ScrollView style ={{marginBottom: 10, flex:1 }}>
-                    <Calendar style={styles.calendar} firstDay={1}/>
-                    
+                    {/* <Calendar style={styles.calendar} firstDay={1}/> */}
+                    <View>
+                        {CustomCalendar()}
+                    </View>
+
                     {/* Yearly Status */}
                     {/* <View style = {styles.part}>
                         <Text style = {styles.headText}>Yearly Status</Text>
@@ -197,6 +198,35 @@ const HabitOfADay = ({navigation :{goBack},route}) =>{
         </View>
     )
 }
+
+function CustomCalendar(props) {
+    const none = {key: '0', color: 'red'};
+    const half = {key: '50', color: 'yellow'};
+    const near = {key: '75', color: 'orange'};
+    const done = {key: '100', color: 'green'};
+   
+    const getMarked = () => {
+        let marked = {};
+        // for(let i = 1; i <= 10; i++) {
+        //   let day = i.toString().padStart(2, '0');
+          marked['2023-02-08'] = {
+                dots: [none]
+          };
+        // }
+        console.log(marked)
+
+        return marked;
+      };
+    return (
+      <Calendar
+        
+        markingType="multi-dot"
+        markedDates={getMarked()}
+        {...props}
+      />
+    );
+}
+
 const styles = StyleSheet.create({
     container: {
         flexDirection:'column',
