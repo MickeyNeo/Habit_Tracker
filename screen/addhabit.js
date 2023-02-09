@@ -89,7 +89,7 @@ const AddHabit = ({navigation, route}) => {
         habitEndDay: value.endDay,
         goalNo: value.goal,
         goalPeriod: value.currentTabPeriod,
-        unitID: value.unit.id,
+        unitID: value.unit,
         icon: IconInfo[0],
         iconFamily: IconInfo[1],
         flag : flag,
@@ -123,7 +123,7 @@ const AddHabit = ({navigation, route}) => {
         dateRange.push(moment(startDate).format('YYYY-MM-DD'));
         //console.log(1)
         //list.push({id:id, day: moment(startDate).format('YYYY-MM-DD'), process:0, memo:''})
-        dispatch(setListProgressDay({id:id, day: moment(startDate).format('YYYY-MM-DD'), process:0, memo:''}))
+        dispatch(setListProgressDay({habitname: name, day: moment(startDate).format('YYYY-MM-DD'), process:0, memo:''}))
         startDate.add(1, 'days');
       }
       //console.log(list)
@@ -244,6 +244,7 @@ const AddHabit = ({navigation, route}) => {
                                         borderRadius: 20,
                                         textAlign: 'center'
                                         }}
+                                        keyboardType="numeric"
                                         value={value.goal}
                                         placeholder={value.goal}
                                         onChangeText={(value) => setState(prevState => ({ ...prevState, goal: value }))}
@@ -316,12 +317,12 @@ const AddHabit = ({navigation, route}) => {
                     </View>
                     <View style = {{padding: 10}}>
                             {DisplayNote(value.selectedFreq,value.goal,value.unit)}
-                            <View style = {{flexDirection: 'row'}}>
+                            {/* <View style = {{flexDirection: 'row'}}>
                                 <Text style ={{fontSize: 10, color: 'red' }}> *Complete {value.goal} {value.unit.title} in total on</Text>
                                 {itemWeek.map((value,index)=>{
                                   <Text style = {{fontSize: 10, color: 'red'}} key = {index}> 1 </Text>
                                 })}
-                          </View>
+                          </View> */}
                     </View>
                     {/* <View style = {{flexDirection: 'column', padding: 10}}>
                         <Text style ={{fontWeight: 'bold', color: theme.color }}>Time Range</Text>

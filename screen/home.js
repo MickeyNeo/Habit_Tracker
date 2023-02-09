@@ -33,10 +33,11 @@ const Home = ({ navigation }) => {
   //refreshDatabase(state.listHabit, dispatch)
   
   //console.log(state.listHabit)
-  console.log(state.listProgressDay)
+  //console.log(state.listProgressDay)
   //loadSetting(state, dispatch);
   /* loadUnit(); */
-  //console.log(selectedDay)
+  console.log('chonngay',selectedDay)
+  console.log('list', state.listHabit)
   // }
   return (
     <View style={{backgroundColor: 'white', flex: 1, flexDirection: 'column'}}>
@@ -58,19 +59,29 @@ const Home = ({ navigation }) => {
 };
 
 const HabitZone = (values,navigation,date) => {
-    // console.log(date)
+    console.log('date',date)
     let day = moment(date.dateString).format('ddd')
     day = day.toUpperCase()
-    console.log(date.dateString)
+    //console.log(day)
     //console.log(values)
     const [state,dispatch] = useStore();
     const {listProgressDay} =state
-    console.log(listProgressDay)
+    console.log('listProgressDay',listProgressDay)
+    
     const arr3 = values.map(obj => {
-      const arr2match = listProgressDay.find(x => x.id === obj.id && (x.day === date.dateString || date.dateString ==undefined));
+      const arr2match = listProgressDay.find(x => x.habitname === obj.name && (x.day === date.dateString || date.dateString ==undefined));
       return { ...obj, ...arr2match };
     });
-    console.log(arr3)
+    console.log('arr3', arr3)
+    //time
+    const handleTime = (until) => {
+      return {
+        seconds: until % 60,
+        minutes: parseInt(until / 60, 10) % 60,
+        hours: parseInt(until / (60 * 60), 10) % 24,
+        days: parseInt(until / (60 * 60 * 24), 10),
+      };
+    };
     if (arr3 != '')
     return (
     <View>
@@ -81,15 +92,22 @@ const HabitZone = (values,navigation,date) => {
           // pickDay = pickDay.split(',')
           // for (let i = 0; i < pickDay.length; i++) {
           //   if (pickDay[i] == day ) {
+          console.log('day' ,value.day)
           if (value.day===date.dateString){
-
+              var valueGoal
               var checkShow = null 
               getUnitName(value)
               if (value.unitID.title == 'sec' || value.unitID.title == 'min' || value.unitID.title == 'hr' ){
-                  checkShow = 1
+                  {checkShow = 1; 
+                    if (value.unitID.title == 'min') valueGoal= value.goalNo*60
+                    else if (value.unitID.title == 'hr') valueGoal= value.goalNo*3600
+                    else valueGoal= value.goalNo
+                  }
               }else{
                   checkShow = 0
               }
+              const {days, hours, minutes, seconds} = handleTime(value.process)
+              //console.log(days, hours, minutes, seconds)
               return (
                 <TouchableOpacity 
                   style={{ padding: 5 }} 
@@ -112,7 +130,8 @@ const HabitZone = (values,navigation,date) => {
                         <Text style={{ fontSize: 8 }}>{value.note}</Text>
                       </View>
                       <View style={{ alignItems: 'flex-end', flex: 1,right:10}}>
-                        <Text>{value.process}/{value.goalNo}</Text>
+                         <Text>{value.process}/{value.goalNo} {value.unitID.title}</Text>
+                      {/* {checkShow && <Text>seconds/{value.goalNo} {value.unitID.title}</Text>} */}
                       </View>
                     </View>
                 </TouchableOpacity>
