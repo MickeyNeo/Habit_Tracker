@@ -77,7 +77,7 @@ const HabitDetail = ({navigation,route}) => {
               //onPress: () => console.log('Cancel Pressed'),
               style: 'cancel',
             },
-            {text: 'OK', onPress: () => {setCount(0),handleEdit(habit.id,habit.day,0,memoText)}},
+            {text: 'OK', onPress: () => {setCount(0),handleEdit(habit.name,habit.day,0,memoText)}},
           ],
           {cancelable: false},
         );
@@ -104,9 +104,9 @@ const HabitDetail = ({navigation,route}) => {
         );
       };
 
-    const handleEdit=(id,day,count,memo)=>{
+    const handleEdit=(name,day,count,memo)=>{
         dispatch(editListProgressDay(state.listProgressDay.map(item => {
-            if (item.id === id && item.day===day) {
+            if (item.habitname === name && item.day===day) {
               return { ...item, process:count, memo:memo};
             }
             return item
@@ -132,7 +132,7 @@ const HabitDetail = ({navigation,route}) => {
                                     timeToShow={['H', 'M', 'S']}
                                     timeLabels={{h:'HH',m: 'MM', s: 'SS'}}
                                     running = {onClock}
-                                    onChange={(time)=>  {if (onClock) {setCount(count+1),handleEdit(habit.id,habit.day,count+1,memoText) }}}
+                                    onChange={(time)=>  {if (onClock) {setCount(count+1),handleEdit(habit.name,habit.day,count+1,memoText) }}}
                                     //showSeparator
                                 />
                                 
@@ -184,7 +184,7 @@ const HabitDetail = ({navigation,route}) => {
                             
                         </View>
                         <View style = {styles.insideCircle}>
-                            {count!=0 &&(<TouchableOpacity  onPress={() => {setCount(count - 1),handleEdit(habit.id,habit.day,count-1,memoText)}}>
+                            {count!=0 &&(<TouchableOpacity  onPress={() => {setCount(count - 1),handleEdit(habit.name,habit.day,count-1,memoText)}}>
                                     <FontAwesome5 style={{marginHorizontal: 5}} 
                                                 name={'minus'} 
                                                 size={20} 
@@ -194,7 +194,7 @@ const HabitDetail = ({navigation,route}) => {
                                 <Text style = {{color: 'black', fontSize: 27}}>{count} {habit.unitID.title}</Text>
                                 <Text>/{habit.goalNo}</Text>
                             </View>
-                            <TouchableOpacity onPress={() => {setCount(prevState => prevState+1),handleEdit(habit.id,habit.day,count+1,memoText)}}>
+                            <TouchableOpacity onPress={() => {setCount(prevState => prevState+1),handleEdit(habit.name,habit.day,count+1,memoText)}}>
                                 
                                 <FontAwesome5 style={{marginHorizontal: 5}} 
                                             name={'plus'} 
@@ -238,7 +238,7 @@ const HabitDetail = ({navigation,route}) => {
                                         onChangeText={number => setValue(number)}
                                     />
                                     <TouchableOpacity
-                                      onPress={() => {setModalVisible(false),setCount(count+value*1),handleEdit(habit.id,habit.day,count+value*1,memoText),setValue(0)}}
+                                      onPress={() => {setModalVisible(false),setCount(count+value*1),handleEdit(habit.name,habit.day,count+value*1,memoText),setValue(0)}}
                                       style={[styles.button,{backgroundColor:habit.color}]}
                                     >
                                       <Text style={styles.text}>Done</Text>
@@ -286,7 +286,7 @@ const [isEnabled, setIsEnabled] = useState(false);
                     onChangeText={text => setMemo(text)}
                 />
                 <TouchableOpacity
-                    onPress={() => {setIsEnabled(false),handleEdit(habit.id,habit.day,count,memoText)}}
+                    onPress={() => {setIsEnabled(false),handleEdit(habit.name,habit.day,count,memoText)}}
                     style={[styles.button,{backgroundColor:'blue'}]}
                 >
                     <Text style={styles.text}>Done</Text>
