@@ -10,6 +10,7 @@ import {useStore,setDayDoneInMonth,setDayTotalDone,setMonthlyVolumn,
 import {React, useState } from 'react';
 import { memoInit, habitInit, reminderInit, unitInit, tagInit, haveTagInit } from './init_data';
 import moment from 'moment';
+import { floor } from 'react-native-reanimated';
 
     
 const streakRetain = (date, followingDate) => {
@@ -1036,6 +1037,62 @@ const CountPerfectDay = (listHabit) => {
         );
     })
 }
+
+// const CountPerfectStreak = (listHabit) => {
+//     const[state, dispatch] = useStore()
+
+//     db.transaction(tx => {
+//         tx.executeSql("SELECT date, COUNT(*)\
+//         FROM Memo AS M\
+//         GROUP BY date\
+//         ORDER BY date\
+//         ", 
+//         [],
+//         (txObj, resultSet) => {
+//             // console.log("Calculate Day Total Done");
+//             // console.log(resultSet);
+
+//             var bestStreak = 0;
+//             var count = 1;
+//             var date = null;
+//             var followingDate = null;
+
+//             for (var day of resultSet.rows){
+//                 if (day['COUNT(*)'] == numberHabitInDay(listHabit, day['date'])) {
+//                     date = followingDate;
+//                     followingDate = day['date'];
+//                     if (followingDate) {
+//                         if (streakRetain(date, followingDate)) {
+//                             count += 1;
+//                             if (bestStreak < count) {
+//                                 bestStreak = count;
+//                             }
+//                         }
+//                         else {
+//                             count = 1
+//                         }
+//                     }
+//                     else {
+//                         followingDate = day['date'];
+//                     }
+//                 }
+//             }
+
+//             /* console.log('Counting perfect days: ', count); */
+
+//             dispatch(setPerfectDayCount(count));
+
+//             /* if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
+//                 count += resultSet.rows[0]['COUNT(*)'];
+//                 if (i == habit.length - 1) {
+//                     dispatch(setEveryHabitDone(count));
+//                 }
+//             } */
+//         },
+//         (txObj, error) => console.log(error)
+//         );
+//     })
+// }
 
 const CalculateOverallRate = (listHabit) => {
     const[state, dispatch] = useStore()

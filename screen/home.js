@@ -14,6 +14,16 @@ import { getUnitName } from '../Store/database';
 
 const Home = ({ navigation }) => {
   const [state,dispatch] = useStore();
+
+    // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
+  useEffect(() => {
+    if (Platform.OS === 'ios' || Platform.OS === 'android') {
+      loadHabit_on_fone(state.listHabit, dispatch)
+    } else {
+      loadHabit_on_web(state.listHabit, dispatch)
+    }
+  }, []); // 👈️ empty dependencies array
+  
   const today = new Date();
   const [selectedDay, setSelectedDay] = useState(format(today, 'MM/dd/yyyy'));
   
@@ -21,14 +31,7 @@ const Home = ({ navigation }) => {
   // //refreshDatabase();
   // //initDatabase();
 
-  // // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
-  // useEffect(() => {
-  //   if (Platform.OS === 'ios' || Platform.OS === 'android') {
-  //     loadHabit_on_fone(state.listHabit, dispatch)
-  //   } else {
-  //     loadHabit_on_web(state.listHabit, dispatch)
-  //   }
-  // }, []); // 👈️ empty dependencies array
+
 
   //refreshDatabase(state.listHabit, dispatch)
   
