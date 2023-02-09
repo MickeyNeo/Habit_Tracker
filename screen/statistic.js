@@ -45,6 +45,7 @@ const Statistic = ({navigation}) => {
         calculateDayTotalDone(state.listHabit);
         CountPerfectDay(state.listHabit);
     }, []); // 👈️ empty dependencies array */
+    CountPerfectStreak(state.listHabit);
     calculateDayTotalDone(state.listHabit);
     CountPerfectDay(state.listHabit);
     CalculateOverallRate(state.listHabit);

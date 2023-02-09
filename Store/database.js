@@ -1049,8 +1049,7 @@ const CountPerfectDay = (listHabit) => {
 //         ", 
 //         [],
 //         (txObj, resultSet) => {
-//             // console.log("Calculate Day Total Done");
-//             // console.log(resultSet);
+//             console.log("Calculate Perfect Streak");
 
 //             var bestStreak = 0;
 //             var count = 1;
@@ -1059,10 +1058,10 @@ const CountPerfectDay = (listHabit) => {
 
 //             for (var day of resultSet.rows){
 //                 if (day['COUNT(*)'] == numberHabitInDay(listHabit, day['date'])) {
-//                     date = followingDate;
-//                     followingDate = day['date'];
 //                     if (followingDate) {
-//                         if (streakRetain(date, followingDate)) {
+//                         if (date||streakRetain(date, followingDate)) {
+//                             date = followingDate;
+//                             followingDate = day['date'];
 //                             count += 1;
 //                             if (bestStreak < count) {
 //                                 bestStreak = count;
@@ -1070,6 +1069,8 @@ const CountPerfectDay = (listHabit) => {
 //                         }
 //                         else {
 //                             count = 1
+//                             date = followingDate;
+//                             followingDate = day['date'];
 //                         }
 //                     }
 //                     else {
@@ -1078,16 +1079,10 @@ const CountPerfectDay = (listHabit) => {
 //                 }
 //             }
 
-//             /* console.log('Counting perfect days: ', count); */
+//             console.log('Counting perfect days: ', bestStreak); 
 
-//             dispatch(setPerfectDayCount(count));
+//             // dispatch(setPerfectDayCount(count));
 
-//             /* if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
-//                 count += resultSet.rows[0]['COUNT(*)'];
-//                 if (i == habit.length - 1) {
-//                     dispatch(setEveryHabitDone(count));
-//                 }
-//             } */
 //         },
 //         (txObj, error) => console.log(error)
 //         );
