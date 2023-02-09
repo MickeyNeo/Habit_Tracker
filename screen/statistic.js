@@ -18,7 +18,7 @@ import {
     ContributionGraph,
     StackedBarChart
   } from "react-native-chart-kit";
-import { calculateDayTotalDone, CalculateOverallRate, CountPerfectDay, CalculateDailyAverage } from '../Store/database';
+import { calculateDayTotalDone, CalculateOverallRate, CountPerfectDay, CalculateDailyAverage, CountPerfectStreak } from '../Store/database';
 import { useEffect } from 'react';
 
 const Statistic = ({navigation}) => {
@@ -47,6 +47,7 @@ const Statistic = ({navigation}) => {
     }, []); // 👈️ empty dependencies array */
     calculateDayTotalDone(state.listHabit);
     CountPerfectDay(state.listHabit);
+    CountPerfectStreak(state.listHabit);
     CalculateOverallRate(state.listHabit);
     CalculateDailyAverage();
 
@@ -100,7 +101,7 @@ const Statistic = ({navigation}) => {
                                 <View style={style.colum}>
                                     <View style={style.iconRecord}>
                                         <FontAwesome5  name="medal" size={50} color="#fcac44" />
-                                        <Text>0 Day</Text>
+                                        <Text>{state.PerfectStreak} {(state.PerfectStreak == 1) ? 'Day' : 'Days'}</Text>
                                         <Text>Best Streaks</Text>
                                     </View>
                                     <View style={style.iconRecord}>
@@ -113,8 +114,8 @@ const Statistic = ({navigation}) => {
                                 <View style={style.colum}>
                                     <View style={style.iconRecord}>
                                         <FontAwesome5 name="calendar-check" size={50} color="#84b5f7" />
-                                        <Text>{state.PerfectDayCount} Day</Text>
-                                        <Text>Perfect Days</Text>
+                                        <Text>{state.PerfectDayCount}</Text>
+                                        <Text>Perfect {(state.PerfectDayCount == 1) ? 'Day' : 'Days'}</Text>
                                     </View>
                                     <View style={style.iconRecord}>
                                         <Entypo name="dots-three-vertical" size={50} color="#b697ff" />
