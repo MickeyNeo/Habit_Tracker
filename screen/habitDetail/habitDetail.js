@@ -1,4 +1,4 @@
-import React ,{useState} from "react";
+import React ,{useState,useRef, useEffect} from "react";
 import { View, Dimensions, Text, StyleSheet, TouchableOpacity,Button, ScrollView, SafeAreaView,Image, TextInput,Alert } from "react-native";
 import {
     ProgressChart,
@@ -13,11 +13,12 @@ import memo from '../Icon/memo.png';
 import stat from '../Icon/stat.png';
 import sound from '../Icon/sound.png';
 import style from '../Icon/style.png';
-import CountDown from './countdown/countdown'
+//import CountDown from './countdown/countdown'
+import CountDown from "react-native-countdown-component";
 import plus from '../Icon/plus.png';
 import play from '../Icon/play.png';
 import pause from '../Icon/pause.png';
-import replay from '../Icon/replay.png';
+import replay from '../Icon/replay.png';    
 import moment from 'moment';
 
 const HabitDetail = ({navigation,route}) => {
@@ -27,7 +28,17 @@ const HabitDetail = ({navigation,route}) => {
     
     const [showCountdown, setshowCountdown] = useState(checkShow)
     //CountDown
-    const [timeCountDown,setTimeCountDown] =useState(0)
+    const [timeCountDown,setTimeCountDown] =useState(()=>{
+        if (habit.unitID.title == 'sec') return habit.goalNo-habit.process  
+        if (habit.unitID.title == 'min')  return habit.goalNo*60-habit.process  
+        if (habit.unitID.title == 'hr' ) return habit.goalNo*3600-habit.process  
+    })
+    //const [timeCount, setTimeCount] = useState(0)
+    const handleTime =(time)=>{ 
+        if (habit.unitID.title == 'sec') return time  
+        if (habit.unitID.title == 'min')  return time*60
+        if (habit.unitID.title == 'hr' ) return time*3600
+    }
     //Count
     const [count,setCount] =useState(habit.process)
     const [value, setValue] = useState(0);
@@ -35,7 +46,7 @@ const HabitDetail = ({navigation,route}) => {
     const [modalVisible, setModalVisible] = useState(false);
     //Memo
     const [memoText,setMemoText] =useState(habit.memo)
-
+    
     const data = {
         label: ['Progress'],
         // data: state.progressData
@@ -52,8 +63,8 @@ const HabitDetail = ({navigation,route}) => {
         useShadowColorFromDataset: false // optional
     };
     
-    console.log(habit.id,habit.day,count,memoText)
-    console.log(habit)
+    // console.log(habit.id,habit.day,count,memoText)
+    // console.log(habit)
     console.log(state.listProgressDay)
     //Hiện thông báo confirm
     const showAlert = () => {
@@ -71,9 +82,29 @@ const HabitDetail = ({navigation,route}) => {
           {cancelable: false},
         );
       };
-    
+    //Hiện thông báo confirm
+    const [itime, setTime] = useState(90);
+    const handleReset = () => {
+        console.log(itime)
+        setTime(90);
+    };
+    const showAlertTime = () => {
+        Alert.alert(
+            'Confirm',
+            'Do you want to reset this habit for today?',
+          [
+            {
+              text: 'Cancel',
+              //onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+            {text: 'OK', onPress: () => setTimeCountDown()},
+          ],
+          {cancelable: false},
+        );
+      };
+
     const handleEdit=(id,day,count,memo)=>{
-        console.log('dem')
         dispatch(editListProgressDay(state.listProgressDay.map(item => {
             if (item.id === id && item.day===day) {
               return { ...item, process:count, memo:memo};
@@ -81,26 +112,17 @@ const HabitDetail = ({navigation,route}) => {
             return item
             })))
     }
-
-    // const test = state.listProgressDay.map(item => {
-    //         //console.log(item)
-    //         if (item.id === habit.id && item.day===habit.day) {
-    //           return { ...item, process: count, memo:memoText};
-    //         }
-    //         return item
-    //     })
-    // console.log(test)
+    
     //handleEdit(habit.id,habit.day,count,memoText)
     return (
         <View style={styles.container}>
-            {
-                
-                showCountdown ? (
+            {      
+                checkShow ? (
                     <View style = {styles.showView}>
                         <View style = {{flex: 0.85}}>
                             <View style={styles.countdown} >
                                 <CountDown
-                                    until={3600}
+                                    until={timeCountDown}
                                     size={35}
                                     onFinish={() => alert('Finished')}
                                     digitStyle={{backgroundColor: '#FFF', borderWidth: 2, borderColor: '#1CC625'}}
@@ -110,24 +132,26 @@ const HabitDetail = ({navigation,route}) => {
                                     timeToShow={['H', 'M', 'S']}
                                     timeLabels={{h:'HH',m: 'MM', s: 'SS'}}
                                     running = {onClock}
+                                    onChange={(time)=>  {if (onClock) {setCount(count+1),handleEdit(habit.id,habit.day,count+1,memoText) }}}
                                     //showSeparator
                                 />
+                                
                             </View>
 
                             <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}> 
-                                <TouchableOpacity >
+                                {/* <TouchableOpacity >
                                 <Image
                                     source={plus}
                                     style={{ width: 30, height: 30, borderRadius: 100, backgroundColor: '#f5f5f5'}}
                                 />
-                                </TouchableOpacity>
+                                </TouchableOpacity> */}
                                 <TouchableOpacity onPress = {() => setOnClock(!onClock)} >
                                 <Image
                                     source={onClock?pause:play}
                                     style={{ width: 40, height: 40,}}
                                 />
                                 </TouchableOpacity>
-                                <TouchableOpacity >
+                                <TouchableOpacity onPress={showAlertTime} >
                                 <Image
                                     source={replay}
                                     style={{ width: 30, height: 30,borderRadius: 100, backgroundColor: '#f5f5f5'}}
@@ -195,7 +219,7 @@ const HabitDetail = ({navigation,route}) => {
                                     //defaultValue='0'
                             />  */}
                             <View style = {{flexDirection: 'row'}}>
-                                <TouchableOpacity onPress={() => setModalVisible(true)}>
+                                <TouchableOpacity onPress={() => {setModalVisible(true)}}>
                                 <Image
                                     source={plus}
                                     style={{ width: 30, height: 30, borderRadius: 100, backgroundColor: '#f5f5f5',right: 10}}
@@ -208,6 +232,7 @@ const HabitDetail = ({navigation,route}) => {
                                     <TextInput
                                       style={styles.input}
                                         //placeholder={Value} {habit.unitID.title}
+                                        //ref={inputRef}
                                         keyboardType="numeric"
                                         value={value}
                                         onChangeText={number => setValue(number)}
