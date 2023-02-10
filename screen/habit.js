@@ -274,7 +274,7 @@ const Habit = ({navigation}) => {
     {
         habit[i].flag = checkFlag.includes(habit[i].id) ? 1 : habit[i].flag;
     }
-    console.log(checkFlag)
+    // console.log(checkFlag)
     return (
     <View style={styles.container}>
         <View style = {styles.addHabit}>

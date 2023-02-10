@@ -16,7 +16,7 @@ export default function HabitManager (){
     const [modalVisible, setModalVisible] = useState(false);
     const option = ["Edit", "Delete"]
     const [isModalVisibleDel, setModalVisibleDel] = useState(true);
-    console.log(state.listHabit)
+    // console.log(state.listHabit)
     const handleDelHablit =(id)=> {
         dispatch(delHabit(state.listHabit.filter(item => item.id !== id)))
     }

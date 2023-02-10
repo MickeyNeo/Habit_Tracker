@@ -24,10 +24,16 @@ const HabitOfADay = ({navigation :{goBack},route}) =>{
     const currentMonth = date.getMonth() + 1
     const nameOfMonth = date.toDateString().slice(4,-8)
     
-    console.log(habit)
-    console.log(nameOfMonth)
+    // console.log(habit)
+    // console.log(nameOfMonth)
     const [isEnabled, setIsEnabled] = useState(false);
     const[state, dispatch] = useStore()
+    calculateDayDoneInMonth(habit);
+    calculateDayTotalDone(habit);
+    calculateMonthlyVolumn(habit);
+    calculateTotalVolumn(habit);
+    calculateCurrentStreak(habit);
+    calculateBestStreak(habit);
     const data = {
         labels: ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"],
         datasets: [
@@ -48,14 +54,9 @@ const HabitOfADay = ({navigation :{goBack},route}) =>{
         useShadowColorFromDataset: false, // optional,
         fillShadowGradientFrom: 'black'
     };
-    getMemmoCurDay(habit)
-    getDataOfCurWeek(habit)
-    calculateDayDoneInMonth(habit);
-    calculateDayTotalDone(habit);
-    calculateMonthlyVolumn(habit);
-    calculateTotalVolumn(habit);
-    calculateCurrentStreak(habit);
-    calculateBestStreak(habit);
+    // getMemmoCurDay(habit)
+    // getDataOfCurWeek(habit)
+    
     const dailyAverage = Math.round(state.TotalVolumn / state.DayTotalDone * 100) / 100;
     const overallRate = Math.round(dailyAverage / habit.goalNo * 100) / 100 ;
     
@@ -213,7 +214,7 @@ function CustomCalendar(props) {
                 dots: [none]
           };
         // }
-        console.log(marked)
+        // console.log(marked)
 
         return marked;
       };

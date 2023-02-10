@@ -18,8 +18,8 @@ const Home = ({ navigation }) => {
   const [selectedDay, setSelectedDay] = useState(format(today, 'MM/dd/yyyy'));
   
   // const db = SQLite.openDatabase('Habit_tracker.db');
-  //refreshDatabase();
-  //initDatabase();
+  // refreshDatabase();
+  // initDatabase();
 
   // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
   useEffect(() => {
@@ -35,8 +35,8 @@ const Home = ({ navigation }) => {
   //console.log(state.listHabit)
   //loadSetting(state, dispatch);
   /* loadUnit(); */
-  console.log('chonngay',selectedDay)
-  console.log('list', state.listHabit)
+  // console.log('chonngay',selectedDay)
+  // console.log('list', state.listHabit)
   // }
   return (
     <View style={{backgroundColor: 'white', flex: 1, flexDirection: 'column'}}>
@@ -51,7 +51,7 @@ const Home = ({ navigation }) => {
         </CalendarProvider>
       </View>
       <View style = {{flex: 0.8, flexDirection: 'column'}}>
-        {HabitZone(state.listHabit,navigation,selectedDay)}
+        {/* {HabitZone(state.listHabit,navigation,selectedDay)} */}
       </View>
     </View>
   )

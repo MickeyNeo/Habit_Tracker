@@ -12,7 +12,7 @@ export default function Language (params){
     //     dispatch(setLanguage(lg))
     // }
     
-    console.log(state)
+    // console.log(state)
     //console.log(setLanguage(lg))
     
     return(         
