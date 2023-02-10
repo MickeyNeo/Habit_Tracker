@@ -2,7 +2,7 @@ import * as SQLite from 'expo-sqlite';
 import { useContext } from 'react';
 import Context from './Context';
 import reducer, { globalState } from './reducer';
-import { addHabitList, emptyHabitList, setOverallRate, setPerFectStreak } from './action';
+import { addHabitList, emptyHabitList, setDayStarted, setOverallRate, setPerFectStreak } from './action';
 import {useStore,setDayDoneInMonth,setDayTotalDone,setMonthlyVolumn,
     setTotalVolumn, setCurrentStreak, setBestStreak, setUnit,setUnitHOAD,
     setDataOfCurWeek, setMemmoCurDay, setListMemmo, setEveryHabitDone, setPerfectDayCount,
@@ -46,6 +46,9 @@ const streakRetain = (date, followingDate) => {
 
 const CurrentStreak = (dates) => {
     let currentDate = new Date(2023, 1, 8);
+
+    // console.log(dates)
+
     if (Platform.OS === 'ios' || Platform.OS === 'android') {
         var [y, m, d] = [...dates._array[0].date.split('-').map((x) => parseInt(x))];
         // console.log('dates ',[y, m, d])
@@ -64,7 +67,7 @@ const CurrentStreak = (dates) => {
 
 
     if (Platform.OS === 'ios' || Platform.OS === 'android') {
-        // console.log('date ', dates)
+        console.log(1)
 
         for (let i = 1; i < dates.length; i++) {
             let date = dates._array[i];
@@ -102,9 +105,9 @@ const CurrentStreak = (dates) => {
 const BestStreak = (dates) => {
     let count = 1;
     let bestStreak = 1;
-
+    // console.log(dates)
     if (Platform.OS === 'ios' || Platform.OS === 'android') {
-        for (let i = 1; i < dates.length; i++) {
+        for (let i = 1; i < dates._array.length; i++) {
         
             let date = dates._array[i];
             let followingDate = dates._array[i - 1]
@@ -709,8 +712,8 @@ const calculateMonthlyVolumn = (habit) => {
             // console.log("Calculated Monthly Volumn");
             // console.log(resultSet);
             if (Platform.OS === 'ios' || Platform.OS === 'android') {
-                if(state.MonthlyVolumn != resultSet.rows._array['SUM(progress)']){
-                    dispatch(setMonthlyVolumn(resultSet.rows._array['SUM(progress)']))
+                if(state.MonthlyVolumn != resultSet.rows._array[0]['SUM(progress)']){
+                    dispatch(setMonthlyVolumn(resultSet.rows._array[0]['SUM(progress)']))
                 }
               } else {
                 if(state.MonthlyVolumn != resultSet.rows[0]['SUM(progress)']){
@@ -736,8 +739,8 @@ const calculateTotalVolumn  = (habit) => {
             // console.log(resultSet.rows[0]['SUM(progress)']);
             // console.log(resultSet);
             if (Platform.OS === 'ios' || Platform.OS === 'android') {
-                if(state.TotalVolumn != resultSet.rows._array['SUM(progress)']){
-                    dispatch(setTotalVolumn(resultSet.rows._array['SUM(progress)']))
+                if(state.TotalVolumn != resultSet.rows._array[0]['SUM(progress)']){
+                    dispatch(setTotalVolumn(resultSet.rows._array[0]['SUM(progress)']))
                 }
               } else {
                 if(state.TotalVolumn != resultSet.rows[0]['SUM(progress)']){
@@ -763,8 +766,8 @@ const calculateDayDoneInMonth = (habit) => {
                     // console.log("Calculated Day Done in month");
                     // console.log(resultSet);
                     if (Platform.OS === 'ios' || Platform.OS === 'android') {
-                        if(state.DayDoneInMonth != resultSet.rows._array['COUNT(*)']){
-                            dispatch(setDayDoneInMonth(resultSet.rows._array['COUNT(*)']))
+                        if(state.DayDoneInMonth != resultSet.rows._array[0]['COUNT(*)']){
+                            dispatch(setDayDoneInMonth(resultSet.rows._array[0]['COUNT(*)']))
                         }
                       } else {
                         if(state.DayDoneInMonth != resultSet.rows[0]['COUNT(*)']){
@@ -827,6 +830,35 @@ const calculateDayDoneInMonth = (habit) => {
     }
 } */
 
+const calculateDayStarted  = (habit) => {
+    const[state, dispatch] = useStore()
+    db.transaction(tx => {
+        tx.executeSql("SELECT COUNT(*)\
+        FROM Memo\
+        WHERE habitName = ? AND progress != 0", 
+        [habit.name],
+        (txObj, resultSet) => {
+            console.log("Calculate Day Started");
+            // console.log(resultSet.rows[0]['COUNT(*)']);
+
+            
+                if (Platform.OS === 'ios' || Platform.OS === 'android') {
+                    if(state.DayTotalDone != resultSet.rows._array[0]['COUNT(*)']){
+                        console.log(resultSet.rows._array);
+
+                        dispatch(setDayStarted(resultSet.rows._array[0]['COUNT(*)']));
+                    }
+                    } else {
+                    if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
+                        dispatch(setDayStarted(resultSet.rows[0]['COUNT(*)']));
+                    }
+                    }
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+}
+
 const calculateDayTotalDone  = (habit) => {
     const[state, dispatch] = useStore()
     if (habit instanceof Array) {
@@ -841,7 +873,7 @@ const calculateDayTotalDone  = (habit) => {
                 // console.log(resultSet.rows._array, habit);
 
                 if (Platform.OS === 'ios' || Platform.OS === 'android') {
-                    dispatch(setEveryHabitDone(resultSet.rows._array['COUNT(*)']));
+                    dispatch(setEveryHabitDone(resultSet.rows._array[0]['COUNT(*)']));
                   } else {
                     dispatch(setEveryHabitDone(resultSet.rows[0]['COUNT(*)']));
                   }
@@ -857,18 +889,19 @@ const calculateDayTotalDone  = (habit) => {
             WHERE habitName = ? AND progress == ?", 
             [habit.name, habit.goalNo],
             (txObj, resultSet) => {
-                // console.log("Calculate Day Total Done 1 habit");
+                console.log("Calculate Day Total Done 1 habit");
                 // console.log(resultSet.rows[0]['COUNT(*)']);
-                // console.log(resultSet.rows._array);
 
                 
                     if (Platform.OS === 'ios' || Platform.OS === 'android') {
-                        if(state.DayTotalDone != resultSet.rows._array['COUNT(*)']){
-                            dispatch(setEveryHabitDone(resultSet.rows._array['COUNT(*)']));
+                        if(state.DayTotalDone != resultSet.rows._array[0]['COUNT(*)']){
+                            console.log(resultSet.rows._array);
+
+                            dispatch(setDayTotalDone(resultSet.rows._array[0]['COUNT(*)']));
                         }
                       } else {
                         if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
-                            dispatch(setEveryHabitDone(resultSet.rows[0]['COUNT(*)']));
+                            dispatch(setDayTotalDone(resultSet.rows[0]['COUNT(*)']));
                         }
                       }
             },
@@ -891,6 +924,8 @@ const calculateCurrentStreak = (habit) => {
             // console.log(resultSet.rows);
 
             let streak = CurrentStreak(resultSet.rows);
+
+            console.log('streak ', streak);
 
             if(state.CurrentStreak != streak){
                 dispatch(setCurrentStreak(streak))
@@ -1359,4 +1394,4 @@ export {db,getAllMemmo,getMemmoCurDay,getUnitNameforHOAD, getDataOfCurWeek,getUn
     loadHabit_on_web , addHabit, refreshDatabase, initDatabase, loadUnit, deleteHabit, 
     updateHabit, loadSetting, calculateDayDoneInMonth, calculateMonthlyVolumn, 
     calculateTotalVolumn, calculateDayTotalDone, calculateCurrentStreak, calculateBestStreak, CountPerfectDay,
-    CalculateOverallRate, CalculateDailyAverage, CountPerfectStreak, loadMemo}
+    CalculateOverallRate, CalculateDailyAverage, CountPerfectStreak, loadMemo, calculateDayStarted}

@@ -14,7 +14,7 @@ import {
   } from "react-native-chart-kit";
 import {calculateDayDoneInMonth, calculateDayTotalDone, calculateMonthlyVolumn,
     calculateTotalVolumn, calculateCurrentStreak, calculateBestStreak, 
-    getDataOfCurWeek, getUnitNameforHOAD, getMemmoCurDay} from '../Store/database';
+    getDataOfCurWeek, getUnitNameforHOAD, getMemmoCurDay, CalculateDayStarted, calculateDayStarted} from '../Store/database';
 import MoreMemo from './HOADChildScreens/MoreMemo'
 
 const HabitOfADay = ({navigation :{goBack},route}) =>{
@@ -34,6 +34,7 @@ const HabitOfADay = ({navigation :{goBack},route}) =>{
     calculateTotalVolumn(habit);
     calculateCurrentStreak(habit);
     calculateBestStreak(habit);
+    calculateDayStarted(habit);
     const data = {
         labels: ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"],
         datasets: [
@@ -57,7 +58,7 @@ const HabitOfADay = ({navigation :{goBack},route}) =>{
     // getMemmoCurDay(habit)
     // getDataOfCurWeek(habit)
     
-    const dailyAverage = Math.round(state.TotalVolumn / state.DayTotalDone * 100) / 100;
+    const dailyAverage = Math.round(state.TotalVolumn / state.DayStarted * 100) / 100;
     const overallRate = Math.round(dailyAverage / habit.goalNo * 100) / 100 ;
     
     const handleDelHablit =(id)=> {

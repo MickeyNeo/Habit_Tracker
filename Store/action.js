@@ -1,4 +1,4 @@
-import { EMPTY_HABIT_LIST, SET_DAILY_AVERAGE, SET_DAILY_REMINDER_TIME, SET_HABIT_BAR_STYLE, SET_HABIT_INPUT, SET_OVERALL_RATE, SET_PERFECT_DAY_COUNT, SET_PERFECT_STREAK } from './constants'
+import { EMPTY_HABIT_LIST, SET_DAILY_AVERAGE, SET_DAILY_REMINDER_TIME, SET_DAY_STARTED, SET_HABIT_BAR_STYLE, SET_HABIT_INPUT, SET_OVERALL_RATE, SET_PERFECT_DAY_COUNT, SET_PERFECT_STREAK } from './constants'
 import { SET_LANGUAGE } from './constants'
 import { ADD_HABIT_OF_ADAY } from './constants'
 import { ADD_HABIT_LIST } from './constants'
@@ -194,5 +194,10 @@ export const setDailyAverage = payload => ({
 
 export const setPerFectStreak = payload => ({
     type: SET_PERFECT_STREAK,
+    payload 
+})
+
+export const setDayStarted = payload => ({
+    type: SET_DAY_STARTED,
     payload 
 })
