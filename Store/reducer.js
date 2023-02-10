@@ -1,6 +1,6 @@
 import { ADD_STATE_SETTING, EMPTY_HABIT_LIST, SET_CURRENT_STREAK, SET_DAILY_REMINDER_TEXT, 
     SET_DAILY_REMINDER_TIME, SET_DATE_BAR_STYLE, SET_HABIT_BAR_STYLE, 
-    SET_HABIT_INPUT, SET_BEST_STREAK, SET_PERFECT_DAY_COUNT, SET_OVERALL_RATE, SET_DAILY_AVERAGE} from './constants'
+    SET_HABIT_INPUT, SET_BEST_STREAK, SET_PERFECT_DAY_COUNT, SET_OVERALL_RATE, SET_DAILY_AVERAGE, SET_PERFECT_STREAK, SET_DAY_STARTED} from './constants'
 import { SET_LANGUAGE } from './constants'
 import { ADD_HABIT_OF_ADAY } from './constants'
 import { ADD_HABIT_LIST } from './constants'
@@ -79,7 +79,9 @@ const globalState = {
     dailyReminderText: '',
     DayDoneInMonth: null,
     DayTotalDone: null,
+    DayStarted: null,
     PerfectDayCount: null,
+    PerfectStreak: 0,
     OverallRate: null,
     DailyAverage: null,
     EveryHabitDone: 0,
@@ -113,7 +115,7 @@ function reducer (state , action) {
             }
         case ADD_HABIT_LIST:
             for (let i = 0; i < state.listHabit.length; i++) {
-                console.log("habit payload: ", action.payload.name)
+                // console.log("habit payload: ", action.payload.name)
                 if (state.listHabit[i].name == action.payload.name) {
                     return {
                         ...state
@@ -130,7 +132,7 @@ function reducer (state , action) {
                     ...state
                 }
             }
-            console.log("Emptied Habit List");
+            // console.log("Emptied Habit List");
             return {
                 ...state,
                 listHabit: []
@@ -304,6 +306,16 @@ function reducer (state , action) {
             return{
                 ...state,
                 DailyAverage: action.payload
+            }
+        case SET_PERFECT_STREAK:
+            return{
+                ...state,
+                PerfectStreak: action.payload
+            }
+        case SET_DAY_STARTED:
+            return{
+                ...state,
+                DayStarted: action.payload
             }
         default:
             throw new Error('sai goi ne')

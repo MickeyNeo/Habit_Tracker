@@ -81,6 +81,7 @@ const HabitDetail = ({navigation,route}) => {
     // console.log(habit)
     //console.log(state.listProgressDay)
     //Hiện thông báo confirm 
+
     const showAlert = () => {
         Alert.alert(
             'Confirm',

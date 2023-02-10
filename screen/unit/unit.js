@@ -2,7 +2,7 @@ import React from "react";
 import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import Modal from "react-native-modal";
 export default function SelectUnit (params){
-    console.log(params.unit)
+    // console.log(params.unit)
     return(         
         <View >
             <Modal isVisible={params.myIsmodalVisible} 

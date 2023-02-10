@@ -2,7 +2,7 @@ import * as SQLite from 'expo-sqlite';
 import { useContext } from 'react';
 import Context from './Context';
 import reducer, { globalState } from './reducer';
-import { addHabitList, emptyHabitList, setOverallRate } from './action';
+import { addHabitList, emptyHabitList, setDayStarted, setOverallRate, setPerFectStreak } from './action';
 import {useStore,setDayDoneInMonth,setDayTotalDone,setMonthlyVolumn,
     setTotalVolumn, setCurrentStreak, setBestStreak, setUnit,setUnitHOAD,
     setDataOfCurWeek, setMemmoCurDay, setListMemmo, setEveryHabitDone, setPerfectDayCount,
@@ -10,6 +10,8 @@ import {useStore,setDayDoneInMonth,setDayTotalDone,setMonthlyVolumn,
 import {React, useState } from 'react';
 import { memoInit, habitInit, reminderInit, unitInit, tagInit, haveTagInit } from './init_data';
 import moment from 'moment';
+import { Platform } from 'react-native';
+
 
     
 const streakRetain = (date, followingDate) => {
@@ -44,53 +46,113 @@ const streakRetain = (date, followingDate) => {
 
 const CurrentStreak = (dates) => {
     let currentDate = new Date(2023, 1, 8);
-    let [y, m, d] = [...dates[0].date.split('-').map((x) => parseInt(x))];
+
+    // console.log(dates)
+
+    if (Platform.OS === 'ios' || Platform.OS === 'android') {
+        var [y, m, d] = [...dates._array[0].date.split('-').map((x) => parseInt(x))];
+        // console.log('dates ',[y, m, d])
+    } else {
+        var [y, m, d] = [...dates[0].date.split('-').map((x) => parseInt(x))];
+    }
+    
+    // console.log('------------------------------ ', dates)
+
+
     if (currentDate.getDate() != d || currentDate.getMonth() + 1 != m && currentDate.getFullYear() != y) {
         return 0;
     }
+
     let count = 1;
-    for (let i = 1; i < dates.length; i++) {
-        let date = dates[i];
-        let followingDate = dates[i - 1]
-        if (streakRetain(date.date, followingDate.date)) {
-            count++;
+
+
+    if (Platform.OS === 'ios' || Platform.OS === 'android') {
+        console.log(1)
+
+        for (let i = 1; i < dates.length; i++) {
+            let date = dates._array[i];
+    
+            let followingDate = dates._array[i - 1]
+    
+            // console.log('date ', dates)
+            if (streakRetain(date.date, followingDate.date)) {
+                count++;
+            }
+            else {
+                break;
+            }
         }
-        else {
-            break;
+        // console.log('dates ',[y, m, d])
+    } else {
+        for (let i = 1; i < dates.length; i++) {
+            let date = dates[i];
+    
+            let followingDate = dates[i - 1]
+    
+            // console.log('date ', dates)
+            if (streakRetain(date.date, followingDate.date)) {
+                count++;
+            }
+            else {
+                break;
+            }
         }
     }
+    
     return count;
 }
 
 const BestStreak = (dates) => {
     let count = 1;
     let bestStreak = 1;
-    for (let i = 1; i < dates.length; i++) {
-        let date = dates[i];
-        let followingDate = dates[i - 1]
-        if (streakRetain(date.date, followingDate.date)) {
-            count++;
-            if (count > bestStreak) {
-                bestStreak = count;
+    // console.log(dates)
+    if (Platform.OS === 'ios' || Platform.OS === 'android') {
+        for (let i = 1; i < dates._array.length; i++) {
+        
+            let date = dates._array[i];
+            let followingDate = dates._array[i - 1]
+            if (streakRetain(date.date, followingDate.date)) {
+                count++;
+                if (count > bestStreak) {
+                    bestStreak = count;
+                }
+            }
+            else {
+                count = 1;
             }
         }
-        else {
-            count = 1;
+    } else {
+        for (let i = 1; i < dates.length; i++) {
+        
+            let date = dates[i];
+            let followingDate = dates[i - 1]
+            if (streakRetain(date.date, followingDate.date)) {
+                count++;
+                if (count > bestStreak) {
+                    bestStreak = count;
+                }
+            }
+            else {
+                count = 1;
+            }
         }
     }
+
+    
+    
     return bestStreak;
 }
   
 const db = SQLite.openDatabase('Habit_tracker.db');
 
 const refreshDatabase = () => {
-console.log("Refreshing habit table");
+// console.log("Refreshing habit table");
 db.transaction(tx => {
     tx.executeSql("DROP TABLE Habit",
     [],
     (txObj, resultSet) => {
-        console.log("Dropped habit table")
-        console.log(resultSet);
+        // console.log("Dropped habit table")
+        // console.log(resultSet);
     },
     (txObj, error) => console.log(error)
     );
@@ -100,8 +162,8 @@ db.transaction(tx => {
     tx.executeSql("DROP TABLE Memo",
     [],
     (txObj, resultSet) => {
-        console.log("Dropped Memo table")
-        console.log(resultSet);
+        // console.log("Dropped Memo table")
+        // console.log(resultSet);
     },
     (txObj, error) => console.log(error)
     );
@@ -111,8 +173,8 @@ db.transaction(tx => {
     tx.executeSql("DROP TABLE Reminder",
     [],
     (txObj, resultSet) => {
-        console.log("Dropped reminder table")
-        console.log(resultSet);
+        // console.log("Dropped reminder table")
+        // console.log(resultSet);
     },
     (txObj, error) => console.log(error)
     );
@@ -122,8 +184,8 @@ db.transaction(tx => {
     tx.executeSql("DROP TABLE Unit",
     [],
     (txObj, resultSet) => {
-        console.log("Dropped Unite table")
-        console.log(resultSet);
+        // console.log("Dropped Unite table")
+        // console.log(resultSet);
     },
     (txObj, error) => console.log(error)
     );
@@ -133,8 +195,8 @@ db.transaction(tx => {
     tx.executeSql("DROP TABLE HaveTag",
     [],
     (txObj, resultSet) => {
-        console.log("Dropped HaveTag table")
-        console.log(resultSet);
+        // console.log("Dropped HaveTag table")
+        // console.log(resultSet);
     },
     (txObj, error) => console.log(error)
     );
@@ -198,8 +260,8 @@ const initDatabase = () => {
         tx.executeSql(habitInit,
         [],
         (txObj, resultSet) => {
-             console.log("Initialize habit data")
-             console.log(resultSet);
+            //  console.log("Initialize habit data")
+            //  console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -225,8 +287,8 @@ const initDatabase = () => {
         tx.executeSql(memoInit,
             [], 
             (txObj, resultSet) => {
-                console.log("Initialize Memo data")
-                console.log(resultSet);
+                // console.log("Initialize Memo data")
+                // console.log(resultSet);
             },
             (txObj, error) => console.log(error)
         );
@@ -262,8 +324,8 @@ const initDatabase = () => {
         tx.executeSql(tagInit,
         [], 
         (txObj, resultSet) => {
-            console.log("Initialize tag data")
-            console.log(resultSet);
+            // console.log("Initialize tag data")
+            // console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -289,8 +351,8 @@ const initDatabase = () => {
         tx.executeSql(unitInit,
         [], 
         (txObj, resultSet) => {
-            console.log("Initialize unit data")
-            console.log(resultSet);
+            // console.log("Initialize unit data")
+            // console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -316,8 +378,8 @@ const initDatabase = () => {
         tx.executeSql(haveTagInit,
         [], 
         (txObj, resultSet) => {
-            console.log("Initialize haveTag data")
-            console.log(resultSet);
+            // console.log("Initialize haveTag data")
+            // console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -388,7 +450,7 @@ const loadHabit_on_fone = (listHabit, dispatch) => {
             console.log(resultSet.rows); */
             if (listHabit.length < resultSet.rows.length) {
                 for (let i = 0; i < resultSet.rows.length; i++) {
-                    console.log("Database resultset", resultSet.rows)
+                    // console.log("Database resultset", resultSet.rows)
                     dispatch(addHabitList(resultSet.rows._array[i]));
                 } 
             }
@@ -403,7 +465,7 @@ const loadHabit_on_fone = (listHabit, dispatch) => {
 //Trên web
 const loadHabit_on_web = (listHabit, dispatch) => {
 
-    console.log("Loading habit from db");
+    // console.log("Loading habit from db");
 
     /* db.transaction(tx => {"DROP TABLE Habit"}); */
 
@@ -418,7 +480,7 @@ const loadHabit_on_web = (listHabit, dispatch) => {
             console.log(resultSet.rows); */
             if (listHabit.length < resultSet.rows.length) {
                 for (let i = 0; i < resultSet.rows.length; i++) {
-                    console.log("Database resultset", resultSet.rows)
+                    // console.log("Database resultset", resultSet.rows)
                     dispatch(addHabitList(resultSet.rows[i]));
                 } 
             }
@@ -427,6 +489,23 @@ const loadHabit_on_web = (listHabit, dispatch) => {
         );
     })
 
+}
+
+const loadMemo = () => {
+    // console.log("Loading memo from db");
+
+    /* db.transaction(tx => {"DROP TABLE Habit"}); */
+
+    db.transaction(tx => {
+        tx.executeSql('SELECT * FROM Memo', 
+        [],
+        (txObj, resultSet) => {
+            // console.log("Loading memo to state");
+            // console.log(resultSet.rows);
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
 }
 
 // //Trên web
@@ -468,8 +547,8 @@ const loadSetting = (state, dispatch) => {
         tx.executeSql('SELECT * FROM setting', 
         [],
         (txObj, resultSet) => {
-            console.log("Loading setting into global state");
-            console.log("resultSet.rows");
+            // console.log("Loading setting into global state");
+            // console.log("resultSet.rows");
             dispatch(addStateSetting(resultSet.rows));
         },
         (txObj, error) => console.log(error)
@@ -478,7 +557,7 @@ const loadSetting = (state, dispatch) => {
 }
 
 const loadUnit = () => {
-    console.log("Loading unit from db");
+    // console.log("Loading unit from db");
 
     /* db.transaction(tx => {"DROP TABLE Habit"}); */
 
@@ -486,7 +565,7 @@ const loadUnit = () => {
         tx.executeSql('SELECT * FROM Unit', 
         [],
         (txObj, resultSet) => {
-            console.log("Loading init unit");
+            // console.log("Loading init unit");
             /*console.log("List habit state");
             console.log(listHabit);
             console.log("Database resultset");
@@ -496,7 +575,7 @@ const loadUnit = () => {
                 dispatch(addHabitList(resultSet.rows[i]));
                 }
             } */
-            console.log(resultSet);
+            // console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -511,8 +590,8 @@ const deleteHabit = (habitName) => {
         WHERE habitName = ?', 
         [habitName],
         (txObj, resultSet) => {
-            console.log("Deleted habit ", habitName, " from table HaveTag");
-            console.log(resultSet);
+            // console.log("Deleted habit ", habitName, " from table HaveTag");
+            // console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -523,8 +602,8 @@ const deleteHabit = (habitName) => {
         WHERE habitName = ?', 
         [habitName],
         (txObj, resultSet) => {
-            console.log("Deleted habit ", habitName, " from table Memo");
-            console.log(resultSet);
+            // console.log("Deleted habit ", habitName, " from table Memo");
+            // console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -535,8 +614,8 @@ const deleteHabit = (habitName) => {
         WHERE habitName = ?', 
         [habitName],
         (txObj, resultSet) => {
-            console.log("Deleted habit ", habitName, " from table Reminder");
-            console.log(resultSet);
+            // console.log("Deleted habit ", habitName, " from table Reminder");
+            // console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -547,8 +626,8 @@ const deleteHabit = (habitName) => {
         WHERE name = ?', 
         [habitName],
         (txObj, resultSet) => {
-            console.log("Deleted habit ", habitName, " from table Habit");
-            console.log(resultSet);
+            // console.log("Deleted habit ", habitName, " from table Habit");
+            // console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -557,19 +636,19 @@ const deleteHabit = (habitName) => {
 }
 
 const updateHabit = (habit, newHabit) => {
-    console.log("Updating habit ", habit.name);
+    // console.log("Updating habit ", habit.name);
 
     if (habit.name != newHabit.name) {
 
-        console.log("Updating habit name");
+        // console.log("Updating habit name");
         db.transaction(tx => {
             tx.executeSql('UPDATE HaveTag \
             SET name = ?\
             WHERE name = ?', 
             [newHabit.name, habit.name],
             (txObj, resultSet) => {
-                console.log("Update habit name ", habit.name, " from table HaveTag to ", newHabit.name);
-                console.log(resultSet);
+                // console.log("Update habit name ", habit.name, " from table HaveTag to ", newHabit.name);
+                // console.log(resultSet);
             },
             (txObj, error) => console.log(error)
             );
@@ -581,8 +660,8 @@ const updateHabit = (habit, newHabit) => {
             WHERE name = ?', 
             [newHabit.name, habit.name],
             (txObj, resultSet) => {
-                console.log("Update habit name ", habitName, " from table Reminder to ", newHabit.name);
-                console.log(resultSet);
+                // console.log("Update habit name ", habitName, " from table Reminder to ", newHabit.name);
+                // console.log(resultSet);
             },
             (txObj, error) => console.log(error)
             );
@@ -594,8 +673,8 @@ const updateHabit = (habit, newHabit) => {
             WHERE name = ?', 
             [newHabit.name, habit.name],
             (txObj, resultSet) => {
-                console.log("Update habit name ", habitName, " from table Memo to ", newHabit.name);
-                console.log(resultSet);
+                // console.log("Update habit name ", habitName, " from table Memo to ", newHabit.name);
+                // console.log(resultSet);
             },
             (txObj, error) => console.log(error)
             );
@@ -612,8 +691,8 @@ const updateHabit = (habit, newHabit) => {
         newHabit.reminderMessage, newHabit.showMemo, newHabit.chartType, newHabit.habitStartDate, newHabit.habitEndDate, 
         newHabit.goalNo, newHabit.goalPeriod, newHabit.unitID, newHabit.icon, newHabit.iconFamily, habit.name],
         (txObj, resultSet) => {
-            console.log("Update habit ", habitName, " from table Habit");
-            console.log(resultSet);
+            // console.log("Update habit ", habitName, " from table Habit");
+            // console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -630,11 +709,18 @@ const calculateMonthlyVolumn = (habit) => {
         AND strftime('%Y',date) = strftime('%Y','now')", 
         [habit.name],
         (txObj, resultSet) => {
-            console.log("Calculated Monthly Volumn");
-            console.log(resultSet);
-            if(state.MonthlyVolumn != resultSet.rows[0]['SUM(progress)']){
-                dispatch(setMonthlyVolumn(resultSet.rows[0]['SUM(progress)']))
-            }
+            // console.log("Calculated Monthly Volumn");
+            // console.log(resultSet);
+            if (Platform.OS === 'ios' || Platform.OS === 'android') {
+                if(state.MonthlyVolumn != resultSet.rows._array[0]['SUM(progress)']){
+                    dispatch(setMonthlyVolumn(resultSet.rows._array[0]['SUM(progress)']))
+                }
+              } else {
+                if(state.MonthlyVolumn != resultSet.rows[0]['SUM(progress)']){
+                    dispatch(setMonthlyVolumn(resultSet.rows[0]['SUM(progress)']))
+                }
+              }
+            
         },
         (txObj, error) => console.log(error)
         );
@@ -649,12 +735,19 @@ const calculateTotalVolumn  = (habit) => {
         WHERE habitName = ?', 
         [habit.name],
         (txObj, resultSet) => {
-            console.log("Calculated Total Volumn");
-            console.log(resultSet.rows[0]['SUM(progress)']);
-            console.log(resultSet);
-            if(state.TotalVolumn != resultSet.rows[0]['SUM(progress)']){
-                dispatch(setTotalVolumn(resultSet.rows[0]['SUM(progress)']))
-            }
+            // console.log("Calculated Total Volumn");
+            // console.log(resultSet.rows[0]['SUM(progress)']);
+            // console.log(resultSet);
+            if (Platform.OS === 'ios' || Platform.OS === 'android') {
+                if(state.TotalVolumn != resultSet.rows._array[0]['SUM(progress)']){
+                    dispatch(setTotalVolumn(resultSet.rows._array[0]['SUM(progress)']))
+                }
+              } else {
+                if(state.TotalVolumn != resultSet.rows[0]['SUM(progress)']){
+                    dispatch(setTotalVolumn(resultSet.rows[0]['SUM(progress)']))
+                }
+              }
+            
         },
         (txObj, error) => console.log(error)
         );
@@ -672,9 +765,16 @@ const calculateDayDoneInMonth = (habit) => {
                 (txObj, resultSet) => {
                     // console.log("Calculated Day Done in month");
                     // console.log(resultSet);
-                    if(state.DayDoneInMonth != resultSet.rows[0]['COUNT(*)']){
-                        dispatch(setDayDoneInMonth(resultSet.rows[0]['COUNT(*)']))
-                    }
+                    if (Platform.OS === 'ios' || Platform.OS === 'android') {
+                        if(state.DayDoneInMonth != resultSet.rows._array[0]['COUNT(*)']){
+                            dispatch(setDayDoneInMonth(resultSet.rows._array[0]['COUNT(*)']))
+                        }
+                      } else {
+                        if(state.DayDoneInMonth != resultSet.rows[0]['COUNT(*)']){
+                            dispatch(setDayDoneInMonth(resultSet.rows[0]['COUNT(*)']))
+                        }
+                      }
+                    
                 },
                 (txObj, error) => console.log(error)
                 );
@@ -730,6 +830,35 @@ const calculateDayDoneInMonth = (habit) => {
     }
 } */
 
+const calculateDayStarted  = (habit) => {
+    const[state, dispatch] = useStore()
+    db.transaction(tx => {
+        tx.executeSql("SELECT COUNT(*)\
+        FROM Memo\
+        WHERE habitName = ? AND progress != 0", 
+        [habit.name],
+        (txObj, resultSet) => {
+            console.log("Calculate Day Started");
+            // console.log(resultSet.rows[0]['COUNT(*)']);
+
+            
+                if (Platform.OS === 'ios' || Platform.OS === 'android') {
+                    if(state.DayTotalDone != resultSet.rows._array[0]['COUNT(*)']){
+                        console.log(resultSet.rows._array);
+
+                        dispatch(setDayStarted(resultSet.rows._array[0]['COUNT(*)']));
+                    }
+                    } else {
+                    if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
+                        dispatch(setDayStarted(resultSet.rows[0]['COUNT(*)']));
+                    }
+                    }
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+}
+
 const calculateDayTotalDone  = (habit) => {
     const[state, dispatch] = useStore()
     if (habit instanceof Array) {
@@ -741,10 +870,13 @@ const calculateDayTotalDone  = (habit) => {
             [],
             (txObj, resultSet) => {
                 // console.log("Calculate Day Total Done");
-                // console.log(resultSet.rows[0]['COUNT(*)']);
-                // console.log(resultSet);
+                // console.log(resultSet.rows._array, habit);
 
-                dispatch(setEveryHabitDone(resultSet.rows[0]['COUNT(*)']));
+                if (Platform.OS === 'ios' || Platform.OS === 'android') {
+                    dispatch(setEveryHabitDone(resultSet.rows._array[0]['COUNT(*)']));
+                  } else {
+                    dispatch(setEveryHabitDone(resultSet.rows[0]['COUNT(*)']));
+                  }
             },
             (txObj, error) => console.log(error)
             );
@@ -757,13 +889,21 @@ const calculateDayTotalDone  = (habit) => {
             WHERE habitName = ? AND progress == ?", 
             [habit.name, habit.goalNo],
             (txObj, resultSet) => {
-                // console.log("Calculate Day Total Done");
+                console.log("Calculate Day Total Done 1 habit");
                 // console.log(resultSet.rows[0]['COUNT(*)']);
-                // console.log(resultSet);
 
-                if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
-                    dispatch(setDayTotalDone(resultSet.rows[0]['COUNT(*)']))
-                }
+                
+                    if (Platform.OS === 'ios' || Platform.OS === 'android') {
+                        if(state.DayTotalDone != resultSet.rows._array[0]['COUNT(*)']){
+                            console.log(resultSet.rows._array);
+
+                            dispatch(setDayTotalDone(resultSet.rows._array[0]['COUNT(*)']));
+                        }
+                      } else {
+                        if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
+                            dispatch(setDayTotalDone(resultSet.rows[0]['COUNT(*)']));
+                        }
+                      }
             },
             (txObj, error) => console.log(error)
             );
@@ -780,10 +920,12 @@ const calculateCurrentStreak = (habit) => {
         ORDER BY date DESC', 
         [habit.name],
         (txObj, resultSet) => {
-            console.log("Calculated Current Streak");
-            console.log(resultSet.rows);
+            // console.log("Calculated Current Streak");
+            // console.log(resultSet.rows);
 
             let streak = CurrentStreak(resultSet.rows);
+
+            console.log('streak ', streak);
 
             if(state.CurrentStreak != streak){
                 dispatch(setCurrentStreak(streak))
@@ -803,11 +945,11 @@ const calculateBestStreak = (habit) => {
         ORDER BY date DESC', 
         [habit.name],
         (txObj, resultSet) => {
-            console.log("Calculated Best Streak");
-            console.log(resultSet.rows);
+            // console.log("Calculated Best Streak");
+            // console.log(resultSet.rows);
 
             let streak = BestStreak(resultSet.rows);
-            console.log(streak);
+            // console.log(streak);
 
             if(state.BestStreak != streak){
                 dispatch(setBestStreak(streak))
@@ -826,12 +968,19 @@ const getUnitName = (habit) => {
         WHERE  Habit.unitID = Unit.id AND Habit.name = ?', 
         [habit.name],
         (txObj, resultSet) => {
-            console.log("Unit Name");
-            console.log(resultSet);
-            console.log(resultSet.rows[0]['name']);
-            if(state.unit != resultSet.rows[0]['name']){
-                dispatch(setUnit(resultSet.rows[0]['name']))
-            }
+            // console.log("Unit Name");
+            // console.log(resultSet);
+            // console.log(resultSet.rows[0]['name']);ư
+            if (Platform.OS === 'ios' || Platform.OS === 'android') {
+                if(state.unit != resultSet.rows._array['name']){
+                    dispatch(setUnit(resultSet.rows._array['name']))
+                }
+              } else {
+                if(state.unit != resultSet.rows[0]['name']){
+                    dispatch(setUnit(resultSet.rows[0]['name']))
+                }
+              }
+            
         },
         (txObj, error) => console.log(error)
         );
@@ -845,12 +994,19 @@ const getUnitNameforHOAD = (habit) => {
         WHERE  Habit.unitID = Unit.id AND Habit.name = ?', 
         [habit.name],
         (txObj, resultSet) => {
-            console.log("Unit Name",habit.name);
-            console.log(resultSet);
-            console.log(resultSet.rows[0]['name']);
-            if(state.unitHOAD != resultSet.rows[0]['name']){
-                dispatch(setUnitHOAD(resultSet.rows[0]['name']))
-            }
+            // console.log("Unit Name",habit.name);
+            // console.log(resultSet);
+            // console.log(resultSet.rows[0]['name']);
+            if (Platform.OS === 'ios' || Platform.OS === 'android') {
+                if(state.unitHOAD != resultSet.rows._array['name']){
+                    dispatch(setUnitHOAD(resultSet.rows._array['name']))
+                }
+              } else {
+                if(state.unitHOAD != resultSet.rows[0]['name']){
+                    dispatch(setUnitHOAD(resultSet.rows[0]['name']))
+                }
+              }
+            
         },
         (txObj, error) => console.log(error)
         );
@@ -886,9 +1042,9 @@ const getDataOfCurWeek = (habit) => {
         AND strftime('%Y',date) = strftime('%Y','now')", 
         [habit.name],
         (txObj, resultSet) => {
-            console.log('length',resultSet.rows.length);
-            console.log('res',resultSet);
-            console.log('state.DataOfCurWeek',state.DataOfCurWeek);
+            // console.log('length',resultSet.rows.length);
+            // console.log('res',resultSet);
+            // console.log('state.DataOfCurWeek',state.DataOfCurWeek);
             let temp = [0,0,0,0,0,0,0]
             if(state.DataOfCurWeek.length == 0){
                 if(resultSet.rows.length != 0){
@@ -900,9 +1056,9 @@ const getDataOfCurWeek = (habit) => {
                             temp[resultSet.rows[i]["strftime('%w',date)"]-1] = resultSet.rows[i]['progress']
                         }
                     }
-                    console.log('Done: ', temp)
+                    // console.log('Done: ', temp)
                     dispatch(setDataOfCurWeek(temp))
-                    console.log(1);
+                    // console.log(1);
                 }
                 else{
                     dispatch(setDataOfCurWeek([0,0,0,0,0,0,0]))
@@ -927,14 +1083,25 @@ const getMemmoCurDay = (habit) => {
         AND strftime('%Y',date) = strftime('%Y','now')", 
         [habit.name],
         (txObj, resultSet) => {
-            console.log("Memo current day");
-            console.log(resultSet);
+            // console.log("Memo current day");
+            // console.log(resultSet);
+
+            if (Platform.OS === 'ios' || Platform.OS === 'android') {
+            if(resultSet.rows._array.length != 0){
+                if(state.memoCurDay != resultSet.rows._array['content'] && 
+                    state.memoCurDate != resultSet.rows._array['date']){
+                    dispatch(setMemmoCurDay([resultSet.rows._array['content'], resultSet.rows.array['date']]))
+                }
+            }
+            } else {
             if(resultSet.rows.length != 0){
                 if(state.memoCurDay != resultSet.rows[0]['content'] && 
-                   state.memoCurDate != resultSet.rows[0]['date']){
+                    state.memoCurDate != resultSet.rows[0]['date']){
                     dispatch(setMemmoCurDay([resultSet.rows[0]['content'], resultSet.rows[0]['date']]))
                 }
             }
+            }
+            
             
         },
         (txObj, error) => console.log(error)
@@ -951,8 +1118,8 @@ const getAllMemmo = (habit) => {
         ORDER BY date DESC", 
         [habit.name],
         (txObj, resultSet) => {
-            console.log("Memo current day", );
-            console.log(resultSet);
+            // console.log("Memo current day", );
+            // console.log(resultSet);
             let tempMem = []
             let tempMemDate = []
             if(resultSet.rows.length != 0){
@@ -1011,15 +1178,24 @@ const CountPerfectDay = (listHabit) => {
         [],
         (txObj, resultSet) => {
             // console.log("Calculate Day Total Done");
-            // console.log(resultSet);
+            // console.log(resultSet.rows._array);
 
             var count = 0;
 
-            for (var day of resultSet.rows){
-                if (day['COUNT(*)'] == numberHabitInDay(listHabit, day['date'])) {
-                    count += 1;
+            if (Platform.OS === 'ios' || Platform.OS === 'android') {
+                for (var day of resultSet.rows._array){
+                    if (day['COUNT(*)'] == numberHabitInDay(listHabit, day['date'])) {
+                        count += 1;
+                    }
                 }
-            }
+              } else {
+                for (var day of resultSet.rows){
+                    if (day['COUNT(*)'] == numberHabitInDay(listHabit, day['date'])) {
+                        count += 1;
+                    }
+                }
+              }
+            
 
             /* console.log('Counting perfect days: ', count); */
 
@@ -1031,6 +1207,86 @@ const CountPerfectDay = (listHabit) => {
                     dispatch(setEveryHabitDone(count));
                 }
             } */
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+}
+
+const CountPerfectStreak = (listHabit) => {
+    const[state, dispatch] = useStore()
+
+    db.transaction(tx => {
+        tx.executeSql("SELECT date, COUNT(*)\
+        FROM Memo AS M\
+        GROUP BY date\
+        ORDER BY date\
+        ", 
+        [],
+        (txObj, resultSet) => {
+            // console.log("Calculate Perfect Streak");
+            // console.log(resultSet.rows._array)
+
+            var bestStreak = 0;
+            var count = 1;
+            var date = null;
+            var followingDate = null;
+
+            if (Platform.OS === 'ios' || Platform.OS === 'android') {
+                for (var day of resultSet.rows._array){
+                    if (day['COUNT(*)'] == numberHabitInDay(listHabit, day['date'])) {
+                        // console.log(1);
+                        if (followingDate) {
+                            if (date&&streakRetain(date, followingDate)) {
+                                date = followingDate;
+                                followingDate = day['date'];
+                                count += 1;
+                                if (bestStreak < count) {
+                                    bestStreak = count;
+                                }
+                            }
+                            else {
+                                count = 1
+                                date = followingDate;
+                                followingDate = day['date'];
+                            }
+                        }
+                        else {
+                            followingDate = day['date'];
+                        }
+                    }
+                }
+              } else {
+                for (var day of resultSet.rows){
+                    if (day['COUNT(*)'] == numberHabitInDay(listHabit, day['date'])) {
+                        // console.log(1);
+                        if (followingDate) {
+                            if (date&&streakRetain(date, followingDate)) {
+                                date = followingDate;
+                                followingDate = day['date'];
+                                count += 1;
+                                if (bestStreak < count) {
+                                    bestStreak = count;
+                                }
+                            }
+                            else {
+                                count = 1
+                                date = followingDate;
+                                followingDate = day['date'];
+                            }
+                        }
+                        else {
+                            followingDate = day['date'];
+                        }
+                    }
+                }
+              }
+            
+
+            // console.log('Counting perfect days: ', bestStreak); 
+
+            dispatch(setPerFectStreak(bestStreak));
+
         },
         (txObj, error) => console.log(error)
         );
@@ -1053,10 +1309,18 @@ const CalculateOverallRate = (listHabit) => {
 
             var rates = [];
 
-            for (var day of resultSet.rows){
-                // console.log(day['COUNT(*)'], numberHabitInDay(listHabit, day['date']))
-                rates.push(day['COUNT(*)'] * 1.0 / numberHabitInDay(listHabit, day['date'])) 
-            }
+            if (Platform.OS === 'ios' || Platform.OS === 'android') {
+                for (var day of resultSet.rows._array){
+                    // console.log(day['COUNT(*)'], numberHabitInDay(listHabit, day['date']))
+                    rates.push(day['COUNT(*)'] * 1.0 / numberHabitInDay(listHabit, day['date'])) 
+                }
+              } else {
+                for (var day of resultSet.rows){
+                    // console.log(day['COUNT(*)'], numberHabitInDay(listHabit, day['date']))
+                    rates.push(day['COUNT(*)'] * 1.0 / numberHabitInDay(listHabit, day['date'])) 
+                }
+              }
+            
 
             const average = array => array.reduce((a, b) => a + b) / array.length;
             // console.log(rates)
@@ -1087,15 +1351,23 @@ const CalculateDailyAverage = () => {
         ", 
         [],
         (txObj, resultSet) => {
-            // console.log("Calculate Day Total Done");
+            // console.log("Calculate Daily Average");
             // console.log(resultSet);
 
             var counts = [];
 
+            if (Platform.OS === 'ios' || Platform.OS === 'android') {
+                for (var day of resultSet.rows._array){
+                    // console.log(day['COUNT(*)'], numberHabitInDay(listHabit, day['date']))
+                    counts.push(day['COUNT(*)']) 
+                }
+            } else {
             for (var day of resultSet.rows){
                 // console.log(day['COUNT(*)'], numberHabitInDay(listHabit, day['date']))
                 counts.push(day['COUNT(*)']) 
             }
+            }
+            
 
             const average = array => array.reduce((a, b) => a + b) / array.length;
             // console.log(rates)
@@ -1122,4 +1394,4 @@ export {db,getAllMemmo,getMemmoCurDay,getUnitNameforHOAD, getDataOfCurWeek,getUn
     loadHabit_on_web , addHabit, refreshDatabase, initDatabase, loadUnit, deleteHabit, 
     updateHabit, loadSetting, calculateDayDoneInMonth, calculateMonthlyVolumn, 
     calculateTotalVolumn, calculateDayTotalDone, calculateCurrentStreak, calculateBestStreak, CountPerfectDay,
-    CalculateOverallRate, CalculateDailyAverage}
+    CalculateOverallRate, CalculateDailyAverage, CountPerfectStreak, loadMemo, calculateDayStarted}
