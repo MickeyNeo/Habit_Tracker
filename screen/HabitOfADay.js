@@ -55,8 +55,8 @@ const HabitOfADay = ({navigation :{goBack},route}) =>{
         useShadowColorFromDataset: false, // optional,
         fillShadowGradientFrom: 'black'
     };
-    // getMemmoCurDay(habit)
-    // getDataOfCurWeek(habit)
+    getMemmoCurDay(habit)
+    getDataOfCurWeek(habit)
     
     const dailyAverage = Math.round(state.TotalVolumn / state.DayStarted * 100) / 100;
     const overallRate = Math.round(dailyAverage / habit.goalNo * 100) / 100 ;
