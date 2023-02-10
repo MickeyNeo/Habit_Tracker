@@ -69,7 +69,7 @@ const HabitZone = (values,navigation,date) => {
     console.log('listProgressDay',listProgressDay)
     
     const arr3 = values.map(obj => {
-      const arr2match = listProgressDay.find(x => x.habitname === obj.name && (x.day === date.dateString || date.dateString ==undefined));
+      const arr2match = listProgressDay.find(x => x.habitName === obj.name && (x.date === date.dateString || date.dateString ==undefined));
       return { ...obj, ...arr2match };
     });
     console.log('arr3', arr3)
@@ -93,8 +93,8 @@ const HabitZone = (values,navigation,date) => {
           // for (let i = 0; i < pickDay.length; i++) {
           //   if (pickDay[i] == day ) {
           console.log('day' ,value.day)
-          if (value.day===date.dateString){
-              var valueGoal
+          if (value.date===date.dateString){
+              var valueGoal = value.goalNo
               var checkShow = null 
               getUnitName(value)
               if (value.unitID.title == 'sec' || value.unitID.title == 'min' || value.unitID.title == 'hr' ){
@@ -106,14 +106,27 @@ const HabitZone = (values,navigation,date) => {
               }else{
                   checkShow = 0
               }
-              const {days, hours, minutes, seconds} = handleTime(value.process)
+              const doMath=()=>{
+                if (checkShow==1){
+                const {days, hours, minutes, seconds} = handleTime(value.progress)
+                console.log(days, hours, minutes, seconds)
+                if (hours!==0)
+                  return(<Text>{hours}h {minutes}m {seconds}s</Text>)
+                else if (minutes!==0)
+                  return(<Text>{minutes}m {seconds}s</Text>)
+                else return(<Text>{seconds}s</Text>)
+                }
+                else 
+                  return(<Text>{value.progress}</Text>)
+              }
+              
               //console.log(days, hours, minutes, seconds)
               return (
                 <TouchableOpacity 
                   style={{ padding: 5 }} 
                   key={value.name} 
                   onPress={() => navigation.navigate('HabitDetail', {habit: value, checkShow: checkShow})}>
-                  <Progress.Bar progress={(value.process)/(value.goalNo)} width={null} height={35} color={value.color}>
+                  <Progress.Bar progress={(value.progress)/(valueGoal)} width={null} height={35} color={value.color}>
                   {/* (value.process)/(value.goalNo) */}
                   </Progress.Bar>
                   <View style={{
@@ -130,8 +143,8 @@ const HabitZone = (values,navigation,date) => {
                         <Text style={{ fontSize: 8 }}>{value.note}</Text>
                       </View>
                       <View style={{ alignItems: 'flex-end', flex: 1,right:10}}>
-                         <Text>{value.process}/{value.goalNo} {value.unitID.title}</Text>
-                      {/* {checkShow && <Text>seconds/{value.goalNo} {value.unitID.title}</Text>} */}
+                        {/* {!checkShow && <Text> {(value.progress)/(valueGoal)} {value.unitID.title}</Text>} */}
+                        <Text>{doMath()}/{valueGoal} {value.unitID.title}</Text>
                       </View>
                     </View>
                 </TouchableOpacity>

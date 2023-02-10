@@ -15,14 +15,11 @@ import SelectUnit from './unit/unit';
 import moment from 'moment';
 import Modal from "react-native-modal";
 
-
-// import addName from ./''
-
 import { useStore , addHabitOfaDay, addHabitList, setListProgressDay} from '../Store'
 import { setHabitInput } from '../Store/action'
 import { db, addHabit } from '../Store/database'
 import { Tile } from "@rneui/base";
-const AddHabit = ({navigation, route}) => {
+const EditHabit = ({navigation, route}) => {
     const frequency_of_day = ["Daily", "Weekly", "Monthly"]
     const frequency_of_week = ["Weekly", "Monthly"]
     const [state, dispatch] = useStore();
@@ -123,7 +120,7 @@ const AddHabit = ({navigation, route}) => {
         dateRange.push(moment(startDate).format('YYYY-MM-DD'));
         //console.log(1)
         //list.push({id:id, day: moment(startDate).format('YYYY-MM-DD'), process:0, memo:''})
-        dispatch(setListProgressDay({habitName: name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''}))
+        dispatch(setListProgressDay({habitname: name, day: moment(startDate).format('YYYY-MM-DD'), process:0, memo:''}))
         startDate.add(1, 'days');
       }
       //console.log(list)
@@ -745,5 +742,5 @@ const styles = StyleSheet.create({
     },
 
 });
-export default AddHabit;
+export default EditHabit;
 
