@@ -3,7 +3,7 @@ import { View,Dimensions , Button, Text, StyleSheet, TouchableOpacity, ScrollVie
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import Icons from "./icon_color/Icon";
-import {useStore,delHabit} from '../Store';
+import {useStore,delHabit, editListProgressDay} from '../Store';
 import {
     LineChart,
     BarChart,
@@ -17,7 +17,7 @@ import {calculateDayDoneInMonth, calculateDayTotalDone, calculateMonthlyVolumn,
     getDataOfCurWeek, getUnitNameforHOAD, getMemmoCurDay} from '../Store/database';
 import MoreMemo from './HOADChildScreens/MoreMemo'
 
-const HabitOfADay = ({navigation :{goBack},route}) =>{
+const HabitOfADay = ({navigation,route}) =>{
     const {habit} = route.params;
     getUnitNameforHOAD(habit)
     const date = new Date();
@@ -61,9 +61,28 @@ const HabitOfADay = ({navigation :{goBack},route}) =>{
     const dailyAverage = Math.round(state.TotalVolumn / state.DayTotalDone * 100) / 100;
     const overallRate = Math.round(dailyAverage / habit.goalNo * 100) / 100 ;
     
-    const handleDelHablit =(id)=> {
+    // const handleDelHablit =(id)=> {
+    //     dispatch(delHabit(state.listHabit.filter(item => item.id !== id)))
+    // }
+    const handleDelHablit =(id,name)=> {
         dispatch(delHabit(state.listHabit.filter(item => item.id !== id)))
+        dispatch(editListProgressDay(state.listProgressDay.filter(item=>item.habitName!==name)))
     }
+    const showAlertDelete = () => {
+        Alert.alert(
+            'Confirm',
+            'Do you want to Delete this habit?',
+          [
+            {
+              text: 'Cancel',
+              //onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+            {text: 'OK', onPress: () => {handleDelHablit(habit.id,habit.name), navigation.goBack()}}
+          ],
+          {cancelable: false},
+        );
+      };
     return(
         <View style = {styles.container}>
             <View style = {styles.header}>
@@ -182,7 +201,7 @@ const HabitOfADay = ({navigation :{goBack},route}) =>{
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style = {{ backgroundColor: '#F3ACB4', borderRadius: 8, width: '40%',height: '140%', justifyContent: 'center'}} onPress={()=> {handleDelHablit(habit.id),goBack()}}>
+                        <TouchableOpacity style = {{ backgroundColor: '#F3ACB4', borderRadius: 8, width: '40%',height: '140%', justifyContent: 'center'}} onPress={showAlertDelete}>
                             <View style = {{flexDirection: 'row',justifyContent: 'center'}}>
                                 <FontAwesome5 style = {{marginHorizontal: 5}} name='trash-alt' size={15} color='black' />
                                 <Text>Delete</Text>
