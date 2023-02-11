@@ -98,7 +98,8 @@ const HabitZone = (values,navigation,date) => {
           // pickDay = pickDay.split(',')
           // for (let i = 0; i < pickDay.length; i++) {
           //   if (pickDay[i] == day ) {
-          console.log('day' ,value)
+
+          console.log('day' ,value.date)
           if (value.date===date.dateString){
               var valueGoal = value.goalNo
               var checkShow = null 
@@ -150,7 +151,7 @@ const HabitZone = (values,navigation,date) => {
                       </View>
                       <View style={{ alignItems: 'flex-end', flex: 1,right:10}}>
                         {/* {!checkShow && <Text> {(value.progress)/(valueGoal)} {value.unitID.title}</Text>} */}
-                        <Text>{doMath()}/{valueGoal} {value.unitID.title}</Text>
+                        <Text>{doMath()}/{value.goalNo} {value.unitID.title}</Text>
                       </View>
                     </View>
                 </TouchableOpacity>

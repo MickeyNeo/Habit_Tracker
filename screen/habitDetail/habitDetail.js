@@ -4,7 +4,7 @@ import {
     ProgressChart,
   } from "react-native-chart-kit";
 import {useStore} from '../../Store';
-import { editListProgressDay } from "../../Store";
+import { editListProgressDay,delHabit } from "../../Store";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Modal from "react-native-modal";
 // import hinh 
@@ -13,7 +13,8 @@ import memo from '../Icon/memo.png';
 import stat from '../Icon/stat.png';
 import sound from '../Icon/sound.png';
 import style from '../Icon/style.png';
-//import CountDown from './countdown/countdown'
+import edit from '../Icon/edit.png'
+import remove from '../Icon/remove.png'
 import CountDown from "react-native-countdown-component";
 import plus from '../Icon/plus.png';
 import play from '../Icon/play.png';
@@ -25,8 +26,21 @@ const HabitDetail = ({navigation,route}) => {
     const[state, dispatch] = useStore()
     const [onClock, setOnClock] = useState(false);
     const {habit, checkShow} = route.params;
-    
-    const [showCountdown, setshowCountdown] = useState(checkShow)
+    //console.log(habit.date, new Date())
+    const today =moment(new Date()).format('YYYY-MM-DD')
+    //Hiện thông báo confirm 
+    useEffect(() => {
+        if (habit.date > today) {
+          Alert.alert(
+            'Warning',
+            'You can not check for future date',
+            [
+                {text: 'OK', onPress: () => {navigation.goBack()}},
+              ],
+              {cancelable: false},
+          );
+        }
+      }, [habit.date]);
     //CountDown
     const [timeCountDown,setTimeCountDown] =useState(()=>{
         if (habit.unitID.title == 'sec') return habit.goalNo-habit.progress  
@@ -65,8 +79,9 @@ const HabitDetail = ({navigation,route}) => {
     
     // console.log(habit.id,habit.day,count,memoText)
     // console.log(habit)
-    // console.log(state.listProgressDay)
-    //Hiện thông báo confirm
+    //console.log(state.listProgressDay)
+    //Hiện thông báo confirm 
+
     const showAlert = () => {
         Alert.alert(
             'Confirm',
@@ -82,19 +97,22 @@ const HabitDetail = ({navigation,route}) => {
           {cancelable: false},
         );
       };
-    //Hiện thông báo confirm
-
-    const showAlertTime = () => {
+    //Hiện thông báo confirm va delete habit
+    const handleDelHablit =(id,name)=> {
+        dispatch(delHabit(state.listHabit.filter(item => item.id !== id)))
+        dispatch(editListProgressDay(state.listProgressDay.filter(item=>item.habitName!==name)))
+    }
+    const showAlertDelete = () => {
         Alert.alert(
             'Confirm',
-            'Do you want to reset this habit for today?',
+            'Do you want to Delete this habit?',
           [
             {
               text: 'Cancel',
               //onPress: () => console.log('Cancel Pressed'),
               style: 'cancel',
             },
-            {text: 'OK', onPress: () => setTimeCountDown()},
+            {text: 'OK', onPress: () => {handleDelHablit(habit.id,habit.name), navigation.goBack()}}
           ],
           {cancelable: false},
         );
@@ -134,7 +152,7 @@ const HabitDetail = ({navigation,route}) => {
                                 
                             </View>
 
-                            <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}> 
+                            <View style = {{flexDirection: 'row', justifyContent: 'center', bottom:'60%'}}> 
                                 {/* <TouchableOpacity >
                                 <Image
                                     source={plus}
@@ -147,12 +165,12 @@ const HabitDetail = ({navigation,route}) => {
                                     style={{ width: 40, height: 40,}}
                                 />
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={showAlertTime} >
+                                {/* <TouchableOpacity onPress={showAlertTime} >
                                 <Image
                                     source={replay}
                                     style={{ width: 30, height: 30,borderRadius: 100, backgroundColor: '#f5f5f5'}}
                                 />
-                                </TouchableOpacity>
+                                </TouchableOpacity> */}
                             </View> 
                         </View>
                         
@@ -161,7 +179,9 @@ const HabitDetail = ({navigation,route}) => {
                             {TabButton(navigation,"Sound", sound)}
                             {TabButton(navigation,"Stopwatch", stopwatch)} */}
                            {TabButtonMemo(memoText,setMemoText,memo,handleEdit,habit,count,memoText)}
+                            {TabButtonEdit(navigation,"Edit", edit, habit)}
                            {TabButtonStat(navigation,"Stat", stat,habit)}
+                            {TabButtonRemove('Delete',remove,showAlertDelete)}
                         </View>
                     </View>
                 ):(
@@ -199,21 +219,7 @@ const HabitDetail = ({navigation,route}) => {
                             </TouchableOpacity>
                         </View>
                         <View style = {{top: '8%',flexDirection: 'column', justifyContent: 'center', alignItems: 'center',}}>
-                            {/* <TextInput
-                                    style = {{ height: 40, 
-                                    width: '50%', 
-                                    margin: 5,
-                                    //flex: 0.2,
-                                    borderRadius: 10,
-                                    padding: 10,
-                                    backgroundColor: '#f5f5f5', 
-                                    color: '#a9a9a9',
-                                    top: '5%',
-                                    }}
-                                    placeholder="Type your memo here!!!"
-                                    onChangeText={newText => setText(newText)}
-                                    //defaultValue='0'
-                            />  */}
+
                             <View style = {{flexDirection: 'row'}}>
                                 <TouchableOpacity onPress={() => {setModalVisible(true)}}>
                                 <Image
@@ -254,7 +260,9 @@ const HabitDetail = ({navigation,route}) => {
                         </View> 
                         <View style={styles.functionZone}>
                             {TabButtonMemo(memoText,setMemoText,memo,handleEdit,habit,count,memoText)}
+                            {TabButtonEdit(navigation,"Edit", edit, habit)}
                             {TabButtonStat(navigation,"Stat", stat,habit)}
+                            {TabButtonRemove('Delete',remove,showAlertDelete)}
                         </View>
                     </View>
                 )
@@ -313,6 +321,34 @@ const TabButtonStat =(navigation, title, pic,habit)=>{
         <Text style = {{fontSize: 10}}>{title}</Text>
         </TouchableOpacity>
     );
+}
+const TabButtonEdit =(navigation,title,pic,habit) =>{
+    return(
+        <TouchableOpacity style = {styles.btnTouch} 
+        onPress={() => 
+            navigation.navigate('EditHabit', {
+                                        Habit: habit,
+                                    })}>  
+        <Image
+            source={pic}
+            style={{ width: 30, height: 30, borderRadius: 100, backgroundColor: '#f5f5f5',}}
+        />
+        <Text style = {{fontSize: 10}}>{title}</Text>
+        </TouchableOpacity>
+    )
+}
+const TabButtonRemove =(title,pic,show) =>{
+    return(
+        <TouchableOpacity style = {styles.btnTouch}
+        onPress={show}
+        >
+        <Image
+            source={pic}
+            style={{ width: 30, height: 30, borderRadius: 100, backgroundColor: '#f5f5f5',}}
+        />
+        <Text style = {{fontSize: 10}}>{title}</Text>
+        </TouchableOpacity>
+    )
 }
 
 const styles = StyleSheet.create({

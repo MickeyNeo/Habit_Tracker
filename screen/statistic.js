@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Foundation,Octicons,Entypo } from '@expo/vector-icons'; 
 import Icons from "./icon_color/Icon";
-import {useStore,setUnit, initDayDoneInMonth,initDayTotalDone, initMonthlyVolumn,initTotalVolumn, initDataOfCurWeek} from '../Store'
+import {useStore,setUnit, initDayDoneInMonth,initDayTotalDone, initMonthlyVolumn,initTotalVolumn, initDataOfCurWeek, setDayDoneInMonth, setDayTotalDone, setMonthlyVolumn, setTotalVolumn, setBestStreak, setCurrentStreak, setDayStarted} from '../Store'
 import {
     LineChart,
     BarChart,
@@ -18,12 +18,24 @@ import {
     ContributionGraph,
     StackedBarChart
   } from "react-native-chart-kit";
-import { calculateDayTotalDone, CalculateOverallRate, CountPerfectDay, CalculateDailyAverage, CountPerfectStreak } from '../Store/database';
+import { calculateDayTotalDone, CalculateOverallRate, CountPerfectDay, CalculateDailyAverage, 
+    CountPerfectStreak, calculateDayDoneInMonth, calculateMonthlyVolumn, calculateTotalVolumn, 
+    calculateCurrentStreak, calculateBestStreak, calculateDayStarted} from '../Store/database';
 import { useEffect } from 'react';
+// import {calculateDayTotalDone, CountPerfectDay, CalculateOverallRate, CountPerfectStreak, CalculateDailyAverage} from '../Store/database';
+// import { set } from 'core-js/core/dict';
 
 const Statistic = ({navigation}) => {
     const[state, dispatch] = useStore()
     
+    // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
+  useEffect(() => {
+    calculateDayTotalDone(state.listHabit, dispatch);
+    CountPerfectDay(state.listHabit, dispatch);
+    CountPerfectStreak(state.listHabit, dispatch);
+    CalculateOverallRate(state.listHabit, dispatch);
+    CalculateDailyAverage(dispatch);
+  }, []); // 👈️ empty dependencies array
     
     
     const dataPro = {
@@ -45,11 +57,8 @@ const Statistic = ({navigation}) => {
         calculateDayTotalDone(state.listHabit);
         CountPerfectDay(state.listHabit);
     }, []); // 👈️ empty dependencies array */
-    calculateDayTotalDone(state.listHabit);
-    CountPerfectDay(state.listHabit);
-    CountPerfectStreak(state.listHabit);
-    CalculateOverallRate(state.listHabit);
-    CalculateDailyAverage();
+    
+    
 
     return(
         <View style={style.container}> 
@@ -63,12 +72,30 @@ const Statistic = ({navigation}) => {
                         
                         <TouchableOpacity key={index}
                             onPress={() => {
-                                dispatch(initDayDoneInMonth(0))
-                                dispatch(initDayTotalDone(0))
-                                dispatch(initMonthlyVolumn(0))
-                                dispatch(initTotalVolumn(0))
-                                dispatch(initDataOfCurWeek([]))
+
+                                console.log(habit);
+                                calculateDayDoneInMonth(habit, dispatch);
+                                calculateDayTotalDone(habit, dispatch);
+                                calculateMonthlyVolumn(habit, dispatch);
+                                calculateTotalVolumn(habit, dispatch);
+                                calculateCurrentStreak(habit, dispatch);
+                                calculateBestStreak(habit, dispatch);
+                                calculateDayStarted(habit, dispatch);
+                                dispatch(setDayDoneInMonth(state.DayDoneInMonth));
+                                dispatch(setDayTotalDone(state.DayTotalDone));
+                                dispatch(setMonthlyVolumn(state.MonthlyVolumn));
+                                dispatch(setTotalVolumn(state.TotalVolumn));
+                                dispatch(setBestStreak(state.BestStreak));
+                                dispatch(setCurrentStreak(state.CurrentStreak));
+                                dispatch(setDayStarted(state.DayStarted));
+
+                                // dispatch(initDayDoneInMonth(0))
+                                // dispatch(initDayTotalDone(0))
+                                // dispatch(initMonthlyVolumn(0))
+                                // dispatch(initTotalVolumn(0))
+                                // dispatch(initDataOfCurWeek([]))
                                 
+                                console.log('Navigate to ', habit.name)
 
                                 navigation.navigate('HabitOfADay', {
                                     habit: habit,

@@ -3,7 +3,7 @@ import { View,Dimensions , Button, Text, StyleSheet, TouchableOpacity, ScrollVie
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import Icons from "./icon_color/Icon";
-import {useStore,delHabit} from '../Store';
+import {useStore,delHabit, editListProgressDay} from '../Store';
 import {
     LineChart,
     BarChart,
@@ -16,9 +16,11 @@ import {calculateDayDoneInMonth, calculateDayTotalDone, calculateMonthlyVolumn,
     calculateTotalVolumn, calculateCurrentStreak, calculateBestStreak, 
     getDataOfCurWeek, getUnitNameforHOAD, getMemmoCurDay, CalculateDayStarted, calculateDayStarted} from '../Store/database';
 import MoreMemo from './HOADChildScreens/MoreMemo'
+import { useEffect } from "react";
 
-const HabitOfADay = ({navigation :{goBack},route}) =>{
+const HabitOfADay = ({navigation,route}) =>{
     const {habit} = route.params;
+    
     getUnitNameforHOAD(habit)
     const date = new Date();
     const currentMonth = date.getMonth() + 1
@@ -28,13 +30,18 @@ const HabitOfADay = ({navigation :{goBack},route}) =>{
     // console.log(nameOfMonth)
     const [isEnabled, setIsEnabled] = useState(false);
     const[state, dispatch] = useStore()
-    calculateDayDoneInMonth(habit);
-    calculateDayTotalDone(habit);
-    calculateMonthlyVolumn(habit);
-    calculateTotalVolumn(habit);
-    calculateCurrentStreak(habit);
-    calculateBestStreak(habit);
-    calculateDayStarted(habit);
+
+    // calculateDayDoneInMonth(habit, dispatch);
+    // calculateDayTotalDone(habit, dispatch);
+    // calculateMonthlyVolumn(habit, dispatch);
+    // calculateTotalVolumn(habit, dispatch);
+    // calculateCurrentStreak(habit, dispatch);
+    // calculateBestStreak(habit, dispatch);
+    // calculateDayStarted(habit, dispatch);
+
+    // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
+ 
+    
     const data = {
         labels: ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"],
         datasets: [
@@ -61,9 +68,28 @@ const HabitOfADay = ({navigation :{goBack},route}) =>{
     const dailyAverage = Math.round(state.TotalVolumn / state.DayStarted * 100) / 100;
     const overallRate = Math.round(dailyAverage / habit.goalNo * 100) / 100 ;
     
-    const handleDelHablit =(id)=> {
+    // const handleDelHablit =(id)=> {
+    //     dispatch(delHabit(state.listHabit.filter(item => item.id !== id)))
+    // }
+    const handleDelHablit =(id,name)=> {
         dispatch(delHabit(state.listHabit.filter(item => item.id !== id)))
+        dispatch(editListProgressDay(state.listProgressDay.filter(item=>item.habitName!==name)))
     }
+    const showAlertDelete = () => {
+        Alert.alert(
+            'Confirm',
+            'Do you want to Delete this habit?',
+          [
+            {
+              text: 'Cancel',
+              //onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+            {text: 'OK', onPress: () => {handleDelHablit(habit.id,habit.name), navigation.goBack()}}
+          ],
+          {cancelable: false},
+        );
+      };
     return(
         <View style = {styles.container}>
             <View style = {styles.header}>
@@ -185,7 +211,7 @@ const HabitOfADay = ({navigation :{goBack},route}) =>{
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style = {{ backgroundColor: '#F3ACB4', borderRadius: 8, width: '40%',height: '140%', justifyContent: 'center'}} onPress={()=> {handleDelHablit(habit.id),goBack()}}>
+                        <TouchableOpacity style = {{ backgroundColor: '#F3ACB4', borderRadius: 8, width: '40%',height: '140%', justifyContent: 'center'}} onPress={showAlertDelete}>
                             <View style = {{flexDirection: 'row',justifyContent: 'center'}}>
                                 <FontAwesome5 style = {{marginHorizontal: 5}} name='trash-alt' size={15} color='black' />
                                 <Text>Delete</Text>
