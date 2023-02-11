@@ -450,7 +450,7 @@ const loadHabit_on_fone = (listHabit, dispatch) => {
             console.log(resultSet.rows); */
             if (listHabit.length < resultSet.rows.length) {
                 for (let i = 0; i < resultSet.rows.length; i++) {
-                    // console.log("Database resultset", resultSet.rows)
+                    //console.log("Database resultset", resultSet.rows)
                     dispatch(addHabitList(resultSet.rows._array[i]));
                 } 
             }

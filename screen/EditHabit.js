@@ -60,7 +60,7 @@ const EditHabit = ({navigation, route}) => {
       endDay: Habit.habitEndDay,
       isEnabled: Habit.showMemo,
       unit: Habit.unitID,
-      tag: Habit.tagID,
+      tag: Habit.tag,
       habitname: Habit.name,
       selectedItem: Habit.frequencyType,
       selectedFreq: date
@@ -89,6 +89,7 @@ const EditHabit = ({navigation, route}) => {
       icon: Habit.icon,
       iconFamily: Habit.iconFamily,
       flag : Habit.flag,
+      tag: value.tag,
   }
   //Tag
   const [iTag, setiTag] = useState([])
