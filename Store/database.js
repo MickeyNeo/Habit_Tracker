@@ -6,7 +6,7 @@ import { addHabitList, emptyHabitList, setDayStarted, setOverallRate, setPerFect
 import {useStore,setDayDoneInMonth,setDayTotalDone,setMonthlyVolumn,
     setTotalVolumn, setCurrentStreak, setBestStreak, setUnit,setUnitHOAD,
     setDataOfCurWeek, setMemmoCurDay, setListMemmo, setEveryHabitDone, setPerfectDayCount,
-    setDailyAverage} from '../Store'
+    setDailyAverage, setCheckHaveMemo} from '../Store'
 import {React, useState } from 'react';
 import { memoInit, habitInit, reminderInit, unitInit, tagInit, haveTagInit } from './init_data';
 import moment from 'moment';
@@ -420,6 +420,43 @@ const addHabit = (habit) => {
 
 }
 
+const addMemo = (habitName,today, content, progress) => {    
+    console.log("Adding Memo to db", habitName,today, content, progress);
+
+    db.transaction(tx => {
+        tx.executeSql('INSERT INTO Memo (habitName, date, content, progress) values (?, ?, ?, ?)', 
+        [habitName,today, content, progress],
+        (txObj, resultSet) => {
+            console.log("add memo here",resultSet.rows._array);
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+
+}
+const updateProgressMemo = (habitName,today, content, progress) => {    
+    // console.log("update Memo to db", habitName,today, content, progress);
+    // console.log("day need", today.slice(8,10));
+
+    db.transaction(tx => {
+        tx.executeSql("UPDATE Memo \
+        SET progress = ?, content = ?\
+        WHERE habitName = ? \
+        AND strftime('%d',date) = ?\
+        AND strftime('%m',date) = ?\
+        AND strftime('%Y',date) = ?", 
+        [progress,content, habitName,today.slice(8,10),today.slice(5,7),today.slice(0,4)],
+        (txObj, resultSet) => {
+            // console.log("Update habit name ", habitName, " from table Memo to ", newHabit.name);
+            // console.log('update Memo to db here',resultSet.rows._array);
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+
+}
+
+
 const addSetting = (state) => {    
     console.log("Adding Setting to db");
 
@@ -676,8 +713,8 @@ const updateHabit = (habit, newHabit) => {
 
         db.transaction(tx => {
             tx.executeSql('UPDATE Memo \
-            SET name = ?\
-            WHERE name = ?', 
+            SET habitName = ?\
+            WHERE habitName = ?', 
             [newHabit.name, habit.name],
             (txObj, resultSet) => {
                 // console.log("Update habit name ", habitName, " from table Memo to ", newHabit.name);
@@ -1395,12 +1432,34 @@ const CalculateDailyAverage = (dispatch) => {
     })
 }
 
+const checkHaveMemoCurDay = (habit,date, dispatch) => {
 
-
+    db.transaction(tx => {
+        tx.executeSql('SELECT COUNT(*) \
+        FROM Memo\
+        WHERE habitName = ? AND date = ?', 
+        [habit.name, date],
+        (txObj, resultSet) => {
+            
+            console.log(resultSet.rows._array[0]["COUNT(*)"]);
+            if (Platform.OS === 'ios' || Platform.OS === 'android') {
+                if(resultSet.rows._array[0]["COUNT(*)"] == 0){
+                    dispatch(setCheckHaveMemo(0))
+                }
+                else{
+                    dispatch(setCheckHaveMemo(0))
+                }
+              } 
+            
+        },
+        (txObj, error) => console.log(error)
+        );
+    })  
+}
 
 
 export {db,getAllMemmo,getMemmoCurDay,getUnitNameforHOAD, getDataOfCurWeek,getUnitName, loadHabit_on_fone,
     loadHabit_on_web , addHabit, refreshDatabase, initDatabase, loadUnit, deleteHabit, 
     updateHabit, loadSetting, calculateDayDoneInMonth, calculateMonthlyVolumn, 
     calculateTotalVolumn, calculateDayTotalDone, calculateCurrentStreak, calculateBestStreak, CountPerfectDay,
-    CalculateOverallRate, CalculateDailyAverage, CountPerfectStreak, loadMemo, calculateDayStarted}
+    CalculateOverallRate, CalculateDailyAverage, CountPerfectStreak, loadMemo, calculateDayStarted, checkHaveMemoCurDay, addMemo,updateProgressMemo}

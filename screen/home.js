@@ -22,15 +22,15 @@ const Home = ({ navigation }) => {
   // initDatabase();
 
   // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
-  useEffect(() => {
-    if (Platform.OS === 'ios' || Platform.OS === 'android') {
-      loadHabit_on_fone(state.listHabit, dispatch)
-      loadMemo(state.listProgressDay, dispatch)
+  // useEffect(() => {
+  //   if (Platform.OS === 'ios' || Platform.OS === 'android') {
+  //     loadHabit_on_fone(state.listHabit, dispatch)
+  //     loadMemo(state.listProgressDay, dispatch)
 
-    } else {
-      loadHabit_on_web(state.listHabit, dispatch)
-    }
-  }, []); // 👈️ empty dependencies array
+  //   } else {
+  //     loadHabit_on_web(state.listHabit, dispatch)
+  //   }
+  // }, []); // 👈️ empty dependencies array
 
   //refreshDatabase(state.listHabit, dispatch)
   console.log('home',state.listProgressDay.length)
