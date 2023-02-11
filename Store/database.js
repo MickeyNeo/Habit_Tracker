@@ -700,8 +700,9 @@ const updateHabit = (habit, newHabit) => {
 
 }
 
-const calculateMonthlyVolumn = (habit) => {
-    const[state, dispatch] = useStore()
+const calculateMonthlyVolumn = (habit, dispatch) => {
+    console.log("Calculated Monthly Volumn");
+    console.log(habit.name)
     db.transaction(tx => {
         tx.executeSql("SELECT SUM(progress) \
         FROM Memo\
@@ -709,16 +710,15 @@ const calculateMonthlyVolumn = (habit) => {
         AND strftime('%Y',date) = strftime('%Y','now')", 
         [habit.name],
         (txObj, resultSet) => {
-            // console.log("Calculated Monthly Volumn");
             // console.log(resultSet);
             if (Platform.OS === 'ios' || Platform.OS === 'android') {
-                if(state.MonthlyVolumn != resultSet.rows._array[0]['SUM(progress)']){
+                // if(state.MonthlyVolumn != resultSet.rows._array[0]['SUM(progress)']){
                     dispatch(setMonthlyVolumn(resultSet.rows._array[0]['SUM(progress)']))
-                }
+                // }
               } else {
-                if(state.MonthlyVolumn != resultSet.rows[0]['SUM(progress)']){
+                // if(state.MonthlyVolumn != resultSet.rows[0]['SUM(progress)']){
                     dispatch(setMonthlyVolumn(resultSet.rows[0]['SUM(progress)']))
-                }
+                // }
               }
             
         },
@@ -727,8 +727,9 @@ const calculateMonthlyVolumn = (habit) => {
     })
 }
 
-const calculateTotalVolumn  = (habit) => {
-    const[state, dispatch] = useStore()
+const calculateTotalVolumn  = (habit, dispatch) => {
+   console.log("Calculated Total Volumn");    
+    console.log(habit.name)
     db.transaction(tx => {
         tx.executeSql('SELECT SUM(progress) \
         FROM Memo\
@@ -739,13 +740,13 @@ const calculateTotalVolumn  = (habit) => {
             // console.log(resultSet.rows[0]['SUM(progress)']);
             // console.log(resultSet);
             if (Platform.OS === 'ios' || Platform.OS === 'android') {
-                if(state.TotalVolumn != resultSet.rows._array[0]['SUM(progress)']){
+                // if(state.TotalVolumn != resultSet.rows._array[0]['SUM(progress)']){
                     dispatch(setTotalVolumn(resultSet.rows._array[0]['SUM(progress)']))
-                }
+                // }
               } else {
-                if(state.TotalVolumn != resultSet.rows[0]['SUM(progress)']){
+                // if(state.TotalVolumn != resultSet.rows[0]['SUM(progress)']){
                     dispatch(setTotalVolumn(resultSet.rows[0]['SUM(progress)']))
-                }
+                // }
               }
             
         },
@@ -754,8 +755,9 @@ const calculateTotalVolumn  = (habit) => {
     })  
 }
 
-const calculateDayDoneInMonth = (habit) => {
-    const[state, dispatch] = useStore()
+const calculateDayDoneInMonth = (habit, dispatch) => {
+    console.log("Calculated Day Done in month");
+    console.log(habit.name);
     db.transaction(function(tx) {
             tx.executeSql("SELECT COUNT(*) \
                 FROM Memo\
@@ -763,16 +765,15 @@ const calculateDayDoneInMonth = (habit) => {
                 AND strftime('%Y',date) = strftime('%Y','now')", 
                 [habit.name],
                 (txObj, resultSet) => {
-                    // console.log("Calculated Day Done in month");
-                    // console.log(resultSet);
+                    
                     if (Platform.OS === 'ios' || Platform.OS === 'android') {
-                        if(state.DayDoneInMonth != resultSet.rows._array[0]['COUNT(*)']){
+                        // if(state.DayDoneInMonth != resultSet.rows._array[0]['COUNT(*)']){
                             dispatch(setDayDoneInMonth(resultSet.rows._array[0]['COUNT(*)']))
-                        }
+                        // }
                       } else {
-                        if(state.DayDoneInMonth != resultSet.rows[0]['COUNT(*)']){
+                        // if(state.DayDoneInMonth != resultSet.rows[0]['COUNT(*)']){
                             dispatch(setDayDoneInMonth(resultSet.rows[0]['COUNT(*)']))
-                        }
+                        // }
                       }
                     
                 },
@@ -830,28 +831,28 @@ const calculateDayDoneInMonth = (habit) => {
     }
 } */
 
-const calculateDayStarted  = (habit) => {
-    const[state, dispatch] = useStore()
+const calculateDayStarted  = (habit, dispatch) => {
+    console.log("Calculate Day Started ", habit.name);
+
     db.transaction(tx => {
         tx.executeSql("SELECT COUNT(*)\
         FROM Memo\
         WHERE habitName = ? AND progress != 0", 
         [habit.name],
         (txObj, resultSet) => {
-            console.log("Calculate Day Started");
             // console.log(resultSet.rows[0]['COUNT(*)']);
 
             
                 if (Platform.OS === 'ios' || Platform.OS === 'android') {
-                    if(state.DayTotalDone != resultSet.rows._array[0]['COUNT(*)']){
-                        console.log(resultSet.rows._array);
+                    // if(state.DayTotalDone != resultSet.rows._array[0]['COUNT(*)']){
+                        // console.log(resultSet.rows._array);
 
                         dispatch(setDayStarted(resultSet.rows._array[0]['COUNT(*)']));
-                    }
+                    // }
                     } else {
-                    if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
+                    // if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
                         dispatch(setDayStarted(resultSet.rows[0]['COUNT(*)']));
-                    }
+                    // }
                     }
         },
         (txObj, error) => console.log(error)
@@ -859,8 +860,9 @@ const calculateDayStarted  = (habit) => {
     })
 }
 
-const calculateDayTotalDone  = (habit) => {
-    const[state, dispatch] = useStore()
+const calculateDayTotalDone  = (habit, dispatch) => {
+    console.log("Calculate Day Total Done");
+    console.log(habit);
     if (habit instanceof Array) {
         db.transaction(tx => {
             tx.executeSql("SELECT COUNT(*)\
@@ -869,8 +871,7 @@ const calculateDayTotalDone  = (habit) => {
             AND M.progress == H.goalNo", 
             [],
             (txObj, resultSet) => {
-                // console.log("Calculate Day Total Done");
-                // console.log(resultSet.rows._array, habit);
+                
 
                 if (Platform.OS === 'ios' || Platform.OS === 'android') {
                     dispatch(setEveryHabitDone(resultSet.rows._array[0]['COUNT(*)']));
@@ -889,20 +890,20 @@ const calculateDayTotalDone  = (habit) => {
             WHERE habitName = ? AND progress == ?", 
             [habit.name, habit.goalNo],
             (txObj, resultSet) => {
-                console.log("Calculate Day Total Done 1 habit");
+                // console.log("Calculate Day Total Done 1 habit");
                 // console.log(resultSet.rows[0]['COUNT(*)']);
 
                 
                     if (Platform.OS === 'ios' || Platform.OS === 'android') {
-                        if(state.DayTotalDone != resultSet.rows._array[0]['COUNT(*)']){
-                            console.log(resultSet.rows._array);
+                        // if(state.DayTotalDone != resultSet.rows._array[0]['COUNT(*)']){
+                            // console.log(resultSet.rows._array);
 
                             dispatch(setDayTotalDone(resultSet.rows._array[0]['COUNT(*)']));
-                        }
+                        // }
                       } else {
-                        if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
+                        // if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
                             dispatch(setDayTotalDone(resultSet.rows[0]['COUNT(*)']));
-                        }
+                        // }
                       }
             },
             (txObj, error) => console.log(error)
@@ -911,8 +912,9 @@ const calculateDayTotalDone  = (habit) => {
     }
 }
 
-const calculateCurrentStreak = (habit) => {
-    const[state, dispatch] = useStore()
+const calculateCurrentStreak = (habit, dispatch) => {
+    console.log("Calculated Current Streak, ", habit.name);
+
     db.transaction(tx => {
         tx.executeSql('SELECT date \
         FROM Memo\
@@ -925,19 +927,20 @@ const calculateCurrentStreak = (habit) => {
 
             let streak = CurrentStreak(resultSet.rows);
 
-            console.log('streak ', streak);
+            // console.log('streak ', streak);
 
-            if(state.CurrentStreak != streak){
+            // if(state.CurrentStreak != streak){
                 dispatch(setCurrentStreak(streak))
-            }
+            // }
         },
         (txObj, error) => console.log(error)
         );
     })  
 }
 
-const calculateBestStreak = (habit) => {
-    const[state, dispatch] = useStore()
+const calculateBestStreak = (habit, dispatch) => {
+    console.log("Calculated Best Streak ", habit.name);
+
     db.transaction(tx => {
         tx.executeSql('SELECT date \
         FROM Memo\
@@ -951,9 +954,9 @@ const calculateBestStreak = (habit) => {
             let streak = BestStreak(resultSet.rows);
             // console.log(streak);
 
-            if(state.BestStreak != streak){
+            // if(state.BestStreak != streak){
                 dispatch(setBestStreak(streak))
-            }
+            // }
         },
         (txObj, error) => console.log(error)
         );
@@ -962,6 +965,7 @@ const calculateBestStreak = (habit) => {
 
 const getUnitName = (habit) => {
     const[state, dispatch] = useStore()
+
     db.transaction(tx => {
         tx.executeSql('SELECT Unit.name \
         FROM Unit, Habit\
@@ -988,6 +992,7 @@ const getUnitName = (habit) => {
 }
 const getUnitNameforHOAD = (habit) => {
     const[state, dispatch] = useStore()
+
     db.transaction(tx => {
         tx.executeSql('SELECT Unit.name \
         FROM Unit, Habit\
@@ -1034,6 +1039,7 @@ const getUnitNameforHOAD = (habit) => {
 
 const getDataOfCurWeek = (habit) => {
     const[state, dispatch] = useStore()
+    
     db.transaction(tx => {
         tx.executeSql("SELECT progress, strftime('%w',date) \
         FROM Memo\
@@ -1074,6 +1080,7 @@ const getDataOfCurWeek = (habit) => {
 
 const getMemmoCurDay = (habit) => {
     const[state, dispatch] = useStore()
+
     db.transaction(tx => {
         tx.executeSql("SELECT content,date \
         FROM Memo\
@@ -1111,6 +1118,7 @@ const getMemmoCurDay = (habit) => {
 
 const getAllMemmo = (habit) => {
     const[state, dispatch] = useStore()
+
     db.transaction(tx => {
         tx.executeSql("SELECT content,date \
         FROM Memo\
@@ -1166,8 +1174,7 @@ const numberHabitInDay = (listHabit, date) => {
     return count;
 }
 
-const CountPerfectDay = (listHabit) => {
-    const[state, dispatch] = useStore()
+const CountPerfectDay = (listHabit, dispatch) => {
 
     db.transaction(tx => {
         tx.executeSql("SELECT date, COUNT(*)\
@@ -1213,8 +1220,7 @@ const CountPerfectDay = (listHabit) => {
     })
 }
 
-const CountPerfectStreak = (listHabit) => {
-    const[state, dispatch] = useStore()
+const CountPerfectStreak = (listHabit, dispatch) => {
 
     db.transaction(tx => {
         tx.executeSql("SELECT date, COUNT(*)\
@@ -1293,9 +1299,7 @@ const CountPerfectStreak = (listHabit) => {
     })
 }
 
-const CalculateOverallRate = (listHabit) => {
-    const[state, dispatch] = useStore()
-
+const CalculateOverallRate = (listHabit, dispatch) => {
     db.transaction(tx => {
         tx.executeSql("SELECT date, COUNT(*)\
         FROM Memo AS M\
@@ -1340,8 +1344,7 @@ const CalculateOverallRate = (listHabit) => {
 }
 
 
-const CalculateDailyAverage = () => {
-    const[state, dispatch] = useStore()
+const CalculateDailyAverage = (dispatch) => {
 
     db.transaction(tx => {
         tx.executeSql("SELECT date, COUNT(*)\

@@ -16,9 +16,11 @@ import {calculateDayDoneInMonth, calculateDayTotalDone, calculateMonthlyVolumn,
     calculateTotalVolumn, calculateCurrentStreak, calculateBestStreak, 
     getDataOfCurWeek, getUnitNameforHOAD, getMemmoCurDay, CalculateDayStarted, calculateDayStarted} from '../Store/database';
 import MoreMemo from './HOADChildScreens/MoreMemo'
+import { useEffect } from "react";
 
 const HabitOfADay = ({navigation :{goBack},route}) =>{
     const {habit} = route.params;
+    
     getUnitNameforHOAD(habit)
     const date = new Date();
     const currentMonth = date.getMonth() + 1
@@ -28,13 +30,18 @@ const HabitOfADay = ({navigation :{goBack},route}) =>{
     // console.log(nameOfMonth)
     const [isEnabled, setIsEnabled] = useState(false);
     const[state, dispatch] = useStore()
-    calculateDayDoneInMonth(habit);
-    calculateDayTotalDone(habit);
-    calculateMonthlyVolumn(habit);
-    calculateTotalVolumn(habit);
-    calculateCurrentStreak(habit);
-    calculateBestStreak(habit);
-    calculateDayStarted(habit);
+
+    // calculateDayDoneInMonth(habit, dispatch);
+    // calculateDayTotalDone(habit, dispatch);
+    // calculateMonthlyVolumn(habit, dispatch);
+    // calculateTotalVolumn(habit, dispatch);
+    // calculateCurrentStreak(habit, dispatch);
+    // calculateBestStreak(habit, dispatch);
+    // calculateDayStarted(habit, dispatch);
+
+    // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
+ 
+    
     const data = {
         labels: ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"],
         datasets: [
