@@ -14,67 +14,50 @@ import { getUnitName, loadMemo} from '../Store/database';
 
 const Home = ({ navigation }) => {
   const [state,dispatch] = useStore();
-  const today = new Date();
-  const [selectedDay, setSelectedDay] = useState(format(today, 'MM/dd/yyyy'));
+  
   
   // const db = SQLite.openDatabase('Habit_tracker.db');
   // refreshDatabase();
   // initDatabase();
 
   // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
-  // useEffect(() => {
-  //   if (Platform.OS === 'ios' || Platform.OS === 'android') {
-  //     loadHabit_on_fone(state.listHabit, dispatch)
-  //     loadMemo(state.listProgressDay, dispatch)
-
-  //   } else {
-  //     loadHabit_on_web(state.listHabit, dispatch)
-  //   }
-  // }, []); // 👈️ empty dependencies array
+  useEffect(() => {
+    if (Platform.OS === 'ios' || Platform.OS === 'android') {
+      loadHabit_on_fone(state.listHabit, dispatch)
+      loadMemo(state.listProgressDay, dispatch)
+     
+    } else {
+      loadHabit_on_web(state.listHabit, dispatch)
+    }
+    
+  }, [state.listHabit,state.listProgressDay]); // 👈️ empty dependencies array
+  const today = new Date();
+  const [selectedDay, setSelectedDay] = useState(format(today, 'MM/dd/yyyy'));
+  const listH = state.listHabit
+  const listP = state.listProgressDay
 
   //refreshDatabase(state.listHabit, dispatch)
   console.log('home',state.listProgressDay.length)
-  
   //console.log(state.listHabit)
   //loadSetting(state, dispatch);
   /* loadUnit(); */
-  // console.log('list', state.listHabit)
-  // }
-  return (
-    <View style={{backgroundColor: 'white', flex: 1, flexDirection: 'column'}}>
-      <View style ={{height: 80 }}>
-        <CalendarProvider date={format(today, 'MM/dd/yyyy')}>
-          <WeekCalendar 
-            theme={styles.theme}
-            onDayPress = {(day) => {
-              setSelectedDay(day)}} 
-            firstDay={1}
-           />
-        </CalendarProvider>
-      </View>
-      <View style = {{flex: 0.8, flexDirection: 'column'}}>
-        {HabitZone(state.listHabit,navigation,selectedDay)}
-      </View>
-    </View>
-  )
-};
-
-const HabitZone = (values,navigation,date) => {
+  console.log('list', state.listHabit)
+  const HabitZone = (values,navigation,date,listProgressDay) => {
     console.log('date',date)
     let day = moment(date.dateString).format('ddd')
     day = day.toUpperCase()
 
     //console.log(day)
     //console.log(values)
-    const [state,dispatch] = useStore();
-    console.log('state',state)
+    // const [state,dispatch] = useStore();
+    // //console.log('state',state)
 
-    const {listProgressDay} =state
+    // const {listProgressDay} =state
     console.log('listProgressDay',listProgressDay)
     
 
     const arr3 = values.map(obj => {
-      const arr2match = listProgressDay.find(x => x.habitName === obj.name && (x.date === date.dateString || date.dateString ==undefined));
+      const arr2match = listProgressDay.find(x => x.habitName === obj.name && (x.date === date.dateString));
       return { ...obj, ...arr2match };
     });
     console.log('arr3', arr3)
@@ -126,15 +109,20 @@ const HabitZone = (values,navigation,date) => {
                 else 
                   return(<Text>{value.progress}</Text>)
               }
-              
+              //console.log('vlp',value.progress, 'vlg',value.goalNo)
+              const handleMath=()=>{
+                if (value.progress===undefined)               
+                  return 0
+                return(value.progress/value.goalNo)
+              }
               //console.log(days, hours, minutes, seconds)
               return (
                 <TouchableOpacity 
                   style={{ padding: 5 }} 
                   key={value.name} 
                   onPress={() => navigation.navigate('HabitDetail', {habit: value, checkShow: checkShow})}>
-                  <Progress.Bar progress={(value.progress)/(valueGoal)} width={null} height={35} color={value.color}>
-                  {/* (value.process)/(value.goalNo) */}
+                  <Progress.Bar progress={handleMath()} width={null} height={35} color={value.color}>
+                  {/* (value.progress)/(value.goalNo) */}
                   </Progress.Bar>
                   <View style={{
                     flex: 1,
@@ -177,6 +165,28 @@ const HabitZone = (values,navigation,date) => {
       </View>
   )
 }
+  // }
+  return (
+    <View style={{backgroundColor: 'white', flex: 1, flexDirection: 'column'}}>
+      <View style ={{height: 80 }}>
+        <CalendarProvider date={format(today, 'MM/dd/yyyy')}>
+          <WeekCalendar 
+            theme={styles.theme}
+            onDayPress = {(day) => {
+              setSelectedDay(day)}} 
+            firstDay={1}
+           />
+        </CalendarProvider>
+      </View>
+      <View style = {{flex: 0.8, flexDirection: 'column'}}>
+        
+        {HabitZone(listH,navigation,selectedDay,listP)}
+      </View>
+    </View>
+  )
+};
+
+
 const styles = StyleSheet.create({
     container:{
         flex: 1, 

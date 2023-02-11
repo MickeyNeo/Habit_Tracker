@@ -87,6 +87,7 @@ const AddHabit = ({navigation, route}) => {
         habitStartDay: value.startDay,
         habitEndDay: value.endDay,
         goalNo: value.goal,
+        tag: value.tag,
         goalPeriod: value.currentTabPeriod,
         unitID: value.unit,
         icon: IconInfo[0],
