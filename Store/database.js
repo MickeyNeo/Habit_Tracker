@@ -710,16 +710,15 @@ const calculateMonthlyVolumn = (habit, dispatch) => {
         AND strftime('%Y',date) = strftime('%Y','now')", 
         [habit.name],
         (txObj, resultSet) => {
-            // console.log(resultSet);
+
             if (Platform.OS === 'ios' || Platform.OS === 'android') {
-                // if(state.MonthlyVolumn != resultSet.rows._array[0]['SUM(progress)']){
-                    dispatch(setMonthlyVolumn(resultSet.rows._array[0]['SUM(progress)']))
-                // }
+                var sum = (resultSet.rows._array[0]['SUM(progress)']) ? resultSet.rows._array[0]['SUM(progress)'] : 0;
               } else {
-                // if(state.MonthlyVolumn != resultSet.rows[0]['SUM(progress)']){
-                    dispatch(setMonthlyVolumn(resultSet.rows[0]['SUM(progress)']))
-                // }
+                var sum = (resultSet.rows[0]['SUM(progress)']) ? resultSet.rows[0]['SUM(progress)'] : 0;
               }
+
+              dispatch(setMonthlyVolumn(sum))
+              
             
         },
         (txObj, error) => console.log(error)
