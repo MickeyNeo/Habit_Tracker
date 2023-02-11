@@ -11,7 +11,7 @@ export default function SelectFreq (params){
             }
             return val; 
         });
-        params.setSelect(tmpState);
+        params.setSelect(prevState => ({ ...prevState, selectedFreq: tmpState}));
 }
     return(         
         <View >

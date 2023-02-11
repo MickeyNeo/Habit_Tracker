@@ -35,6 +35,7 @@ const Home = ({ navigation }) => {
   const [selectedDay, setSelectedDay] = useState(format(today, 'MM/dd/yyyy'));
   const listH = state.listHabit
   const listP = state.listProgressDay
+
   //refreshDatabase(state.listHabit, dispatch)
   console.log('home',state.listProgressDay.length)
   //console.log(state.listHabit)

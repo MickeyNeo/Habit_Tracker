@@ -16,9 +16,15 @@ import { SET_DATA_OF_CURRENT_WEEK, INIT_DATA_OF_CURRENT_WEEK,} from './constants
 import { SET_MEMO_CUR_DAY, SET_LIST_MEMO, SET_EVERY_HABIT_DONE} from './constants'
 import { DEL_HABIT } from './constants'
 import { SET_LIST_PROGRESS_DAY } from './constants'
+import { SET_CHECK_HAVE_MEMO } from './constants'
 import { EDIT_LIST_PROGRESS_DAY, DEL_LIST_PROGRESS_DAY } from './constants'
 export const setHabitInput = payload => ({
     type: SET_HABIT_INPUT,
+    payload 
+})
+
+export const setCheckHaveMemo = payload => ({
+    type: SET_CHECK_HAVE_MEMO,
     payload 
 })
 

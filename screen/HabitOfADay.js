@@ -14,7 +14,7 @@ import {
   } from "react-native-chart-kit";
 import {calculateDayDoneInMonth, calculateDayTotalDone, calculateMonthlyVolumn,
     calculateTotalVolumn, calculateCurrentStreak, calculateBestStreak, 
-    getDataOfCurWeek, getUnitNameforHOAD, getMemmoCurDay, CalculateDayStarted, calculateDayStarted} from '../Store/database';
+    getDataOfCurWeek, getUnitNameforHOAD, getMemmoCurDay, CalculateDayStarted, calculateDayStarted, deleteHabit} from '../Store/database';
 import MoreMemo from './HOADChildScreens/MoreMemo'
 import { useEffect } from "react";
 
@@ -62,8 +62,8 @@ const HabitOfADay = ({navigation,route}) =>{
         useShadowColorFromDataset: false, // optional,
         fillShadowGradientFrom: 'black'
     };
-    getMemmoCurDay(habit)
-    getDataOfCurWeek(habit)
+    // getMemmoCurDay(habit)
+    // getDataOfCurWeek(habit)
     
     const dailyAverage = Math.round(state.TotalVolumn / state.DayStarted * 100) / 100;
     const overallRate = Math.round(dailyAverage / habit.goalNo * 100) / 100 ;
@@ -211,7 +211,16 @@ const HabitOfADay = ({navigation,route}) =>{
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style = {{ backgroundColor: '#F3ACB4', borderRadius: 8, width: '40%',height: '140%', justifyContent: 'center'}} onPress={showAlertDelete}>
+                        <TouchableOpacity style = {{ backgroundColor: '#F3ACB4', borderRadius: 8, width: '40%',height: '140%', justifyContent: 'center'}} onPress={()=> {
+                            showAlertDelete
+                            deleteHabit(habit.name);
+                            // if (Platform.OS === 'ios' || Platform.OS === 'android') {
+                            //     loadHabit_on_fone(state.listHabit, dispatch)
+                            //   } else {
+                            //     loadHabit_on_web(state.listHabit, dispatch)
+                            //   }
+                            // navigation.navigate('Statistic')
+                            }}>
                             <View style = {{flexDirection: 'row',justifyContent: 'center'}}>
                                 <FontAwesome5 style = {{marginHorizontal: 5}} name='trash-alt' size={15} color='black' />
                                 <Text>Delete</Text>
