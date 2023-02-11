@@ -1036,9 +1036,7 @@ const getUnitNameforHOAD = (habit) => {
 //     })
 // }
 
-const getDataOfCurWeek = (habit) => {
-    const[state, dispatch] = useStore()
-    
+const getDataOfCurWeek = (habit, state, dispatch) => {    
     db.transaction(tx => {
         tx.executeSql("SELECT progress, strftime('%w',date) \
         FROM Memo\
@@ -1077,8 +1075,7 @@ const getDataOfCurWeek = (habit) => {
     })  
 }
 
-const getMemmoCurDay = (habit) => {
-    const[state, dispatch] = useStore()
+const getMemmoCurDay = (habit, state, dispatch) => {
 
     db.transaction(tx => {
         tx.executeSql("SELECT content,date \

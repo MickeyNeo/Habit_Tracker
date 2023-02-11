@@ -20,7 +20,7 @@ import {
   } from "react-native-chart-kit";
 import { calculateDayTotalDone, CalculateOverallRate, CountPerfectDay, CalculateDailyAverage, 
     CountPerfectStreak, calculateDayDoneInMonth, calculateMonthlyVolumn, calculateTotalVolumn, 
-    calculateCurrentStreak, calculateBestStreak, calculateDayStarted} from '../Store/database';
+    calculateCurrentStreak, calculateBestStreak, calculateDayStarted, getDataOfCurWeek, getMemmoCurDay} from '../Store/database';
 import { useEffect } from 'react';
 // import {calculateDayTotalDone, CountPerfectDay, CalculateOverallRate, CountPerfectStreak, CalculateDailyAverage} from '../Store/database';
 // import { set } from 'core-js/core/dict';
@@ -74,6 +74,8 @@ const Statistic = ({navigation}) => {
                             onPress={() => {
 
                                 console.log(habit);
+                                getMemmoCurDay(habit, state, dispatch);
+                                getDataOfCurWeek(habit, state, dispatch);
                                 calculateDayDoneInMonth(habit, dispatch);
                                 calculateDayTotalDone(habit, dispatch);
                                 calculateMonthlyVolumn(habit, dispatch);
@@ -81,13 +83,13 @@ const Statistic = ({navigation}) => {
                                 calculateCurrentStreak(habit, dispatch);
                                 calculateBestStreak(habit, dispatch);
                                 calculateDayStarted(habit, dispatch);
-                                dispatch(setDayDoneInMonth(state.DayDoneInMonth));
-                                dispatch(setDayTotalDone(state.DayTotalDone));
-                                dispatch(setMonthlyVolumn(state.MonthlyVolumn));
-                                dispatch(setTotalVolumn(state.TotalVolumn));
-                                dispatch(setBestStreak(state.BestStreak));
-                                dispatch(setCurrentStreak(state.CurrentStreak));
-                                dispatch(setDayStarted(state.DayStarted));
+                                // dispatch(setDayDoneInMonth(state.DayDoneInMonth));
+                                // dispatch(setDayTotalDone(state.DayTotalDone));
+                                // dispatch(setMonthlyVolumn(state.MonthlyVolumn));
+                                // dispatch(setTotalVolumn(state.TotalVolumn));
+                                // dispatch(setBestStreak(state.BestStreak));
+                                // dispatch(setCurrentStreak(state.CurrentStreak));
+                                // dispatch(setDayStarted(state.DayStarted));
 
                                 // dispatch(initDayDoneInMonth(0))
                                 // dispatch(initDayTotalDone(0))
