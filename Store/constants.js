@@ -3,6 +3,7 @@ export const SET_LANGUAGE = 'set_language';
 
 export const ADD_HABIT_OF_ADAY = "add_Habit_Of_aDay";
 export const ADD_HABIT_LIST = 'add_habit_list';
+export const ADD_PROGRESS_LIST = 'add_progress_list';
 export const EMPTY_HABIT_LIST = 'empty_habit_list';
 export const SET_DATE_BAR_STYLE = "set_date_bar_style"
 export const SET_HABIT_BAR_STYLE = "set_habit_bar_style"

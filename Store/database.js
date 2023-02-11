@@ -2,7 +2,7 @@ import * as SQLite from 'expo-sqlite';
 import { useContext } from 'react';
 import Context from './Context';
 import reducer, { globalState } from './reducer';
-import { addHabitList, emptyHabitList, setDayStarted, setOverallRate, setPerFectStreak } from './action';
+import { addHabitList, emptyHabitList, setDayStarted, setOverallRate, setPerFectStreak, addProgressList} from './action';
 import {useStore,setDayDoneInMonth,setDayTotalDone,setMonthlyVolumn,
     setTotalVolumn, setCurrentStreak, setBestStreak, setUnit,setUnitHOAD,
     setDataOfCurWeek, setMemmoCurDay, setListMemmo, setEveryHabitDone, setPerfectDayCount,
@@ -491,8 +491,8 @@ const loadHabit_on_web = (listHabit, dispatch) => {
 
 }
 
-const loadMemo = () => {
-    // console.log("Loading memo from db");
+const loadMemo = (listProgressDay, dispatch) => {
+    console.log("Loading memo from db");
 
     /* db.transaction(tx => {"DROP TABLE Habit"}); */
 
@@ -500,6 +500,13 @@ const loadMemo = () => {
         tx.executeSql('SELECT * FROM Memo', 
         [],
         (txObj, resultSet) => {
+
+            if (listProgressDay.length < resultSet.rows.length) {
+                for (let i = 0; i < resultSet.rows.length; i++) {
+                    // console.log("Database resultset", resultSet.rows)
+                    dispatch(addProgressList(resultSet.rows._array[i]));
+                } 
+            }
             // console.log("Loading memo to state");
             // console.log(resultSet.rows);
         },
