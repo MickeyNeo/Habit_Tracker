@@ -18,6 +18,8 @@ import { SET_MEMO_CUR_DAY, SET_LIST_MEMO, SET_EVERY_HABIT_DONE  } from './consta
 import { DEL_HABIT } from './constants'
 import { SET_LIST_PROGRESS_DAY, DEL_LIST_PROGRESS_DAY, EDIT_LIST_PROGRESS_DAY } from './constants'
 import { emptyHabitList } from './action'
+import { SET_CHECK_HAVE_MEMO } from './constants'
+
 import theme from '../screen/styles/theme'
 
 const globalState = {
@@ -98,12 +100,18 @@ const globalState = {
     memoCurDate: '',
     listMemo: [],
     listMemoDate: [],
+    checkHaveMemo : -1,
 
 
 }
 
 function reducer (state , action) {
     switch (action.type) {
+        case SET_CHECK_HAVE_MEMO: 
+            return {
+                ...state,
+                checkHaveMemo: action.payload,
+            }
         case SET_HABIT_INPUT: 
             return {
                 ...state,
