@@ -36,7 +36,7 @@ const Habit = ({navigation}) => {
     
     const habit = [ 
         {
-            id: 'wk',
+            id: 'wa',
             name: 'Walking',
             image: walking,
             color: '#FFAEAE',
@@ -47,7 +47,7 @@ const Habit = ({navigation}) => {
             number: 0,
         },
         {
-            id: 'rn',
+            id: 'ru',
             name: 'Running',
             image: running,
             color: 'green',
@@ -113,7 +113,7 @@ const Habit = ({navigation}) => {
             number: 6,
         },
         {
-            id: 'bn',
+            id: 'bu',
             name: 'Burn Calo',
             image: burn,
             color:  '#00ffff', 
@@ -135,7 +135,7 @@ const Habit = ({navigation}) => {
             number: 8,
         },
         {
-            id: 'bre',
+            id: 'br',
             name: "Breathe",
             image: breathe,
             color:  '#00ffff', 
@@ -146,7 +146,7 @@ const Habit = ({navigation}) => {
             number: 9,
         },
         {
-            id: 'md',
+            id: 'me',
             name: 'Meditation',
             image: meditation,
             color:  '#00ffff', 
@@ -157,7 +157,7 @@ const Habit = ({navigation}) => {
             number: 10,
         },
         {
-            id: 'rb',
+            id: 're',
             name: 'Read book',
             image: read,
             color:  '#00ffff', 
@@ -168,7 +168,7 @@ const Habit = ({navigation}) => {
             number: 11,
         },
         {
-            id: 'ln',
+            id: 'le',
             name: 'Learning',
             image: learning,
             color:  '#00ffff', 
@@ -190,7 +190,7 @@ const Habit = ({navigation}) => {
             number: 13,
         },
         {
-            id: 'mcl',
+            id: 'mi',
             name: 'Mind Clear',
             image: clear,
             color:  '#00ffff', 
@@ -201,7 +201,7 @@ const Habit = ({navigation}) => {
             number: 14,
         },
         {
-            id: 'wt',
+            id: 'wo',
             name: "Workout",
             image: workout,
             color:  '#00ffff', 
@@ -212,7 +212,7 @@ const Habit = ({navigation}) => {
             number: 15,
         },
         {
-            id: 'ef',
+            id: 'eaf',
             name: 'Eat Fruit',
             image: fruit,
             color:  '#00ffff', 
@@ -223,7 +223,7 @@ const Habit = ({navigation}) => {
             number: 16,
         },
         {
-            id: 'ev',
+            id: 'eav',
             name: 'Eat Vegetable',
             image: vege,
             color:  '#00ffff', 
@@ -234,7 +234,7 @@ const Habit = ({navigation}) => {
             number: 17,
         },
         {
-            id: 'ng',
+            id: 'no',
             name: 'No Sugar',
             image: nosugar,
             color:  '#00ffff', 
@@ -256,7 +256,7 @@ const Habit = ({navigation}) => {
             number: 19,
         },
         {
-            id: 'el',
+            id: 'eal',
             name: 'Eat Low-Fat',
             image: lowfat,
             color:  '#00ffff', 
