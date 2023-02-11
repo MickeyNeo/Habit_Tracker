@@ -4,6 +4,7 @@ import { ADD_STATE_SETTING, EMPTY_HABIT_LIST, SET_CURRENT_STREAK, SET_DAILY_REMI
 import { SET_LANGUAGE } from './constants'
 import { ADD_HABIT_OF_ADAY } from './constants'
 import { ADD_HABIT_LIST } from './constants'
+import { ADD_PROGRESS_LIST } from './constants'
 import { SET_THEME } from './constants'
 import { SET_HABIT_STAT } from './constants'
 import { CHANGE_NOTE } from './constants'
@@ -136,6 +137,20 @@ function reducer (state , action) {
             return {
                 ...state,
                 listHabit: []
+            }
+        case ADD_PROGRESS_LIST:
+            for (let i = 0; i < state.listProgressDay.length; i++) {
+                // console.log("Progress payload: ", action.payload.habitName)
+                if (state.listProgressDay[i].habitName == action.payload.habitName 
+                    && state.listProgressDay[i].date == action.payload.date) {
+                    return {
+                        ...state
+                    }
+                }
+            }
+            return {
+                ...state,
+                listProgressDay: [...state.listProgressDay, action.payload]
             }
         case SET_THEME:
             const newThemeKey = state.currentTheme.id === "dark" ? "light" : "dark"

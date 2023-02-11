@@ -2,6 +2,7 @@ import { EMPTY_HABIT_LIST, SET_DAILY_AVERAGE, SET_DAILY_REMINDER_TIME, SET_DAY_S
 import { SET_LANGUAGE } from './constants'
 import { ADD_HABIT_OF_ADAY } from './constants'
 import { ADD_HABIT_LIST } from './constants'
+import { ADD_PROGRESS_LIST } from './constants'
 import { SET_THEME } from './constants'
 import { SET_HABIT_STAT} from './constants'
 import {CHANGE_NOTE } from './constants'
@@ -33,6 +34,11 @@ export const addHabitOfaDay = payload => ({
 
 export const addHabitList = payload => ({
     type: ADD_HABIT_LIST,
+    payload
+})
+
+export const addProgressList = payload => ({
+    type: ADD_PROGRESS_LIST,
     payload
 })
 
