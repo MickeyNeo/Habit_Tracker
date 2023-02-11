@@ -8,9 +8,9 @@ import { CalendarProvider, WeekCalendar } from "react-native-calendars";
 import { refreshDatabase, loadHabit_on_fone, loadHabit_on_web, initDatabase, loadUnit, loadSetting } from '../Store/database';
 import moment from 'moment';
 import { format} from 'date-fns';
-import { TextInput } from 'react-native-gesture-handler';
+import { State, TextInput } from 'react-native-gesture-handler';
 import { Platform } from 'react-native';
-import { getUnitName } from '../Store/database';
+import { getUnitName, loadMemo} from '../Store/database';
 
 const Home = ({ navigation }) => {
   const [state,dispatch] = useStore();
@@ -25,17 +25,19 @@ const Home = ({ navigation }) => {
   useEffect(() => {
     if (Platform.OS === 'ios' || Platform.OS === 'android') {
       loadHabit_on_fone(state.listHabit, dispatch)
+      loadMemo(state.listProgressDay, dispatch)
+
     } else {
       loadHabit_on_web(state.listHabit, dispatch)
     }
   }, []); // 👈️ empty dependencies array
 
   //refreshDatabase(state.listHabit, dispatch)
+  console.log('home',state.listProgressDay.length)
   
   //console.log(state.listHabit)
   //loadSetting(state, dispatch);
   /* loadUnit(); */
-  // console.log('chonngay',selectedDay)
   // console.log('list', state.listHabit)
   // }
   return (
@@ -51,7 +53,7 @@ const Home = ({ navigation }) => {
         </CalendarProvider>
       </View>
       <View style = {{flex: 0.8, flexDirection: 'column'}}>
-        {/* {HabitZone(state.listHabit,navigation,selectedDay)} */}
+        {HabitZone(state.listHabit,navigation,selectedDay)}
       </View>
     </View>
   )
@@ -65,6 +67,8 @@ const HabitZone = (values,navigation,date) => {
     //console.log(day)
     //console.log(values)
     const [state,dispatch] = useStore();
+    console.log('state',state)
+
     const {listProgressDay} =state
     console.log('listProgressDay',listProgressDay)
     
@@ -94,7 +98,7 @@ const HabitZone = (values,navigation,date) => {
           // pickDay = pickDay.split(',')
           // for (let i = 0; i < pickDay.length; i++) {
           //   if (pickDay[i] == day ) {
-          console.log('day' ,value.day)
+          console.log('day' ,value)
           if (value.date===date.dateString){
               var valueGoal = value.goalNo
               var checkShow = null 
