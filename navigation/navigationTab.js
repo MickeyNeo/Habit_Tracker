@@ -16,6 +16,7 @@ import HabitManager from "../screen/settingsScreen/HabitManager";
 import Export from "../screen/settingsScreen/Export";
 import HabitOfADay from "../screen/HabitOfADay";
 import TagManager from "../screen/settingsScreen/TagManager";
+import EditHabit from "../screen/EditHabit";
 import { useStore } from "../Store";
 
 const Tab = createBottomTabNavigator();
@@ -135,6 +136,7 @@ function MainTabNavigator () {
         <Stack.Screen name="Export" component={Export} />
         <Stack.Screen name="TagManager" component={TagManager} />
         <Stack.Screen options={{ headerTitle: 'Habit Details' }} name="HabitOfADay" component={HabitOfADay}/>
+        <Stack.Screen options={{ headerTitle: 'Edit Habit'}} name="EditHabit" component={EditHabit}/>
       </Stack.Navigator>
   );
 }

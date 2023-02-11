@@ -27,6 +27,7 @@ const AddHabit = ({navigation, route}) => {
     const frequency_of_week = ["Weekly", "Monthly"]
     const [state, dispatch] = useStore();
     const {id, name, colors, IconInfo, unitHabit, tag, flag } = route.params;
+    
     const IconDetail = {
         iconName: IconInfo[0],
         iconFamily: IconInfo[1],
@@ -59,9 +60,7 @@ const AddHabit = ({navigation, route}) => {
         note: "",
         mess: "",
         startDay: new Date(),
-        endDay: new Date(),
-        formattedDateStart: moment(new Date()).format('YYYY-MM-DD'),
-        formattedDateEnd: moment(new Date()).format('YYYY-MM-DD'),
+        endDay: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
         isEnabled: 0,
         unit: unit,
         tag: tag,
@@ -284,57 +283,12 @@ const AddHabit = ({navigation, route}) => {
                               week = {Week}
                               month = {month}
                                /> 
-                          {/* <Modal
-                                  isVisible={visModel}
-                                  onBackdropPress={() => {setVisModel(false)}}
-                                >
-                                  <View style={styles.modalFe}>
-                                    <TouchableOpacity
-                                      onPress={() => {setVisModel(false)}}
-                                      style={[styles.button,{backgroundColor:value.changecolor}]}
-                                    >
-                                      <Text style={styles.text}>Confirm</Text>
-                                    </TouchableOpacity>
-                                  </View>
-                          </Modal> */}
                         </View>
-                            {/* <View style = {{flexDirection: 'row', justifyContent: 'center'}}>
-                                <SelectDropdown
-                                  buttonStyle={{width: 75, height: 15, backgroundColor: 'white'}}
-                                  buttonTextStyle= {{fontSize: 8}}
-                                  defaultButtonText={ value.selectedItem}
-                                  data={value.currentTabPeriod == 'Week' ? frequency_of_week: frequency_of_day}
-                                  onSelect={(selectedItem, index) => 
-                                    {
-                                      setState(prevState => ({ ...prevState, selectedItem: selectedItem }))
-                                      if (selectedItem == 'Weekly') setSelect(Week)
-                                      else if (selectedItem == 'Monthly') setSelect(month)
-                                      else setSelect(date)
-                                    }}
-                                />
-                                
-                            </View> */}
+                            
                     </View>
                     <View style = {{padding: 10}}>
                             {DisplayNote(value.selectedFreq,value.goal,value.unit)}
-                            {/* <View style = {{flexDirection: 'row'}}>
-                                <Text style ={{fontSize: 10, color: 'red' }}> *Complete {value.goal} {value.unit.title} in total on</Text>
-                                {itemWeek.map((value,index)=>{
-                                  <Text style = {{fontSize: 10, color: 'red'}} key = {index}> 1 </Text>
-                                })}
-                          </View> */}
                     </View>
-                    {/* <View style = {{flexDirection: 'column', padding: 10}}>
-                        <Text style ={{fontWeight: 'bold', color: theme.color }}>Time Range</Text>
-                            <View style = {{flexDirection: 'row', flex: 1, padding: 10}}>
-                                <View style ={{ flexDirection: 'row', justifyContent: 'space-evenly', flex: 0.8}}>
-                                {TabButtontime(value.currentTabTime, setState, "Anytime",value.changecolor)}
-                                {TabButtontime(value.currentTabTime, setState, "Morning", value.changecolor)}
-                                {TabButtontime(value.currentTabTime, setState, "Afternoon", value.changecolor)}
-                                {TabButtontime(value.currentTabTime, setState, "Evening", value.changecolor)}
-                                </View>
-                        </View> 
-                    </View> */}
 
                     <View style = {{flexDirection: 'column', padding: 10}}>
                         <Text style ={{fontWeight: 'bold', color: theme.color }}>Reminder</Text>
@@ -364,7 +318,7 @@ const AddHabit = ({navigation, route}) => {
                         </View>
                     </View>
 
-                    <View style = {{flexDirection: 'column', padding: 10}}>
+                    {/* <View style = {{flexDirection: 'column', padding: 10}}>
                             <View style = {{flexDirection : 'row', justifyContent: 'space-between', alignContent: 'center'}}>
                                 <Text style ={{fontWeight: 'bold', color: theme.color, alignSelf: 'center' }}>Chart Type</Text>
                                 <View style = {{flexDirection: 'row'}}>
@@ -376,7 +330,7 @@ const AddHabit = ({navigation, route}) => {
                                     </TouchableOpacity>
                                 </View>
                             </View>
-                    </View>
+                    </View> */}
 
                     <View style = {{flexDirection: 'column', padding: 10}}>
                         <Text style ={{fontWeight: 'bold', color: theme.color }}>Habit Term</Text>
@@ -555,64 +509,7 @@ const ShowTimePicker = (startDay, endDay, setState,color ,flag) => {
     </View>
   );
   
-  
-  
-  
-  // const [mode, setMode] = useState('date');
-  // const [show, setShow] = useState(false);
-  // // const onChange = (event, selectedDate) => {
-  // //   const currentDate = selectedDate;
-  // //   setShow(false);
-  // //   if (flag === 1) {
-  // //     setState(prevState => ({ ...prevState, formattedDateStart: title }))
-  // //   } else {
-  // //     setState(prevState => ({ ...prevState, formattedDateEnd: title }))
-  // //   }
-  // // };
-  // const showMode = (currentMode) => {
-  //   setShow(true);
-  //   setMode(currentMode);
-  // };
-  // const showDatepicker = () => {
-  //   showMode('date');
-  // };
-  // //const [day,setDay]= useState(new Date(flag?startDay:endDay))
-  // const handleChange=(event, date) => {
-  //   // setDay(date)
-  //   if (flag === 1) {
-  //         setState(prevState => ({ ...prevState, startDay: date }))
-  //       } else {
-  //         setState(prevState => ({ ...prevState, endDay: date }))
-  //       }
-  // };
-  
-  // return (
-  //   <View
-  //       style={{ flexDirection: 'row', borderRadius: 10, backgroundColor: color }}
-  //     >
-  //       <TouchableOpacity onPress={showDatepicker}>
-  //       {show && (
-  //         <TimePickerDialog
-  //           testID="dateTimePicker"
-  //           value={flag === 1 ? startDay : endDay}
-  //           mode={mode}
-  //           is24Hour
-  //           positiveButton={{ label: 'OK', textColor: 'green' }}
-  //           onChange={handleChange}
-  //         />
-  //       )}
-  //       </TouchableOpacity>
-  //       {/* <Text>{flag === 1 ? startDay.toLocaleString() : endDay.toLocaleString()}</Text>
-  //         <TimePickerDialog
-  //           testID="dateTimePicker"
-  //           value={flag?startDay:endDay}
-  //           mode='date'
-  //           is24Hour
-  //           positiveButton={{ label: 'OK', textColor: 'green' }}
-  //           onChange={handleChange}
-  //         /> */}
-  //   </View>
-  // );
+
 };
 
 const DisplayNote = (select,goal,unit) => {

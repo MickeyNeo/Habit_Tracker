@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from 'react';
 import {Text,  View, StyleSheet,ScrollView,TouchableOpacity,SafeAreaView,TouchableWithoutFeedback,Button } from 'react-native';
 import { useStore} from "../../Store";
-import { delHabit } from "../../Store";
+import { delHabit,editListProgressDay } from "../../Store";
 import { FontAwesome5,MaterialCommunityIcons } from "@expo/vector-icons";
 import Modal from "react-native-modal";
 import SelectDropdown from 'react-native-select-dropdown'
@@ -16,9 +16,10 @@ export default function HabitManager (){
     const [modalVisible, setModalVisible] = useState(false);
     const option = ["Edit", "Delete"]
     const [isModalVisibleDel, setModalVisibleDel] = useState(true);
-    // console.log(state.listHabit)
-    const handleDelHablit =(id)=> {
+    console.log(state.listHabit)
+    const handleDelHablit =(id,name)=> {
         dispatch(delHabit(state.listHabit.filter(item => item.id !== id)))
+        dispatch(editListProgressDay(state.listProgressDay.filter(item=>item.habitName!==name)))
     }
     return(         
         <SafeAreaView style={styles.container}>
@@ -60,7 +61,7 @@ export default function HabitManager (){
                                                           if (selectedItem == option[0]) console.log(selectedItem)
                                                           else if (selectedItem == option[1]) 
                                                             {
-                                                                handleDelHablit(habit.id)
+                                                                handleDelHablit(habit.id, habit.name)
                                                                 
                                                             }
                                                         }}
