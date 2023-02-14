@@ -212,7 +212,7 @@ const HabitOfADay = ({navigation,route}) =>{
                         </TouchableOpacity>
 
                         <TouchableOpacity style = {{ backgroundColor: '#F3ACB4', borderRadius: 8, width: '40%',height: '140%', justifyContent: 'center'}} onPress={()=> {
-                            showAlertDelete
+                            showAlertDelete()
                             deleteHabit(habit.name);
                             // if (Platform.OS === 'ios' || Platform.OS === 'android') {
                             //     loadHabit_on_fone(state.listHabit, dispatch)

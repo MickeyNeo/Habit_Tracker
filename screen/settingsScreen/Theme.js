@@ -10,14 +10,14 @@ export default function Theme (){
     const {currentTheme} =state
     //console.log(currentTheme.id)
     const [HBSize, setHBSize] =useState('Normal')
-    const [DBS, setDBS] =useState('Normal')
+    //const [DBS, setDBS] =useState('Normal')
     const flag = (currentTheme.id =='light')? true:false
     const [isEnabledSwitch, setIsEnabledSwitch] =useState(flag)
     const toggleSwitch = () => {setIsEnabledSwitch(previousState => !previousState),dispatch(setTheme())};
-    const [HBS,setHBS] = useState('Simple')
+    const [HBS,setHBS] = useState('Monday')
     const handleHBS =()=>{
-        if (HBS =='Simple') setHBS('Intutive')
-        else setHBS('Simple')
+        if (HBS =='Monday') setHBS('Sunday')
+        else setHBS('Monday')
     }
     
     return(         
@@ -27,19 +27,19 @@ export default function Theme (){
                 
                 <TouchableOpacity onPress={handleHBS}>
                     <View style={{flexDirection:'row'}}>
-                        <Text style={[styles.text,{color: currentTheme.color}]}>Habit Bar Style</Text>
+                        <Text style={[styles.text,{color: currentTheme.color}]}>Date Bar Stype</Text>
                         <Text style={[styles.textCheck,{color: currentTheme.color}]}>{HBS}</Text>                        
                     </View>
                 </TouchableOpacity>
                     
-                    <View style={{flexDirection:'row'}}>
+                    {/* <View style={{flexDirection:'row'}}>
                         <Text style={[styles.text,{color: currentTheme.color}]}>Date Bar Style</Text>
                         <CheckTab 
                             values={valueDBS}
                             selectedValue={DBS}
                             setSelectedValue={setDBS}
                         />
-                    </View>
+                    </View> */}
                 
                 
                     <View style={{flexDirection:'row'}}>

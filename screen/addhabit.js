@@ -108,23 +108,30 @@ const AddHabit = ({navigation, route}) => {
       newList.splice(index, 1);
       setiTag(newList);
     };
-    //Daly
-    const itemWeek = ['MON', 'TUE', 'WED','THU','FRI','SAT','SUN'];
-    const itemMoth = Array.from({length: 31}, (_, index) => (index + 1).toString());
-    const [visModel, setVisModel] = useState(false)
-    //console.log(itemMoth)
+    
     //Danh sách các ngày được chọn
+    //console.log('Thu',moment('').date());  
     const handleProgressDay=()=>{
       const startDate = moment(value.startDay);
       const endDate = moment(value.endDay);
       const dateRange = [];
       const list = [];
       while (startDate <= endDate) {
-        dateRange.push(moment(startDate).format('YYYY-MM-DD'));
+        //dateRange.push(moment(startDate).format('YYYY-MM-DD'));
         //console.log(1)
         //list.push({id:id, day: moment(startDate).format('YYYY-MM-DD'), process:0, memo:''})
-        dispatch(setListProgressDay({habitName: habit.name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''}))
-        startDate.add(1, 'days');
+        if (habit.frequencyType==='Daily')
+          dispatch(setListProgressDay({habitName: habit.name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''}))
+        else if (habit.frequencyType==='Weekly')
+          {
+            if (habit.frequency.includes(moment(startDate).format('ddd').toLocaleUpperCase()))
+              dispatch(setListProgressDay({habitName: habit.name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''}))          }
+        else if (habit.frequencyType==='Monthly')
+          {
+            if (habit.frequency.includes(moment(startDate).date()))
+              dispatch(setListProgressDay({habitName: habit.name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''})) 
+          }
+          startDate.add(1, 'days');
       }
       //console.log(list)
      // dispatch(setListProgressDay(list))
