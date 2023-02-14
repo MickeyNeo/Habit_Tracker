@@ -24,29 +24,29 @@ export default function SelectUnit (params){
                                 <Text style={styles.tilte}>Select Unit</Text>
                                 <PreviewLayout
                                     values = {[
-                                    { id: 0, title: 'count'},
-                                    { id: 1, title: 'steps'},
-                                    { id: 2, title: 'm'},
-                                    { id: 3, title: 'km'},
-                                    { id: 4, title: 'mile'}
+                                    { id: 1, title: 'sec'},
+                                    { id: 2, title: 'min'},
+                                    { id: 3, title: 'hr'},
+                                    { id: 4, title: 'ml'},
+                                    { id: 5, title: 'oz'}
                                 ]}
                                     selectedValue={params.unit}
                                     setSelectedValue={params.setunit}
                                 />
                                 <PreviewLayout
                                     values = {[
-                                    { id: 5, title: 'sec'},
-                                    { id: 6, title: 'min'},
-                                    { id: 7, title: 'hr'},
-                                    { id: 8, title: 'ml'},
-                                    { id: 9, title: 'oz'}
+                                    { id: 6, title: 'cal'},
+                                    { id: 7, title: 'count'},
+                                    { id: 8, title: 'steps'},
+                                    { id: 9, title: 'm'},
+                                    { id: 10, title: 'km'}
                                 ]}
                                     selectedValue={params.unit}
                                     setSelectedValue={params.setunit}
                                 />
                                 <PreviewLayout
                                     values = {[
-                                    { id: 10, title: 'Cal'},
+                                    { id: 11, title: 'mile'},
                                 ]}
                                     selectedValue={params.unit}
                                     setSelectedValue={params.setunit}

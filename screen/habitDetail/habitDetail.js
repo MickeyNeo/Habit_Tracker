@@ -27,7 +27,7 @@ const HabitDetail = ({navigation,route}) => {
     const[state, dispatch] = useStore()
     const [onClock, setOnClock] = useState(false);
     const {habit, checkShow} = route.params;
-    //console.log(habit.date, new Date())
+    //console.log(habit)
     const today =moment(new Date()).format('YYYY-MM-DD')
     // console.log('hbdt',habit, today)
     // console.log('state.checkHaveMemo', state.checkHaveMemo)
@@ -57,7 +57,7 @@ const HabitDetail = ({navigation,route}) => {
               {cancelable: false},
           );
         }
-      }, [habit.date]);
+      },[]);
     //CountDown
     const [timeCountDown,setTimeCountDown] =useState(()=>{
         if (habit.unitID.title == 'sec') return habit.goalNo-habit.progress  

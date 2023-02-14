@@ -15,7 +15,7 @@ import SelectUnit from './unit/unit';
 import moment from 'moment';
 import Modal from "react-native-modal";
 
-import { useStore , addHabitOfaDay, addHabitList, setListProgressDay} from '../Store'
+import { useStore , setListProgressDay, delHabit, editListProgressDay} from '../Store'
 import { setHabitInput } from '../Store/action'
 import { db, addHabit } from '../Store/database'
 import { Tile } from "@rneui/base";
@@ -47,8 +47,10 @@ const EditHabit = ({navigation, route}) => {
   const today = new Date();
   const day = moment(today).format('ddd')
   const date = [{title: day.toUpperCase(), selected: true}]
-  // let unit = {}
-  // unitHabit.forEach((item) => unit = item)
+  const findObjectById = (id) => {
+    return state.listUnit.find((obj) => obj.id === id) || null;
+  };
+  let unit = findObjectById(Habit.unitID) 
   const [value, setState] = useState({
       goal: Habit.goalNo,
       currentTabPeriod: Habit.goalPeriod,
@@ -56,10 +58,10 @@ const EditHabit = ({navigation, route}) => {
       changecolor: Habit.color,
       note: Habit.note,
       mess: Habit.remainderMessage,
-      startDay: Habit.habitStartDay,
-      endDay: Habit.habitEndDay,
+      startDay: Habit.habitStartDate,
+      endDay: Habit.habitEndDate,
       isEnabled: Habit.showMemo,
-      unit: Habit.unitID,
+      unit: unit,
       tag: Habit.tag,
       habitname: Habit.name,
       selectedItem: Habit.frequencyType,
@@ -81,11 +83,11 @@ const EditHabit = ({navigation, route}) => {
       remainderMessage: value.mess,
       showMemo: value.isEnabled,
       chartType: Habit.chartType,
-      habitStartDay: value.startDay,
-      habitEndDay: value.endDay,
+      habitStartDate: value.startDay,
+      habitEndDate: value.endDay,
       goalNo: value.goal,
       goalPeriod: value.currentTabPeriod,
-      unitID: value.unit,
+      unitID: value.unit.id,
       icon: Habit.icon,
       iconFamily: Habit.iconFamily,
       flag : Habit.flag,
@@ -111,22 +113,50 @@ const EditHabit = ({navigation, route}) => {
   const [visModel, setVisModel] = useState(false)
   //console.log(itemMoth)
   //Danh sách các ngày được chọn
-  const handleProgressDay=()=>{
-    const startDate = moment(value.startDay);
-    const endDate = moment(value.endDay);
+  const handleProgressDay=(startDate,endDate)=>{
+    startDate = moment(value.startDay);
+    endDate = moment(value.endDay);
     const dateRange = [];
     const list = [];
     while (startDate <= endDate) {
       dateRange.push(moment(startDate).format('YYYY-MM-DD'));
       //console.log(1)
       //list.push({id:id, day: moment(startDate).format('YYYY-MM-DD'), process:0, memo:''})
-      dispatch(setListProgressDay({habitName: name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''}))
+      dispatch(setListProgressDay({habitName: Habit.name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''}))
       startDate.add(1, 'days');
     }
     
   }
+  //Hàm sửa habit
+  const handleHabit=()=>{
+    dispatch(delHabit(state.listHabit.map(item => {
+        if (item.id === Habit.id)
+          return { ...item, name:habit.name, chartType : habit.chartType, color: habit.color, frequency: habit.frequency, frequencyType: habit.frequencyType, goalNo: habit.goalNo, goalPeriod: habit.goalPeriod, habitEndDate: habit.habitEndDate, habitStartDate: habit.habitStartDate, icon: habit.icon, iconFamily: habit.iconFamily, note: habit.note, remainderMessage: habit.remainderMessage, showMemo: habit.showMemo, tag: habit.tag, tagID: habit.tagID, timeRange: habit.timeRange, unitID: habit.unitID};
+        return item
+        }
+        )))}
+  //Hàm xóa ngày
+  const handDelProgressDay=(name, startDate, endDate)=>{
+    console.log('1 listPro',state.listProgressDay)
+    dispatch(editListProgressDay(state.listProgressDay.filter(item=>item.habitName!==name)))
+    console.log('2 listPro',state.listProgressDay)
+  }
+  //Edit
   const handleEdit=()=>{
-    console.log(1)
+    if (value.endDay>Habit.habitEndDate){
+      const startDate = new Date(Habit.habitEndDate.getTime() + 24 * 60 * 60 * 1000);
+      const endDate = value.endDay;
+      handleProgressDay(startDate,endDate);
+      handleHabit();
+    }
+    else if (value.endDay<Habit.habitEndDate)
+    {
+      handDelProgressDay(habit.name,value.endDay,Habit.habitEndDate)
+      handleHabit();
+    }
+    else 
+    handleHabit();
+    navigation.goBack()
   }
   return (
       <View style={{ flex: 1, flexDirection : 'column'}}>
@@ -317,19 +347,7 @@ const EditHabit = ({navigation, route}) => {
                       </View>
                   </View>
 
-                  <View style = {{flexDirection: 'column', padding: 10}}>
-                          <View style = {{flexDirection : 'row', justifyContent: 'space-between', alignContent: 'center'}}>
-                              <Text style ={{fontWeight: 'bold', color: theme.color, alignSelf: 'center' }}>Chart Type</Text>
-                              <View style = {{flexDirection: 'row'}}>
-                                  <TouchableOpacity>
-                                      <Icons type = {'ant'} name = {'barschart'} size = {32} />
-                                  </TouchableOpacity>
-                                  <TouchableOpacity>
-                                      <Icons type = {'ant'} name = {'barschart'} size = {32} />
-                                  </TouchableOpacity>
-                              </View>
-                          </View>
-                  </View>
+            
 
                   <View style = {{flexDirection: 'column', padding: 10}}>
                       <Text style ={{fontWeight: 'bold', color: theme.color }}>Habit Term</Text>
@@ -355,7 +373,7 @@ const EditHabit = ({navigation, route}) => {
                   //dispatch(addHabitList(habit));
                   handleEdit();
                   //addHabit(state.habit);
-                  navigation.goBack()
+                  
               }}>
               <Image
                   source={require('./Icon/done.png')}

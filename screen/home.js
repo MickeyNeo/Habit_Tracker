@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View,Text, StyleSheet, TouchableOpacity, Image, } from "react-native";
+import { View,Text, StyleSheet, TouchableOpacity, Image, ScrollView} from "react-native";
 import Icons from "./icon_color/Icon";
 import * as Progress from 'react-native-progress';
 import { addHabitList, useStore } from '../Store'
@@ -8,7 +8,7 @@ import { CalendarProvider, WeekCalendar } from "react-native-calendars";
 import { refreshDatabase, loadHabit_on_fone, loadHabit_on_web, initDatabase, loadUnit, loadSetting } from '../Store/database';
 import moment from 'moment';
 import { format} from 'date-fns';
-import { State, TextInput } from 'react-native-gesture-handler';
+//import { ScrollView, State, TextInput } from 'react-native-gesture-handler';
 import { Platform } from 'react-native';
 import { getUnitName, loadMemo} from '../Store/database';
 
@@ -21,16 +21,16 @@ const Home = ({ navigation }) => {
   // initDatabase();
 
   // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
-  useEffect(() => {
-    if (Platform.OS === 'ios' || Platform.OS === 'android') {
-      loadHabit_on_fone(state.listHabit, dispatch)
-      loadMemo(state.listProgressDay, dispatch)
+  // useEffect(() => {
+  //   if (Platform.OS === 'ios' || Platform.OS === 'android') {
+  //     loadHabit_on_fone(state.listHabit, dispatch)
+  //     loadMemo(state.listProgressDay, dispatch)
      
-    } else {
-      loadHabit_on_web(state.listHabit, dispatch)
-    }
+  //   } else {
+  //     loadHabit_on_web(state.listHabit, dispatch)
+  //   }
     
-  }, [state.listHabit,state.listProgressDay]); // 👈️ empty dependencies array
+  // }, []); // 👈️ empty dependencies array
   const today = new Date();
   const [selectedDay, setSelectedDay] = useState(format(today, 'MM/dd/yyyy'));
   const listH = state.listHabit
@@ -43,14 +43,13 @@ const Home = ({ navigation }) => {
   /* loadUnit(); */
   console.log('list', state.listHabit)
   const HabitZone = (values,navigation,date,listProgressDay) => {
-    console.log('date',date)
+    //console.log('date',date)
     let day = moment(date.dateString).format('ddd')
     day = day.toUpperCase()
 
     //console.log(day)
     //console.log(values)
-    // const [state,dispatch] = useStore();
-    // //console.log('state',state)
+    const [state,dispatch] = useStore();
 
     // const {listProgressDay} =state
     console.log('listProgressDay',listProgressDay)
@@ -70,10 +69,14 @@ const Home = ({ navigation }) => {
         days: parseInt(until / (60 * 60 * 24), 10),
       };
     };
-
+    const findObjectById = (id) => {
+      var a=state.listUnit.find((obj) => obj.id === id) || null;
+      if (a!==null) return a.title
+      return null
+    };
     if (arr3 != '')
     return (
-    <View>
+    <ScrollView>
       <View style = {{flexDirection: 'column', padding: 10, justifyContent: 'space-evenly'}}>
 
         {arr3.map((value) => {
@@ -87,10 +90,10 @@ const Home = ({ navigation }) => {
               var valueGoal = value.goalNo
               var checkShow = null 
               getUnitName(value)
-              if (value.unitID.title == 'sec' || value.unitID.title == 'min' || value.unitID.title == 'hr' ){
+              if (value.unitID === 1 || value.unitID.title === 2 || value.unitID.title == 3 ){
                   {checkShow = 1; 
-                    if (value.unitID.title == 'min') valueGoal= value.goalNo*60
-                    else if (value.unitID.title == 'hr') valueGoal= value.goalNo*3600
+                    if (value.unitID === 3 ) valueGoal= value.goalNo*60
+                    else if (value.unitID === 3) valueGoal= value.goalNo*3600
                     else valueGoal= value.goalNo
                   }
               }else{
@@ -115,6 +118,7 @@ const Home = ({ navigation }) => {
                   return 0
                 return(value.progress/value.goalNo)
               }
+              
               //console.log(days, hours, minutes, seconds)
               return (
                 <TouchableOpacity 
@@ -139,7 +143,7 @@ const Home = ({ navigation }) => {
                       </View>
                       <View style={{ alignItems: 'flex-end', flex: 1,right:10}}>
                         {/* {!checkShow && <Text> {(value.progress)/(valueGoal)} {value.unitID.title}</Text>} */}
-                        <Text>{doMath()}/{value.goalNo} {value.unitID.title}</Text>
+                        <Text>{doMath()}/{value.goalNo} {findObjectById(value.unitID)}</Text>
                       </View>
                     </View>
                 </TouchableOpacity>
@@ -147,7 +151,7 @@ const Home = ({ navigation }) => {
           }
   })}
       </View>
-    </View>
+    </ScrollView>
   )
   else 
     return (

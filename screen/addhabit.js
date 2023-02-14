@@ -84,12 +84,12 @@ const AddHabit = ({navigation, route}) => {
         remainderMessage: value.mess,
         showMemo: value.isEnabled,
         chartType: 0,
-        habitStartDay: value.startDay,
-        habitEndDay: value.endDay,
+        habitStartDate: value.startDay,
+        habitEndDate: value.endDay,
         goalNo: value.goal,
         tag: value.tag,
         goalPeriod: value.currentTabPeriod,
-        unitID: value.unit,
+        unitID: value.unit.id,
         icon: IconInfo[0],
         iconFamily: IconInfo[1],
         flag : flag,
@@ -123,7 +123,7 @@ const AddHabit = ({navigation, route}) => {
         dateRange.push(moment(startDate).format('YYYY-MM-DD'));
         //console.log(1)
         //list.push({id:id, day: moment(startDate).format('YYYY-MM-DD'), process:0, memo:''})
-        dispatch(setListProgressDay({habitName: name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''}))
+        dispatch(setListProgressDay({habitName: habit.name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''}))
         startDate.add(1, 'days');
       }
       //console.log(list)
@@ -493,7 +493,7 @@ const ShowTimePicker = (startDay, endDay, setState,color ,flag) => {
     <View>
       <TouchableOpacity
         onPress={showDatepicker}
-        style={{ flexDirection: 'row', borderRadius: 10, backgroundColor: 'green' }}
+        style={{ flexDirection: 'row', borderRadius: 10, backgroundColor: color }}
       >
         <Text>{flag === 1 ? startDay.toDateString() : endDay.toDateString()}</Text>
         {show && (
@@ -502,7 +502,7 @@ const ShowTimePicker = (startDay, endDay, setState,color ,flag) => {
             value={flag === 1 ? startDay : endDay}
             mode={mode}
             //is24Hour
-            positiveButton={{ label: 'OK', textColor: 'green' }}
+            positiveButton={{ label: 'OK', textColor: color }}
             onChange={onChange}
           />
         )}
