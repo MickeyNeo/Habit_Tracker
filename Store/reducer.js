@@ -32,8 +32,8 @@ const globalState = {
         reminderMessage: '',
         showMemo: 0,
         chartType: 0,
-        habitStartDay: '',
-        habitEndDay: '',
+        habitStartDate: '',
+        habitEndDate: '',
         goalNo: '1',
         goalPeriod: 'Day',
         unitID: 0,
@@ -70,6 +70,51 @@ const globalState = {
         process:0,
         memo:'',
     },
+    listUnit:[{
+        id: 1,
+        title: 'sec',
+    },
+    {
+        id: 2,
+        title: 'min',
+    },
+    {
+        id: 3,
+        title: 'hr',
+    },
+    {
+        id: 4,
+        title: 'ml',
+    },
+    {
+        id: 5,
+        title: 'oz',
+    },
+    {
+        id: 6,
+        title: 'cal',
+    },
+    {
+        id: 7,
+        title: 'count',
+    },
+    {
+        id: 8,
+        title: 'steps',
+    },
+    {
+        id: 9,
+        title: 'm',
+    },
+    {
+        id: 10,
+        title: 'km',
+    },
+    {
+        id: 11,
+        title: 'mile',
+    }
+    ],
     listProgressDay: [],
     stateLanguage:"English",
     currentTheme: theme.light,

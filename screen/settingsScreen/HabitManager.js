@@ -33,7 +33,7 @@ export default function HabitManager (){
                                                 {habit.name}
                                             </Text>
                                             <Text style={styles.textRemind}>
-                                                {habit.reminderMessage}
+                                                {habit.note}
                                             </Text>
                                         </View>
                                         <TouchableWithoutFeedback onPress={()=> {setModalVisible(true) }}>
