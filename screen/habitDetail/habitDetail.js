@@ -15,13 +15,12 @@ import sound from '../Icon/sound.png';
 import style from '../Icon/style.png';
 import edit from '../Icon/edit.png'
 import remove from '../Icon/remove.png'
-import CountDown from "react-native-countdown-component";
+import CountDown from "./countdown";
 import plus from '../Icon/plus.png';
 import play from '../Icon/play.png';
 import pause from '../Icon/pause.png';
 import replay from '../Icon/replay.png';    
 import moment from 'moment';
-import { checkHaveMemoCurDay, addMemo, updateProgressMemo} from "../../Store/database";
 
 const HabitDetail = ({navigation,route}) => {
     const[state, dispatch] = useStore()
@@ -29,24 +28,8 @@ const HabitDetail = ({navigation,route}) => {
     const {habit, checkShow} = route.params;
     //console.log(habit)
     const today =moment(new Date()).format('YYYY-MM-DD')
-    // console.log('hbdt',habit, today)
-    // console.log('state.checkHaveMemo', state.checkHaveMemo)
-    if (state.checkHaveMemo == 0){
-        // console.log(state.checkHaveMemo)
-        // console.log('add memo',habit.habitName,today, habit.content, habit.progress)
-        addMemo(habit.habitName,today, habit.content, habit.progress)
-
-    }
     //Hiện thông báo confirm 
     useEffect(() => {
-        checkHaveMemoCurDay(habit, today, dispatch)
-
-        // if (state.checkHaveMemo == 0){
-        //     console.log(state.checkHaveMemo)
-        //     console.log('add memo',habit.habitName,today, habit.content, habit.progress)
-        //     addMemo(habit.habitName,today, habit.content, habit.progress)
-        // }
-
         if (habit.date > today) {
           Alert.alert(
             'Warning',
@@ -60,16 +43,10 @@ const HabitDetail = ({navigation,route}) => {
       },[]);
     //CountDown
     const [timeCountDown,setTimeCountDown] =useState(()=>{
-        if (habit.unitID.title == 'sec') return habit.goalNo-habit.progress  
-        if (habit.unitID.title == 'min')  return habit.goalNo*60-habit.progress  
-        if (habit.unitID.title == 'hr' ) return habit.goalNo*3600-habit.progress  
+        if (habit.unitID === 1) return habit.goalNo-habit.progress  
+        if (habit.unitID === 2)  return habit.goalNo*60-habit.progress  
+        if (habit.unitID === 3 ) return habit.goalNo*3600-habit.progress  
     })
-    //const [timeCount, setTimeCount] = useState(0)
-    const handleTime =(time)=>{ 
-        if (habit.unitID.title == 'sec') return time  
-        if (habit.unitID.title == 'min')  return time*60
-        if (habit.unitID.title == 'hr' ) return time*3600
-    }
     //Count
     const [count,setCount] =useState(habit.progress)
     const [value, setValue] = useState(0);
@@ -136,12 +113,9 @@ const HabitDetail = ({navigation,route}) => {
       };
 
     const handleEdit=(name,day,count,memo)=>{
-        console.log('here',name,day,count,memo)
-        updateProgressMemo(name,day,memo,count)
-
         dispatch(editListProgressDay(state.listProgressDay.map(item => {
             if (item.habitName === name && item.date===day) {
-                return { ...item, progress:count, content:memo};
+              return { ...item, progress:count, content:memo};
             }
             return item
             })))
@@ -166,13 +140,13 @@ const HabitDetail = ({navigation,route}) => {
                                     timeToShow={['H', 'M', 'S']}
                                     timeLabels={{h:'HH',m: 'MM', s: 'SS'}}
                                     running = {onClock}
-                                    onChange={(time)=>  {if (onClock &&count!==timeCountDown)  {setCount(count+1),handleEdit(habit.name,habit.date,count+1,memoText) }}}
+                                    onChange={(time)=>  {if (onClock && count!==timeCountDown)  {setCount(count+1),handleEdit(habit.name,habit.date,count+1,memoText)} else if (count==timeCountDown) setOnClock(false)}}
                                     //showSeparator
                                 />
                                 
                             </View>
 
-                            <View style = {{flexDirection: 'row', justifyContent: 'center', bottom:'30%'}}> 
+                            <View style = {{flexDirection: 'row', justifyContent: 'center', bottom:'60%'}}> 
                                 {/* <TouchableOpacity >
                                 <Image
                                     source={plus}
@@ -206,7 +180,7 @@ const HabitDetail = ({navigation,route}) => {
                     </View>
                 ):(
                     <View style = {styles.showView}>
-                        <View style = {{flexDirection: 'column',alignItems:'center', top: '1%'}}>
+                        <View style = {{flexDirection: 'column',alignItems:'center', top: '10%'}}>
                             <ProgressChart
                                 data={data}
                                 width={Dimensions.get('window').width-40}
@@ -231,17 +205,18 @@ const HabitDetail = ({navigation,route}) => {
                                 <Text>/{habit.goalNo}</Text>
                             </View>
                             <TouchableOpacity onPress={() => {setCount(prevState => prevState+1),handleEdit(habit.name,habit.date,count+1,memoText)}}>
+                                
                                 <FontAwesome5 style={{marginHorizontal: 5}} 
                                             name={'plus'} 
                                             size={20} 
                                             color='gray' />
                             </TouchableOpacity>
                         </View>
-                        <View style = {{top: '1%',flexDirection: 'column', justifyContent: 'center', alignItems: 'center',}}>
+                        <View style = {{top: '8%',flexDirection: 'column', justifyContent: 'center', alignItems: 'center',}}>
 
                             <View style = {{flexDirection: 'row'}}>
-                                {/* <TouchableOpacity onPress={() => {setModalVisible(true)}}>
-                                    <Image
+                                <TouchableOpacity onPress={() => {setModalVisible(true)}}>
+                                <Image
                                     source={plus}
                                     style={{ width: 30, height: 30, borderRadius: 100, backgroundColor: '#f5f5f5',right: 10}}
                                 />
@@ -267,13 +242,13 @@ const HabitDetail = ({navigation,route}) => {
                                     </View>
 
                                 </Modal>
-                                </TouchableOpacity> */}
-                                {/* <TouchableOpacity  onPress={showAlert}>
+                                </TouchableOpacity>
+                                <TouchableOpacity  onPress={showAlert}>
                                 <Image
                                     source={replay}
                                     style={{ width: 30, height: 30,borderRadius: 100, backgroundColor: '#f5f5f5', left: 10}}
                                 />
-                                </TouchableOpacity> */}
+                                </TouchableOpacity>
                                 </View>
                                 
                         </View> 
@@ -405,7 +380,7 @@ const styles = StyleSheet.create({
     insideCircle: {
         flexDirection: 'row',
         position: 'relative',
-        bottom: '70%',
+        bottom: 170,
         left: '1%',
         justifyContent: 'center',
         alignItems: 'center',

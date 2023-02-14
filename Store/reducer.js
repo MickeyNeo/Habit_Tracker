@@ -121,8 +121,9 @@ const globalState = {
     stateLanguage:"English",
     currentTheme: theme.light,
     stateHabitStat: true,
-    dateBarStyle: 'Date',
-    habitBarStyle: 'Small',
+    dateBarStyle: 1,
+    habitBarStyle: 1,
+    
     dailyReminderTime: '',
     dailyReminderText: '',
     DayDoneInMonth: null,

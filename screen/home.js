@@ -90,9 +90,9 @@ const Home = ({ navigation }) => {
               var valueGoal = value.goalNo
               var checkShow = null 
               getUnitName(value)
-              if (value.unitID === 1 || value.unitID.title === 2 || value.unitID.title == 3 ){
+              if (value.unitID === 1 || value.unitID === 2 || value.unitID == 3 ){
                   {checkShow = 1; 
-                    if (value.unitID === 3 ) valueGoal= value.goalNo*60
+                    if (value.unitID === 2 ) valueGoal= value.goalNo*60
                     else if (value.unitID === 3) valueGoal= value.goalNo*3600
                     else valueGoal= value.goalNo
                   }
@@ -102,7 +102,7 @@ const Home = ({ navigation }) => {
               const doMath=()=>{
                 if (checkShow==1){
                 const {days, hours, minutes, seconds} = handleTime(value.progress)
-                console.log(days, hours, minutes, seconds)
+                //console.log(days, hours, minutes, seconds)
                 if (hours!==0)
                   return(<Text>{hours}h {minutes}m {seconds}s</Text>)
                 else if (minutes!==0)
@@ -116,7 +116,7 @@ const Home = ({ navigation }) => {
               const handleMath=()=>{
                 if (value.progress===undefined)               
                   return 0
-                return(value.progress/value.goalNo)
+                return(value.progress/valueGoal)
               }
               
               //console.log(days, hours, minutes, seconds)
