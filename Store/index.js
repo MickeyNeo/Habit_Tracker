@@ -1,6 +1,7 @@
 //import { setListProgressDay } from './action'
 
 
+
 export { default as StoreProvider }  from './Provider'
 export { default as StoreContext } from './Context'
 export * from './hooks'
@@ -14,6 +15,8 @@ export {addHabitList} from './action'
 
 export {setTheme} from './action'
 export {setHabitStat} from './action'
+export {setDateBarStyle} from './action'
+export {setHabitBarSize} from './action'
 export {changenote} from './action'
 
 export {initDayDoneInMonth} from './action'

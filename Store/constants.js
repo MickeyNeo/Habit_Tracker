@@ -8,6 +8,8 @@ export const EMPTY_HABIT_LIST = 'empty_habit_list';
 export const SET_DATE_BAR_STYLE = "set_date_bar_style"
 export const SET_HABIT_BAR_STYLE = "set_habit_bar_style"
 export const SET_THEME = "set_Theme"
+export const SET_HABIT_BAR_SIZE = 'set_habit_bar_size'
+
 export const SET_DAILY_REMINDER_TIME = "set_daily_reminder_time"
 export const SET_DAILY_REMINDER_TEXT = "set_daily_reminder_text"
 export const SET_HABIT_STAT="set_habit_state";

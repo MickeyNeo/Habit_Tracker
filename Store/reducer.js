@@ -7,6 +7,7 @@ import { ADD_HABIT_LIST } from './constants'
 import { ADD_PROGRESS_LIST } from './constants'
 import { SET_THEME } from './constants'
 import { SET_HABIT_STAT } from './constants'
+import { SET_HABIT_BAR_SIZE } from './constants'
 import { CHANGE_NOTE } from './constants'
 import {INIT_DAY_DONE_IN_MONTH, SET_DAY_DONE_IN_MONTH} from './constants'
 import {INIT_DAY_TOTAL_DONE, SET_DAY_DAY_TOTAL_DONE} from './constants'
@@ -121,8 +122,8 @@ const globalState = {
     stateLanguage:"English",
     currentTheme: theme.light,
     stateHabitStat: true,
-    dateBarStyle: 1,
-    habitBarStyle: 1,
+    dateBarStyle: true,
+    habitBarSize: true,
     
     dailyReminderTime: '',
     dailyReminderText: '',
@@ -217,6 +218,7 @@ function reducer (state , action) {
                 ...state,
                 stateHabitStat: action.payload,
             }
+
         case SET_DAILY_REMINDER_TEXT:
             return{
                 ...state,
@@ -236,6 +238,11 @@ function reducer (state , action) {
             return{
                 ...state,
                 dateBarStyle: action.payload,
+            }
+        case SET_HABIT_BAR_SIZE:
+            return{
+                ...state,
+                habitBarSize: action.payload,
             }
         case ADD_STATE_SETTING:
             return{

@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from 'react';
 import {Text,  View, StyleSheet, ScrollView, TouchableOpacity,Switch,Button} from 'react-native';
-import { useStore,setTheme } from "../../Store";
+import { useStore,setTheme,setDateBarStyle,setHabitBarSize } from "../../Store";
 
 const valueHBS = ['Simple','Intutive'];
 const valueDBS =['Week only','Day + Week','Date only'];
@@ -9,15 +9,17 @@ export default function Theme (){
     const [state, dispatch] =useStore()
     const {currentTheme} =state
     //console.log(currentTheme.id)
-    const [HBSize, setHBSize] =useState('Normal')
+    const [HBSize, setHBSize] =useState(state.habitBarSize?'Normal':'Small')
     //const [DBS, setDBS] =useState('Normal')
     const flag = (currentTheme.id =='light')? true:false
     const [isEnabledSwitch, setIsEnabledSwitch] =useState(flag)
     const toggleSwitch = () => {setIsEnabledSwitch(previousState => !previousState),dispatch(setTheme())};
-    const [HBS,setHBS] = useState('Monday')
+    const [HBS,setHBS] = useState(state.dateBarStyle?'Monday':'Sunday')
+    console.log('date bar size',state.habitBarSize)
     const handleHBS =()=>{
-        if (HBS =='Monday') setHBS('Sunday')
-        else setHBS('Monday')
+        if (HBS =='Monday') {setHBS('Sunday'), dispatch(setDateBarStyle(false))}
+        else {setHBS('Monday'), dispatch(setDateBarStyle(true))}
+        
     }
     
     return(         
@@ -27,7 +29,7 @@ export default function Theme (){
                 
                 <TouchableOpacity onPress={handleHBS}>
                     <View style={{flexDirection:'row'}}>
-                        <Text style={[styles.text,{color: currentTheme.color}]}>Date Bar Stype</Text>
+                        <Text style={[styles.text,{color: currentTheme.color}]}>Date Bar Style</Text>
                         <Text style={[styles.textCheck,{color: currentTheme.color}]}>{HBS}</Text>                        
                     </View>
                 </TouchableOpacity>
@@ -61,6 +63,7 @@ export default function Theme (){
                             values={['Normal','Small']}
                             selectedValue={HBSize}
                             setSelectedValue={setHBSize}
+                            dispatch ={dispatch}
                         />
                     </View>                
             </ScrollView>    
@@ -73,12 +76,13 @@ const CheckTab=({
     values,
     selectedValue,
     setSelectedValue,  
+    dispatch,
 })=>(
     <View style={{flexDirection: 'row'}}>
         {values.map((value) =>(
             <TouchableOpacity
                 key={value}
-                onPress={() => setSelectedValue(value)}
+                onPress={() => {setSelectedValue(value), dispatch(setHabitBarSize(value==='Small'?false:true))}}
                 style={[
                     styles.button,
                     selectedValue === value && styles.selected,

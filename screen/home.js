@@ -21,16 +21,16 @@ const Home = ({ navigation }) => {
   // initDatabase();
 
   // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
-  // useEffect(() => {
-  //   if (Platform.OS === 'ios' || Platform.OS === 'android') {
-  //     loadHabit_on_fone(state.listHabit, dispatch)
-  //     loadMemo(state.listProgressDay, dispatch)
+  useEffect(() => {
+    if (Platform.OS === 'ios' || Platform.OS === 'android') {
+      loadHabit_on_fone(state.listHabit, dispatch)
+      loadMemo(state.listProgressDay, dispatch)
      
-  //   } else {
-  //     loadHabit_on_web(state.listHabit, dispatch)
-  //   }
+    } else {
+      loadHabit_on_web(state.listHabit, dispatch)
+    }
     
-  // }, []); // 👈️ empty dependencies array
+  }, []); // 👈️ empty dependencies array
   const today = new Date();
   const [selectedDay, setSelectedDay] = useState(format(today, 'MM/dd/yyyy'));
   const listH = state.listHabit
@@ -125,7 +125,7 @@ const Home = ({ navigation }) => {
                   style={{ padding: 5 }} 
                   key={value.name} 
                   onPress={() => navigation.navigate('HabitDetail', {habit: value, checkShow: checkShow})}>
-                  <Progress.Bar progress={handleMath()} width={null} height={35} color={value.color}>
+                  <Progress.Bar progress={handleMath()} width={null} height={state.habitBarSize?50:35} color={value.color}>
                   {/* (value.progress)/(value.goalNo) */}
                   </Progress.Bar>
                   <View style={{
@@ -136,7 +136,7 @@ const Home = ({ navigation }) => {
                     top:9,
                     left:10
                   }}>
-                      <Icons type={value.iconFamily} name={value.icon} size={25} color='black' />
+                      <Icons type={value.iconFamily} name={value.icon} size={state.habitBarSize?40:25} color='black' />
                       <View style={{ flexDirection: 'column' }}>
                         <Text style={{ fontSize: 10 }}>{value.name}</Text>
                         <Text style={{ fontSize: 8 }}>{value.note}</Text>
@@ -178,7 +178,7 @@ const Home = ({ navigation }) => {
             theme={styles.theme}
             onDayPress = {(day) => {
               setSelectedDay(day)}} 
-            firstDay={1}
+            firstDay={state.dateBarStyle?1:0}
            />
         </CalendarProvider>
       </View>

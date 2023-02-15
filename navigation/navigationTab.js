@@ -132,7 +132,7 @@ function MainTabNavigator () {
         <Stack.Screen options={{ headerTitle: 'Add Your Habit' }} name="AddHabit" component={AddHabit} />
         <Stack.Screen options={{ headerTitle: 'Habit Detail' }} name="HabitDetail" component={HabitDetail} />
         <Stack.Screen name='Theme' component={Theme}/>
-        <Stack.Screen option ={{headerTitle: 'All Habit'}} name='HabitManager' component={HabitManager}/>
+        <Stack.Screen options ={{headerTitle: 'All Habit'}} name='HabitManager' component={HabitManager}/>
         <Stack.Screen name="Export" component={Export} />
         <Stack.Screen name="TagManager" component={TagManager} />
         <Stack.Screen options={{ headerTitle: 'Habit Details' }} name="HabitOfADay" component={HabitOfADay}/>
