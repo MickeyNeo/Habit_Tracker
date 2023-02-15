@@ -74,6 +74,7 @@ const HabitOfADay = ({navigation,route}) =>{
     const handleDelHablit =(id,name)=> {
         dispatch(delHabit(state.listHabit.filter(item => item.id !== id)))
         dispatch(editListProgressDay(state.listProgressDay.filter(item=>item.habitName!==name)))
+        deleteHabit(name);
     }
     const showAlertDelete = () => {
         Alert.alert(
@@ -215,7 +216,7 @@ const HabitOfADay = ({navigation,route}) =>{
 
                         <TouchableOpacity style = {{ backgroundColor: '#F3ACB4', borderRadius: 8, width: '40%',height: '140%', justifyContent: 'center'}} onPress={()=> {
                             showAlertDelete()
-                            deleteHabit(habit.name);
+                            
                             // if (Platform.OS === 'ios' || Platform.OS === 'android') {
                             //     loadHabit_on_fone(state.listHabit, dispatch)
                             //   } else {
