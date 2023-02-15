@@ -18,6 +18,8 @@ import { DEL_HABIT } from './constants'
 import { SET_LIST_PROGRESS_DAY } from './constants'
 import { SET_CHECK_HAVE_MEMO } from './constants'
 import { EDIT_LIST_PROGRESS_DAY, DEL_LIST_PROGRESS_DAY } from './constants'
+import { SET_DATE_BAR_STYLE } from './constants'
+import { SET_HABIT_BAR_SIZE } from './constants'
 export const setHabitInput = payload => ({
     type: SET_HABIT_INPUT,
     payload 
@@ -79,6 +81,10 @@ export const setHabitBarStyle = payload => ({
 
 export const setDateBarStyle = payload => ({
     type: SET_DATE_BAR_STYLE,
+    payload
+})
+export const setHabitBarSize = payload =>({
+    type : SET_HABIT_BAR_SIZE,
     payload
 })
 

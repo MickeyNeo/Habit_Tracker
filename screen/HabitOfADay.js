@@ -204,7 +204,9 @@ const HabitOfADay = ({navigation,route}) =>{
 
                     {/* Buttons */}
                     <View style = {{flex: 1, marginHorizontal: 10, flexDirection: 'row', justifyContent: 'space-around', marginBottom: 20}}>
-                        <TouchableOpacity style = {{ backgroundColor: '#F3ACB4', borderRadius: 8, width: '40%',height: '140%', justifyContent: 'center'}} onPress={()=> {}}>
+                        <TouchableOpacity style = {{ backgroundColor: '#F3ACB4', borderRadius: 8, width: '40%',height: '140%', justifyContent: 'center'}} onPress={()=> navigation.navigate('EditHabit', {
+                                        Habit: habit,
+                                    })}>  
                             <View style = {{flexDirection: 'row',justifyContent: 'center'}}>
                                 <FontAwesome5 style = {{marginHorizontal: 5}} name='pencil-alt' size={15} color='black' />
                                 <Text>Edit</Text>
