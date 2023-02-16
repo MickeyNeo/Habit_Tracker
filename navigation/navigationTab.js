@@ -45,9 +45,9 @@ function HomeTab() {
 function HomeTabs({navigation}) {
   const [state, dispatch] = useStore()
   const {stateHabitStat} = state
-  if (stateHabitStat==true)
-    return (
+  return (
       <Tab.Navigator 
+            
             initialRouteName="Home"
             screenOptions={({ route }) => ({
             tabBarShowLabel: false,
@@ -75,6 +75,12 @@ function HomeTabs({navigation}) {
         >
         <Tab.Screen 
         options = {{headerShown: false,
+          headerStyle: {
+            backgroundColor: state.currentTheme.backgroundColor, // đổi màu nền header
+          },
+          headerTitleStyle: {
+            color: state.currentTheme.color, // đổi màu chữ header
+          },
         tabBarButton: (props) => <TouchableOpacity {...props} 
         onPress = {() => {
           if (props.accessibilityState.selected == true)
@@ -83,60 +89,78 @@ function HomeTabs({navigation}) {
           //console.log(props.accessibilityState.selected)
         }}/>
         }} name= "Home" component={Home} /> 
-        <Tab.Screen  name="Statistic" component={Statistic} />
-        <Tab.Screen  name="Settings" component={Setting} />
+        {stateHabitStat && <Tab.Screen options={{headerStyle: {
+            backgroundColor: state.currentTheme.backgroundColor, // đổi màu nền header
+          },
+          headerTitleStyle: {
+            color: state.currentTheme.color, // đổi màu chữ header
+          },}} name="Statistic" component={Statistic} />}
+        <Tab.Screen options={{headerStyle: {
+            backgroundColor: state.currentTheme.backgroundColor, // đổi màu nền header
+          },
+          headerTitleStyle: {
+            color: state.currentTheme.color, // đổi màu chữ header
+          },}} name="Settings" component={Setting} />
       </Tab.Navigator>
   );
-  else
-  return (
-    <Tab.Navigator
-            initialRouteName="Home"
-            screenOptions={({ route }) => ({
-            tabBarShowLabel: false,
-            headerShown: false,
-            tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
-            if (route.name === 'Home') {
-              iconName = focused
-                ? 'add'
-                : 'ios-home-outline';
-            if (iconName === 'add' && !focused) { 
-              {navigation.navigate('Habit')}
-            }
-            } else if (route.name === 'Settings') {
-              iconName = focused ? 'ios-list' : 'ios-list-outline';
-            }
-            else if (route.name === 'Statistic') {
-                iconName = focused ? 'ios-bar-chart' : 'ios-bar-chart-outline';
-            }
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-          tabBarActiveTintColor: '#0c5776',
-          tabBarInactiveTintColor: 'gray',
-          tabBarActiveBackgroundColor: '#bcfefe',
-          tabBarInactiveBackgroundColor: 'white',
-        })}>
-      <Tab.Screen  options = {{headerShown: false}} name="Home" component={HomeTab} /> 
-      <Tab.Screen  options = {{headerShown: false}}  name="Settings" component={Setting} />
-    </Tab.Navigator>
-);
 }
 function MainTabNavigator () {
+  const [state,dispatch] = useStore();
   return (
       <Stack.Navigator >
         <Stack.Screen   
           options={({ route }) => ({
           headerTitle: getHeaderTitle(route)})} 
           name="None" component={HomeTabs} />
-        <Stack.Screen name="Habit" component={Habit} />
-        <Stack.Screen options={{ headerTitle: 'Add Your Habit' }} name="AddHabit" component={AddHabit} />
-        <Stack.Screen options={{ headerTitle: 'Habit Detail' }} name="HabitDetail" component={HabitDetail} />
-        <Stack.Screen name='Theme' component={Theme}/>
-        <Stack.Screen options ={{headerTitle: 'All Habit'}} name='HabitManager' component={HabitManager}/>
+        <Stack.Screen options={{headerStyle: {
+            backgroundColor: state.currentTheme.backgroundColor, // đổi màu nền header
+          },
+          headerTitleStyle: {
+            color: state.currentTheme.color, // đổi màu chữ header
+          },}} name="Habit" component={Habit} />
+        <Stack.Screen options={{ headerTitle: 'Add Your Habit',headerStyle: {
+            backgroundColor: state.currentTheme.backgroundColor, // đổi màu nền header
+          },
+          headerTitleStyle: {
+            color: state.currentTheme.color, // đổi màu chữ header
+          }, }} name="AddHabit" component={AddHabit} />
+        <Stack.Screen options={{ headerTitle: 'Habit Detail',headerStyle: {
+            backgroundColor: state.currentTheme.backgroundColor, // đổi màu nền header
+          },
+          headerTitleStyle: {
+            color: state.currentTheme.color, // đổi màu chữ header
+          }, }} name="HabitDetail" component={HabitDetail} />
+        <Stack.Screen options={{headerStyle: {
+            backgroundColor: state.currentTheme.backgroundColor, // đổi màu nền header
+          },
+          headerTitleStyle: {
+            color: state.currentTheme.color, // đổi màu chữ header
+          },}} name='Theme' component={Theme}/>
+        <Stack.Screen options ={{headerTitle: 'All Habit',headerStyle: {
+            backgroundColor: state.currentTheme.backgroundColor, // đổi màu nền header
+          },
+          headerTitleStyle: {
+            color: state.currentTheme.color, // đổi màu chữ header
+          },}} name='HabitManager' component={HabitManager}/>
         <Stack.Screen name="Export" component={Export} />
-        <Stack.Screen name="TagManager" component={TagManager} />
-        <Stack.Screen options={{ headerTitle: 'Habit Details' }} name="HabitOfADay" component={HabitOfADay}/>
-        <Stack.Screen options={{ headerTitle: 'Edit Habit'}} name="EditHabit" component={EditHabit}/>
+        <Stack.Screen options={{headerStyle: {
+            backgroundColor: state.currentTheme.backgroundColor, // đổi màu nền header
+          },
+          headerTitleStyle: {
+            color: state.currentTheme.color, // đổi màu chữ header
+          },}} name="TagManager" component={TagManager} />
+        <Stack.Screen options={{ headerTitle: 'Habit Details',headerStyle: {
+            backgroundColor: state.currentTheme.backgroundColor, // đổi màu nền header
+          },
+          headerTitleStyle: {
+            color: state.currentTheme.color, // đổi màu chữ header
+          }, }} name="HabitOfADay" component={HabitOfADay}/>
+        <Stack.Screen options={{ headerTitle: 'Edit Habit',headerStyle: {
+            backgroundColor: state.currentTheme.backgroundColor, // đổi màu nền header
+          },
+          headerTitleStyle: {
+            color: state.currentTheme.color, // đổi màu chữ header
+          },}} name="EditHabit" component={EditHabit}/>
       </Stack.Navigator>
   );
 }

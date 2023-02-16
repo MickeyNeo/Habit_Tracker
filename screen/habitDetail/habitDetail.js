@@ -5,6 +5,7 @@ import {
   } from "react-native-chart-kit";
 import {useStore} from '../../Store';
 import { editListProgressDay,delHabit } from "../../Store";
+import { deleteHabit } from "../../Store/database";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Modal from "react-native-modal";
 // import hinh 
@@ -95,6 +96,7 @@ const HabitDetail = ({navigation,route}) => {
     const handleDelHablit =(id,name)=> {
         dispatch(delHabit(state.listHabit.filter(item => item.id !== id)))
         dispatch(editListProgressDay(state.listProgressDay.filter(item=>item.habitName!==name)))
+        deleteHabit(habit.name);
     }
     const showAlertDelete = () => {
         Alert.alert(

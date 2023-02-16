@@ -55,7 +55,7 @@ const AddHabit = ({navigation, route}) => {
     const [value, setState] = useState({
         goal: "1",
         currentTabPeriod: "Day",
-        currentTabTime: "Anytime",
+        // currentTabTime: "Anytime",
         changecolor: colors,
         note: "",
         mess: "",
@@ -78,9 +78,9 @@ const AddHabit = ({navigation, route}) => {
         note: value.note,
         frequency: showday.join(),
         color: value.changecolor,
-        tagID: 0,
+        // tagID: 0,
         frequencyType: value.selectedItem,
-        timeRange: value.currentTabTime,
+        // timeRange: value.currentTabTime,
         remainderMessage: value.mess,
         showMemo: value.isEnabled,
         chartType: 0,
@@ -121,7 +121,7 @@ const AddHabit = ({navigation, route}) => {
         //console.log(1)
         //list.push({id:id, day: moment(startDate).format('YYYY-MM-DD'), process:0, memo:''})
         if (habit.frequencyType==='Daily')
-          dispatch(setListProgressDay({habitName: habit.name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''}))
+          {dispatch(setListProgressDay({habitName: habit.name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''}))}
         else if (habit.frequencyType==='Weekly')
           {
             if (habit.frequency.includes(moment(startDate).format('ddd').toLocaleUpperCase()))
@@ -131,7 +131,7 @@ const AddHabit = ({navigation, route}) => {
             if (habit.frequency.includes(moment(startDate).date()))
               dispatch(setListProgressDay({habitName: habit.name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''})) 
           }
-          startDate.add(1, 'days');
+        startDate.add(1, 'days');
       }
       //console.log(list)
      // dispatch(setListProgressDay(list))
@@ -363,7 +363,7 @@ const AddHabit = ({navigation, route}) => {
                     dispatch(setHabitInput(habit));
                     dispatch(addHabitList(habit));
                     handleProgressDay();
-                    //addHabit(state.habit);
+                    addHabit(state.habit);
                     navigation.navigate('Home', {
                         screen: 'AddHabit',
                     });
@@ -526,7 +526,7 @@ const DisplayNote = (select,goal,unit) => {
     <View style = {{flexDirection: 'row'}}>
         <Text style ={{fontSize: 10, color: 'red' }}> *Complete {goal} {unit.title} in</Text>
         {select.map((value) => 
-        <Text style = {{fontSize: 10, color: 'red'}}key = {value.id} > {value.selected ? value.title : null}</Text> 
+        <Text style = {{fontSize: 10, color: 'red'}} key = {value.id} > {value.selected ? value.title : null}</Text> 
     )}
     </View>
     )
