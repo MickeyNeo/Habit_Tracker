@@ -4,31 +4,24 @@ export const habitInit = "INSERT INTO Habit (name, note, frequency, color, frequ
     '30', 'Week', '2', 'walking', 'FontAwesome5','dc'),\
     ('Meditate', 'Nothing to note', 'Daily', '#FFAEAE', 'Day', 'Morning', 'Remember to meditate', '0', '0', '2021-02-15T14:46:07.830Z', '2023-02-15T14:46:07.830Z',\
     '10', 'Day', '2', 'walking', 'FontAwesome5','md'),\
-    ('Run', 'Nothing to note', 'SUN', '#FFAEAE', 'Week', 'Morning', 'Remember to run', '1', '0', '2022-02-15T14:46:07.830Z', '2023-02-15T14:46:07.830Z',\
+    ('Run', 'Nothing to note', '6, 7, 13, 14, 20, 21', '#FFAEAE', 'Week', 'Morning', 'Remember to run', '1', '0', '2022-02-15T14:46:07.830Z', '2023-02-15T14:46:07.830Z',\
     '2', 'Week', '9', 'walking', 'FontAwesome5','rn')"
 
 export const memoInit = "INSERT INTO Memo (habitName, date, content, progress) VALUES\
-('Meditate', '2023-02-06', 'Feel so good', '2'),\
-('Meditate', '2023-02-07', 'So happy', '4'),\
-('Meditate', '2023-02-08', 'So happy', '3'),\
-('Run', '2023-02-06', 'Lets go', '0'),\
-('Meditate', '2023-02-09', 'Feel so good', '7'),\
-('Meditate', '2023-02-10', 'So happy', '2'),\
-('Run', '2023-02-07', 'Lets go', '2'),\
-('Run', '2023-02-08', 'So happy', '0'),\
-('Dancing', '2023-02-06', 'So happy', '12'),\
-('Meditate', '2023-02-11', 'Lets go', '9'),\
-('Run', '2023-02-09', 'More to go', '0'),\
-('Meditate', '2023-02-12', 'More to go', '9'),\
-('Run', '2023-02-10', 'More to go', '2'),\
-('Run', '2023-02-11', 'Lets go', '1'),\
-('Meditate', '2023-03-12', 'Im on a roll', '7'),\
-('Dancing', '2023-02-07', 'Feel so good', '23'),\
-('Run', '2023-02-12', 'Lets go', '0'),\
-('Dancing', '2023-02-08', 'Im getting better everyday', '6'),\
-('Run', '2023-02-13', 'Feel so good', '0'),\
-('Run', '2023-02-14', 'Lets go', '0'),\
-('Meditate', '2023-02-13', 'So happy', '4')"
+('Run', '2023:02:21', 'Im on a roll', '0'),\
+('Run', '2023:02:20', 'So happy', '2'),\('Meditate', '2023:02:22', 'More to go', '2'),\
+('Meditate', '2023:02:18', 'Feel so good', '4'),\
+('Meditate', '2023:02:17', 'Im on a roll', '7'),\
+('Meditate', '2023:02:20', 'Im getting better everyday', '10'),\
+('Meditate', '2023:02:15', 'So happy', '6'),\
+('Meditate', '2023:02:16', 'Im on a roll', '1'),\
+('Meditate', '2023:02:21', 'More to go', '9'),\
+('Meditate', '2023:02:19', 'Im on a roll', '5'),\
+('Meditate', '2023:02:23', 'Im getting better everyday', '1'),\
+('Meditate', '2023:02:24', 'Feel so good', '3'),\('Dancing', '2023:02:23', 'More to go', '16'),\
+('Dancing', '2023:02:20', 'More to go', '29'),\
+('Dancing', '2023:02:16', 'So happy', '10'),\
+('Dancing', '2023:02:21', 'So happy', '28')"
 
 
 
