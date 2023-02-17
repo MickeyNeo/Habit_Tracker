@@ -33,7 +33,7 @@ import tick from './Icon/tick.png'
 
 const Habit = ({navigation}) => {
     const [state, dispatch] = useStore();
-    
+    const {currentTheme} =state
     const habit = [ 
         {
             id: 'wa',
@@ -276,7 +276,7 @@ const Habit = ({navigation}) => {
     }
     // console.log(checkFlag)
     return (
-    <View style={styles.container}>
+    <View style={[styles.container,{backgroundColor: currentTheme.backgroundColor}]}>
         <View style = {styles.addHabit}>
             <TouchableOpacity  onPress= {() => {
             navigation.navigate('AddHabit', {
@@ -285,29 +285,29 @@ const Habit = ({navigation}) => {
                 image: add,
                 IconInfo: ['add','Ionicons'],
                 unitHabit: 'count',})
-            }}  style ={styles.customHabit}> 
+            }}  style ={[styles.customHabit,{backgroundColor: currentTheme.backgroundColor}]}> 
                 <Image
                     source={require('./Icon/add.png')}
                     style={{ width: 40, height: 40,}}
                 />
-                <Text> Create Your Custom Habit </Text>
+                <Text style={{color: currentTheme.color}}> Create Your Custom Habit </Text>
             </TouchableOpacity>
         </View>
         {/* Habit Zone */}
         <View style ={styles.Habit}>
             <ScrollView>
-                <Text style = {{ fontSize: 20, padding: 10, fontWeight: 'bold'}}>Sports</Text>
+                <Text style = {{ fontSize: 20, padding: 10, fontWeight: 'bold', color: currentTheme.color}}>Sports</Text>
                 <View style = { styles.habitZone}>
                     <TabButton navigation={navigation} habit={habit} flag = {0} />
                     <TabButton navigation={navigation} habit={habit} flag = {1} />
                     <TabButton navigation={navigation} habit={habit} flag = {2} />
                     </View>
-                <Text style = {{ fontSize: 20, padding: 10, fontWeight: 'bold'}}>Thought</Text>
+                <Text style = {{ fontSize: 20, padding: 10, fontWeight: 'bold',color: currentTheme.color}}>Thought</Text>
                 <View style = { styles.habitZone}>
                     <TabButton navigation={navigation} habit={habit} flag = {3} />
                     <TabButton navigation={navigation} habit={habit} flag = {4} />
                 </View>
-                <Text style = {{ fontSize: 20, padding: 10, fontWeight: 'bold'}}>Health</Text>
+                <Text style = {{ fontSize: 20, padding: 10, fontWeight: 'bold',color: currentTheme.color}}>Health</Text>
                 <View style = { styles.habitZone}>
                     <TabButton navigation={navigation} habit={habit} flag = {5} />
                     <TabButton navigation={navigation} habit={habit} flag = {6} />

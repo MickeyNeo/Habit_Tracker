@@ -9,7 +9,7 @@ const theme = {
         id: "dark",
         backgroundColor1: '#CCCCCC',
         color: 'white', 
-        backgroundColor: 'black',
+        backgroundColor: '#1f1e1e',
     }
 };
 export default theme;
