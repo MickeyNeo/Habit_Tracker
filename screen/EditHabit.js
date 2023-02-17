@@ -77,9 +77,9 @@ const EditHabit = ({navigation, route}) => {
       note: value.note,
       frequency: Habit.frequency,
       color: value.changecolor,
-      tagID: Habit.tagID,
+      // tagID: Habit.tagID,
       frequencyType: value.selectedItem,
-      timeRange: value.currentTabTime,
+      // timeRange: value.currentTabTime,
       remainderMessage: value.mess,
       showMemo: value.isEnabled,
       chartType: Habit.chartType,
@@ -129,6 +129,11 @@ const EditHabit = ({navigation, route}) => {
   }
   //Hàm sửa habit
   const handleHabit=()=>{
+    if (habit.name!==Habit.name) dispatch(editListProgressDay(state.listProgressDay.map(item=>{
+      if (item.habitName=== Habit.name)
+        return {...item, habitName: habit.name}
+      return item
+    })))
     dispatch(delHabit(state.listHabit.map(item => {
         if (item.id === Habit.id)
           return { ...item, name:habit.name, chartType : habit.chartType, color: habit.color, frequency: habit.frequency, frequencyType: habit.frequencyType, goalNo: habit.goalNo, goalPeriod: habit.goalPeriod, habitEndDate: habit.habitEndDate, habitStartDate: habit.habitStartDate, icon: habit.icon, iconFamily: habit.iconFamily, note: habit.note, remainderMessage: habit.remainderMessage, showMemo: habit.showMemo, tag: habit.tag, tagID: habit.tagID, timeRange: habit.timeRange, unitID: habit.unitID};
@@ -486,8 +491,10 @@ return (
 const ShowTimePicker = (startDay, endDay, setState,color ,flag) => {
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
+  startDay = new Date(startDay);
+  endDay = new Date(endDay);
   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate;
+    // const currentDate = selectedDate;
     setShow(false);
     if (flag === 1) {
       setState(prevState => ({ ...prevState, startDay: selectedDate  }))

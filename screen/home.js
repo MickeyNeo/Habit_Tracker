@@ -17,8 +17,8 @@ const Home = ({ navigation }) => {
   
   
   // const db = SQLite.openDatabase('Habit_tracker.db');
-  // refreshDatabase();
-  // initDatabase();
+  //refreshDatabase();
+  //initDatabase();
 
   // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
   useEffect(() => {
@@ -123,7 +123,7 @@ const Home = ({ navigation }) => {
               return (
                 <TouchableOpacity 
                   style={{ padding: 5 }} 
-                  key={value.name} 
+                  key={value.id} 
                   onPress={() => navigation.navigate('HabitDetail', {habit: value, checkShow: checkShow})}>
                   <Progress.Bar progress={handleMath()} width={null} height={state.habitBarSize?50:35} color={value.color}>
                   {/* (value.progress)/(value.goalNo) */}
