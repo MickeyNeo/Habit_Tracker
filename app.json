@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Habit Tracker",
-    "slug": "Habit Tracker",
+    "slug": "HabitTracker",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -18,16 +18,23 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.mrthuancao.HabitTracker"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.mrthuancao.HabitTracker"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "9786c172-41da-4d4d-a3cf-58e5b18fecc9"
+      }
     }
   }
 }
