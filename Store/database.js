@@ -232,7 +232,7 @@ const initDatabase = () => {
             note	TEXT,\
             frequency	TEXT NOT NULL,\
             color	TEXT NOT NULL DEFAULT \'#000\',\
-            frequencyType	TEXT NOT NULL CHECK(frequencyType IN (\'Day\', \'Week\', \'Month\')),\
+            frequencyType	TEXT NOT NULL CHECK(frequencyType IN (\'Daily\', \'Weekly\', \'Monthly\')),\
             timeRange	TEXT NOT NULL CHECK(timeRange IN (\'Anytime\', \'Morning\', \'Afternoon\', \'Evening\')),\
             reminderMessage	TEXT,\
             showMemo	INTEGER NOT NULL CHECK(showMemo IN (0, 1)),\
