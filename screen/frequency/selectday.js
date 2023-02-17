@@ -195,7 +195,7 @@ const ChooseFreq = ({values, color, selected, setFreq, setSelect, week, month}) 
                     }}
                     key={value}
                 >
-                <Text style = {{fontSize: 15 }}>
+                <Text numberOfLines={1} style = {{fontSize: 15 }}>
                     {value}
                 </Text>
                 </TouchableOpacity>

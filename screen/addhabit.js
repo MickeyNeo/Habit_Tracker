@@ -26,6 +26,7 @@ const AddHabit = ({navigation, route}) => {
     const frequency_of_day = ["Daily", "Weekly", "Monthly"]
     const frequency_of_week = ["Weekly", "Monthly"]
     const [state, dispatch] = useStore();
+    const {currentTheme} =state
     const {id, name, colors, IconInfo, unitHabit, tag, flag } = route.params;
     
     const IconDetail = {
@@ -43,7 +44,7 @@ const AddHabit = ({navigation, route}) => {
         Week.push(day);
     }
     const month = [];
-    for ( var i = 0; i < 30; i++)
+    for ( var i = 0; i < 31; i++)
     {
         month.push({id:i+1 , title: i+1, selected: 1})
     }
@@ -138,13 +139,13 @@ const AddHabit = ({navigation, route}) => {
     }
     //console.log(value.startDay,value.endDay)
     return (
-        <View style={{ flex: 1, flexDirection : 'column'}}>
-            <View style ={styles.Habit}>
+        <View style={{ flex: 1, flexDirection : 'column' }}>
+            <View style ={[styles.Habit, {backgroundColor: currentTheme.backgroundColor}]}>
                 <ScrollView >
                     <View style = {{flexDirection: 'column', padding: 10, }}>
-                        <Text style ={{fontWeight: 'bold', color: theme.color }}>Name</Text>
+                        <Text style ={{fontWeight: 'bold', color: currentTheme.color }}>Name</Text>
                         <TextInput
-                            style={[styles.textInput]}
+                            style={[styles.textInput, {backgroundColor:(currentTheme.backgroundColor=='#1f1e1e')?'#918e8e':'#f5f5f5', color: currentTheme.color}]}
                             placeholder={(value.habitname)}
                             value={value.habitname}
                             onChangeText={(value) => setState(prevState => ({ ...prevState, habitname: value }))}
@@ -152,9 +153,9 @@ const AddHabit = ({navigation, route}) => {
                     </View>
 
                     <View style = {{flexDirection: 'column', padding: 10, }}>
-                        <Text style ={{fontWeight: 'bold', color: theme.color }}>Note</Text>
+                        <Text style ={{fontWeight: 'bold', color: currentTheme.color}}>Note</Text>
                         <TextInput
-                            style={styles.textInput}
+                            style={[styles.textInput, {backgroundColor:(currentTheme.backgroundColor=='#1f1e1e')?'#918e8e':'#f5f5f5',color: currentTheme.color}]}
                             value={value.note}
                             placeholder="Description or other infos"
                             onChangeText={(value) => setState(prevState => ({ ...prevState, note: value }))}
@@ -162,7 +163,7 @@ const AddHabit = ({navigation, route}) => {
                     </View>
 
                     <View style = {{flexDirection: 'column', padding: 10, }}>
-                        <Text style ={{fontWeight: 'bold', color: theme.color }}>Icon & Color</Text>
+                        <Text style ={{fontWeight: 'bold', color: currentTheme.color }}>Icon & Color</Text>
                         <View style = {{flexDirection: 'row', flex: 2}}>
                             <View style ={{ 
                                 flexDirection: 'row', 
@@ -170,7 +171,7 @@ const AddHabit = ({navigation, route}) => {
                                 flex: 0.5, 
                                 padding: 10
                                 }}>
-                                <Text style = {{fontSize: 12, alignSelf: 'center' }}>Icon</Text>
+                                <Text style = {{fontSize: 12, alignSelf: 'center',color: currentTheme.color }}>Icon</Text>
                                 <TabChoose 
                                   title = 'Icon' 
                                   changecolor = {value.changecolor}
@@ -180,8 +181,8 @@ const AddHabit = ({navigation, route}) => {
                                   setState = {setState}
                                   flag = {1} 
                                 />
-                                <Text>|</Text>
-                                <Text style = {{fontSize: 12, alignSelf: 'center' }}>Color</Text>
+                                <Text style={{color: currentTheme.color}}>|</Text>
+                                <Text style = {{fontSize: 12, alignSelf: 'center',color: currentTheme.color }}>Color</Text>
                                 <TabChoose 
                                   title = 'Color' 
                                   changecolor = {value.changecolor}
@@ -196,51 +197,32 @@ const AddHabit = ({navigation, route}) => {
                     </View>
                     {/* Tag */}
                     <View style = {{flexDirection: 'column', padding: 10}}>
-                            <Text style ={{fontWeight: 'bold', color: theme.color }}>Tag</Text>
-                            <View style={{flexDirection:'row',padding: 10,justifyContent: 'space-between' }}>  
-                              <Text style={[styles.boder,{backgroundColor:value.changecolor}]}>{value.tag}</Text>
-                              <ScrollView style={{marginLeft:30}} horizontal={true}>
-                                {iTag.map((todo, index) => (
-                                  <View key={index}>
-                                    <Text style={[styles.boder,{backgroundColor:value.changecolor}]}>{todo}</Text>
-                                    <Button
-                                
-                                      title="Remove"
-                                      onPress={() => handleRemoveTag(index)}
-                                    />
-                                  </View>
-                                ))}
-                                {/* onPress={handleAddTag} */}
-                                <TouchableOpacity 
-                                  onPress={() => setModalVisible(true)}
-                                  //style={styles.button}
-                                >
-                                  <Text style={[styles.boder, {backgroundColor:'gray'}]}>+</Text>
-                                </TouchableOpacity>
-                                <Modal
+                            <Text style ={{fontWeight: 'bold', color: currentTheme.color }}>Tag</Text>
+                            <TouchableOpacity style={{flexDirection:'row',padding: 10,justifyContent: 'space-between' }} onPress={() => setModalVisible(true)}>  
+                              <Text style={[styles.boder,{backgroundColor:value.changecolor,color: currentTheme.color }]}>{value.tag}</Text>
+                            </TouchableOpacity>
+                            <Modal
                                   isVisible={isModalVisible}
-                                  onBackdropPress={() => {setModalVisible(false); if (newTag!='') handleAddTag()}}
+                                  onBackdropPress={() => setModalVisible(false)}
                                 >
                                   <View style={styles.modalContainer}>
                                     <TextInput
                                       style={styles.input}
                                       placeholder="Enter text here"
-                                      value={newTag}
-                                      onChangeText={text => {setNewTag(text)}}
+                                      value={value.tag}
+                                      onChangeText={text => {setState(prevState => ({ ...prevState, tag: text }))}}
                                     />
                                     <TouchableOpacity
-                                      onPress={() => {setModalVisible(false); if (newTag!='') handleAddTag()}}
+                                      onPress={() => setModalVisible(false)}
                                       style={[styles.button,{backgroundColor:value.changecolor}]}
                                     >
                                       <Text style={styles.text}>Done</Text>
                                     </TouchableOpacity>
                                   </View>
                                 </Modal>
-                              </ScrollView>
-                            </View>
                     </View>                          
                     <View style = {{flexDirection: 'column',padding: 10}}>
-                        <Text style ={{fontWeight: 'bold', color: theme.color }}>Goal & Goal Period</Text>
+                        <Text style ={{fontWeight: 'bold', color: currentTheme.color }}>Goal & Goal Period</Text>
                         <View style = {{flexDirection: 'row'}}>
                             <View style ={{ flexDirection: 'row', padding: 10, justifyContent: 'space-evenly', flex: 0.7 }}>
                                 <TextInput
@@ -249,11 +231,12 @@ const AddHabit = ({navigation, route}) => {
                                         height: 17,
                                         backgroundColor: value.changecolor,
                                         borderRadius: 20,
-                                        textAlign: 'center'
+                                        textAlign: 'center',
+                                        color: currentTheme.color
                                         }}
                                         keyboardType="numeric"
                                         value={value.goal}
-                                        placeholder={value.goal}
+                                        //placeholder={value.goal}
                                         onChangeText={(value) => setState(prevState => ({ ...prevState, goal: value }))}
                                     />
                                 <TabChoose 
@@ -265,7 +248,9 @@ const AddHabit = ({navigation, route}) => {
                                   setState = {setState}
                                   flag = {4} 
                                 />
+                                <Text style={{color: currentTheme.color}}>/</Text>
                             </View>
+                          
                             <View style = {{flexDirection: 'row', padding: 10, alignSelf: 'center'}}>
                               {TabButton(value.currentTabPeriod, setState, "Day", value.changecolor, date)}
                               {TabButton(value.currentTabPeriod, setState, "Week", value.changecolor, Week)}
@@ -276,7 +261,7 @@ const AddHabit = ({navigation, route}) => {
 
                     <View style = {{padding: 10}}>
                         <View style = {{flexDirection: 'row' , justifyContent: 'space-between'}}>
-                          <Text style ={{fontWeight: 'bold', color: theme.color}}>Frequency</Text>
+                          <Text style ={{fontWeight: 'bold', color: currentTheme.color}}>Frequency</Text>
                           <TabChoose 
                               title = '>' 
                               changecolor = {value.changecolor}
@@ -295,17 +280,17 @@ const AddHabit = ({navigation, route}) => {
                             
                     </View>
                     <View style = {{padding: 10}}>
-                            {DisplayNote(value.selectedFreq,value.goal,value.unit)}
+                            {DisplayNote(value.selectedFreq,value.goal,value.unit, value.selectedItem)}
                     </View>
 
-                    <View style = {{flexDirection: 'column', padding: 10}}>
+                    {/* <View style = {{flexDirection: 'column', padding: 10}}>
                         <Text style ={{fontWeight: 'bold', color: theme.color }}>Reminder</Text>
-                    </View>
+                    </View> */}
 
                     <View style = {{flexDirection: 'column', padding: 10}}>
-                        <Text style ={{fontWeight: 'bold', color: theme.color }}>Reminder Messages</Text>
+                        <Text style ={{fontWeight: 'bold', color: currentTheme.color }}>Reminder Messages</Text>
                         <TextInput
-                            style={[styles.textInput]}
+                            style={[styles.textInput,{backgroundColor:(currentTheme.backgroundColor=='#1f1e1e')?'#918e8e':'#f5f5f5', color: currentTheme.color}]}
                             value={value.mess}
                             placeholder="Enter your message here!"
                             onChangeText={(value) => setState(prevState => ({ ...prevState, mess: value }))}
@@ -314,7 +299,7 @@ const AddHabit = ({navigation, route}) => {
 
                     <View style = {{flexDirection: 'column', padding: 10}}>
                         <View style = {{flex: 0.2, flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Text style ={{fontWeight: 'bold', color: theme.color, alignSelf: 'center' }}>Show memo after check-in</Text>
+                            <Text style ={{fontWeight: 'bold', color: currentTheme.color, alignSelf: 'center' }}>Show memo after check-in</Text>
                             <Switch
                                 //style ={{borderWidth: 1}}
                                 trackColor={{ false: "#d9d6c6", true: "orange" }}
@@ -341,15 +326,15 @@ const AddHabit = ({navigation, route}) => {
                     </View> */}
 
                     <View style = {{flexDirection: 'column', padding: 10}}>
-                        <Text style ={{fontWeight: 'bold', color: theme.color }}>Habit Term</Text>
+                        <Text style ={{fontWeight: 'bold', color: currentTheme.color }}>Habit Term</Text>
                         <View style = {{flexDirection: 'row', flex: 1}}>
                             <View style ={{ flexDirection: 'column', alignItems: 'center',flex: 0.5, padding: 10 }}>
-                                <Text>Start</Text>
-                                {ShowTimePicker(value.startDay, value.endDay,setState,value.changecolor ,1)}
+                                <Text style={{color: currentTheme.color}}>Start</Text>
+                                {ShowTimePicker(value.startDay, value.endDay,setState,value.changecolor ,1,currentTheme.color)}
                             </View>
                             <View style ={{ flexDirection: 'column', alignItems: 'center',flex: 0.5, padding: 10 }}>
-                                <Text>End</Text>
-                                {ShowTimePicker(value.startDay, value.endDay,setState,value.changecolor,0)}
+                                <Text style={{color: currentTheme.color}}>End</Text>
+                                {ShowTimePicker(value.startDay, value.endDay,setState,value.changecolor,0,currentTheme.color)}
                             </View>
                         </View>
                     </View> 
@@ -417,10 +402,12 @@ const TabButtontime = (currentTabTime, setState, title, color) => {
   )
 }
 const TabChoose = ({title, changecolor, unit, tag, IconDetail, setState, flag, selectedItem, goal, select, week, month}) => {
+  const [state, dispatch] = useStore();
+  const {currentTheme} =state
   const [isEnabled, setIsEnabled] = useState(false);
   return (
     <TouchableOpacity
-      style={[styles.btnTouch, flag === 2 && { backgroundColor: changecolor }, flag === 3 && [styles.freq]]}
+      style={[styles.btnTouch, flag === 2 && { backgroundColor: changecolor}, flag === 3 && [styles.freq]]}
       onPress={() => {
         setIsEnabled(!isEnabled)
       }}>
@@ -468,7 +455,7 @@ const TabChoose = ({title, changecolor, unit, tag, IconDetail, setState, flag, s
           )}
         </>
       )}
-      {flag === 3 && <Text>{selectedItem}{title}</Text>}
+      {flag === 3 && <Text>{selectedItem} {title}</Text>}
       {flag === 4 && (
         <Text style={{ fontSize: 12 }}>{unit.title}</Text>
       )}
@@ -476,7 +463,7 @@ const TabChoose = ({title, changecolor, unit, tag, IconDetail, setState, flag, s
   )
 }
 
-const ShowTimePicker = (startDay, endDay, setState,color ,flag) => {
+const ShowTimePicker = (startDay, endDay, setState,color ,flag, colors) => {
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
   const onChange = (event, selectedDate) => {
@@ -502,7 +489,7 @@ const ShowTimePicker = (startDay, endDay, setState,color ,flag) => {
         onPress={showDatepicker}
         style={{ flexDirection: 'row', borderRadius: 10, backgroundColor: color }}
       >
-        <Text>{flag === 1 ? startDay.toDateString() : endDay.toDateString()}</Text>
+        <Text style={{color: colors}}>{flag === 1 ? startDay.toDateString() : endDay.toDateString()}</Text>
         {show && (
           <TimePickerDialog
             testID="dateTimePicker"
@@ -520,13 +507,13 @@ const ShowTimePicker = (startDay, endDay, setState,color ,flag) => {
 
 };
 
-const DisplayNote = (select,goal,unit) => {
-
+const DisplayNote = (select,goal,unit,frequencyType) => {
+    var text =frequencyType=='Daily'?'each day':'in total on'
     return (
     <View style = {{flexDirection: 'row'}}>
-        <Text style ={{fontSize: 10, color: 'red' }}> *Complete {goal} {unit.title} in</Text>
-        {select.map((value) => 
-        <Text style = {{fontSize: 10, color: 'red'}} key = {value.id} > {value.selected ? value.title : null}</Text> 
+        <Text numberOfLines={1} style ={{fontSize: 10, color: 'red' }}> *Complete {goal} {unit.title} {text}</Text>
+         {select.map((value) => 
+        <Text numberOfLines={1} style = {{fontSize: 10, color: 'red'}} key = {value.id} > {value.selected ? value.title : null}</Text> 
     )}
     </View>
     )
@@ -562,7 +549,7 @@ const styles = StyleSheet.create({
         with: '20%', 
         flex: 0.2,
         borderRadius: 5,
-        backgroundColor: '#f5f5f5', 
+        //backgroundColor: '#f5f5f5', 
         color: '#a9a9a9',
     },
     customHabit: {
