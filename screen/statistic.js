@@ -27,7 +27,7 @@ import { useEffect } from 'react';
 
 const Statistic = ({navigation}) => {
     const[state, dispatch] = useStore()
-    
+    const {currentTheme} =state
     // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
   useEffect(() => {
     calculateDayTotalDone(state.listHabit, dispatch);
@@ -43,9 +43,9 @@ const Statistic = ({navigation}) => {
         data: [0.8]
       };
     const chartConfig = {
-        backgroundGradientFrom: "white",
+        backgroundGradientFrom: (currentTheme.backgroundColor=='#1f1e1e')?'#918e8e':'#f5f5f5',
         backgroundGradientFromOpacity: 1,
-        backgroundGradientTo: "white",
+        backgroundGradientTo: (currentTheme.backgroundColor=='#1f1e1e')?'#918e8e':'#f5f5f5',
         backgroundGradientToOpacity: 1,
         color: (opacity = 1) => `rgba(249, 187, 174, ${opacity})`,
         // strokeWidth: 2, // optional, default 3
@@ -61,8 +61,8 @@ const Statistic = ({navigation}) => {
     
 
     return(
-        <View style={style.container}> 
-            <View style={{flexDirection:'row',backgroundColor: 'white',}}>
+        <View style={[style.container,{backgroundColor: currentTheme.backgroundColor}]}> 
+            <View style={{flexDirection:'row',}}>
                 <Foundation
                     style={{margin:5,marginLeft:15}}  
                     name="graph-pie" size={27} color="pink" />
@@ -109,11 +109,11 @@ const Statistic = ({navigation}) => {
                     ))}
                 </ScrollView>
             </View>
-            <View style={{flex: 1,}}>
+            <View style={{flex: 1}}>
                 <ScrollView>
-                    <Calendar style={style.calendar} firstDay={1}/>
-                    <View style={style.static}>
-                        <View style = {{flexDirection: 'column',alignItems:'center'}}>
+                    <Calendar style={[style.calendar,{backgroundColor: currentTheme.backgroundColor}]} firstDay={1}/>
+                    <View style={[style.static,{backgroundColor:(currentTheme.backgroundColor=='#1f1e1e')?'#918e8e':'#f5f5f5'}]}>
+                        <View style = {{flexDirection: 'column',alignItems:'center' }}>
                             <ProgressChart
                                 data={dataPro}
                                 width={Dimensions.get('window').width-40}
@@ -123,33 +123,33 @@ const Statistic = ({navigation}) => {
                                 chartConfig={chartConfig}
                                 hideLegend={true}
                             />
-                            <Text>Monthly rate: {state.OverallRate*100}%</Text>
+                            <Text style={{color: currentTheme.color}}>Monthly rate: {state.OverallRate*100}%</Text>
                         </View>
                         <View style={{marginTop: '10%'}}>
                             <View style={{flexDirection:'row',justifyContent:'center'}}>
                                 <View style={style.colum}>
                                     <View style={style.iconRecord}>
                                         <FontAwesome5  name="medal" size={50} color="#fcac44" />
-                                        <Text>{state.PerfectStreak} {(state.PerfectStreak == 1) ? 'Day' : 'Days'}</Text>
-                                        <Text>Best Streaks</Text>
+                                        <Text style={{color: currentTheme.color}}>{state.PerfectStreak} {(state.PerfectStreak == 1) ? 'Day' : 'Days'}</Text>
+                                        <Text style={{color: currentTheme.color}}>Best Streaks</Text>
                                     </View>
                                     <View style={style.iconRecord}>
                                         <Octicons name="checklist" size={50} color="#3ee7a8" />
-                                        <Text>{state.EveryHabitDone}</Text>
-                                        <Text>Habits Done</Text>
+                                        <Text style={{color: currentTheme.color}}>{state.EveryHabitDone}</Text>
+                                        <Text style={{color: currentTheme.color}}>Habits Done</Text>
                                     </View>
                                     
                                 </View>
                                 <View style={style.colum}>
                                     <View style={style.iconRecord}>
                                         <FontAwesome5 name="calendar-check" size={50} color="#84b5f7" />
-                                        <Text>{state.PerfectDayCount}</Text>
-                                        <Text>Perfect {(state.PerfectDayCount == 1) ? 'Day' : 'Days'}</Text>
+                                        <Text style={{color: currentTheme.color}}>{state.PerfectDayCount}</Text>
+                                        <Text style={{color: currentTheme.color}}>Perfect {(state.PerfectDayCount == 1) ? 'Day' : 'Days'}</Text>
                                     </View>
                                     <View style={style.iconRecord}>
                                         <Entypo name="dots-three-vertical" size={50} color="#b697ff" />
-                                        <Text>{state.DailyAverage}</Text>
-                                        <Text>Daily Average</Text> 
+                                        <Text style={{color: currentTheme.color}}>{state.DailyAverage}</Text>
+                                        <Text style={{color: currentTheme.color}}>Daily Average</Text> 
                                     </View>
                                 </View>
                             </View>
@@ -177,7 +177,7 @@ const style = StyleSheet.create({
         marginLeft: 30,
     },
     calendar:{
-        backgroundColor: 'white',
+        //backgroundColor: 'white',
         borderRadius: 10,
         elevation: 4,
         margin: 10

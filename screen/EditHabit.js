@@ -23,6 +23,7 @@ const EditHabit = ({navigation, route}) => {
   const frequency_of_day = ["Daily", "Weekly", "Monthly"]
   const frequency_of_week = ["Weekly", "Monthly"]
   const [state, dispatch] = useStore();
+  const {currentTheme} =state
   const {Habit} = route.params;
   const IconDetail = {
       iconName: Habit.icon,
@@ -156,7 +157,7 @@ const EditHabit = ({navigation, route}) => {
     }
     else if (value.endDay<Habit.habitEndDate)
     {
-      handDelProgressDay(habit.name,value.endDay,Habit.habitEndDate)
+      handDelProgressDay(value.habitname,value.endDay,Habit.habitEndDate)
       handleHabit();
     }
     else 
@@ -222,48 +223,29 @@ const EditHabit = ({navigation, route}) => {
                   </View>
                   {/* Tag */}
                   <View style = {{flexDirection: 'column', padding: 10}}>
-                          <Text style ={{fontWeight: 'bold', color: theme.color }}>Tag</Text>
-                          <View style={{flexDirection:'row',padding: 10,justifyContent: 'space-between' }}>  
-                            <Text style={[styles.boder,{backgroundColor:value.changecolor}]}>{value.tag}</Text>
-                            <ScrollView style={{marginLeft:30}} horizontal={true}>
-                              {iTag.map((todo, index) => (
-                                <View key={index}>
-                                  <Text style={[styles.boder,{backgroundColor:value.changecolor}]}>{todo}</Text>
-                                  <Button
-                              
-                                    title="Remove"
-                                    onPress={() => handleRemoveTag(index)}
-                                  />
-                                </View>
-                              ))}
-                              {/* onPress={handleAddTag} */}
-                              <TouchableOpacity 
-                                onPress={() => setModalVisible(true)}
-                                //style={styles.button}
-                              >
-                                <Text style={[styles.boder, {backgroundColor:'gray'}]}>+</Text>
-                              </TouchableOpacity>
-                              <Modal
-                                isVisible={isModalVisible}
-                                onBackdropPress={() => {setModalVisible(false); if (newTag!='') handleAddTag()}}
-                              >
-                                <View style={styles.modalContainer}>
-                                  <TextInput
-                                    style={styles.input}
-                                    placeholder="Enter text here"
-                                    value={newTag}
-                                    onChangeText={text => {setNewTag(text)}}
-                                  />
-                                  <TouchableOpacity
-                                    onPress={() => {setModalVisible(false); if (newTag!='') handleAddTag()}}
-                                    style={[styles.button,{backgroundColor:value.changecolor}]}
-                                  >
-                                    <Text style={styles.text}>Done</Text>
-                                  </TouchableOpacity>
-                                </View>
-                              </Modal>
-                            </ScrollView>
-                          </View>
+                            <Text style ={{fontWeight: 'bold', color: theme.color }}>Tag</Text>
+                            <TouchableOpacity style={{flexDirection:'row',padding: 10,justifyContent: 'space-between' }} onPress={() => setModalVisible(true)}>  
+                              <Text style={[styles.boder,{backgroundColor:value.changecolor}]}>{value.tag}</Text>
+                            </TouchableOpacity>
+                            <Modal
+                                  isVisible={isModalVisible}
+                                  onBackdropPress={() => setModalVisible(false)}
+                                >
+                                  <View style={styles.modalContainer}>
+                                    <TextInput
+                                      style={styles.input}
+                                      placeholder="Enter text here"
+                                      value={value.tag}
+                                      onChangeText={text => {setState(prevState => ({ ...prevState, tag: text }))}}
+                                    />
+                                    <TouchableOpacity
+                                      onPress={() => setModalVisible(false)}
+                                      style={[styles.button,{backgroundColor:value.changecolor}]}
+                                    >
+                                      <Text style={styles.text}>Done</Text>
+                                    </TouchableOpacity>
+                                  </View>
+                                </Modal>
                   </View>                          
                   <View style = {{flexDirection: 'column',padding: 10}}>
                       <Text style ={{fontWeight: 'bold', color: theme.color }}>Goal & Goal Period</Text>
