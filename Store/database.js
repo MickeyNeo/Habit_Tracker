@@ -245,6 +245,8 @@ const initDatabase = () => {
             icon TEXT,\
             iconFamily TEXT,\
             id TEXT NOT NULL,\
+            flag INTEGER DEFAULT \'1\',\
+            tag TEXT,\
             PRIMARY KEY(name))',
             [], 
             (txObj, resultSet) => {
