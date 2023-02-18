@@ -7,6 +7,7 @@ import { FontAwesome5,MaterialCommunityIcons } from "@expo/vector-icons";
 import Modal from "react-native-modal";
 import SelectDropdown from 'react-native-select-dropdown'
 import Icons from "../icon_color/Icon";
+import {deleteHabit} from "../../Store/database.js"
 
 export default function HabitManager ({navigation}){
     const[state, dispatch] =useStore()
@@ -20,6 +21,7 @@ export default function HabitManager ({navigation}){
     const handleDelHablit =(id,name)=> {
         dispatch(delHabit(state.listHabit.filter(item => item.id !== id)))
         dispatch(editListProgressDay(state.listProgressDay.filter(item=>item.habitName!==name)))
+        deleteHabit(name)
     }
     return(         
         <SafeAreaView style={[styles.container,{backgroundColor: currentTheme.backgroundColor}]}>
