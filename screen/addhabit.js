@@ -29,7 +29,7 @@ const AddHabit = ({navigation, route}) => {
     const {currentTheme} =state
     const {id, name, colors, IconInfo, unitHabit, tag, flag } = route.params;
     
-    const IconDetail = {
+    const IconDetail={
         iconName: IconInfo[0],
         iconFamily: IconInfo[1],
     }
@@ -56,7 +56,7 @@ const AddHabit = ({navigation, route}) => {
     const [value, setState] = useState({
         goal: "1",
         currentTabPeriod: "Day",
-        // currentTabTime: "Anytime",
+        currentTabTime: "Anytime",
         changecolor: colors,
         note: "",
         mess: "",
@@ -67,7 +67,10 @@ const AddHabit = ({navigation, route}) => {
         tag: tag,
         habitname: name,
         selectedItem: "Daily",
-        selectedFreq: date
+        selectedFreq: date,
+        icon: IconInfo[0],
+        iconFamily: IconInfo[1],
+
     });
     const showday = []
     value.selectedFreq.forEach((item) => { if (item.selected == true ) showday.push(item.title)})
@@ -81,7 +84,7 @@ const AddHabit = ({navigation, route}) => {
         color: value.changecolor,
         // tagID: 0,
         frequencyType: value.selectedItem,
-        // timeRange: value.currentTabTime,
+        timeRange: value.currentTabTime,
         remainderMessage: value.mess,
         showMemo: value.isEnabled,
         chartType: 0,
@@ -91,8 +94,8 @@ const AddHabit = ({navigation, route}) => {
         tag: value.tag,
         goalPeriod: value.currentTabPeriod,
         unitID: value.unit.id,
-        icon: IconInfo[0],
-        iconFamily: IconInfo[1],
+        icon: value.icon,
+        iconFamily: value.iconFamily,
         flag : flag,
     }
     //Tag
@@ -178,6 +181,8 @@ const AddHabit = ({navigation, route}) => {
                                   unit = {value.unit} 
                                   tag = {value.tag} 
                                   IconDetail = {IconDetail}
+                                  icon ={value.icon}
+                                  iconFamily ={value.iconFamily}
                                   setState = {setState}
                                   flag = {1} 
                                 />
@@ -189,6 +194,8 @@ const AddHabit = ({navigation, route}) => {
                                   unit = {value.unit} 
                                   tag = {value.tag} 
                                   IconDetail = {IconDetail}
+                                  icon ={value.icon}
+                                  iconFamily ={value.iconFamily}
                                   setState = {setState}
                                   flag = {2} 
                                 />
@@ -245,6 +252,8 @@ const AddHabit = ({navigation, route}) => {
                                   unit = {value.unit} 
                                   tag = {value.tag} 
                                   IconDetail = {IconDetail}
+                                  icon ={value.icon}
+                                  iconFamily ={value.iconFamily}
                                   setState = {setState}
                                   flag = {4} 
                                 />
@@ -401,7 +410,7 @@ const TabButtontime = (currentTabTime, setState, title, color) => {
     </TouchableOpacity>
   )
 }
-const TabChoose = ({title, changecolor, unit, tag, IconDetail, setState, flag, selectedItem, goal, select, week, month}) => {
+const TabChoose = ({title, changecolor, unit, tag, IconDetail, icon, iconFamily, setState, flag, selectedItem, goal, select, week, month}) => {
   const [state, dispatch] = useStore();
   const {currentTheme} =state
   const [isEnabled, setIsEnabled] = useState(false);
@@ -412,7 +421,7 @@ const TabChoose = ({title, changecolor, unit, tag, IconDetail, setState, flag, s
         setIsEnabled(!isEnabled)
       }}>
       {flag === 1 && (
-        <Icons type={IconDetail.iconFamily} name={IconDetail.iconName} size={18} color={changecolor} />
+        <Icons type={iconFamily} name={icon} size={18} color={changecolor} />
       )}
       {isEnabled && (
         <>

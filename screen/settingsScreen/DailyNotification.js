@@ -3,7 +3,10 @@ import { useState } from 'react';
 import {Text,  View,StyleSheet,Button, TextInput } from 'react-native';
 import Modal from "react-native-modal";
 import TimePickerDialog from '@react-native-community/datetimepicker';
+import { useStore } from "../../Store";
 export default function DailyNotification (params){
+    const [state, dispatch] =useStore()
+    const {currentTheme} =state
     const [text, setText] = useState("Are your habits completed?");
     return(         
                 <View>
@@ -15,15 +18,15 @@ export default function DailyNotification (params){
                         animationOut ='bounceOut'
                         animationOutTiming = {500}
                     >
-                    <View style={{height: '50%', backgroundColor: 'white', borderRadius: 30, borderWidth: 1,justifyContent: 'center'}}>
+                    <View style={{height: '50%', backgroundColor: 'white', borderRadius: 30, borderWidth: 1,justifyContent: 'center',backgroundColor: currentTheme.backgroundColor}}>
                         <View style={styles.container}>
-                            <Text style={styles.tilte}>Daily Motivation</Text>
+                            <Text style={[styles.tilte,{color: currentTheme.color}]}>Daily Motivation</Text>
                             <TextInput
-                                style={styles.input}
+                                style={[styles.input,{color: currentTheme.color,backgroundColor:(currentTheme.backgroundColor=='#1f1e1e')?'#918e8e':'#f5f5f5'}]}
                                 onChangeText={(text)=>setText(text)}
                                 value={text}
                             />  
-                            <Text style={styles.tilte}>Time</Text>
+                            <Text style={[styles.tilte,{color: currentTheme.color}]}>Time</Text>
                             <View style={{flex:1}}>
                                 <TimePickerDialog style={{alignSelf :'center'}} mode="time" value={new Date()} />
                             </View>

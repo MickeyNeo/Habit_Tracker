@@ -14,11 +14,11 @@ import { getUnitName, loadMemo} from '../Store/database';
 
 const Home = ({ navigation }) => {
   const [state,dispatch] = useStore();
-  
+  const {currentTheme} =state
   
   // const db = SQLite.openDatabase('Habit_tracker.db');
   // refreshDatabase();
-  initDatabase();
+  //initDatabase();
 
   // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
   useEffect(() => {
@@ -42,14 +42,14 @@ const Home = ({ navigation }) => {
   //loadSetting(state, dispatch);
   /* loadUnit(); */
   console.log('list', state.listHabit)
-  const HabitZone = (values,navigation,date,listProgressDay) => {
+  const HabitZone = (values,navigation,date,listProgressDay, state) => {
     //console.log('date',date)
     let day = moment(date.dateString).format('ddd')
     day = day.toUpperCase()
-
+    const {currentTheme} =state
     //console.log(day)
     //console.log(values)
-    const [state,dispatch] = useStore();
+    //const [state,dispatch] = useStore();
 
     // const {listProgressDay} =state
     console.log('listProgressDay',listProgressDay)
@@ -89,7 +89,7 @@ const Home = ({ navigation }) => {
           if (value.date===date.dateString){
               var valueGoal = value.goalNo
               var checkShow = null 
-              getUnitName(value)
+              //getUnitName(value)
               if (value.unitID === 1 || value.unitID === 2 || value.unitID == 3 ){
                   {checkShow = 1; 
                     if (value.unitID === 2 ) valueGoal= value.goalNo*60
@@ -136,14 +136,14 @@ const Home = ({ navigation }) => {
                     top:9,
                     left:10
                   }}>
-                      <Icons type={value.iconFamily} name={value.icon} size={state.habitBarSize?40:25} color='black' />
+                      <Icons type={value.iconFamily} name={value.icon} size={state.habitBarSize?40:25} color={currentTheme.color} />
                       <View style={{ flexDirection: 'column' }}>
-                        <Text style={{ fontSize: 10 }}>{value.name}</Text>
-                        <Text style={{ fontSize: 8 }}>{value.note}</Text>
+                        <Text style={{ fontSize: 10,color: currentTheme.color }}>{value.name}</Text>
+                        <Text style={{ fontSize: 8,color: currentTheme.color }}>{value.note}</Text>
                       </View>
                       <View style={{ alignItems: 'flex-end', flex: 1,right:10}}>
                         {/* {!checkShow && <Text> {(value.progress)/(valueGoal)} {value.unitID.title}</Text>} */}
-                        <Text>{doMath()}/{value.goalNo} {findObjectById(value.unitID)}</Text>
+                        <Text style={{color: currentTheme.color}}>{doMath()}/{value.goalNo} {findObjectById(value.unitID)}</Text>
                       </View>
                     </View>
                 </TouchableOpacity>
@@ -171,7 +171,7 @@ const Home = ({ navigation }) => {
 }
   // }
   return (
-    <View style={{backgroundColor: 'white', flex: 1, flexDirection: 'column'}}>
+    <View style={{backgroundColor: currentTheme.backgroundColor, flex: 1, flexDirection: 'column'}}>
       <View style ={{height: 80 }}>
         <CalendarProvider date={format(today, 'MM/dd/yyyy')}>
           <WeekCalendar 
@@ -184,7 +184,7 @@ const Home = ({ navigation }) => {
       </View>
       <View style = {{flex: 0.8, flexDirection: 'column'}}>
         
-        {HabitZone(listH,navigation,selectedDay,listP)}
+        {HabitZone(listH,navigation,selectedDay,listP, state)}
       </View>
     </View>
   )

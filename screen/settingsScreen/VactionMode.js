@@ -7,6 +7,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { useStore } from "../../Store";
 export default function VactionMode (params){
     const[state, dispatch] =useStore()
+    const {currentTheme} =state
     return(         
                 <View>
                     <Modal isVisible={params.myIsmodalVisible} 
@@ -17,16 +18,16 @@ export default function VactionMode (params){
                         animationOut ="bounceOut"
                         animationOutTiming = {500}
                     >
-                        <View style={{height: '60%', backgroundColor: 'white', borderRadius: 30, borderWidth: 1,justifyContent: 'center'}}>
+                        <View style={{height: '60%', backgroundColor: 'white', borderRadius: 30, borderWidth: 1,justifyContent: 'center',backgroundColor: currentTheme.backgroundColor}}>
                             <View style={styles.container}>
-                                <Text style={styles.tilte}>Do you want to turn vacation mode on?</Text>
+                                <Text style={[styles.tilte,{color: currentTheme.color}]}>Do you want to turn vacation mode on?</Text>
                                 <View style={{flex:0.5,flexDirection:'row'}}>
                                     <View style={styles.startEnd}>
-                                        <Text style={styles.text}>Start</Text>
+                                        <Text style={[styles.text,{color: currentTheme.color}]}>Start</Text>
                                         <TimePickerDialog style={{alignSelf :'center'}} mode="date" value={new Date()} />
                                     </View>
                                     <View  style={styles.startEnd}>
-                                        <Text style={styles.text}>End</Text>
+                                        <Text style={[styles.text,{color: currentTheme.color}]}>End</Text>
                                         <TimePickerDialog style={{alignSelf :'center'}} mode="date" value={new Date()} />
                                     </View>  
                                 </View>

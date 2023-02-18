@@ -30,7 +30,7 @@ const HabitOfADay = ({navigation,route}) =>{
     // console.log(nameOfMonth)
     const [isEnabled, setIsEnabled] = useState(false);
     const[state, dispatch] = useStore()
-
+    const {currentTheme} =state
     // calculateDayDoneInMonth(habit, dispatch);
     // calculateDayTotalDone(habit, dispatch);
     // calculateMonthlyVolumn(habit, dispatch);
@@ -92,11 +92,11 @@ const HabitOfADay = ({navigation,route}) =>{
         );
       };
     return(
-        <View style = {styles.container}>
+        <View style = {[styles.container,{backgroundColor: currentTheme.backgroundColor}]}>
             <View style = {styles.header}>
                 {/* <FontAwesome5 style={styles.iconTitle} name={habit.name.toLowerCase()} size={27} color='crimson' /> */}
                 <Icons style={styles.iconTitle} type={habit.iconFamily} name={habit.icon} size={27} color={habit.color} />
-                <Text style ={{marginTop: 10, fontSize: 20, fontWeight : "bold"}}>{habit.name}</Text>
+                <Text style ={{marginTop: 10, fontSize: 20, fontWeight : "bold", color: currentTheme.color}}>{habit.name}</Text>
             </View>
             <View style={{flex: 1,alignItems: 'stretch'}}>
                 <ScrollView style ={{marginBottom: 10, flex:1 }}>
@@ -111,53 +111,53 @@ const HabitOfADay = ({navigation,route}) =>{
                     </View> */}
 
                     {/* Records */}
-                    <View style = {styles.part}>
-                        <Text style = {styles.headText}>Records</Text>
+                    <View style = {[styles.part,{backgroundColor:(currentTheme.backgroundColor=='#1f1e1e')?'#918e8e':'#f5f5f5'}]}>
+                        <Text style = {[styles.headText,{color: currentTheme.color}]}>Records</Text>
                         <View style={{flexDirection:'row',justifyContent:'center',alignContent: "space-around"}}>
                             <View style = {styles.column}>
                                 <View style={styles.iconRecords}>
                                     <FontAwesome5  name="calendar-alt" size={50} color="#7fb7fa" />
-                                    <Text>{state.DayDoneInMonth} Day</Text>
+                                    <Text style={{color: currentTheme.color}}>{state.DayDoneInMonth} Day</Text>
                                     <View></View>
-                                    <Text>Done in {nameOfMonth}</Text>
+                                    <Text style={{color: currentTheme.color}}>Done in {nameOfMonth}</Text>
                                 </View>
                                 <View style={styles.iconRecords}>
                                     <FontAwesome5  name="layer-group" size={50} color="#a6acf0" />
-                                    <Text>{state.CurrentStreak} Day</Text>
-                                    <Text>Current Streak</Text>
+                                    <Text style={{color: currentTheme.color}}>{state.CurrentStreak} Day</Text>
+                                    <Text style={{color: currentTheme.color}}>Current Streak</Text>
                                 </View>
                                 <View style={styles.iconRecords}>
                                     <FontAwesome5  name="poll" size={50} color="#10cc7a" />
-                                    <Text>{state.MonthlyVolumn}</Text>
-                                    <Text>Vol. in {nameOfMonth}</Text>
+                                    <Text style={{color: currentTheme.color}}>{state.MonthlyVolumn}</Text>
+                                    <Text style={{color: currentTheme.color}}>Vol. in {nameOfMonth}</Text>
                                 </View>
                                 <View style={styles.iconRecords}>
                                     <FontAwesome5  name="cubes" size={50} color="#f8b2b3" />
-                                    <Text>{dailyAverage}</Text>
-                                    <Text>Daily Avg.</Text>
+                                    <Text style={{color: currentTheme.color}}>{dailyAverage}</Text>
+                                    <Text style={{color: currentTheme.color}}>Daily Avg.</Text>
                                 </View>
                             </View>
 
                             <View style = {styles.column}>
                                 <View style={styles.iconRecords}>
                                     <FontAwesome5  name="clipboard-list" size={50} color="#4be1a9" />
-                                    <Text>{state.DayTotalDone} Day</Text>
-                                    <Text>Total Done</Text>
+                                    <Text style={{color: currentTheme.color}}>{state.DayTotalDone} Day</Text>
+                                    <Text style={{color: currentTheme.color}}>Total Done</Text>
                                 </View>
                                 <View style={styles.iconRecords}>
                                     <FontAwesome5  name="medal" size={50} color="#f8b043" />
-                                    <Text>{state.BestStreak} Day</Text>
-                                    <Text>Best Streaks</Text>
+                                    <Text style={{color: currentTheme.color}}>{state.BestStreak} Day</Text>
+                                    <Text style={{color: currentTheme.color}}>Best Streaks</Text>
                                 </View>
                                 <View style={styles.iconRecords}>
                                     <FontAwesome5  name="receipt" size={50} color="#81b6f8" />
-                                    <Text>{state.TotalVolumn}</Text>
-                                    <Text>Vol. Total</Text>
+                                    <Text style={{color: currentTheme.color}}>{state.TotalVolumn}</Text>
+                                    <Text style={{color: currentTheme.color}}>Vol. Total</Text>
                                 </View>
                                 <View style={styles.iconRecords}>
                                     <FontAwesome5  name="percent" size={50} color="#fca133" />
-                                    <Text>{overallRate}</Text>
-                                    <Text>Overall Rate</Text>
+                                    <Text style={{color: currentTheme.color}}>{overallRate}</Text>
+                                    <Text style={{color: currentTheme.color}}>Overall Rate</Text>
                                 </View>
                                 
                             </View>
@@ -166,14 +166,14 @@ const HabitOfADay = ({navigation,route}) =>{
                     </View>
                     
                     {/* Memos */}
-                    <View style = {styles.part}>
-                        <View style = {{flexDirection: 'row',justifyContent: 'space-between', marginHorizontal: 5 }}>
-                            <Text style = {styles.headText}>Memos</Text>
+                    <View style = {[styles.part,{backgroundColor:(currentTheme.backgroundColor=='#1f1e1e')?'#918e8e':'#f5f5f5'}]}>
+                        <View style = {{flexDirection: 'row',justifyContent: 'space-between', marginHorizontal: 5}}>
+                            <Text style = {[styles.headText,{color: currentTheme.color}] }>Memos</Text>
                             <TouchableOpacity style = {{marginTop: '1.25%'}}
                                 onPress ={() =>{
                                     setIsEnabled(!isEnabled)
                                 }}>
-                                <Text>More</Text>
+                                <Text style={{color: currentTheme.color}}>More</Text>
                                 {isEnabled && <MoreMemo 
                                     myIsmodalVisible = {isEnabled}
                                     habit = {habit}
@@ -182,12 +182,12 @@ const HabitOfADay = ({navigation,route}) =>{
                             </TouchableOpacity>
                         </View>
                         <View style = {{padding: 10, backgroundColor: '#F9BBAE' , borderRadius: 6, marginHorizontal: 10, marginBottom: 5}}>
-                            <Text>{state.memoCurDay}</Text>
+                            <Text style={{color: currentTheme.color}}>{state.memoCurDay}</Text>
                         </View>
                     </View>
 
                     {/* Chart */}
-                    <View style = {styles.part}>
+                    <View style = {[styles.part] }>
                         <Text style = {styles.headText}>Chart</Text>
                         <View style = {{ flexDirection: 'row',justifyContent: 'center'}}>
                             <BarChart
@@ -209,8 +209,8 @@ const HabitOfADay = ({navigation,route}) =>{
                                         Habit: habit,
                                     })}>  
                             <View style = {{flexDirection: 'row',justifyContent: 'center'}}>
-                                <FontAwesome5 style = {{marginHorizontal: 5}} name='pencil-alt' size={15} color='black' />
-                                <Text>Edit</Text>
+                                <FontAwesome5 style = {{marginHorizontal: 5}} name='pencil-alt' size={15} color={currentTheme.color} />
+                                <Text style={{color: currentTheme.color}}>Edit</Text>
                             </View>
                         </TouchableOpacity>
 
@@ -225,8 +225,8 @@ const HabitOfADay = ({navigation,route}) =>{
                             // navigation.navigate('Statistic')
                             }}>
                             <View style = {{flexDirection: 'row',justifyContent: 'center'}}>
-                                <FontAwesome5 style = {{marginHorizontal: 5}} name='trash-alt' size={15} color='black' />
-                                <Text>Delete</Text>
+                                <FontAwesome5 style = {{marginHorizontal: 5}} name='trash-alt' size={15} color={currentTheme.color} />
+                                <Text style={{color: currentTheme.color}}>Delete</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
