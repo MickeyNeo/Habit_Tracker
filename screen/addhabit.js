@@ -20,13 +20,13 @@ import Modal from "react-native-modal";
 
 import { useStore , addHabitOfaDay, addHabitList, setListProgressDay} from '../Store'
 import { setHabitInput } from '../Store/action'
-import { db, addHabit } from '../Store/database'
+import { db, addHabit, addMemo } from '../Store/database'
 import { Tile } from "@rneui/base";
 const AddHabit = ({navigation, route}) => {
+    const [state, dispatch] = useStore(); 
     const frequency_of_day = ["Daily", "Weekly", "Monthly"]
     const frequency_of_week = ["Weekly", "Monthly"]
-    const [state, dispatch] = useStore();
-    const {currentTheme} =state
+    const {currentTheme} = state
     const {id, name, colors, IconInfo, unitHabit, tag, flag } = route.params;
     
     const IconDetail={
@@ -54,7 +54,7 @@ const AddHabit = ({navigation, route}) => {
     let unit = {}
     unitHabit.forEach((item) => unit = item)
     const [value, setState] = useState({
-        goal: "1",
+        goal: '1',
         currentTabPeriod: "Day",
         currentTabTime: "Anytime",
         changecolor: colors,
@@ -125,15 +125,24 @@ const AddHabit = ({navigation, route}) => {
         //console.log(1)
         //list.push({id:id, day: moment(startDate).format('YYYY-MM-DD'), process:0, memo:''})
         if (habit.frequencyType==='Daily')
-          {dispatch(setListProgressDay({habitName: habit.name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''}))}
+          { 
+            addMemo(habit.name, moment(startDate).format('YYYY-MM-DD'), '', 0)
+            dispatch(setListProgressDay({habitName: habit.name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''}))
+          }
         else if (habit.frequencyType==='Weekly')
           {
-            if (habit.frequency.includes(moment(startDate).format('ddd').toLocaleUpperCase()))
-              dispatch(setListProgressDay({habitName: habit.name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''}))          }
+            if (habit.frequency.includes(moment(startDate).format('ddd').toLocaleUpperCase())) {
+              addMemo(habit.name, moment(startDate).format('YYYY-MM-DD'), '', 0)
+              dispatch(setListProgressDay({habitName: habit.name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''}))          
+            }
+          }
         else if (habit.frequencyType==='Monthly')
           {
             if (habit.frequency.includes(moment(startDate).date()))
+            {
+              addMemo(habit.name, moment(startDate).format('YYYY-MM-DD'), '', 0)
               dispatch(setListProgressDay({habitName: habit.name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''})) 
+            }
           }
         startDate.add(1, 'days');
       }
@@ -353,6 +362,7 @@ const AddHabit = ({navigation, route}) => {
         <SafeAreaView style = {styles.homeZone}> 
             <TouchableOpacity 
                 onPress={() => {
+                    console.log('Pressed Addhabit: ', habit)
                     // dispatch(addHabitOfaDay(name.toLowerCase()));
                     dispatch(setHabitInput(habit));
                     dispatch(addHabitList(habit));

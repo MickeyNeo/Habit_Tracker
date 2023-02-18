@@ -18,8 +18,8 @@ const Home = ({ navigation }) => {
   
   // const db = SQLite.openDatabase('Habit_tracker.db');
 
-  // refreshDatabase();
-  initDatabase();
+  // refreshDatabase();  
+  // initDatabase();
 
   // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
   useEffect(() => {
@@ -39,11 +39,11 @@ const Home = ({ navigation }) => {
   const listP = state.listProgressDay
 
   //refreshDatabase(state.listHabit, dispatch)
-  console.log('home',state.listProgressDay.length)
+  // console.log('home',state.listProgressDay.length)
   //console.log(state.listHabit)
   //loadSetting(state, dispatch);
   /* loadUnit(); */
-  console.log('list', state.listHabit)
+  // console.log('list', state.listHabit)
   const HabitZone = (values,navigation,date,listProgressDay, state,check) => {
     //console.log('date',date)
     let day = moment(date.dateString).format('ddd')
@@ -54,14 +54,14 @@ const Home = ({ navigation }) => {
     //const [state,dispatch] = useStore();
 
     // const {listProgressDay} =state
-    console.log('listProgressDay',listProgressDay)
+    // console.log('listProgressDay',listProgressDay)
     
 
     const arr3 = values.map(obj => {
       const arr2match = listProgressDay.find(x => x.habitName === obj.name && (x.date === date.dateString));
       return { ...obj, ...arr2match };
     });
-    console.log('arr3', arr3)
+    // console.log('arr3', arr3)
     //time
     const handleTime = (until) => {
       return {
@@ -191,7 +191,7 @@ const Home = ({ navigation }) => {
       </View>
       <View style = {{flex: 0.8, flexDirection: 'column'}}>
         
-      {/* {HabitZone(listH,navigation,selectedDay,listP, state,checkShow)} */}
+      {HabitZone(listH,navigation,selectedDay,listP, state,checkShow)}
       </View>
     </View>
   )
