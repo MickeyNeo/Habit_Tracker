@@ -17,7 +17,7 @@ import Modal from "react-native-modal";
 
 import { useStore , setListProgressDay, delHabit, editListProgressDay} from '../Store'
 import { setHabitInput } from '../Store/action'
-import { db, addHabit, updateHabit } from '../Store/database'
+import { db, addHabit } from '../Store/database'
 import { Tile } from "@rneui/base";
 const EditHabit = ({navigation, route}) => {
   const frequency_of_day = ["Daily", "Weekly", "Monthly"]
@@ -52,6 +52,26 @@ const EditHabit = ({navigation, route}) => {
     return state.listUnit.find((obj) => obj.id === id) || null;
   };
   let unit = findObjectById(Habit.unitID) 
+  let freq_selected = Habit.frequency
+  freq_selected = freq_selected.split(',')
+  const freqtype = Habit.frequencyType;
+  let old_freq_selected = []
+  if (freqtype === 'Daily') {
+      old_freq_selected = freq_selected;
+  }
+  else if (freqtype === 'Weekly') {
+    for (let i = 0; i < Week.length; i++) 
+    {
+      Week[i].selected = freq_selected.includes(Week[i].title) ? 1 : 0;
+    }
+  }
+  else {
+    for (let i = 0; i < month.length; i++) 
+    {
+      month[i].selected = freq_selected.includes(month[i].title) ? 1 : 0;
+    }
+  }
+  console.log(Week);
   const [value, setState] = useState({
       goal: Habit.goalNo,
       currentTabPeriod: Habit.goalPeriod,
@@ -66,19 +86,17 @@ const EditHabit = ({navigation, route}) => {
       tag: Habit.tag,
       habitname: Habit.name,
       selectedItem: Habit.frequencyType,
-      selectedFreq: date,
+      selectedFreq: Habit.frequencyType === 'Daily' ? date : Habit.frequencyType === 'Weekly' ? Week : month,
       icon: Habit.icon,
       iconFamily: Habit.iconFamily,
   });
-  const showday = []
-  value.selectedFreq.forEach((item) => { if (item.selected == true ) showday.push(item.title)})
   const theme = useContext(themeContext);
   const toggleSwitch = () => setState(prevState => ({ ...prevState, isEnabled: !prevState.isEnabled}));
   const habit = {
       id: Habit.id,
       name: value.habitname,
       note: value.note,
-      frequency: Habit.frequency,
+      frequency: value.frequency,
       color: value.changecolor,
       // tagID: Habit.tagID,
       frequencyType: value.selectedItem,
@@ -164,7 +182,6 @@ const EditHabit = ({navigation, route}) => {
     }
     else 
     handleHabit();
-    updateHabit(Habit, habit)
     navigation.goBack()
   }
   return (
@@ -256,38 +273,33 @@ const EditHabit = ({navigation, route}) => {
                   </View>                          
                   <View style = {{flexDirection: 'column',padding: 10}}>
                       <Text style ={{fontWeight: 'bold', color: theme.color }}>Goal & Goal Period</Text>
-                      <View style = {{flexDirection: 'row'}}>
+                      <View style = {{flexDirection: 'row', alignItems: 'center'}}>
                           <View style ={{ flexDirection: 'row', padding: 10, justifyContent: 'space-evenly', flex: 0.7 }}>
                               <TextInput
-                                  style = {{
-                                      width: 50,
-                                      height: 17,
-                                      backgroundColor: value.changecolor,
-                                      borderRadius: 20,
-                                      textAlign: 'center'
-                                      }}
-                                      keyboardType="numeric"
-                                      value={value.goal}
-                                      placeholder={value.goal}
-                                      onChangeText={(value) => setState(prevState => ({ ...prevState, goal: value }))}
-                                  />
-                              <TabChoose 
-                                title = 'count' 
-                                changecolor = {value.changecolor}
-                                unit = {value.unit} 
-                                tag = {value.tag} 
-                                IconDetail = {IconDetail}
-                                icon ={value.icon}
-                                iconFamily ={value.iconFamily}
-                                setState = {setState}
-                                flag = {4} 
-                              />
-                          </View>
-                          <View style = {{flexDirection: 'row', padding: 10, alignSelf: 'center'}}>
-                            {TabButton(value.currentTabPeriod, setState, "Day", value.changecolor, date)}
-                            {TabButton(value.currentTabPeriod, setState, "Week", value.changecolor, Week)}
-                            {TabButton(value.currentTabPeriod, setState, "Month", value.changecolor, month)}
-                          </View>
+                                    style = {[styles.btnTouch, {textAlign: 'center' , height: 20}]}
+                                        keyboardType="numeric"
+                                        value={value.goal}
+                                        onChangeText={(value) => setState(prevState => ({ ...prevState, goal: value }))}
+                                    />
+                                <TabChoose 
+                                  title = 'count' 
+                                  changecolor = {value.changecolor}
+                                  unit = {value.unit} 
+                                  tag = {value.tag} 
+                                  IconDetail = {IconDetail}
+                                  icon ={value.icon}
+                                  iconFamily ={value.iconFamily}
+                                  setState = {setState}
+                                  flag = {4} 
+                                />
+                                
+                            </View>
+                            <Text style={{color: currentTheme.color}}>/</Text>
+                            <View style = {{flexDirection: 'row', padding: 10, alignSelf: 'center'}}>
+                              {TabButton(value.currentTabPeriod, setState, "Day", value.changecolor, date)}
+                              {TabButton(value.currentTabPeriod, setState, "Week", value.changecolor, Week)}
+                              {TabButton(value.currentTabPeriod, setState, "Month", value.changecolor, month)}
+                            </View>
                       </View>
                   </View>
 
@@ -312,7 +324,7 @@ const EditHabit = ({navigation, route}) => {
                           
                   </View>
                   <View style = {{padding: 10}}>
-                          {DisplayNote(value.selectedFreq,value.goal,value.unit)}
+                          {DisplayNote(value.selectedFreq,value.goal,value.unit, value.selectedItem)}
                   </View>
 
                   <View style = {{flexDirection: 'column', padding: 10}}>
@@ -342,8 +354,6 @@ const EditHabit = ({navigation, route}) => {
                           />
                       </View>
                   </View>
-
-            
 
                   <View style = {{flexDirection: 'column', padding: 10}}>
                       <Text style ={{fontWeight: 'bold', color: theme.color }}>Habit Term</Text>
@@ -488,8 +498,30 @@ const ShowTimePicker = (startDay, endDay, setState,color ,flag) => {
     // const currentDate = selectedDate;
     setShow(false);
     if (flag === 1) {
+      if (selectedDate > endDay) 
+      {
+        Alert.alert(
+          'Warning',
+          'Start day must be before the end day',
+        [
+      { text: 'OK', onPress: () => setState(prevState => ({ ...prevState, startDay: startDay })) }
+        ],
+      { cancelable: false }
+      );
+      }
       setState(prevState => ({ ...prevState, startDay: selectedDate  }))
     } else {
+      if (selectedDate < startDay) 
+      {
+        Alert.alert(
+          'Warning',
+          'End day must be after the current day',
+        [
+      { text: 'OK', onPress: () => setState(prevState => ({ ...prevState, endDay: endDay })) }
+        ],
+      { cancelable: false }
+      );
+      }
       setState(prevState => ({ ...prevState, endDay: selectedDate }))
     }
   };
@@ -525,16 +557,22 @@ const ShowTimePicker = (startDay, endDay, setState,color ,flag) => {
 
 };
 
-const DisplayNote = (select,goal,unit) => {
-
-  return (
-  <View style = {{flexDirection: 'row'}}>
-      <Text style ={{fontSize: 10, color: 'red' }}> *Complete {goal} {unit.title} in</Text>
-      {select.map((value) => 
-      <Text style = {{fontSize: 10, color: 'red'}}key = {value.id} > {value.selected ? value.title : null}</Text> 
-  )}
-  </View>
-  )
+const DisplayNote = (select, goal, unit, frequencyType) => {
+    var text = frequencyType == 'Daily'? 'each day':'in total on'
+    return (
+    <View style = {{flexDirection: 'row'}}>
+        <Text style = {{fontSize: 10, color: 'red' }}> *Complete {goal} {unit.title} {text} </Text>
+        {frequencyType === 'Weekly' || frequencyType === 'Monthly' ? (
+    <View style={[{flexDirection: 'row', }, frequencyType === 'Monthly' && {flexWrap: 'wrap'}]}>
+    {select.map((value) => (
+      <Text style={{fontSize: 10, color: 'red' , marginRight: 5}} key={value.id}> 
+        {value.selected ? value.title : null}
+      </Text>
+      ))}
+    </View>
+      ) : null}
+    </View>
+    )
 }
 
 const styles = StyleSheet.create({
@@ -589,12 +627,12 @@ const styles = StyleSheet.create({
         width: 50, 
         alignItems: 'center',
         backgroundColor: '#f5f5f5',
-        
+        height: 20,
     },
     freq: {
-        alignItems: 'center',
-        backgroundColor: 'white',
-    },
+      alignItems: 'center',
+      width : '25%',
+  },
     btnTouchTime: {
         borderRadius: 10, 
         width: 60, 
@@ -647,13 +685,5 @@ const styles = StyleSheet.create({
       borderRadius: 5,
       alignItems: 'center',
     },
-    boderWeek:{
-
-    },
-    boderMoth:{
-
-    },
-
 });
 export default EditHabit;
-
