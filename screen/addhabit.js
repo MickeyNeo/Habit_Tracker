@@ -357,7 +357,7 @@ const AddHabit = ({navigation, route}) => {
                     dispatch(setHabitInput(habit));
                     dispatch(addHabitList(habit));
                     handleProgressDay();
-                    addHabit(state.habit);
+                    addHabit(habit);
                     navigation.navigate('Home', {
                         screen: 'AddHabit',
                     });

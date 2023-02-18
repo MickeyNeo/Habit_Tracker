@@ -17,8 +17,9 @@ const Home = ({ navigation }) => {
   const {currentTheme} =state
   
   // const db = SQLite.openDatabase('Habit_tracker.db');
-  //refreshDatabase();
-  //initDatabase();
+
+  // refreshDatabase();
+  // initDatabase();
 
   // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
   useEffect(() => {

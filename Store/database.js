@@ -45,7 +45,7 @@ const streakRetain = (date, followingDate) => {
 }
 
 const CurrentStreak = (dates) => {
-    let currentDate = new Date(2023, 1, 8);
+    let currentDate = new Date();
 
     // console.log(dates)
 
@@ -239,7 +239,7 @@ const initDatabase = () => {
             chartType	INTEGER NOT NULL CHECK(chartType IN (0, 1)),\
             habitStartDate	TEXT NOT NULL,\
             habitEndDate	TEXT,\
-            goalNo	INTEGER NOT NULL DEFAULT 1,\
+            goalNo	TEXT NOT NULL DEFAULT \'1\',\
             goalPeriod	TEXT NOT NULL CHECK(goalPeriod IN (\'Day\', \'Week\', \'Month\')),\
             unitID	INTEGER,\
             icon TEXT,\
