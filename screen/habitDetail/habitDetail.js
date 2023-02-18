@@ -148,7 +148,7 @@ const HabitDetail = ({navigation,route}) => {
                                 
                             </View>
 
-                            <View style = {{flexDirection: 'row', justifyContent: 'center', bottom:'60%'}}> 
+                            <View style = {{flexDirection: 'row', justifyContent: 'center', bottom:'30%'}}> 
                                 {/* <TouchableOpacity >
                                 <Image
                                     source={plus}
@@ -216,42 +216,42 @@ const HabitDetail = ({navigation,route}) => {
                         </View>
                         <View style = {{top: '8%',flexDirection: 'column', justifyContent: 'center', alignItems: 'center',}}>
 
-                            <View style = {{flexDirection: 'row'}}>
-                                <TouchableOpacity onPress={() => {setModalVisible(true)}}>
-                                <Image
-                                    source={plus}
-                                    style={{ width: 30, height: 30, borderRadius: 100, backgroundColor: '#f5f5f5',right: 10}}
-                                />
-                                <Modal
-                                    isVisible={modalVisible}
-                                    onBackdropPress={() => {setModalVisible(false)}}
-                                >
-                                    <View style={styles.modalContainer}>
-                                    <TextInput
-                                      style={styles.input}
-                                        //placeholder={Value} {habit.unitID.title}
-                                        //ref={inputRef}
-                                        keyboardType="numeric"
-                                        value={value}
-                                        onChangeText={number => setValue(number)}
-                                    />
-                                    <TouchableOpacity
-                                      onPress={() => {setModalVisible(false),setCount(count+value*1),handleEdit(habit.name,habit.date,count+value*1,memoText),setValue(0)}}
-                                      style={[styles.button,{backgroundColor:habit.color}]}
-                                    >
-                                      <Text style={styles.text}>Done</Text>
-                                    </TouchableOpacity>
-                                    </View>
+//                             <View style = {{flexDirection: 'row'}}>
+//                                 <TouchableOpacity onPress={() => {setModalVisible(true)}}>
+//                                 <Image
+//                                     source={plus}
+//                                     style={{ width: 30, height: 30, borderRadius: 100, backgroundColor: '#f5f5f5',right: 10}}
+//                                 />
+//                                 <Modal
+//                                     isVisible={modalVisible}
+//                                     onBackdropPress={() => {setModalVisible(false)}}
+//                                 >
+//                                     <View style={styles.modalContainer}>
+//                                     <TextInput
+//                                       style={styles.input}
+//                                         //placeholder={Value} {habit.unitID.title}
+//                                         //ref={inputRef}
+//                                         keyboardType="numeric"
+//                                         value={value}
+//                                         onChangeText={number => setValue(number)}
+//                                     />
+//                                     <TouchableOpacity
+//                                       onPress={() => {setModalVisible(false),setCount(count+value*1),handleEdit(habit.name,habit.date,count+value*1,memoText),setValue(0)}}
+//                                       style={[styles.button,{backgroundColor:habit.color}]}
+//                                     >
+//                                       <Text style={styles.text}>Done</Text>
+//                                     </TouchableOpacity>
+//                                     </View>
 
-                                </Modal>
-                                </TouchableOpacity>
-                                <TouchableOpacity  onPress={showAlert}>
-                                <Image
-                                    source={replay}
-                                    style={{ width: 30, height: 30,borderRadius: 100, backgroundColor: '#f5f5f5', left: 10}}
-                                />
-                                </TouchableOpacity>
-                                </View>
+//                                 </Modal>
+//                                 </TouchableOpacity>
+//                                 <TouchableOpacity  onPress={showAlert}>
+//                                 <Image
+//                                     source={replay}
+//                                     style={{ width: 30, height: 30,borderRadius: 100, backgroundColor: '#f5f5f5', left: 10}}
+//                                 />
+//                                 </TouchableOpacity>
+//                                 </View>
                                 
                         </View> 
                         <View style={styles.functionZone}>
