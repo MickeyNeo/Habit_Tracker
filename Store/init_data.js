@@ -12,16 +12,16 @@ export const memoInit = "INSERT INTO Memo (habitName, date, content, progress) V
 ('Run', '2023-02-20', 'So happy', '2'),\('Meditate', '2023-02-22', 'More to go', '2'),\
 ('Meditate', '2023-02-18', 'Feel so good', '4'),\
 ('Meditate', '2023-02-17', 'Im on a roll', '7'),\
-('Meditate', '2023-02-20', 'Im getting better everyday', '10'),\
+('Meditate', '2023-01-20', 'Im getting better everyday', '10'),\
 ('Meditate', '2023-02-15', 'So happy', '6'),\
 ('Meditate', '2023-02-16', 'Im on a roll', '1'),\
-('Meditate', '2023-02-21', 'More to go', '9'),\
-('Meditate', '2023-02-19', 'Im on a roll', '5'),\
-('Meditate', '2023-02-23', 'Im getting better everyday', '1'),\
-('Meditate', '2023-02-24', 'Feel so good', '3'),\('Dancing', '2023-02-23', 'More to go', '16'),\
+('Meditate', '2023-01-21', 'More to go', '9'),\
+('Meditate', '2023-01-19', 'Im on a roll', '5'),\
+('Meditate', '2023-01-23', 'Im getting better everyday', '1'),\
+('Meditate', '2023-01-24', 'Feel so good', '3'),\('Dancing', '2023-02-23', 'More to go', '16'),\
 ('Dancing', '2023-02-20', 'More to go', '29'),\
 ('Dancing', '2023-02-16', 'So happy', '10'),\
-('Dancing', '2023-02-21', 'So happy', '28')"
+('Dancing', '2023-02-14', 'So happy', '28')"
 
 
 
