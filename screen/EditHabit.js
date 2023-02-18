@@ -66,7 +66,9 @@ const EditHabit = ({navigation, route}) => {
       tag: Habit.tag,
       habitname: Habit.name,
       selectedItem: Habit.frequencyType,
-      selectedFreq: date
+      selectedFreq: date,
+      icon: Habit.icon,
+      iconFamily: Habit.iconFamily,
   });
   const showday = []
   value.selectedFreq.forEach((item) => { if (item.selected == true ) showday.push(item.title)})
@@ -80,7 +82,7 @@ const EditHabit = ({navigation, route}) => {
       color: value.changecolor,
       // tagID: Habit.tagID,
       frequencyType: value.selectedItem,
-      // timeRange: value.currentTabTime,
+      timeRange: value.currentTabTime,
       remainderMessage: value.mess,
       showMemo: value.isEnabled,
       chartType: Habit.chartType,
@@ -89,8 +91,8 @@ const EditHabit = ({navigation, route}) => {
       goalNo: value.goal,
       goalPeriod: value.currentTabPeriod,
       unitID: value.unit.id,
-      icon: Habit.icon,
-      iconFamily: Habit.iconFamily,
+      icon: value.icon,
+      iconFamily: value.iconFamily,
       flag : Habit.flag,
       tag: value.tag,
   }
@@ -137,7 +139,7 @@ const EditHabit = ({navigation, route}) => {
     })))
     dispatch(delHabit(state.listHabit.map(item => {
         if (item.id === Habit.id)
-          return { ...item, name:habit.name, chartType : habit.chartType, color: habit.color, frequency: habit.frequency, frequencyType: habit.frequencyType, goalNo: habit.goalNo, goalPeriod: habit.goalPeriod, habitEndDate: habit.habitEndDate, habitStartDate: habit.habitStartDate, icon: habit.icon, iconFamily: habit.iconFamily, note: habit.note, remainderMessage: habit.remainderMessage, showMemo: habit.showMemo, tag: habit.tag, tagID: habit.tagID, timeRange: habit.timeRange, unitID: habit.unitID};
+          return { ...item, name:habit.name, chartType : habit.chartType, color: habit.color, frequency: habit.frequency, frequencyType: habit.frequencyType, goalNo: habit.goalNo, goalPeriod: habit.goalPeriod, habitEndDate: habit.habitEndDate, habitStartDate: habit.habitStartDate, icon: habit.icon, iconFamily: habit.iconFamily, note: habit.note, remainderMessage: habit.remainderMessage, showMemo: habit.showMemo, tag: habit.tag, timeRange: habit.timeRange, unitID: habit.unitID};
         return item
         }
         )))}
@@ -204,6 +206,8 @@ const EditHabit = ({navigation, route}) => {
                                 unit = {value.unit} 
                                 tag = {value.tag} 
                                 IconDetail = {IconDetail}
+                                icon ={value.icon}
+                                iconFamily ={value.iconFamily}
                                 setState = {setState}
                                 flag = {1} 
                               />
@@ -215,6 +219,8 @@ const EditHabit = ({navigation, route}) => {
                                 unit = {value.unit} 
                                 tag = {value.tag} 
                                 IconDetail = {IconDetail}
+                                icon ={value.icon}
+                                iconFamily ={value.iconFamily}
                                 setState = {setState}
                                 flag = {2} 
                               />
@@ -270,6 +276,8 @@ const EditHabit = ({navigation, route}) => {
                                 unit = {value.unit} 
                                 tag = {value.tag} 
                                 IconDetail = {IconDetail}
+                                icon ={value.icon}
+                                iconFamily ={value.iconFamily}
                                 setState = {setState}
                                 flag = {4} 
                               />
@@ -410,7 +418,7 @@ return (
   </TouchableOpacity>
 )
 }
-const TabChoose = ({title, changecolor, unit, tag, IconDetail, setState, flag, selectedItem, goal, select, week, month}) => {
+const TabChoose = ({title, changecolor, unit, tag, IconDetail,icon, iconFamily, setState, flag, selectedItem, goal, select, week, month}) => {
 const [isEnabled, setIsEnabled] = useState(false);
 return (
   <TouchableOpacity
@@ -419,7 +427,7 @@ return (
       setIsEnabled(!isEnabled)
     }}>
     {flag === 1 && (
-      <Icons type={IconDetail.iconFamily} name={IconDetail.iconName} size={18} color={changecolor} />
+      <Icons type={iconFamily} name={icon} size={18} color={changecolor} />
     )}
     {isEnabled && (
       <>

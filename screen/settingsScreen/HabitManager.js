@@ -8,9 +8,9 @@ import Modal from "react-native-modal";
 import SelectDropdown from 'react-native-select-dropdown'
 import Icons from "../icon_color/Icon";
 
-
-export default function HabitManager (){
+export default function HabitManager ({navigation}){
     const[state, dispatch] =useStore()
+    const {currentTheme} =state
     const [test, setList] =useState(['Action 1',' Action 2', 'Action 3'])
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -22,17 +22,17 @@ export default function HabitManager (){
         dispatch(editListProgressDay(state.listProgressDay.filter(item=>item.habitName!==name)))
     }
     return(         
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={[styles.container,{backgroundColor: currentTheme.backgroundColor}]}>
            <ScrollView style={styles.scroll} >
                     {state.listHabit.map((habit,index) =>( 
                         <View key={index}>
                             <View style={styles.iconTitle}>
                             <Icons type={habit.iconFamily} name={habit.icon} size={27} color={habit.color} />
                                         <View style={styles.viewText}>
-                                            <Text style={styles.textName}>
+                                            <Text style={[styles.textName,{color: currentTheme.color}]}>
                                                 {habit.name}
                                             </Text>
-                                            <Text style={styles.textRemind}>
+                                            <Text style={[styles.textRemind,{color: currentTheme.color}]}>
                                                 {habit.note}
                                             </Text>
                                         </View>
@@ -45,7 +45,7 @@ export default function HabitManager (){
                                                     //         <MaterialCommunityIcons  name="dots-horizontal-circle-outline" size={20} color="black" />
                                                     // </View>
                                                     // }
-                                                    defaultButtonText={<Text style={{alignSelf:'flex-start'}}>...</Text>}
+                                                    defaultButtonText={<Text style={{alignSelf:'flex-start',color: currentTheme.color}}>...</Text>}
                                                     buttonStyle={{
                                                         width: 50,
                                                         height: 50,
@@ -54,11 +54,17 @@ export default function HabitManager (){
                                                     //style={{ width: 100, height: 100}}
                                                     dropdownStyle={{
                                                         marginLeft:'-13%',
-                                                        width: 180, height: 100, backgroundColor: 'white'
+                                                        width: 180, height: 100, backgroundColor: currentTheme.backgroundColor
                                                     }}
+                                                    rowTextStyle={{
+                                                        color: currentTheme.color
+                                                    }}
+                                                    
                                                     onSelect={(selectedItem, index) => 
                                                         {
-                                                          if (selectedItem == option[0]) console.log(selectedItem)
+                                                          if (selectedItem == option[0]) navigation .navigate('EditHabit', {
+                                                            Habit: habit,
+                                                        })
                                                           else if (selectedItem == option[1]) 
                                                             {
                                                                 handleDelHablit(habit.id, habit.name)

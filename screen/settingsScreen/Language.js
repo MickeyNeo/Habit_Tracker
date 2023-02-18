@@ -6,7 +6,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { useStore,setLanguage } from "../../Store";
 export default function Language (params){
     const[state, dispatch] =useStore()
-    
+    const {currentTheme} =state
     const [lg,setLg] = useState(state.stateLanguage)
     // const handleLanguage =()=>{
     //     dispatch(setLanguage(lg))
@@ -25,13 +25,14 @@ export default function Language (params){
                 animationOut ='bounceOut'
                 animationOutTiming = {500}
                 >
-                    <View style={{height: '38%', backgroundColor: 'white', borderRadius: 30, borderWidth: 1,justifyContent: 'center'}}>
+                    <View style={{height: '38%', backgroundColor: 'white', borderRadius: 30, borderWidth: 1,justifyContent: 'center',backgroundColor: currentTheme.backgroundColor}}>
                         <View style={styles.container}>
-                            <Text style={styles.tilte}>Select Language</Text>
+                            <Text style={[styles.tilte,{color: currentTheme.color}]}>Select Language</Text>
                             <PreviewLayout
                                 values={["English", "Vietnamese", "French", "German"]}
                                 selectedValue={lg}
                                 setSelectedValue={setLg}
+                                color={currentTheme.color}
                             />
                         </View>
                         <View style={styles.buttonType}>
@@ -49,6 +50,7 @@ const PreviewLayout =({
     values,
     selectedValue,
     setSelectedValue, 
+    color,
 })=>(
     <View>
         {values.map((value) =>(
@@ -57,7 +59,7 @@ const PreviewLayout =({
                 onPress={() => setSelectedValue(value)}
             >
                <View style={{flexDirection:'row'}}>
-                    <Text style={styles.text}>
+                    <Text style={[styles.text,{color:color}]}>
                         {value}
                     </Text>
                     <View style={styles.iconCheck}>

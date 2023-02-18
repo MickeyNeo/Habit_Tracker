@@ -275,16 +275,28 @@ const Habit = ({navigation}) => {
         habit[i].flag = checkFlag.includes(habit[i].id) ? 1 : habit[i].flag;
     }
     // console.log(checkFlag)
+    function generateRandomString(length) {
+        let result = '';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            result += characters.charAt(randomIndex);
+        }
+        return result;
+        }
     return (
     <View style={[styles.container,{backgroundColor: currentTheme.backgroundColor}]}>
         <View style = {styles.addHabit}>
             <TouchableOpacity  onPress= {() => {
             navigation.navigate('AddHabit', {
-                name: 'Enter your name habit here!',
-                colors: 'green',
+                id: generateRandomString(10),
+                name: 'New Habit',
                 image: add,
+                colors: 'green',
                 IconInfo: ['add','Ionicons'],
-                unitHabit: 'count',})
+                unitHabit: [{ id: 7, title: 'count'}],
+                tag: 'Sport',
+                flag: 1,})
             }}  style ={[styles.customHabit,{backgroundColor: currentTheme.backgroundColor}]}> 
                 <Image
                     source={require('./Icon/add.png')}
@@ -319,7 +331,7 @@ const Habit = ({navigation}) => {
 };
 const TabButton = ({navigation, habit, flag }) => 
     <View style = {styles.zone}>
-    {habit.map((value) => { 
+    {habit.map((value, index) => { 
         //console.log(value.flag)
         if (value.number <= 2 && flag == 0 || value.number >= 3 && value.number < 6 && flag == 1
             || value.number >= 6 && value.number < 9 && flag == 2 || value.number >= 9 && value.number < 12 && flag == 3
@@ -327,7 +339,7 @@ const TabButton = ({navigation, habit, flag }) =>
             || value.number >= 18 && value.number < 21 && flag == 6) 
         return (
         <TouchableOpacity
-            key = {value.id}
+            key = {index}
             onPress={() => {
                 navigation.navigate('AddHabit', {
                     id: value.id,

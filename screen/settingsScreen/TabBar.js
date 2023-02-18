@@ -6,7 +6,7 @@ import { useStore,setHabitStat} from "../../Store";
 
 export default function TabBar (params){
     const [state, dispatch] =useStore()
-    const {stateHabitStat} =state
+    const {stateHabitStat,currentTheme} =state
     const [isEnabledSwitch, setIsEnabledSwitch] =useState(stateHabitStat)
     const toggleSwitch = () => {setIsEnabledSwitch(previousState => !previousState)};
     
@@ -21,11 +21,11 @@ export default function TabBar (params){
                 animationOut ="bounceOut"
                 animationOutTiming = {500}
                 >
-                    <View style={{height: '38%', backgroundColor: 'white', borderRadius: 30, borderWidth: 1,justifyContent: 'center'}}>
+                    <View style={{height: '38%', backgroundColor: 'white', borderRadius: 30, borderWidth: 1,justifyContent: 'center',backgroundColor: currentTheme.backgroundColor}}>
                         <View style={styles.container}>
-                                <Text style={styles.tilte}>Tab Bar</Text> 
+                                <Text style={[styles.tilte,{color: currentTheme.color}]}>Tab Bar</Text> 
                                 <View style={{flexDirection:'row'}}>
-                                    <Text style={styles.text}>Habit Stat</Text>
+                                    <Text style={[styles.text,{color: currentTheme.color}]}>Habit Stat</Text>
                                     <Switch 
                                         style={styles.switchType}
                                         trackColor={{ false: "#d9d6c6", true: "orange" }}

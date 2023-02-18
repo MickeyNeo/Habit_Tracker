@@ -62,7 +62,7 @@ const Statistic = ({navigation}) => {
 
     return(
         <View style={[style.container,{backgroundColor: currentTheme.backgroundColor}]}> 
-            <View style={{flexDirection:'row',}}>
+            <View style={{flexDirection:'row'}}>
                 <Foundation
                     style={{margin:5,marginLeft:15}}  
                     name="graph-pie" size={27} color="pink" />
@@ -111,7 +111,7 @@ const Statistic = ({navigation}) => {
             </View>
             <View style={{flex: 1}}>
                 <ScrollView>
-                    <Calendar style={[style.calendar,{backgroundColor: currentTheme.backgroundColor}]} firstDay={1}/>
+                    <Calendar style={[style.calendar,{backgroundColor:(currentTheme.backgroundColor=='#1f1e1e')?'#918e8e':'#f5f5f5'}]} firstDay={1}/>
                     <View style={[style.static,{backgroundColor:(currentTheme.backgroundColor=='#1f1e1e')?'#918e8e':'#f5f5f5'}]}>
                         <View style = {{flexDirection: 'column',alignItems:'center' }}>
                             <ProgressChart

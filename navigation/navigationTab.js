@@ -143,7 +143,7 @@ function MainTabNavigator () {
             color: state.currentTheme.color, // đổi màu chữ header
           },}} name='HabitManager' component={HabitManager}/>
         <Stack.Screen name="Export" component={Export} />
-        <Stack.Screen options={{headerStyle: {
+        <Stack.Screen options={{ headerTitle: 'Tag Manager',headerStyle: {
             backgroundColor: state.currentTheme.backgroundColor, // đổi màu nền header
           },
           headerTitleStyle: {
