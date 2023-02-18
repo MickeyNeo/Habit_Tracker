@@ -148,7 +148,7 @@ const HabitDetail = ({navigation,route}) => {
                                 
                             </View>
 
-                            <View style = {{flexDirection: 'row', justifyContent: 'center', bottom:'60%'}}> 
+                            <View style = {{flexDirection: 'row', justifyContent: 'center', bottom:'30%'}}> 
                                 {/* <TouchableOpacity >
                                 <Image
                                     source={plus}
