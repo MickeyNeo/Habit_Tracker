@@ -21,7 +21,7 @@ import { useEffect } from "react";
 const HabitOfADay = ({navigation,route}) =>{
     const {habit} = route.params;
     
-    getUnitNameforHOAD(habit)
+    // getUnitNameforHOAD(habit, state, dispatch)
     const date = new Date();
     const currentMonth = date.getMonth() + 1
     const nameOfMonth = date.toDateString().slice(4,-8)
@@ -62,8 +62,8 @@ const HabitOfADay = ({navigation,route}) =>{
         useShadowColorFromDataset: false, // optional,
         fillShadowGradientFrom: 'black'
     };
-    // getMemmoCurDay(habit)
-    // getDataOfCurWeek(habit)
+    // getMemmoCurDay(habit, state, dispatch)
+    // getDataOfCurWeek(habit, state, dispatch)
     
     const dailyAverage = Math.round(state.TotalVolumn / state.DayStarted * 100) / 100;
     const overallRate = Math.round(dailyAverage / habit.goalNo * 100) / 100 ;

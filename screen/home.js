@@ -19,7 +19,7 @@ const Home = ({ navigation }) => {
   // const db = SQLite.openDatabase('Habit_tracker.db');
 
   // refreshDatabase();
-  // initDatabase();
+  initDatabase();
 
   // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
   useEffect(() => {
@@ -191,7 +191,7 @@ const Home = ({ navigation }) => {
       </View>
       <View style = {{flex: 0.8, flexDirection: 'column'}}>
         
-      {HabitZone(listH,navigation,selectedDay,listP, state,checkShow)}
+      {/* {HabitZone(listH,navigation,selectedDay,listP, state,checkShow)} */}
       </View>
     </View>
   )

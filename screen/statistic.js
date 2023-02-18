@@ -20,7 +20,7 @@ import {
   } from "react-native-chart-kit";
 import { calculateDayTotalDone, CalculateOverallRate, CountPerfectDay, CalculateDailyAverage, 
     CountPerfectStreak, calculateDayDoneInMonth, calculateMonthlyVolumn, calculateTotalVolumn, 
-    calculateCurrentStreak, calculateBestStreak, calculateDayStarted, getDataOfCurWeek, getMemmoCurDay} from '../Store/database';
+    calculateCurrentStreak, calculateBestStreak, calculateDayStarted, getDataOfCurWeek, getMemmoCurDay, getUnitNameforHOAD} from '../Store/database';
 import { useEffect } from 'react';
 // import {calculateDayTotalDone, CountPerfectDay, CalculateOverallRate, CountPerfectStreak, CalculateDailyAverage} from '../Store/database';
 // import { set } from 'core-js/core/dict';
@@ -40,7 +40,7 @@ const Statistic = ({navigation}) => {
     
     const dataPro = {
         labels: ['Monthly_rate'], // optional
-        data: [0.8]
+        data: [state.OverallRate]
       };
     const chartConfig = {
         backgroundGradientFrom: (currentTheme.backgroundColor=='#1f1e1e')?'#918e8e':'#f5f5f5',
@@ -74,15 +74,16 @@ const Statistic = ({navigation}) => {
                             onPress={() => {
 
                                 // console.log(habit);
-                                // getMemmoCurDay(habit, state, dispatch);
-                                // getDataOfCurWeek(habit, state, dispatch);
+                                getMemmoCurDay(habit, state, dispatch);
+                                getDataOfCurWeek(habit, state, dispatch);
+                                getUnitNameforHOAD(habit, state, dispatch)
                                 calculateDayDoneInMonth(habit, dispatch);
                                 calculateDayTotalDone(habit, dispatch);
                                 calculateMonthlyVolumn(habit, dispatch);
                                 calculateTotalVolumn(habit, dispatch);
                                 calculateCurrentStreak(habit, dispatch);
-                                // calculateBestStreak(habit, dispatch);
-                                // calculateDayStarted(habit, dispatch);
+                                calculateBestStreak(habit, dispatch);
+                                calculateDayStarted(habit, dispatch);
 
                                 // dispatch(setDayDoneInMonth(state.DayDoneInMonth));
                                 // dispatch(setDayTotalDone(state.DayTotalDone));

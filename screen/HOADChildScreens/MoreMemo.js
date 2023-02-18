@@ -8,7 +8,7 @@ import { useStore } from "../../Store";
 
 export default function More (params){
     const[state, dispatch] = useStore()
-    getAllMemmo(params.habit)
+    getAllMemmo(params.habit, state, dispatch)
     // console.log(state.listMemo)
     // console.log(state.listMemoDate)
     return(         

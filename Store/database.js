@@ -909,7 +909,6 @@ const calculateDayStarted  = (habit, dispatch) => {
 
 const calculateDayTotalDone  = (habit, dispatch) => {
     console.log("Calculate Day Total Done");
-    console.log(habit);
     if (habit instanceof Array) {
         db.transaction(tx => {
             tx.executeSql("SELECT COUNT(*)\
@@ -1010,8 +1009,8 @@ const calculateBestStreak = (habit, dispatch) => {
     })  
 }
 
-const getUnitName = (habit) => {
-    const[state, dispatch] = useStore()
+const getUnitName = (habit, state, dispatch) => {
+    // const[state, dispatch] = useStore()
 
     db.transaction(tx => {
         tx.executeSql('SELECT Unit.name \
@@ -1037,8 +1036,8 @@ const getUnitName = (habit) => {
         );
     })  
 }
-const getUnitNameforHOAD = (habit) => {
-    const[state, dispatch] = useStore()
+const getUnitNameforHOAD = (habit, state, dispatch) => {
+    // const[state, dispatch] = useStore()
 
     db.transaction(tx => {
         tx.executeSql('SELECT Unit.name \
@@ -1048,7 +1047,7 @@ const getUnitNameforHOAD = (habit) => {
         (txObj, resultSet) => {
             // console.log("Unit Name",habit.name);
             // console.log(resultSet);
-            // console.log(resultSet.rows[0]['name']);
+            console.log(resultSet.rows._array['name']);
             if (Platform.OS === 'ios' || Platform.OS === 'android') {
                 if(state.unitHOAD != resultSet.rows._array['name']){
                     dispatch(setUnitHOAD(resultSet.rows._array['name']))
@@ -1093,21 +1092,21 @@ const getDataOfCurWeek = (habit, state, dispatch) => {
         AND strftime('%Y',date) = strftime('%Y','now')", 
         [habit.name],
         (txObj, resultSet) => {
-            // console.log('length',resultSet.rows.length);
-            // console.log('res',resultSet);
-            // console.log('state.DataOfCurWeek',state.DataOfCurWeek);
+            console.log('length',resultSet.rows.length);
+            console.log('res',resultSet);
+            console.log('state.DataOfCurWeek',state.DataOfCurWeek);
             let temp = [0,0,0,0,0,0,0]
             if(state.DataOfCurWeek.length == 0){
                 if(resultSet.rows.length != 0){
                     for(let i = 0; i< resultSet.rows.length; i++){
-                        if(resultSet.rows[i]["strftime('%w',date)"] == 0){
-                            temp[6] = resultSet.rows[i]['progress']
+                        if(resultSet.rows._array[i]["strftime('%w',date)"] == 0){
+                            temp[6] = resultSet.rows._array[i]['progress']
                         }
                         else{
-                            temp[resultSet.rows[i]["strftime('%w',date)"]-1] = resultSet.rows[i]['progress']
+                            temp[resultSet.rows._array[i]["strftime('%w',date)"]-1] = resultSet.rows._array[i]['progress']
                         }
                     }
-                    // console.log('Done: ', temp)
+                    console.log('Done: ', temp)
                     dispatch(setDataOfCurWeek(temp))
                     // console.log(1);
                 }
@@ -1124,7 +1123,8 @@ const getDataOfCurWeek = (habit, state, dispatch) => {
 }
 
 const getMemmoCurDay = (habit, state, dispatch) => {
-
+    // console.log("Memo current day");
+    // console.log("Habit", habit)
     db.transaction(tx => {
         tx.executeSql("SELECT content,date \
         FROM Memo\
@@ -1160,8 +1160,8 @@ const getMemmoCurDay = (habit, state, dispatch) => {
     })  
 }
 
-const getAllMemmo = (habit) => {
-    const[state, dispatch] = useStore()
+const getAllMemmo = (habit, state, dispatch) => {
+    // const[state, dispatch] = useStore()
 
     db.transaction(tx => {
         tx.executeSql("SELECT content,date \
@@ -1195,11 +1195,11 @@ const getAllMemmo = (habit) => {
 const numberHabitInDay = (listHabit, date) => {
     var count = 0;
     for (var habit of listHabit) {
-        if (habit.frequencyType == 'Day') {
+        if (habit.frequencyType == 'Daily') {
             // console.log('Habit Day: ', date);
             count += 1;
         }
-        else if (habit.frequencyType == 'Week') {
+        else if (habit.frequencyType == 'Weekly') {
             let day = moment(date).format('ddd');
             // console.log('Habit Week: ', day.toUpperCase() , habit.frequency.split(','));
             if (habit.frequency.split(',').includes(day.toUpperCase())) {
@@ -1207,7 +1207,7 @@ const numberHabitInDay = (listHabit, date) => {
                 count += 1;
             }
         }
-        else if (habit.frequencyType == 'Month') {
+        else if (habit.frequencyType == 'Monthly') {
             // console.log('Habit Month: ', date.slice(8), habit.frequency.split());
             if (date.slice(8) in habit.frequency.split()) {
                 count += 1;
@@ -1359,8 +1359,12 @@ const CalculateOverallRate = (listHabit, dispatch) => {
 
             if (Platform.OS === 'ios' || Platform.OS === 'android') {
                 for (var day of resultSet.rows._array){
-                    // console.log(day['COUNT(*)'], numberHabitInDay(listHabit, day['date']))
-                    rates.push(day['COUNT(*)'] * 1.0 / numberHabitInDay(listHabit, day['date'])) 
+                    // console.log("CalculateOverallRate",day['COUNT(*)'], numberHabitInDay(listHabit, day['date']))
+                    if(numberHabitInDay(listHabit, day['date']) == 0){
+                        rates.push(1)
+                    }else{
+                        rates.push(day['COUNT(*)'] * 1.0 / numberHabitInDay(listHabit, day['date'])) 
+                    }
                 }
               } else {
                 for (var day of resultSet.rows){
@@ -1371,7 +1375,7 @@ const CalculateOverallRate = (listHabit, dispatch) => {
             
 
             const average = array => array.reduce((a, b) => a + b) / array.length;
-            // console.log(rates)
+            console.log(rates)
             // console.log('Overall Rate: ', average(rates));
             dispatch(setOverallRate(Math.round(average(rates) * 100)/100));
 
