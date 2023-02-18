@@ -17,7 +17,7 @@ import Modal from "react-native-modal";
 
 import { useStore , setListProgressDay, delHabit, editListProgressDay} from '../Store'
 import { setHabitInput } from '../Store/action'
-import { db, addHabit } from '../Store/database'
+import { db, addHabit, updateHabit } from '../Store/database'
 import { Tile } from "@rneui/base";
 const EditHabit = ({navigation, route}) => {
   const frequency_of_day = ["Daily", "Weekly", "Monthly"]
@@ -164,6 +164,7 @@ const EditHabit = ({navigation, route}) => {
     }
     else 
     handleHabit();
+    updateHabit(Habit, habit)
     navigation.goBack()
   }
   return (

@@ -689,18 +689,18 @@ const updateHabit = (habit, newHabit) => {
     if (habit.name != newHabit.name) {
 
         // console.log("Updating habit name");
-        db.transaction(tx => {
-            tx.executeSql('UPDATE HaveTag \
-            SET name = ?\
-            WHERE name = ?', 
-            [newHabit.name, habit.name],
-            (txObj, resultSet) => {
-                // console.log("Update habit name ", habit.name, " from table HaveTag to ", newHabit.name);
-                // console.log(resultSet);
-            },
-            (txObj, error) => console.log(error)
-            );
-        })
+        // db.transaction(tx => {
+        //     tx.executeSql('UPDATE HaveTag \
+        //     SET name = ?\
+        //     WHERE name = ?', 
+        //     [newHabit.name, habit.name],
+        //     (txObj, resultSet) => {
+        //         // console.log("Update habit name ", habit.name, " from table HaveTag to ", newHabit.name);
+        //         // console.log(resultSet);
+        //     },
+        //     (txObj, error) => console.log(error)
+        //     );
+        // })
 
         db.transaction(tx => {
             tx.executeSql('UPDATE Reminder \
@@ -733,14 +733,14 @@ const updateHabit = (habit, newHabit) => {
     db.transaction(tx => {
         tx.executeSql('UPDATE Habit \
         SET name = ?, note = ?, frequency = ?, color = ?, frequencyType = ?, timeRange = ?, reminderMessage = ?, showMemo = ?, \
-        chartType = ?, habitStartDate = ?, habitEndDate = ?, goalNo = ?, goalPeriod = ?, unitID = ?, icon = ?\, iconFamily = ?\
+        chartType = ?, habitStartDate = ?, habitEndDate = ?, goalNo = ?, goalPeriod = ?, unitID = ?, icon = ?\, iconFamily = ?, flag = ?, tag = ?, id = ?\
         WHERE name = ?', 
         [newHabit.name, newHabit.note, newHabit.frequency, newHabit.color, newHabit.frequencyType, newHabit.timeRange, 
         newHabit.reminderMessage, newHabit.showMemo, newHabit.chartType, newHabit.habitStartDate, newHabit.habitEndDate, 
-        newHabit.goalNo, newHabit.goalPeriod, newHabit.unitID, newHabit.icon, newHabit.iconFamily, habit.name],
+        newHabit.goalNo, newHabit.goalPeriod, newHabit.unitID, newHabit.icon, newHabit.iconFamily, newHabit.flag, newHabit.tag, newHabit.id, habit.name],
         (txObj, resultSet) => {
-            // console.log("Update habit ", habitName, " from table Habit");
-            // console.log(resultSet);
+            console.log("Update habit ", habit.name, " to ", newHabit.name, "from table Habit");
+            console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
