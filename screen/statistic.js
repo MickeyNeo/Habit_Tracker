@@ -73,16 +73,17 @@ const Statistic = ({navigation}) => {
                         <TouchableOpacity key={index}
                             onPress={() => {
 
-                                console.log(habit);
-                                getMemmoCurDay(habit, state, dispatch);
-                                getDataOfCurWeek(habit, state, dispatch);
+                                // console.log(habit);
+                                // getMemmoCurDay(habit, state, dispatch);
+                                // getDataOfCurWeek(habit, state, dispatch);
                                 calculateDayDoneInMonth(habit, dispatch);
                                 calculateDayTotalDone(habit, dispatch);
                                 calculateMonthlyVolumn(habit, dispatch);
                                 calculateTotalVolumn(habit, dispatch);
                                 calculateCurrentStreak(habit, dispatch);
-                                calculateBestStreak(habit, dispatch);
-                                calculateDayStarted(habit, dispatch);
+                                // calculateBestStreak(habit, dispatch);
+                                // calculateDayStarted(habit, dispatch);
+
                                 // dispatch(setDayDoneInMonth(state.DayDoneInMonth));
                                 // dispatch(setDayTotalDone(state.DayTotalDone));
                                 // dispatch(setMonthlyVolumn(state.MonthlyVolumn));

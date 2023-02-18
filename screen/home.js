@@ -17,7 +17,7 @@ const Home = ({ navigation }) => {
   const {currentTheme} =state
   
   // const db = SQLite.openDatabase('Habit_tracker.db');
-  // refreshDatabase();
+  //refreshDatabase();
   //initDatabase();
 
   // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
@@ -33,6 +33,7 @@ const Home = ({ navigation }) => {
   }, []); // 👈️ empty dependencies array
   const today = new Date();
   const [selectedDay, setSelectedDay] = useState(format(today, 'MM/dd/yyyy'));
+  const [checkShow, setCheckShow] = useState(0)
   const listH = state.listHabit
   const listP = state.listProgressDay
 
@@ -42,7 +43,7 @@ const Home = ({ navigation }) => {
   //loadSetting(state, dispatch);
   /* loadUnit(); */
   console.log('list', state.listHabit)
-  const HabitZone = (values,navigation,date,listProgressDay, state) => {
+  const HabitZone = (values,navigation,date,listProgressDay, state,check) => {
     //console.log('date',date)
     let day = moment(date.dateString).format('ddd')
     day = day.toUpperCase()
@@ -75,84 +76,88 @@ const Home = ({ navigation }) => {
       return null
     };
     if (arr3 != '')
-    return (
-    <ScrollView>
-      <View style = {{flexDirection: 'column', padding: 10, justifyContent: 'space-evenly'}}>
-
-        {arr3.map((value) => {
-          // let pickDay = value.frequency;
-          // pickDay = pickDay.split(',')
-          // for (let i = 0; i < pickDay.length; i++) {
-          //   if (pickDay[i] == day ) {
-
-          console.log('day' ,value.date)
-          if (value.date===date.dateString){
-              var valueGoal = value.goalNo
-              var checkShow = null 
-              //getUnitName(value)
-              if (value.unitID === 1 || value.unitID === 2 || value.unitID == 3 ){
-                  {checkShow = 1; 
-                    if (value.unitID === 2 ) valueGoal= value.goalNo*60
-                    else if (value.unitID === 3) valueGoal= value.goalNo*3600
-                    else valueGoal= value.goalNo
-                  }
-              }else{
-                  checkShow = 0
-              }
-              const doMath=()=>{
-                if (checkShow==1){
-                const {days, hours, minutes, seconds} = handleTime(value.progress)
-                //console.log(days, hours, minutes, seconds)
-                if (hours!==0)
-                  return(<Text>{hours}h {minutes}m {seconds}s</Text>)
-                else if (minutes!==0)
-                  return(<Text>{minutes}m {seconds}s</Text>)
-                else return(<Text>{seconds}s</Text>)
+      if (check==1)
+      {
+        return (
+          <ScrollView>
+            <View style = {{flexDirection: 'column', padding: 10, justifyContent: 'space-evenly'}}>
+  
+              {arr3.map((value) => {
+                // let pickDay = value.frequency;
+                // pickDay = pickDay.split(',')
+                // for (let i = 0; i < pickDay.length; i++) {
+                //   if (pickDay[i] == day ) {
+  
+                // console.log('day1' ,value.date)
+                if (value.date===date.dateString){
+                    var valueGoal = value.goalNo
+                    var checkShow = null 
+                    //getUnitName(value)
+                    if (value.unitID === 1 || value.unitID === 2 || value.unitID == 3 ){
+                        {checkShow = 1; 
+                          if (value.unitID === 2 ) valueGoal= value.goalNo*60
+                          else if (value.unitID === 3) valueGoal= value.goalNo*3600
+                          else valueGoal= value.goalNo
+                        }
+                    }else{
+                        checkShow = 0
+                    }
+                    const doMath=()=>{
+                      if (checkShow==1){
+                      const {days, hours, minutes, seconds} = handleTime(value.progress)
+                      //console.log(days, hours, minutes, seconds)
+                      if (hours!==0)
+                        return(<Text>{hours}h {minutes}m {seconds}s</Text>)
+                      else if (minutes!==0)
+                        return(<Text>{minutes}m {seconds}s</Text>)
+                      else return(<Text>{seconds}s</Text>)
+                      }
+                      else 
+                        return(<Text>{value.progress}</Text>)
+                    }
+                    //console.log('vlp',value.progress, 'vlg',value.goalNo)
+                    const handleMath=()=>{
+                      if (value.progress===undefined)               
+                        return 0
+                      return(value.progress/valueGoal)
+                    }
+                    
+                    //console.log(days, hours, minutes, seconds)
+                    return (
+                      <TouchableOpacity 
+                        style={{ padding: 5 }} 
+                        key={value.id} 
+                        onPress={() => navigation.navigate('HabitDetail', {habit: value, checkShow: checkShow})}>
+                        <Progress.Bar progress={handleMath()} width={null} height={state.habitBarSize?50:35} color={value.color}>
+                        {/* (value.progress)/(value.goalNo) */}
+                        </Progress.Bar>
+                        <View style={{
+                          flex: 1,
+                          position: 'absolute',
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          top:9,
+                          left:10
+                        }}>
+                            <Icons type={value.iconFamily} name={value.icon} size={state.habitBarSize?40:25} color={currentTheme.color} />
+                            <View style={{ flexDirection: 'column' }}>
+                              <Text style={{ fontSize: 10,color: currentTheme.color }}>{value.name}</Text>
+                              <Text style={{ fontSize: 8,color: currentTheme.color }}>{value.note}</Text>
+                            </View>
+                            <View style={{ alignItems: 'flex-end', flex: 1,right:10}}>
+                              {/* {!checkShow && <Text> {(value.progress)/(valueGoal)} {value.unitID.title}</Text>} */}
+                              <Text style={{color: currentTheme.color}}>{doMath()}/{value.goalNo} {findObjectById(value.unitID)}</Text>
+                            </View>
+                          </View>
+                      </TouchableOpacity>
+                    );
                 }
-                else 
-                  return(<Text>{value.progress}</Text>)
-              }
-              //console.log('vlp',value.progress, 'vlg',value.goalNo)
-              const handleMath=()=>{
-                if (value.progress===undefined)               
-                  return 0
-                return(value.progress/valueGoal)
-              }
-              
-              //console.log(days, hours, minutes, seconds)
-              return (
-                <TouchableOpacity 
-                  style={{ padding: 5 }} 
-                  key={value.id} 
-                  onPress={() => navigation.navigate('HabitDetail', {habit: value, checkShow: checkShow})}>
-                  <Progress.Bar progress={handleMath()} width={null} height={state.habitBarSize?50:35} color={value.color}>
-                  {/* (value.progress)/(value.goalNo) */}
-                  </Progress.Bar>
-                  <View style={{
-                    flex: 1,
-                    position: 'absolute',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    top:9,
-                    left:10
-                  }}>
-                      <Icons type={value.iconFamily} name={value.icon} size={state.habitBarSize?40:25} color={currentTheme.color} />
-                      <View style={{ flexDirection: 'column' }}>
-                        <Text style={{ fontSize: 10,color: currentTheme.color }}>{value.name}</Text>
-                        <Text style={{ fontSize: 8,color: currentTheme.color }}>{value.note}</Text>
-                      </View>
-                      <View style={{ alignItems: 'flex-end', flex: 1,right:10}}>
-                        {/* {!checkShow && <Text> {(value.progress)/(valueGoal)} {value.unitID.title}</Text>} */}
-                        <Text style={{color: currentTheme.color}}>{doMath()}/{value.goalNo} {findObjectById(value.unitID)}</Text>
-                      </View>
-                    </View>
-                </TouchableOpacity>
-              );
-          }
-  })}
-      </View>
-    </ScrollView>
-  )
+        })}
+            </View>
+          </ScrollView>
+        )
+      }
+        
   else 
     return (
       <View style={{backgroundColor: 'white', flex: 1}}>
@@ -177,6 +182,7 @@ const Home = ({ navigation }) => {
           <WeekCalendar 
             theme={styles.theme}
             onDayPress = {(day) => {
+              setCheckShow(1),
               setSelectedDay(day)}} 
             firstDay={state.dateBarStyle?1:0}
            />
@@ -184,7 +190,7 @@ const Home = ({ navigation }) => {
       </View>
       <View style = {{flex: 0.8, flexDirection: 'column'}}>
         
-        {HabitZone(listH,navigation,selectedDay,listP, state)}
+      {HabitZone(listH,navigation,selectedDay,listP, state,checkShow)}
       </View>
     </View>
   )
