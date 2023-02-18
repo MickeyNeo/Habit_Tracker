@@ -8,8 +8,8 @@ export const habitInit = "INSERT INTO Habit (name, note, frequency, color, frequ
     '2', 'Day', '9', 'running', 'FontAwesome5','rn', '1', 'Health')"
 
 export const memoInit = "INSERT INTO Memo (habitName, date, content, progress) VALUES\
-('Run', '2023-02-21', 'Im on a roll', '0'),\
-('Run', '2023-02-20', 'So happy', '2'),\
+('Run', '2023-02-14', 'Im on a roll', '0'),\
+('Run', '2023-02-13', 'So happy', '2'),\
 ('Meditate', '2023-02-22', 'More to go', '2'),\
 ('Meditate', '2023-02-18', 'Feel so good', '4'),\
 ('Meditate', '2023-02-17', 'Im on a roll', '7'),\
