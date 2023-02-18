@@ -1141,7 +1141,7 @@ const getMemmoCurDay = (habit, state, dispatch) => {
             if(resultSet.rows._array.length != 0){
                 if(state.memoCurDay != resultSet.rows._array['content'] && 
                     state.memoCurDate != resultSet.rows._array['date']){
-                    dispatch(setMemmoCurDay([resultSet.rows._array['content'], resultSet.rows.array['date']]))
+                    dispatch(setMemmoCurDay([resultSet.rows._array['content'], resultSet.rows._array['date']]))
                 }
             }
             } else {
@@ -1178,8 +1178,8 @@ const getAllMemmo = (habit, state, dispatch) => {
                 if(state.listMemo.length == 0 && state.listMemoDate.length == 0 ){
                     if(resultSet.rows.length != 0){
                         for(let i = 0; i< resultSet.rows.length; i++){
-                            tempMem.push(resultSet.rows[i]['content'])
-                            tempMemDate.push(resultSet.rows[i]['date'].replace(/-/g,'/'))
+                            tempMem.push(resultSet.rows._array[i]['content'])
+                            tempMemDate.push(resultSet.rows._array[i]['date'].replace(/-/g,'/'))
                         }
                         dispatch(setListMemmo([tempMem, tempMemDate]))
     
