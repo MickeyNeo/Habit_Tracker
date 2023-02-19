@@ -20,7 +20,8 @@ import {
   } from "react-native-chart-kit";
 import { calculateDayTotalDone, CalculateOverallRate, CountPerfectDay, CalculateDailyAverage, 
     CountPerfectStreak, calculateDayDoneInMonth, calculateMonthlyVolumn, calculateTotalVolumn, 
-    calculateCurrentStreak, calculateBestStreak, calculateDayStarted, getDataOfCurWeek, getMemmoCurDay, getUnitNameforHOAD} from '../Store/database';
+    calculateCurrentStreak, calculateBestStreak, calculateDayStarted, getDataOfCurWeek, getMemmoCurDay, 
+    getUnitNameforHOAD,getProgressCurMonth } from '../Store/database';
 import { useEffect } from 'react';
 // import {calculateDayTotalDone, CountPerfectDay, CalculateOverallRate, CountPerfectStreak, CalculateDailyAverage} from '../Store/database';
 // import { set } from 'core-js/core/dict';
@@ -74,6 +75,7 @@ const Statistic = ({navigation}) => {
                             onPress={() => {
 
                                 // console.log(habit);
+                                getProgressCurMonth(habit, state, dispatch)
                                 getMemmoCurDay(habit, state, dispatch);
                                 getDataOfCurWeek(habit, state, dispatch);
                                 getUnitNameforHOAD(habit, state, dispatch)
@@ -84,7 +86,6 @@ const Statistic = ({navigation}) => {
                                 calculateCurrentStreak(habit, dispatch);
                                 calculateBestStreak(habit, dispatch);
                                 calculateDayStarted(habit, dispatch);
-
                                 // dispatch(setDayDoneInMonth(state.DayDoneInMonth));
                                 // dispatch(setDayTotalDone(state.DayTotalDone));
                                 // dispatch(setMonthlyVolumn(state.MonthlyVolumn));

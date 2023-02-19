@@ -20,10 +20,17 @@ import { SET_CHECK_HAVE_MEMO } from './constants'
 import { EDIT_LIST_PROGRESS_DAY, DEL_LIST_PROGRESS_DAY } from './constants'
 import { SET_DATE_BAR_STYLE } from './constants'
 import { SET_HABIT_BAR_SIZE } from './constants'
+import { SET_PRO_CUR_MONTH } from './constants'
 export const setHabitInput = payload => ({
     type: SET_HABIT_INPUT,
     payload 
 })
+
+export const setProCurMonth = payload => ({
+    type: SET_PRO_CUR_MONTH,
+    payload 
+})
+
 
 export const setCheckHaveMemo = payload => ({
     type: SET_CHECK_HAVE_MEMO,

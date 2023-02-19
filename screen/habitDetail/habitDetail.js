@@ -182,7 +182,7 @@ const HabitDetail = ({navigation,route}) => {
                     </View>
                 ):(
                     <View style = {styles.showView}>
-                        <View style = {{flexDirection: 'column',alignItems:'center', top: '10%'}}>
+                        <View style = {{flexDirection: 'column',alignItems:'center', top: '1%'}}>
                             <ProgressChart
                                 data={data}
                                 width={Dimensions.get('window').width-40}
@@ -214,7 +214,7 @@ const HabitDetail = ({navigation,route}) => {
                                             color='gray' />
                             </TouchableOpacity>
                         </View>
-                        <View style = {{top: '8%',flexDirection: 'column', justifyContent: 'center', alignItems: 'center',}}>
+                        <View style = {{bottom: '2%',flexDirection: 'column', justifyContent: 'center', alignItems: 'center',}}>
 
                             <View style = {{flexDirection: 'row'}}>
                                 <TouchableOpacity onPress={() => {setModalVisible(true)}}>
@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
     insideCircle: {
         flexDirection: 'row',
         position: 'relative',
-        bottom: 170,
+        bottom: '70%',
         left: '1%',
         justifyContent: 'center',
         alignItems: 'center',

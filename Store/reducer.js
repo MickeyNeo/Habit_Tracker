@@ -20,6 +20,7 @@ import { DEL_HABIT } from './constants'
 import { SET_LIST_PROGRESS_DAY, DEL_LIST_PROGRESS_DAY, EDIT_LIST_PROGRESS_DAY } from './constants'
 import { emptyHabitList } from './action'
 import { SET_CHECK_HAVE_MEMO } from './constants'
+import { SET_PRO_CUR_MONTH } from './constants'
 
 import theme from '../screen/styles/theme'
 
@@ -148,7 +149,8 @@ const globalState = {
     listMemo: [],
     listMemoDate: [],
     checkHaveMemo : -1,
-
+    listPro: [],
+    listProDate: [],
 
 }
 
@@ -344,6 +346,13 @@ function reducer (state , action) {
                 ...state,
                 listMemo: action.payload[0],
                 listMemoDate: action.payload[1],
+            }
+        case SET_PRO_CUR_MONTH:
+            // console.log("reducer",action.payload[0])
+            return{
+                ...state,
+                listPro: action.payload[0],
+                listProDate: action.payload[1],
             }
         case DEL_HABIT:
             return{

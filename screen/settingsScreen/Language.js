@@ -25,7 +25,7 @@ export default function Language (params){
                 animationOut ='bounceOut'
                 animationOutTiming = {500}
                 >
-                    <View style={{height: '38%', backgroundColor: 'white', borderRadius: 30, borderWidth: 1,justifyContent: 'center',backgroundColor: currentTheme.backgroundColor}}>
+                    <View style={{height: '44%', backgroundColor: 'white', borderRadius: 30, borderWidth: 1,justifyContent: 'center',backgroundColor: currentTheme.backgroundColor}}>
                         <View style={styles.container}>
                             <Text style={[styles.tilte,{color: currentTheme.color}]}>Select Language</Text>
                             <PreviewLayout
@@ -36,7 +36,7 @@ export default function Language (params){
                             />
                         </View>
                         <View style={styles.buttonType}>
-                            <Button  title="Confirm" color="white" onPress={() => {params.setModalVisible(false);dispatch((setLanguage(lg)))}} />
+                            <Button  title="Confirm" color="pink" onPress={() => {params.setModalVisible(false);dispatch((setLanguage(lg)))}} />
                         </View>
                         
                     </View>
@@ -89,20 +89,26 @@ const styles=StyleSheet.create({
         marginRight: 30,
         marginBottom: 10, 
         paddingVertical: 5,
-        backgroundColor: 'pink',
+        //backgroundColor: 'white',
     },
     text:{
         flex:1,
         marginLeft: 30,
         fontSize: 15,
-        marginTop: 30,
+        marginTop: '3%',
 
     },
     iconCheck: {
-        marginTop: 24,
+        marginTop: '3%',
         AlignItems: 'flex-end',
         marginRight:"8%"
         
+    },
+    modalContainer: {
+        backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 5,
+        alignItems: 'center',
     },
     
 })

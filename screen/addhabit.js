@@ -281,6 +281,7 @@ const AddHabit = ({navigation, route}) => {
                                 value={value.isEnabled}
                             />
                         </View>
+
                     </View> */}
                     <View style = {{flexDirection: 'column', padding: 10}}>
                         <Text style ={{fontWeight: 'bold', color: currentTheme.color }}>Habit Term</Text>
