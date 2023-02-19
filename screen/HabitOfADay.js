@@ -17,6 +17,7 @@ import {calculateDayDoneInMonth, calculateDayTotalDone, calculateMonthlyVolumn,
     getDataOfCurWeek, getUnitNameforHOAD, getMemmoCurDay, CalculateDayStarted, calculateDayStarted, deleteHabit} from '../Store/database';
 import MoreMemo from './HOADChildScreens/MoreMemo'
 import { useEffect } from "react";
+// import replace from "core-js/fn/symbol/replace";
 
 const HabitOfADay = ({navigation,route}) =>{
     const {habit} = route.params;
@@ -103,7 +104,7 @@ const HabitOfADay = ({navigation,route}) =>{
                 <ScrollView style ={{marginBottom: 10, flex:1 }}>
                     {/* <Calendar style={styles.calendar} firstDay={1}/> */}
                     <View>
-                        {CustomCalendar()}
+                        {CustomCalendar(habit, state, dispatch)}
                     </View>
 
                     {/* Yearly Status */}
@@ -240,24 +241,50 @@ const HabitOfADay = ({navigation,route}) =>{
     )
 }
 
-function CustomCalendar(props) {
+function CustomCalendar(props, state, dispatch) {
     const habit = props
     const none = {key: '0', color: 'red'};
     const half = {key: '50', color: 'yellow'};
     const near = {key: '75', color: 'orange'};
     const done = {key: '100', color: 'green'};
     var temp = '2023-02-08'
+
     // const[state, dispatch] = useStore()
-    // console.log(state.listPro)
+    // console.log("state.listPro: ", state.listProDate)
+    // console.log("Habit.goalNo: ", habit.goalNo)
+    
     const getMarked = () => {
 
         let marked = {};
-        // for(let i = 0; i<= state.listPro.length; i++){
-        //     if
-        // }
-          marked[temp] = {
-                dots: [none]
-          };
+        if (state.listProDate.length != 0)
+        for(let i = 0; i< state.listPro.length; i++){
+            let temp = state.listPro[i]/habit.goalNo;
+            // console.log(typeof state.listProDate[i])
+            let tempDate = state.listProDate[i].split('/').join('-');
+            if (temp == 0) {
+                marked[tempDate]  = {
+                    dots: [none] 
+                };
+            }
+            else if (temp <= 0.5) {
+                marked[tempDate]  = {
+                    dots: [half]
+                };
+            }
+            else if (temp <= .75) {
+                marked[tempDate]  = {
+                    dots: [near]
+                };
+            }
+            else if (temp <= 1) {
+                marked[tempDate]  = {
+                    dots: [done]
+                };
+            }
+        }
+        //   marked[temp] = {
+        //         dots: [none]
+        //   };
         
 
         return marked;
