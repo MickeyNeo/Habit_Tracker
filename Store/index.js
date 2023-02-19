@@ -43,4 +43,5 @@ export {setMemmoCurDay, setListMemmo} from './action'
 export {setEveryHabitDone, setPerfectDayCount} from './action'
 export {setOverallRate, setDailyAverage} from './action'
 export {setCheckHaveMemo} from './action'
+export {setProCurMonth} from './action'
 

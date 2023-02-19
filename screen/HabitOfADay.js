@@ -27,10 +27,11 @@ const HabitOfADay = ({navigation,route}) =>{
     const nameOfMonth = date.toDateString().slice(4,-8)
     
     // console.log(habit)
-    // console.log(nameOfMonth)
     const [isEnabled, setIsEnabled] = useState(false);
     const[state, dispatch] = useStore()
     const {currentTheme} =state
+    // console.log(state.listPro)
+
     // calculateDayDoneInMonth(habit, dispatch);
     // calculateDayTotalDone(habit, dispatch);
     // calculateMonthlyVolumn(habit, dispatch);
@@ -240,20 +241,24 @@ const HabitOfADay = ({navigation,route}) =>{
 }
 
 function CustomCalendar(props) {
+    const habit = props
     const none = {key: '0', color: 'red'};
     const half = {key: '50', color: 'yellow'};
     const near = {key: '75', color: 'orange'};
     const done = {key: '100', color: 'green'};
-   
+    var temp = '2023-02-08'
+    // const[state, dispatch] = useStore()
+    // console.log(state.listPro)
     const getMarked = () => {
+
         let marked = {};
-        // for(let i = 1; i <= 10; i++) {
-        //   let day = i.toString().padStart(2, '0');
-          marked['2023-02-08'] = {
+        // for(let i = 0; i<= state.listPro.length; i++){
+        //     if
+        // }
+          marked[temp] = {
                 dots: [none]
           };
-        // }
-        // console.log(marked)
+        
 
         return marked;
       };

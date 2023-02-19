@@ -6,7 +6,7 @@ import { addHabitList, emptyHabitList, setDayStarted, setOverallRate, setPerFect
 import {useStore,setDayDoneInMonth,setDayTotalDone,setMonthlyVolumn,
     setTotalVolumn, setCurrentStreak, setBestStreak, setUnit,setUnitHOAD,
     setDataOfCurWeek, setMemmoCurDay, setListMemmo, setEveryHabitDone, setPerfectDayCount,
-    setDailyAverage, setCheckHaveMemo} from '../Store'
+    setDailyAverage, setCheckHaveMemo, setProCurMonth} from '../Store'
 import {React, useState } from 'react';
 import { memoInit, habitInit, reminderInit, unitInit, tagInit, haveTagInit } from './init_data';
 import moment from 'moment';
@@ -749,8 +749,8 @@ const updateHabit = (habit, newHabit) => {
 }
 
 const calculateMonthlyVolumn = (habit, dispatch) => {
-    console.log("Calculated Monthly Volumn");
-    console.log(habit.name)
+    // console.log("Calculated Monthly Volumn");
+    // console.log(habit.name)
     db.transaction(tx => {
         tx.executeSql("SELECT SUM(progress) \
         FROM Memo\
@@ -775,8 +775,8 @@ const calculateMonthlyVolumn = (habit, dispatch) => {
 }
 
 const calculateTotalVolumn  = (habit, dispatch) => {
-   console.log("Calculated Total Volumn");    
-    console.log(habit.name)
+//    console.log("Calculated Total Volumn");    
+//     console.log(habit.name)
     db.transaction(tx => {
         tx.executeSql('SELECT SUM(progress) \
         FROM Memo\
@@ -803,7 +803,7 @@ const calculateTotalVolumn  = (habit, dispatch) => {
 }
 
 const calculateDayDoneInMonth = (habit, dispatch) => {
-    console.log("Calculated Day Done in month");
+    // console.log("Calculated Day Done in month");
 
     // console.log(habit.name);
     db.transaction(function(tx) {
@@ -881,7 +881,7 @@ const calculateDayDoneInMonth = (habit, dispatch) => {
 } */
 
 const calculateDayStarted  = (habit, dispatch) => {
-    console.log("Calculate Day Started ", habit.name);
+    // console.log("Calculate Day Started ", habit.name);
 
     db.transaction(tx => {
         tx.executeSql("SELECT COUNT(*)\
@@ -910,7 +910,7 @@ const calculateDayStarted  = (habit, dispatch) => {
 }
 
 const calculateDayTotalDone  = (habit, dispatch) => {
-    console.log("Calculate Day Total Done");
+    // console.log("Calculate Day Total Done");
     if (habit instanceof Array) {
         db.transaction(tx => {
             tx.executeSql("SELECT COUNT(*)\
@@ -961,7 +961,7 @@ const calculateDayTotalDone  = (habit, dispatch) => {
 }
 
 const calculateCurrentStreak = (habit, dispatch) => {
-    console.log("Calculated Current Streak, ", habit.name);
+    // console.log("Calculated Current Streak, ", habit.name);
 
     db.transaction(tx => {
         tx.executeSql('SELECT date \
@@ -975,7 +975,7 @@ const calculateCurrentStreak = (habit, dispatch) => {
 
             let streak = CurrentStreak(resultSet.rows);
 
-            console.log('streak ', streak);
+            // console.log('streak ', streak);
 
             // if(state.CurrentStreak != streak){
                 dispatch(setCurrentStreak(streak))
@@ -987,7 +987,7 @@ const calculateCurrentStreak = (habit, dispatch) => {
 }
 
 const calculateBestStreak = (habit, dispatch) => {
-    console.log("Calculated Best Streak ", habit.name);
+    // console.log("Calculated Best Streak ", habit.name);
 
     db.transaction(tx => {
         tx.executeSql('SELECT date \
@@ -1049,7 +1049,7 @@ const getUnitNameforHOAD = (habit, state, dispatch) => {
         (txObj, resultSet) => {
             // console.log("Unit Name",habit.name);
             // console.log(resultSet);
-            console.log(resultSet.rows._array['name']);
+            // console.log("here",resultSet.rows._array['name']);
             if (Platform.OS === 'ios' || Platform.OS === 'android') {
                 if(state.unitHOAD != resultSet.rows._array['name']){
                     dispatch(setUnitHOAD(resultSet.rows._array['name']))
@@ -1094,9 +1094,9 @@ const getDataOfCurWeek = (habit, state, dispatch) => {
         AND strftime('%Y',date) = strftime('%Y','now')", 
         [habit.name],
         (txObj, resultSet) => {
-            console.log('length',resultSet.rows.length);
-            console.log('res',resultSet);
-            console.log('state.DataOfCurWeek',state.DataOfCurWeek);
+            // console.log('length',resultSet.rows.length);
+            // console.log('res',resultSet);
+            // console.log('state.DataOfCurWeek',state.DataOfCurWeek);
             let temp = [0,0,0,0,0,0,0]
             if(state.DataOfCurWeek.length == 0){
                 if(resultSet.rows.length != 0){
@@ -1108,7 +1108,7 @@ const getDataOfCurWeek = (habit, state, dispatch) => {
                             temp[resultSet.rows._array[i]["strftime('%w',date)"]-1] = resultSet.rows._array[i]['progress']
                         }
                     }
-                    console.log('Done: ', temp)
+                    // console.log('Done: ', temp)
                     dispatch(setDataOfCurWeek(temp))
                     // console.log(1);
                 }
@@ -1177,7 +1177,7 @@ const getAllMemmo = (habit, state, dispatch) => {
             let tempMem = []
             let tempMemDate = []
             if(resultSet.rows.length != 0){
-                if(state.listMemo.length == 0 && state.listMemoDate.length == 0 ){
+                // if(state.listMemo.length == 0 && state.listMemoDate.length == 0 ){
                     if(resultSet.rows.length != 0){
                         for(let i = 0; i< resultSet.rows.length; i++){
                             tempMem.push(resultSet.rows._array[i]['content'])
@@ -1186,7 +1186,46 @@ const getAllMemmo = (habit, state, dispatch) => {
                         dispatch(setListMemmo([tempMem, tempMemDate]))
     
                     }
-                }
+                // }
+            }
+        },
+        (txObj, error) => console.log(error)
+        );
+    })  
+}
+
+const getProgressCurMonth = (habit, state, dispatch) => {
+    // const[state, dispatch] = useStore()
+
+    db.transaction(tx => {
+        tx.executeSql("SELECT progress,date \
+        FROM Memo\
+        WHERE habitName = ? AND strftime('%m',date) = strftime('%m','now')\
+        AND strftime('%Y',date) = strftime('%Y','now')", 
+        [habit.name],
+        (txObj, resultSet) => {
+            console.log("getProgressCurMonth", );
+            // console.log(resultSet.rows);
+            let tempPro = []
+            let tempProDate = []
+            if(resultSet.rows.length != 0){
+                // if(state.listPro.length == 0 && state.listProDate.length == 0 ){
+                        for(let i = 0; i< resultSet.rows.length; i++){
+                            tempPro.push(resultSet.rows._array[i]['progress'])
+                            tempProDate.push(resultSet.rows._array[i]['date'].replace(/-/g,'/'))
+                        }
+                        dispatch(setProCurMonth([tempPro, tempProDate]))
+                        console.log("here: ", state.listPro)
+                        console.log("here1: ", state.listProDate)
+                // }else{
+                //         for(let i = 0; i< resultSet.rows.length; i++){
+                //             tempPro.push(resultSet.rows._array[i]['progress'])
+                //             tempProDate.push(resultSet.rows._array[i]['date'].replace(/-/g,'/'))
+                //         }
+                //         dispatch(setProCurMonth([tempPro, tempProDate]))
+                //         // console.log("here: ", state.listPro)
+                //         // console.log("here1: ", state.listProDate)
+                // }
             }
         },
         (txObj, error) => console.log(error)
@@ -1377,7 +1416,7 @@ const CalculateOverallRate = (listHabit, dispatch) => {
             
 
             const average = array => array.reduce((a, b) => a + b) / array.length;
-            console.log(rates)
+            // console.log(rates)
             // console.log('Overall Rate: ', average(rates));
             dispatch(setOverallRate(Math.round(average(rates) * 100)/100));
 
@@ -1469,4 +1508,5 @@ export {db,getAllMemmo,getMemmoCurDay,getUnitNameforHOAD, getDataOfCurWeek,getUn
     loadHabit_on_web , addHabit, refreshDatabase, initDatabase, loadUnit, deleteHabit, 
     updateHabit, loadSetting, calculateDayDoneInMonth, calculateMonthlyVolumn, 
     calculateTotalVolumn, calculateDayTotalDone, calculateCurrentStreak, calculateBestStreak, CountPerfectDay,
-    CalculateOverallRate, CalculateDailyAverage, CountPerfectStreak, loadMemo, calculateDayStarted, checkHaveMemoCurDay, addMemo,updateProgressMemo}
+    CalculateOverallRate, CalculateDailyAverage, CountPerfectStreak, loadMemo, calculateDayStarted, 
+    checkHaveMemoCurDay, addMemo,updateProgressMemo, getProgressCurMonth}

@@ -329,7 +329,7 @@ const EditHabit = ({navigation, route}) => {
                       />
                   </View>
 
-                  <View style = {{flexDirection: 'column', padding: 10}}>
+                  {/* <View style = {{flexDirection: 'column', padding: 10}}>
                       <View style = {{flex: 0.2, flexDirection: 'row', justifyContent: 'space-between'}}>
                           <Text style ={{fontWeight: 'bold', color: theme.color, alignSelf: 'center' }}>Show memo after check-in</Text>
                           <Switch
@@ -341,7 +341,7 @@ const EditHabit = ({navigation, route}) => {
                               value={value.isEnabled}
                           />
                       </View>
-                  </View>
+                  </View> */}
 
             
 

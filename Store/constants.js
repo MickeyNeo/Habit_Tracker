@@ -39,6 +39,7 @@ export const SET_DAILY_AVERAGE = 'set_daily_average'
 export const SET_PERFECT_STREAK = 'set_perfect_streak'
 export const SET_DAY_STARTED = 'set_day_started'
 export const SET_CHECK_HAVE_MEMO = 'set_check_have_memo'
+export const SET_PRO_CUR_MONTH = 'set_pro_cur_month'
 
 
 
