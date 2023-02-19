@@ -60,17 +60,18 @@ function HomeTabs({navigation}) {
                 : 'ios-home-outline';
             }
             else if (route.name === 'Settings') {
+              
               iconName = focused ? 'ios-list' : 'ios-list-outline';
             }
             else if (route.name === 'Statistic') {
                 iconName = focused ? 'ios-bar-chart' : 'ios-bar-chart-outline';
             }
-            return <Ionicons name={iconName} size={size} color={color} />;
+            return <Ionicons name={iconName} size={size} color={state.currentTheme.color} />;
           },
           tabBarActiveTintColor: '#4E3B43',
           tabBarInactiveTintColor: '#AEAC99',
           tabBarActiveBackgroundColor: '#FFB2D1',
-          tabBarInactiveBackgroundColor: 'white',
+          tabBarInactiveBackgroundColor: state.currentTheme.backgroundColor,
         })}
         >
         <Tab.Screen 
@@ -108,7 +109,7 @@ function MainTabNavigator () {
   const [state,dispatch] = useStore();
   return (
       <Stack.Navigator >
-        <Stack.Screen   
+        <Stack.Screen 
           options={({ route }) => ({
           headerTitle: getHeaderTitle(route)})} 
           name="None" component={HomeTabs} />

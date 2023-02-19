@@ -10,7 +10,7 @@ const ChooseColor = (params) => {
                 useNativeDriver={true}
                 onBackdropPress={() => params.setModalVisible(false)}
                 >
-                    <View style={{backgroundColor: 'white', 
+                    <View style={{backgroundColor: params.currentTheme.backgroundColor, 
                             borderRadius: 20, 
                             borderWidth: 1,
                             height: '60%',

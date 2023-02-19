@@ -25,6 +25,7 @@ import moment from 'moment';
 
 const HabitDetail = ({navigation,route}) => {
     const[state, dispatch] = useStore()
+    const {currentTheme} =state
     const [onClock, setOnClock] = useState(false);
     const {habit, checkShow} = route.params;
     //console.log(habit)
@@ -62,11 +63,11 @@ const HabitDetail = ({navigation,route}) => {
         data: [count/habit.goalNo]
     }
     const chartConfig = {
-        backgroundGradientFrom: "white",
+        backgroundGradientFrom: currentTheme.backgroundColor,
         backgroundGradientFromOpacity: 1,
-        backgroundGradientTo: "white",
+        backgroundGradientTo: currentTheme.backgroundColor,
         backgroundGradientToOpacity: 1,
-        color: (opacity = 1) => `rgba(138, 126, 164, ${opacity})`,
+        color: (opacity = 1) => `rgba(255,105,180, ${opacity})`,
         // strokeWidth: 2, // optional, default 3
         //barPercentage: count/habit.goalNo,
         useShadowColorFromDataset: false // optional
@@ -128,7 +129,7 @@ const HabitDetail = ({navigation,route}) => {
     
     //handleEdit(habit.id,habit.day,count,memoText)
     return (
-        <View style={styles.container}>
+        <View style={[styles.container,{backgroundColor: currentTheme.backgroundColor}]}>
             {      
                 checkShow ? (
                     <View style = {styles.showView}>
@@ -138,7 +139,7 @@ const HabitDetail = ({navigation,route}) => {
                                     until={timeCountDown}
                                     size={35}
                                     onFinish={() => alert('Finished')}
-                                    digitStyle={{backgroundColor: '#FFF', borderWidth: 2, borderColor: '#1CC625'}}
+                                    digitStyle={{backgroundColor: currentTheme.backgroundColor, borderWidth: 2, borderColor: '#1CC625'}}
                                     digitTxtStyle={{color: '#1CC625'}}
                                     timeLabelStyle={{color: 'red', fontWeight: 'bold'}}
                                     //separatorStyle={{color: '#1CC625'}}
@@ -177,10 +178,10 @@ const HabitDetail = ({navigation,route}) => {
                             {/* {TabButton(navigation,"Style", style)}
                             {TabButton(navigation,"Sound", sound)}
                             {TabButton(navigation,"Stopwatch", stopwatch)} */}
-                           {TabButtonMemo(memoText,setMemoText,memo,handleEdit,habit,count,memoText)}
-                            {TabButtonEdit(navigation,"Edit", edit, habit)}
-                           {TabButtonStat(navigation,"Stat", stat,habit)}
-                            {TabButtonRemove('Delete',remove,showAlertDelete)}
+                           {TabButtonMemo(memoText,setMemoText,memo,handleEdit,habit,count,memoText,currentTheme)}
+                            {TabButtonEdit(navigation,"Edit", edit, habit,currentTheme)}
+                           {TabButtonStat(navigation,"Stat", stat,habit,currentTheme)}
+                            {TabButtonRemove('Delete',remove,showAlertDelete,currentTheme)}
                         </View>
                     </View>
                 ):(
@@ -195,7 +196,7 @@ const HabitDetail = ({navigation,route}) => {
                                 chartConfig={chartConfig}
                                 hideLegend={true}
                             />
-                            <Text>Progress rate: {data.data[0]*100}%</Text>
+                            <Text style={{color: currentTheme.color}}>Progress rate: {data.data[0]*100}%</Text>
                             
                         </View>
                         <View style = {styles.insideCircle}>
@@ -203,18 +204,18 @@ const HabitDetail = ({navigation,route}) => {
                                     <FontAwesome5 style={{marginHorizontal: 5}} 
                                                 name={'minus'} 
                                                 size={20} 
-                                                color='gray' />
+                                                color={currentTheme.color} />
                             </TouchableOpacity>)}
                             <View style = {{flexDirection: 'column'}}>
-                                <Text style = {{color: 'black', fontSize: 27}}>{count} {habit.unitID.title}</Text>
-                                <Text>/{habit.goalNo}</Text>
+                                <Text style = {{color: currentTheme.color, fontSize: 27}}>{count} {habit.unitID.title}</Text>
+                                <Text style={{color: currentTheme.color}}>/{habit.goalNo}</Text>
                             </View>
                             <TouchableOpacity onPress={() => {setCount(prevState => prevState+1),handleEdit(habit.name,habit.date,count+1,memoText)}}>
                                 
                                 <FontAwesome5 style={{marginHorizontal: 5}} 
                                             name={'plus'} 
                                             size={20} 
-                                            color='gray' />
+                                            color={currentTheme.color} />
                             </TouchableOpacity>
                         </View>
                         <View style = {{bottom: '2%',flexDirection: 'column', justifyContent: 'center', alignItems: 'center',}}>
@@ -223,15 +224,15 @@ const HabitDetail = ({navigation,route}) => {
                                 <TouchableOpacity onPress={() => {setModalVisible(true)}}>
                                 <Image
                                     source={plus}
-                                    style={{ width: 30, height: 30, borderRadius: 100, backgroundColor: '#f5f5f5',right: 10}}
+                                    style={{ width: 30, height: 30, borderRadius: 100, backgroundColor: currentTheme.backgroundColor,right: 10}}
                                 />
                                 <Modal
                                     isVisible={modalVisible}
                                     onBackdropPress={() => {setModalVisible(false)}}
                                 >
-                                    <View style={styles.modalContainer}>
+                                    <View style={[styles.modalContainer,{backgroundColor: currentTheme.backgroundColor}]}>
                                     <TextInput
-                                      style={styles.input}
+                                      style={[styles.input,{color: currentTheme.color}]}
                                         //placeholder={Value} {habit.unitID.title}
                                         //ref={inputRef}
                                         keyboardType="numeric"
@@ -242,7 +243,7 @@ const HabitDetail = ({navigation,route}) => {
                                       onPress={() => {setModalVisible(false),setCount(count+value*1),handleEdit(habit.name,habit.date,count+value*1,memoText),setValue(0)}}
                                       style={[styles.button,{backgroundColor:habit.color}]}
                                     >
-                                      <Text style={styles.text}>Done</Text>
+                                      <Text style={[styles.text,{color: currentTheme.color}]}>Done</Text>
                                     </TouchableOpacity>
                                     </View>
 
@@ -251,17 +252,17 @@ const HabitDetail = ({navigation,route}) => {
                                 <TouchableOpacity  onPress={showAlert}>
                                 <Image
                                     source={replay}
-                                    style={{ width: 30, height: 30,borderRadius: 100, backgroundColor: '#f5f5f5', left: 10}}
+                                    style={{ width: 30, height: 30,borderRadius: 100, backgroundColor: currentTheme.backgroundColor, left: 10}}
                                 />
                                 </TouchableOpacity>
                                 </View>
                                 
                         </View> 
                         <View style={styles.functionZone}>
-                            {TabButtonMemo(memoText,setMemoText,memo,handleEdit,habit,count,memoText)}
-                            {TabButtonEdit(navigation,"Edit", edit, habit)}
-                            {TabButtonStat(navigation,"Stat", stat,habit)}
-                            {TabButtonRemove('Delete',remove,showAlertDelete)}
+                            {TabButtonMemo(memoText,setMemoText,memo,handleEdit,habit,count,memoText,currentTheme)}
+                            {TabButtonEdit(navigation,"Edit", edit, habit,currentTheme)}
+                            {TabButtonStat(navigation,"Stat", stat,habit,currentTheme)}
+                            {TabButtonRemove('Delete',remove,showAlertDelete,currentTheme)}
                         </View>
                     </View>
                 )
@@ -272,7 +273,7 @@ const HabitDetail = ({navigation,route}) => {
             </View>
         );
 };
-const TabButtonMemo = (memo, setMemo,pic,handleEdit,habit,count,memoText) => {
+const TabButtonMemo = (memo, setMemo,pic,handleEdit,habit,count,memoText, currentTheme) => {
 const [isEnabled, setIsEnabled] = useState(false);
   return (
     <TouchableOpacity style = {styles.btnTouch}
@@ -281,9 +282,9 @@ const [isEnabled, setIsEnabled] = useState(false);
             isVisible={isEnabled}
             onBackdropPress={() => {setIsEnabled(false)}}
             >
-            <View style={styles.modalContainer}>
+            <View style={[styles.modalContainer,{backgroundColor: currentTheme.backgroundColor}]}>
                 <TextInput
-                    style={styles.input}
+                    style={[styles.input,{color: currentTheme.color}]}
                     placeholder="Input your memo here"
                     value={memo}
                     onChangeText={text => setMemo(text)}
@@ -295,7 +296,7 @@ const [isEnabled, setIsEnabled] = useState(false);
                     }}
                     style={[styles.button,{backgroundColor:'blue'}]}
                 >
-                    <Text style={styles.text}>Done</Text>
+                    <Text style={[styles.text,{color: currentTheme.color}]}>Done</Text>
                 </TouchableOpacity>
             </View>
             
@@ -303,13 +304,13 @@ const [isEnabled, setIsEnabled] = useState(false);
             </Modal>  
     <Image
         source={pic}
-        style={{ width: 30, height: 30, borderRadius: 100, backgroundColor: '#f5f5f5',}}
+        style={{ width: 30, height: 30, borderRadius: 100, backgroundColor: currentTheme.backgroundColor}}
     />
-    <Text style = {{fontSize: 10}}>Memo</Text>
+    <Text style = {{fontSize: 10,color: currentTheme.color}}>Memo</Text>
     </TouchableOpacity>
   );
 }
-const TabButtonStat =(navigation, title, pic,habit)=>{
+const TabButtonStat =(navigation, title, pic,habit,currentTheme)=>{
     return (
         <TouchableOpacity style = {styles.btnTouch} 
         onPress={() => 
@@ -318,13 +319,13 @@ const TabButtonStat =(navigation, title, pic,habit)=>{
                                 })}>  
         <Image
             source={pic}
-            style={{ width: 30, height: 30, borderRadius: 100, backgroundColor: '#f5f5f5',}}
+            style={{ width: 30, height: 30, borderRadius: 100, backgroundColor: currentTheme.backgroundColor}}
         />
-        <Text style = {{fontSize: 10}}>{title}</Text>
+        <Text style = {{fontSize: 10,color: currentTheme.color}}>{title}</Text>
         </TouchableOpacity>
     );
 }
-const TabButtonEdit =(navigation,title,pic,habit) =>{
+const TabButtonEdit =(navigation,title,pic,habit,currentTheme) =>{
     return(
         <TouchableOpacity style = {styles.btnTouch} 
         onPress={() => 
@@ -333,22 +334,22 @@ const TabButtonEdit =(navigation,title,pic,habit) =>{
                                     })}>  
         <Image
             source={pic}
-            style={{ width: 30, height: 30, borderRadius: 100, backgroundColor: '#f5f5f5',}}
+            style={{ width: 30, height: 30, borderRadius: 100, backgroundColor: currentTheme.backgroundColor}}
         />
-        <Text style = {{fontSize: 10}}>{title}</Text>
+        <Text style = {{fontSize: 10,color: currentTheme.color}}>{title}</Text>
         </TouchableOpacity>
     )
 }
-const TabButtonRemove =(title,pic,show) =>{
+const TabButtonRemove =(title,pic,show,currentTheme) =>{
     return(
         <TouchableOpacity style = {styles.btnTouch}
         onPress={show}
         >
         <Image
             source={pic}
-            style={{ width: 30, height: 30, borderRadius: 100, backgroundColor: '#f5f5f5',}}
+            style={{ width: 30, height: 30, borderRadius: 100, backgroundColor: currentTheme.backgroundColor}}
         />
-        <Text style = {{fontSize: 10}}>{title}</Text>
+        <Text style = {{fontSize: 10,color: currentTheme.color}}>{title}</Text>
         </TouchableOpacity>
     )
 }
@@ -394,7 +395,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     modalContainer: {
-        backgroundColor: 'white',
+        //backgroundColor: 'white',
         padding: 20,
         borderRadius: 5,
         alignItems: 'center',

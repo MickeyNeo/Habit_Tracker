@@ -69,13 +69,13 @@ const ChooseIcon = (params) => {
                 onBackdropPress={() => params.setModalVisible(false)}
                 >
 
-                <View style={styles.modalContainer}>
+                <View style={[styles.modalContainer, {backgroundColor: params.currentTheme.backgroundColor}]}>
                     <View style={ {flexDirection:'row'}}>
                     {iconList1.map((iconS,index)=>{
                         return(
                         <TouchableOpacity style={{margin:2}}  key={iconS.name}  onPress={() => handlePress(iconS)}>
                                 
-                            <Icons type={iconS.family} name={iconS.name} size={30} color={isPressed===iconS.name?'red' : 'black'}/>
+                            <Icons type={iconS.family} name={iconS.name} size={30} color={isPressed===iconS.name?'red' : params.currentTheme.color}/>
                             
                         </TouchableOpacity >
                         )
@@ -85,7 +85,7 @@ const ChooseIcon = (params) => {
                     {iconList2.map((iconS,index)=>{
                         return(
                         <TouchableOpacity  style={{margin:2}}  key={iconS.name}  onPress={() => handlePress(iconS)}>
-                            <Icons type={iconS.family} name={iconS.name} size={30} color={isPressed===iconS.name?'red' : 'black'}/>
+                            <Icons type={iconS.family} name={iconS.name} size={30} color={isPressed===iconS.name?'red' : params.currentTheme.color}/>
                         </TouchableOpacity >
                         )
                     })}
@@ -94,7 +94,7 @@ const ChooseIcon = (params) => {
                         {iconList3.map((iconS,index)=>{
                             return(
                                 <TouchableOpacity  style={{margin:2}}  key={iconS.name}  onPress={() => handlePress(iconS)}>
-                                    <Icons type={iconS.family} name={iconS.name} size={30} color={isPressed===iconS.name?'red' : 'black'}/>
+                                    <Icons type={iconS.family} name={iconS.name} size={30} color={isPressed===iconS.name?'red' : params.currentTheme.color}/>
                                 </TouchableOpacity >
                                 )
                         })}
@@ -103,7 +103,7 @@ const ChooseIcon = (params) => {
                         {iconList4.map((iconS,index)=>{
                             return(
                                 <TouchableOpacity  style={{margin:2}}  key={iconS.name}  onPress={() => handlePress(iconS)}>
-                                    <Icons type={iconS.family} name={iconS.name} size={30} color={isPressed===iconS.name?'red' : 'black'}/>
+                                    <Icons type={iconS.family} name={iconS.name} size={30} color={isPressed===iconS.name?'red' : params.currentTheme.color}/>
                                 </TouchableOpacity >
                                 )
                         })}
@@ -118,7 +118,7 @@ const ChooseIcon = (params) => {
 }
 const styles = StyleSheet.create({
     modalContainer: {
-        backgroundColor: 'white',
+        //backgroundColor: 'white',
         padding: 20,
         borderRadius: 5,
         alignItems: 'flex-start',

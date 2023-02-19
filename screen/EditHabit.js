@@ -17,7 +17,7 @@ import Modal from "react-native-modal";
 
 import { useStore , setListProgressDay, delHabit, editListProgressDay} from '../Store'
 import { setHabitInput } from '../Store/action'
-import { db, addHabit, updateHabit } from '../Store/database'
+import { db, addHabit, updateHabit,addMemo } from '../Store/database'
 import { Tile } from "@rneui/base";
 const EditHabit = ({navigation, route}) => {
   const frequency_of_day = ["Daily", "Weekly", "Monthly"]
@@ -140,10 +140,28 @@ const EditHabit = ({navigation, route}) => {
     const dateRange = [];
     const list = [];
     while (startDate <= endDate) {
-      dateRange.push(moment(startDate).format('YYYY-MM-DD'));
-      //console.log(1)
-      //list.push({id:id, day: moment(startDate).format('YYYY-MM-DD'), process:0, memo:''})
-      dispatch(setListProgressDay({habitName: Habit.name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''}))
+      if (habit.frequencyType==='Daily')
+          { 
+            addMemo(habit.name, moment(startDate).format('YYYY-MM-DD'), '', 0)
+            dispatch(setListProgressDay({habitName: habit.name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''}))}
+        else if (habit.frequencyType==='Weekly')
+          {
+            if (habit.frequency.includes(moment(startDate).format('ddd').toLocaleUpperCase()))
+              {
+                addMemo(habit.name, moment(startDate).format('YYYY-MM-DD'), '', 0)
+                dispatch(setListProgressDay({habitName: habit.name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''}))          
+          }
+        }
+        else if (habit.frequencyType==='Monthly')
+          {
+            if (habit.frequency.includes(moment(startDate).date()))
+              {
+                addMemo(habit.name, moment(startDate).format('YYYY-MM-DD'), '', 0)
+                dispatch(setListProgressDay({habitName: habit.name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''})) 
+          }
+        }
+
+      //dispatch(setListProgressDay({habitName: Habit.name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''}))
       startDate.add(1, 'days');
     }
     
@@ -161,12 +179,6 @@ const EditHabit = ({navigation, route}) => {
         return item
         }
         )))}
-  //Hàm xóa ngày
-  const handDelProgressDay=(name, startDate, endDate)=>{
-    console.log('1 listPro',state.listProgressDay)
-    dispatch(editListProgressDay(state.listProgressDay.filter(item=>item.habitName!==name)))
-    console.log('2 listPro',state.listProgressDay)
-  }
   //Edit
   const handleEdit=()=>{
     if (value.endDay>Habit.habitEndDate){
@@ -175,11 +187,11 @@ const EditHabit = ({navigation, route}) => {
       handleProgressDay(startDate,endDate);
       handleHabit();
     }
-    else if (value.endDay<Habit.habitEndDate)
-    {
-      handDelProgressDay(value.habitname,value.endDay,Habit.habitEndDate)
-      handleHabit();
-    }
+    // else if (value.endDay<Habit.habitEndDate)
+    // {
+    //   handDelProgressDay(value.habitname,value.endDay,Habit.habitEndDate)
+    //   handleHabit();
+    // }
     else 
     handleHabit();
     updateHabit(Habit, habit);
@@ -187,12 +199,12 @@ const EditHabit = ({navigation, route}) => {
   }
   return (
       <View style={{ flex: 1, flexDirection : 'column'}}>
-          <View style ={styles.Habit}>
+          <View style ={[styles.Habit,{backgroundColor: currentTheme.backgroundColor}]}>
               <ScrollView >
                   <View style = {{flexDirection: 'column', padding: 10, }}>
-                      <Text style ={{fontWeight: 'bold', color: theme.color }}>Name</Text>
+                      <Text style ={{fontWeight: 'bold', color: currentTheme.color }}>Name</Text>
                       <TextInput
-                          style={[styles.textInput]}
+                          style={[styles.textInput, {backgroundColor:(currentTheme.backgroundColor=='#1f1e1e')?'#918e8e':'#f5f5f5', color: currentTheme.color}]}
                           placeholder={(value.habitname)}
                           value={value.habitname}
                           onChangeText={(value) => setState(prevState => ({ ...prevState, habitname: value }))}
@@ -200,9 +212,9 @@ const EditHabit = ({navigation, route}) => {
                   </View>
 
                   <View style = {{flexDirection: 'column', padding: 10, }}>
-                      <Text style ={{fontWeight: 'bold', color: theme.color }}>Note</Text>
+                      <Text style ={{fontWeight: 'bold', color: currentTheme.color }}>Note</Text>
                       <TextInput
-                          style={styles.textInput}
+                          style={[styles.textInput, {backgroundColor:(currentTheme.backgroundColor=='#1f1e1e')?'#918e8e':'#f5f5f5',color: currentTheme.color}]}
                           value={value.note}
                           placeholder="Description or other infos"
                           onChangeText={(value) => setState(prevState => ({ ...prevState, note: value }))}
@@ -210,7 +222,7 @@ const EditHabit = ({navigation, route}) => {
                   </View>
 
                   <View style = {{flexDirection: 'column', padding: 10, }}>
-                      <Text style ={{fontWeight: 'bold', color: theme.color }}>Icon & Color</Text>
+                      <Text style ={{fontWeight: 'bold', color: currentTheme.color }}>Icon & Color</Text>
                       <View style = {{flexDirection: 'row', flex: 2}}>
                           <View style ={{ 
                               flexDirection: 'row', 
@@ -218,7 +230,7 @@ const EditHabit = ({navigation, route}) => {
                               flex: 0.5, 
                               padding: 10
                               }}>
-                              <Text style = {{fontSize: 12, alignSelf: 'center' }}>Icon</Text>
+                              <Text style = {{fontSize: 12, alignSelf: 'center',color: currentTheme.color  }}>Icon</Text>
                               <TabChoose 
                                 title = 'Icon' 
                                 changecolor = {value.changecolor}
@@ -229,9 +241,10 @@ const EditHabit = ({navigation, route}) => {
                                 iconFamily ={value.iconFamily}
                                 setState = {setState}
                                 flag = {1} 
+                                currentTheme={currentTheme}
                               />
-                              <Text>|</Text>
-                              <Text style = {{fontSize: 12, alignSelf: 'center' }}>Color</Text>
+                              <Text style={{color: currentTheme.color}}>|</Text>
+                              <Text style = {{fontSize: 12, alignSelf: 'center',color: currentTheme.color }}>Color</Text>
                               <TabChoose 
                                 title = 'Color' 
                                 changecolor = {value.changecolor}
@@ -242,23 +255,24 @@ const EditHabit = ({navigation, route}) => {
                                 iconFamily ={value.iconFamily}
                                 setState = {setState}
                                 flag = {2} 
+                                currentTheme={currentTheme}
                               />
                           </View>
                       </View>
                   </View>
                   {/* Tag */}
                   <View style = {{flexDirection: 'column', padding: 10}}>
-                            <Text style ={{fontWeight: 'bold', color: theme.color }}>Tag</Text>
+                            <Text style ={{fontWeight: 'bold', color: theme.color,color: currentTheme.color }}>Tag</Text>
                             <TouchableOpacity style={{flexDirection:'row',padding: 10,justifyContent: 'space-between' }} onPress={() => setModalVisible(true)}>  
-                              <Text style={[styles.boder,{backgroundColor:value.changecolor}]}>{value.tag}</Text>
+                              <Text style={[styles.boder,{backgroundColor:value.changecolor,color: currentTheme.color}]}>{value.tag}</Text>
                             </TouchableOpacity>
                             <Modal
                                   isVisible={isModalVisible}
                                   onBackdropPress={() => setModalVisible(false)}
                                 >
-                                  <View style={styles.modalContainer}>
+                                  <View style={[styles.modalContainer,{backgroundColor:currentTheme.backgroundColor}]}>
                                     <TextInput
-                                      style={styles.input}
+                                      style={[styles.input,{color: currentTheme.color}]}
                                       placeholder="Enter text here"
                                       value={value.tag}
                                       onChangeText={text => {setState(prevState => ({ ...prevState, tag: text }))}}
@@ -267,17 +281,17 @@ const EditHabit = ({navigation, route}) => {
                                       onPress={() => setModalVisible(false)}
                                       style={[styles.button,{backgroundColor:value.changecolor}]}
                                     >
-                                      <Text style={styles.text}>Done</Text>
+                                      <Text style={[styles.text,{color: currentTheme.color}]}>Done</Text>
                                     </TouchableOpacity>
                                   </View>
                                 </Modal>
                   </View>                          
                   <View style = {{flexDirection: 'column',padding: 10}}>
-                      <Text style ={{fontWeight: 'bold', color: theme.color }}>Goal & Goal Period</Text>
+                      <Text style ={{fontWeight: 'bold', color: currentTheme.color  }}>Goal & Goal Period</Text>
                       <View style = {{flexDirection: 'row', alignItems: 'center'}}>
                           <View style ={{ flexDirection: 'row', padding: 10, justifyContent: 'space-evenly', flex: 0.7 }}>
                               <TextInput
-                                    style = {[styles.btnTouch, {textAlign: 'center' , height: 20}]}
+                                    style = {[styles.btnTouch, {textAlign: 'center' , height: 20,color: currentTheme.color }]}
                                         keyboardType="numeric"
                                         value={value.goal}
                                         onChangeText={(value) => setState(prevState => ({ ...prevState, goal: value }))}
@@ -292,21 +306,22 @@ const EditHabit = ({navigation, route}) => {
                                   iconFamily ={value.iconFamily}
                                   setState = {setState}
                                   flag = {4} 
+                                  currentTheme={currentTheme}
                                 />
                                 
                             </View>
                             <Text style={{color: currentTheme.color}}>/</Text>
                             <View style = {{flexDirection: 'row', padding: 10, alignSelf: 'center'}}>
-                              {TabButton(value.currentTabPeriod, setState, "Day", value.changecolor, date)}
-                              {TabButton(value.currentTabPeriod, setState, "Week", value.changecolor, Week)}
-                              {TabButton(value.currentTabPeriod, setState, "Month", value.changecolor, month)}
+                              {TabButton(value.currentTabPeriod, setState, "Day", value.changecolor, date,currentTheme)}
+                              {TabButton(value.currentTabPeriod, setState, "Week", value.changecolor, Week,currentTheme)}
+                              {TabButton(value.currentTabPeriod, setState, "Month", value.changecolor, month,currentTheme)}
                             </View>
                       </View>
                   </View>
 
                   <View style = {{padding: 10}}>
                       <View style = {{flexDirection: 'row' , justifyContent: 'space-between'}}>
-                        <Text style ={{fontWeight: 'bold', color: theme.color}}>Frequency</Text>
+                        <Text style ={{fontWeight: 'bold', color: currentTheme.color}}>Frequency</Text>
                         <TabChoose 
                             title = '>' 
                             changecolor = {value.changecolor}
@@ -320,6 +335,7 @@ const EditHabit = ({navigation, route}) => {
                             select = {value.selectedFreq}
                             week = {Week}
                             month = {month}
+                            currentTheme={currentTheme}
                              /> 
                       </View>
                           
@@ -328,14 +344,14 @@ const EditHabit = ({navigation, route}) => {
                           {DisplayNote(value.selectedFreq,value.goal,value.unit, value.selectedItem)}
                   </View>
 
-                  <View style = {{flexDirection: 'column', padding: 10}}>
+                  {/* <View style = {{flexDirection: 'column', padding: 10}}>
                       <Text style ={{fontWeight: 'bold', color: theme.color }}>Reminder</Text>
-                  </View>
+                  </View> */}
 
                   <View style = {{flexDirection: 'column', padding: 10}}>
-                      <Text style ={{fontWeight: 'bold', color: theme.color }}>Reminder Messages</Text>
+                      <Text style ={{fontWeight: 'bold', color: currentTheme.color}}>Reminder Messages</Text>
                       <TextInput
-                          style={[styles.textInput]}
+                          style={[styles.textInput,{backgroundColor:(currentTheme.backgroundColor=='#1f1e1e')?'#918e8e':'#f5f5f5', color: currentTheme.color}]}
                           value={value.mess}
                           placeholder="Enter your message here!"
                           onChangeText={(value) => setState(prevState => ({ ...prevState, mess: value }))}
@@ -357,22 +373,22 @@ const EditHabit = ({navigation, route}) => {
                   </View> */}
 
                   <View style = {{flexDirection: 'column', padding: 10}}>
-                      <Text style ={{fontWeight: 'bold', color: theme.color }}>Habit Term</Text>
+                      <Text style ={{fontWeight: 'bold', color: currentTheme.color }}>Habit Term</Text>
                       <View style = {{flexDirection: 'row', flex: 1}}>
                           <View style ={{ flexDirection: 'column', alignItems: 'center',flex: 0.5, padding: 10 }}>
-                              <Text>Start</Text>
-                              {ShowTimePicker(value.startDay, value.endDay,setState,value.changecolor ,1)}
+                              <Text style={{color: currentTheme.color}}>Start</Text>
+                              {ShowTimePicker(value.startDay, value.endDay,setState,value.changecolor ,1,currentTheme.color)}
                           </View>
                           <View style ={{ flexDirection: 'column', alignItems: 'center',flex: 0.5, padding: 10 }}>
-                              <Text>End</Text>
-                              {ShowTimePicker(value.startDay, value.endDay,setState,value.changecolor,0)}
+                              <Text style={{color: currentTheme.color}}>End</Text>
+                              {ShowTimePicker(value.startDay, value.endDay,setState,value.changecolor,0,currentTheme.color)}
                           </View>
                       </View>
                   </View> 
               </ScrollView>
 
           </View>
-      <SafeAreaView style = {styles.homeZone}> 
+      <SafeAreaView style = {[styles.homeZone,{backgroundColor:currentTheme.backgroundColor}]}> 
           <TouchableOpacity 
               onPress={() => {
                   // dispatch(addHabitOfaDay(name.toLowerCase()));
@@ -384,7 +400,8 @@ const EditHabit = ({navigation, route}) => {
               }}>
               <Image
                   source={require('./Icon/done.png')}
-                  style={{ width: 45, height: 45,}}
+                  style={{ width: 45, height: 45,tintColor: currentTheme.color}}
+                  
               />
           </TouchableOpacity>
       </SafeAreaView>
@@ -392,7 +409,7 @@ const EditHabit = ({navigation, route}) => {
   );
 };
 
-const TabButton = (currentTabPeriod, setState, title, color, time) => {
+const TabButton = (currentTabPeriod, setState, title, color, time,currentTheme) => {
   return (
       <TouchableOpacity onPress={() => {
           setState(prevState => ({ ...prevState, currentTabPeriod: title }))
@@ -402,18 +419,18 @@ const TabButton = (currentTabPeriod, setState, title, color, time) => {
           else setState(prevState => ({ ...prevState, selectedItem: 'Monthly' }))
       }}>
       <View style={[styles.btnTouch, 
-          {backgroundColor: currentTabPeriod == title ? color : '#f5f5f5'}
+          {backgroundColor: currentTabPeriod == title ? color : '#918e8e'}
       ]}>
           <Text style={{
           fontSize: 12,
-          color: currentTabPeriod == title ? "black" : "#a9a9a9"
+          color: currentTabPeriod == title ? (currentTheme.color=='white'?'black':'white') : currentTheme.color
           }}>{title}</Text>
 
       </View>
       </TouchableOpacity>
   )
 }
-const TabButtontime = (currentTabTime, setState, title, color) => {
+const TabButtontime = (currentTabTime, setState, title, color,currentTheme) => {
 return (
   <TouchableOpacity onPress={() => {
       setState(prevState => ({ ...prevState, currentTabTime: title }))
@@ -430,7 +447,7 @@ return (
   </TouchableOpacity>
 )
 }
-const TabChoose = ({title, changecolor, unit, tag, IconDetail,icon, iconFamily, setState, flag, selectedItem, goal, select, week, month}) => {
+const TabChoose = ({title, changecolor, unit, tag, IconDetail,icon, iconFamily, setState, flag, selectedItem, goal, select, week, month,currentTheme}) => {
 const [isEnabled, setIsEnabled] = useState(false);
 return (
   <TouchableOpacity
@@ -449,6 +466,7 @@ return (
             setModalVisible={setIsEnabled}
             color={changecolor}
             setColor={setState}
+            currentTheme={currentTheme}
           />
         )}
         {title === 'Icon' && flag === 1 && (
@@ -456,6 +474,7 @@ return (
             myIsmodalVisible={isEnabled}
             setModalVisible={setIsEnabled}
             seticon={setState}
+            currentTheme={currentTheme}
           />
         )}
         {title === '>' && flag === 3 && (
@@ -470,6 +489,7 @@ return (
             setSelect={setState}
             week = {week}
             month = {month}
+            currentTheme={currentTheme}
           />
         )}
         {title === 'count' && flag === 4 && (
@@ -478,19 +498,20 @@ return (
             setModalVisible={setIsEnabled}
             unit={unit}
             setunit={setState}
+            currentTheme={currentTheme}
           />
         )}
       </>
     )}
-    {flag === 3 && <Text>{selectedItem}{title}</Text>}
+    {flag === 3 && <Text style={{color:currentTheme.color}}>{selectedItem}{title}</Text>}
     {flag === 4 && (
-      <Text style={{ fontSize: 12 }}>{unit.title}</Text>
+      <Text style={{ fontSize: 12, color:currentTheme.color }}>{unit.title}</Text>
     )}
   </TouchableOpacity>
 )
 }
 
-const ShowTimePicker = (startDay, endDay, setState,color ,flag) => {
+const ShowTimePicker = (startDay, endDay, setState,color ,flag,colors) => {
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
   startDay = new Date(startDay);
@@ -499,24 +520,35 @@ const ShowTimePicker = (startDay, endDay, setState,color ,flag) => {
     // const currentDate = selectedDate;
     setShow(false);
     if (flag === 1) {
-      if (selectedDate > endDay) 
+      //if (selectedDate > endDay) 
       {
         Alert.alert(
           'Warning',
-          'Start day must be before the end day',
+          'Not allow changing the Start day',
         [
       { text: 'OK', onPress: () => setState(prevState => ({ ...prevState, startDay: startDay })) }
         ],
       { cancelable: false }
       );
       }
-      setState(prevState => ({ ...prevState, startDay: selectedDate  }))
+      //setState(prevState => ({ ...prevState, startDay: selectedDate  }))
     } else {
       if (selectedDate < startDay) 
       {
         Alert.alert(
           'Warning',
           'End day must be after the current day',
+        [
+      { text: 'OK', onPress: () => setState(prevState => ({ ...prevState, endDay: endDay })) }
+        ],
+      { cancelable: false }
+      );
+      }
+      else if (selectedDate < endDay)
+      {
+        Alert.alert(
+          'Warning',
+          'Not allow adjusting the End day smaller',
         [
       { text: 'OK', onPress: () => setState(prevState => ({ ...prevState, endDay: endDay })) }
         ],
@@ -540,7 +572,7 @@ const ShowTimePicker = (startDay, endDay, setState,color ,flag) => {
         onPress={showDatepicker}
         style={{ flexDirection: 'row', borderRadius: 10, backgroundColor: color }}
       >
-        <Text>{flag === 1 ? startDay.toDateString() : endDay.toDateString()}</Text>
+        <Text style={{color: colors}}>{flag === 1 ? startDay.toDateString() : endDay.toDateString()}</Text>
         {show && (
           <TimePickerDialog
             testID="dateTimePicker"
@@ -591,12 +623,12 @@ const styles = StyleSheet.create({
     homeZone: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent : 'space-evenly',
+        justifyContent : 'center',
+        alignSelf:'center',
         position: 'absolute',
         width: 59,
         height: 59,
-        top: '90%',
-        left: '40%',
+        top: '90.5%',
         padding: 0,
         borderRadius: 150,
         borderWidth: 1,
@@ -627,7 +659,7 @@ const styles = StyleSheet.create({
         borderRadius: 10, 
         width: 50, 
         alignItems: 'center',
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#918e8e',
         height: 20,
     },
     freq: {
@@ -667,7 +699,7 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
     },
     modalContainer: {
-      backgroundColor: 'white',
+      //backgroundColor: 'white',
       padding: 20,
       borderRadius: 5,
       alignItems: 'center',
