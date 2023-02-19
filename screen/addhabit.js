@@ -10,7 +10,7 @@ import moment from 'moment';
 import Modal from "react-native-modal";
 import { useStore , addHabitList, setListProgressDay} from '../Store'
 import { setHabitInput } from '../Store/action'
-import { db, addHabit } from '../Store/database'
+import { db, addHabit,addMemo } from '../Store/database'
 const AddHabit = ({navigation, route}) => {
     const [state, dispatch] = useStore();
     const {currentTheme} = state
@@ -105,16 +105,25 @@ const AddHabit = ({navigation, route}) => {
       const endDate = moment(value.endDay);
       while (startDate <= endDate) {
         if (habit.frequencyType==='Daily')
-          {dispatch(setListProgressDay({habitName: habit.name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''}))}
+        {
+          addMemo(habit.name, moment(startDate).format('YYYY-MM-DD'), '', 0)
+          dispatch(setListProgressDay({habitName: habit.name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''}))}
         else if (habit.frequencyType==='Weekly')
           {
             if (habit.frequency.includes(moment(startDate).format('ddd').toLocaleUpperCase()))
-              dispatch(setListProgressDay({habitName: habit.name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''}))          }
+            {
+              addMemo(habit.name, moment(startDate).format('YYYY-MM-DD'), '', 0)
+              dispatch(setListProgressDay({habitName: habit.name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''}))          
+            }
+          }
         else if (habit.frequencyType==='Monthly')
           {
             if (habit.frequency.includes(moment(startDate).date()))
+            {
+              addMemo(habit.name, moment(startDate).format('YYYY-MM-DD'), '', 0)
               dispatch(setListProgressDay({habitName: habit.name, date: moment(startDate).format('YYYY-MM-DD'), progress:0, content:''})) 
           }
+        }
         startDate.add(1, 'days');
       }
     }
@@ -163,6 +172,7 @@ const AddHabit = ({navigation, route}) => {
                                   iconFamily ={value.iconFamily}
                                   setState = {setState}
                                   flag = {1} 
+                                  currentTheme={currentTheme}
                                 />
                                 <Text style={{color: currentTheme.color}}>|</Text>
                                 <Text style = {{fontSize: 12, alignSelf: 'center',color: currentTheme.color }}>Color</Text>
@@ -176,6 +186,7 @@ const AddHabit = ({navigation, route}) => {
                                   iconFamily ={value.iconFamily}
                                   setState = {setState}
                                   flag = {2} 
+                                  currentTheme={currentTheme}
                                 />
                             </View>
                         </View>
@@ -190,9 +201,9 @@ const AddHabit = ({navigation, route}) => {
                                   isVisible={isModalVisible}
                                   onBackdropPress={() => setModalVisible(false)}
                                 >
-                                  <View style={styles.modalContainer}>
+                                  <View style={[styles.modalContainer,{backgroundColor:currentTheme.backgroundColor}]}>
                                     <TextInput
-                                      style={[styles.input, {textAlign : 'center'}]}
+                                      style={[styles.input, {textAlign : 'center', color:currentTheme.color}]}
                                       placeholder="Enter text here"
                                       value={value.tag}
                                       onChangeText={text => {setState(prevState => ({ ...prevState, tag: text }))}}
@@ -200,7 +211,7 @@ const AddHabit = ({navigation, route}) => {
                                     <TouchableOpacity
                                       onPress={() => setModalVisible(false)}
                                       style={[styles.button, { backgroundColor:value.changecolor}]}>
-                                      <Text style={styles.text}>Done</Text>
+                                      <Text style={[styles.text,{color: currentTheme.color}]}>Done</Text>
                                     </TouchableOpacity>
                                   </View>
                                 </Modal>
@@ -210,7 +221,7 @@ const AddHabit = ({navigation, route}) => {
                         <View style = {{flexDirection: 'row' , alignItems: 'center'}}>
                             <View style ={{ flexDirection: 'row', padding: 10, justifyContent: 'space-evenly', flex: 0.7 }}>
                                 <TextInput
-                                    style = {[styles.btnTouch, {textAlign: 'center' , height: 20}]}
+                                    style = {[styles.btnTouch, {textAlign: 'center' , height: 20,color: currentTheme.color }]}
                                         keyboardType="numeric"
                                         value={value.goal}
                                         onChangeText={(value) => setState(prevState => ({ ...prevState, goal: value }))}
@@ -225,14 +236,15 @@ const AddHabit = ({navigation, route}) => {
                                   iconFamily ={value.iconFamily}
                                   setState = {setState}
                                   flag = {4} 
+                                  currentTheme={currentTheme}
                                 />
                                 
                             </View>
                             <Text style={{color: currentTheme.color}}>/</Text>
                             <View style = {{flexDirection: 'row', padding: 10, alignSelf: 'center'}}>
-                              {TabButton(value.currentTabPeriod, setState, "Day", value.changecolor, date)}
-                              {TabButton(value.currentTabPeriod, setState, "Week", value.changecolor, Week)}
-                              {TabButton(value.currentTabPeriod, setState, "Month", value.changecolor, month)}
+                              {TabButton(value.currentTabPeriod, setState, "Day", value.changecolor, date,currentTheme)}
+                              {TabButton(value.currentTabPeriod, setState, "Week", value.changecolor, Week,currentTheme)}
+                              {TabButton(value.currentTabPeriod, setState, "Month", value.changecolor, month,currentTheme)}
                             </View>
                         </View>
                     </View>
@@ -253,6 +265,7 @@ const AddHabit = ({navigation, route}) => {
                               select = {value.selectedFreq}
                               week = {Week}
                               month = {month}
+                              currentTheme={currentTheme}
                                /> 
                         </View>
                     </View>
@@ -298,7 +311,7 @@ const AddHabit = ({navigation, route}) => {
                     </View> 
                 </ScrollView>
             </View>
-        <SafeAreaView style = {styles.homeZone}> 
+        <SafeAreaView style = {[styles.homeZone,{backgroundColor:currentTheme.backgroundColor}]}> 
             <TouchableOpacity 
                 onPress={() => {
                     // dispatch(addHabitOfaDay(name.toLowerCase()));
@@ -312,7 +325,7 @@ const AddHabit = ({navigation, route}) => {
                 }}>
                 <Image
                     source={require('./Icon/done.png')}
-                    style={{ width: 45, height: 45,}}
+                    style={{ width: 45, height: 45,tintColor: currentTheme.color}}
                 />
             </TouchableOpacity>
         </SafeAreaView>
@@ -320,7 +333,7 @@ const AddHabit = ({navigation, route}) => {
     );
 };
 
-const TabButton = (currentTabPeriod, setState, title, color, time) => {
+const TabButton = (currentTabPeriod, setState, title, color, time,currentTheme) => {
     return (
         <TouchableOpacity onPress={() => {
             setState(prevState => ({ ...prevState, currentTabPeriod: title }))
@@ -330,11 +343,11 @@ const TabButton = (currentTabPeriod, setState, title, color, time) => {
             else setState(prevState => ({ ...prevState, selectedItem: 'Monthly' }))
         }}>
         <View style={[styles.btnTouch, 
-            {backgroundColor: currentTabPeriod == title ? color : '#f5f5f5'}
+            {backgroundColor: currentTabPeriod == title ? color : '#918e8e'}
         ]}>
             <Text style={{
             fontSize: 12,
-            color: currentTabPeriod == title ? "black" : "#a9a9a9"
+            color: currentTabPeriod == title ? (currentTheme.color=='white'?'black':'white') : currentTheme.color
             }}>{title}</Text>
 
         </View>
@@ -342,7 +355,7 @@ const TabButton = (currentTabPeriod, setState, title, color, time) => {
     )
 }
 
-const TabChoose = ({title, changecolor, unit, tag, IconDetail, icon, iconFamily, setState, flag, selectedItem, goal, select, week, month}) => {
+const TabChoose = ({title, changecolor, unit, tag, IconDetail, icon, iconFamily, setState, flag, selectedItem, goal, select, week, month,currentTheme}) => {
   const [isEnabled, setIsEnabled] = useState(false);
   return (
     <TouchableOpacity
@@ -361,6 +374,7 @@ const TabChoose = ({title, changecolor, unit, tag, IconDetail, icon, iconFamily,
               setModalVisible={setIsEnabled}
               color={changecolor}
               setColor={setState}
+              currentTheme={currentTheme}
             />
           )}
           {title === 'Icon' && flag === 1 && (
@@ -368,6 +382,7 @@ const TabChoose = ({title, changecolor, unit, tag, IconDetail, icon, iconFamily,
               myIsmodalVisible={isEnabled}
               setModalVisible={setIsEnabled}
               seticon={setState}
+              currentTheme={currentTheme}
             />
           )}
           {title === '>' && flag === 3 && (
@@ -382,6 +397,7 @@ const TabChoose = ({title, changecolor, unit, tag, IconDetail, icon, iconFamily,
               setSelect={setState}
               week = {week}
               month = {month}
+              currentTheme={currentTheme}
             />
           )}
           {title === 'count' && flag === 4 && (
@@ -390,13 +406,14 @@ const TabChoose = ({title, changecolor, unit, tag, IconDetail, icon, iconFamily,
               setModalVisible={setIsEnabled}
               unit={unit}
               setunit={setState}
+              currentTheme={currentTheme}
             />
           )}
         </>
       )}
-      {flag === 3 && <Text>{selectedItem} {title}</Text>}
+      {flag === 3 && <Text style={{color:currentTheme.color}}>{selectedItem} {title}</Text>}
       {flag === 4 && (
-        <Text style={{ fontSize: 12 }}>{unit.title}</Text>
+        <Text style={{ fontSize: 12,color:currentTheme.color }}>{unit.title}</Text>
       )}
     </TouchableOpacity>
   )
@@ -496,12 +513,12 @@ const styles = StyleSheet.create({
   homeZone: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent : 'space-evenly',
+    justifyContent : 'center',
+    alignSelf:'center',
     position: 'absolute',
     width: 59,
     height: 59,
-    top: '90%',
-    left: '40%',
+    top: '90.5%',
     padding: 0,
     borderRadius: 150,
     borderWidth: 1,
@@ -536,7 +553,7 @@ const styles = StyleSheet.create({
     borderRadius: 10, 
     width: 50, 
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#918e8e',
     fontSize: 12,
     height: 20,
   },
@@ -565,7 +582,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   modalContainer: {
-    backgroundColor: 'white',
+    //backgroundColor: 'white',
     padding: 20,
     borderRadius: 5,
     alignItems: 'center',

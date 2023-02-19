@@ -23,10 +23,11 @@ export default function SelectFreq (params){
                             height: params.freq == 'Week' ? '10%' : '25%', 
                             borderRadius: 30, 
                             borderWidth: 1,
-                            backgroundColor: '#FFFFFF',}}>
+                            backgroundColor: params.currentTheme.backgroundColor,}}>
                         <View style={styles.container}>
                             <View style ={{
-                                backgroundColor: '#FFFFFF',
+                                backgroundColor: params.currentTheme.backgroundColor,
+                                borderColor: params.currentTheme.color,
                                 borderWidth: 1, 
                                 borderRadius: 20, 
                                 marginLeft: 20, 
@@ -34,13 +35,14 @@ export default function SelectFreq (params){
                                 marginTop: 10, 
                                 justifyContent: 'center', 
                                 alignItems: 'center'}}>
-                                <Text style={styles.tilte}>Track Habit on</Text>
+                                <Text style={[styles.tilte,{color:params.currentTheme.color}]}>Track Habit on</Text>
                                 { params.freq == 'Weekly' && 
                                 <SelectZone
                                     values = {params.select}
                                     buttonPressed = {buttonPressed}
                                     condition = {params.freq}
                                     color = {params.color}
+                                    currentTheme ={params.currentTheme}
                                 />
                                 }
                                 { params.freq == 'Monthly' &&
@@ -51,6 +53,7 @@ export default function SelectFreq (params){
                                     condition = {params.freq}
                                     color = {params.color}
                                     flag = {0}
+                                    currentTheme ={params.currentTheme}
                                     />
                                 <SelectZone
                                     values = {params.select}
@@ -58,6 +61,7 @@ export default function SelectFreq (params){
                                     condition = {params.freq}
                                     color = {params.color}
                                     flag = {1}
+                                    currentTheme ={params.currentTheme}
                                     />
                                 <SelectZone
                                     values = {params.select}
@@ -65,6 +69,7 @@ export default function SelectFreq (params){
                                     condition = {params.freq}
                                     color = {params.color}
                                     flag = {2}
+                                    currentTheme ={params.currentTheme}
                                     />
                                 </View>
                                 }
@@ -78,6 +83,7 @@ export default function SelectFreq (params){
                                         setSelect = {params.setSelect}
                                         week = {params.week}
                                         month = {params.month}
+                                        currentTheme ={params.currentTheme}
                                     />
                                 }
                                 {
@@ -86,7 +92,7 @@ export default function SelectFreq (params){
                                         onPress={() => {params.setModalVisible(false)}}
                                         style={[styles.button, {backgroundColor: params.color}]}
                                         >
-                                        <Text style={styles.text}>Confirm</Text>
+                                        <Text style={[styles.text,{color:params.currentTheme.color}]}>Confirm</Text>
                                     </TouchableOpacity>
                                 }
                                 {
@@ -95,7 +101,7 @@ export default function SelectFreq (params){
                                         onPress={() => {params.setModalVisible(false)}}
                                         style={[styles.button, {backgroundColor: params.color}]}
                                         >
-                                        <Text style={styles.text}>Confirm</Text>
+                                        <Text style={[styles.text,{color:params.currentTheme.color}]}>Confirm</Text>
                                     </TouchableOpacity>
                                 }
                             {/* <Text style ={{fontSize: 10}}> Complete 1000 steps each day </Text> */}
@@ -144,7 +150,7 @@ export default function SelectFreq (params){
         </View>
     )
 }
-const SelectZone = ({ values, buttonPressed, condition, color, flag }) => 
+const SelectZone = ({ values, buttonPressed, condition, color, flag, currentTheme }) => 
     (   
         <View style ={{flexDirection: 'row'}}>
             {values.map((value) => {
@@ -159,12 +165,12 @@ const SelectZone = ({ values, buttonPressed, condition, color, flag }) =>
                     width: condition == 'Weekly' ? 40 : 20,
                     height: 20, 
                     alignItems: 'center',
-                    backgroundColor: value.selected ? color : 'white',
+                    backgroundColor: value.selected ? color : '#918e8e',
                     justifyContent: condition == 'Weekly' ? 'center' : 'space-evenly',
                     }}
                     key={value.title}
                 >
-                <Text style = {{fontSize: 10 }}>
+                <Text style = {{fontSize: 10, color: value.selected ? currentTheme.color: (currentTheme.color=='white'?'black':'white') }}>
                     {value.title}
                 </Text>
                 </TouchableOpacity>
@@ -172,7 +178,7 @@ const SelectZone = ({ values, buttonPressed, condition, color, flag }) =>
             })}
         </View>
     );
-const ChooseFreq = ({values, color, selected, setFreq, setSelect, week, month}) =>
+const ChooseFreq = ({values, color, selected, setFreq, setSelect, week, month, currentTheme}) =>
     (   
         <View style ={{flexDirection: 'column '}}>
             {values.map((value) => 
@@ -190,12 +196,12 @@ const ChooseFreq = ({values, color, selected, setFreq, setSelect, week, month}) 
                     width: 80,
                     height: 20, 
                     alignItems: 'center',
-                    backgroundColor: value == selected ? color : 'white',
+                    backgroundColor: value == selected ? color : '#918e8e',
                     justifyContent: 'center',
                     }}
                     key={value}
                 >
-                <Text numberOfLines={1} style = {{fontSize: 15 }}>
+                <Text numberOfLines={1} style = {{fontSize: 15, color: currentTheme.color }}>
                     {value}
                 </Text>
                 </TouchableOpacity>

@@ -18,8 +18,8 @@ const Home = ({ navigation }) => {
   
   // const db = SQLite.openDatabase('Habit_tracker.db');
 
-  // refreshDatabase();  
-  initDatabase();
+  //refreshDatabase();  
+  //initDatabase();
 
   // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
   useEffect(() => {
@@ -42,7 +42,7 @@ const Home = ({ navigation }) => {
 
   //refreshDatabase(state.listHabit, dispatch)
   // console.log('home',state.listProgressDay.length)
-  // console.log(state.listHabit)
+  console.log('list' ,state.listHabit)
   /* loadUnit(); */
   // console.log('list', state.listHabit)
   const HabitZone = (values,navigation,date,listProgressDay, state,check) => {
@@ -55,7 +55,7 @@ const Home = ({ navigation }) => {
     //const [state,dispatch] = useStore();
 
     // const {listProgressDay} =state
-    // console.log('listProgressDay',listProgressDay)
+    console.log('listProgressDay',listProgressDay)
     
 
     const arr3 = values.map(obj => {
@@ -78,7 +78,7 @@ const Home = ({ navigation }) => {
       return null
     };
     if (arr3 != '')
-      if (check==1)
+      if (check===1)
       {
         return (
           <ScrollView>
@@ -162,15 +162,15 @@ const Home = ({ navigation }) => {
         
   else 
     return (
-      <View style={{backgroundColor: 'white', flex: 1}}>
+      <View style={{backgroundColor: currentTheme.backgroundColor, flex: 1}}>
         <View style = {styles.addHabit}>
           <TouchableOpacity style = { styles.addHabit} onPress = {() => navigation.navigate("Habit")}>
             <Image
               source={require('./Icon/rocket.png')}
               style={{ width: 100, height: 100,}} />
 
-            <Text style = {{color: 'black' }} >No Habits</Text>
-            <Text style = {{color: 'black' }} >Press '+' to add new habit </Text>
+            <Text style = {{color: currentTheme.color }} >No Habits</Text>
+            <Text style = {{color: currentTheme.color }} >Press '+' to add new habit </Text>
             </TouchableOpacity>
         </View>
       </View>

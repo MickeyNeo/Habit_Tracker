@@ -12,7 +12,7 @@ export default function SelectUnit (params){
                     <View style={{
                                 height: '20%',
                                 marginTop: 'auto', 
-                                backgroundColor: 'white', 
+                                backgroundColor: params.currentTheme.backgroundColor, 
                                 borderRadius: 30, 
                                 borderWidth: 1}}>
                         <View style={styles.container}>
@@ -21,7 +21,7 @@ export default function SelectUnit (params){
                                 flex: 1, 
                                 justifyContent: 'space-evenly', 
                                 }}>
-                                <Text style={styles.tilte}>Select Unit</Text>
+                                <Text style={[styles.tilte,{color: params.currentTheme.color}]}>Select Unit</Text>
                                 <PreviewLayout
                                     values = {[
                                     { id: 1, title: 'sec'},
@@ -32,6 +32,7 @@ export default function SelectUnit (params){
                                 ]}
                                     selectedValue={params.unit}
                                     setSelectedValue={params.setunit}
+                                    currentTheme={params.currentTheme}
                                 />
                                 <PreviewLayout
                                     values = {[
@@ -43,6 +44,7 @@ export default function SelectUnit (params){
                                 ]}
                                     selectedValue={params.unit}
                                     setSelectedValue={params.setunit}
+                                    currentTheme={params.currentTheme}
                                 />
                                 <PreviewLayout
                                     values = {[
@@ -50,6 +52,7 @@ export default function SelectUnit (params){
                                 ]}
                                     selectedValue={params.unit}
                                     setSelectedValue={params.setunit}
+                                    currentTheme={params.currentTheme}
                                 />
                             </View>
                         </View>
@@ -63,6 +66,7 @@ const PreviewLayout =({
     values,
     selectedValue,
     setSelectedValue, 
+    currentTheme,
 })=>(
     <View style = {{flexDirection: 'row', justifyContent: 'space-evenly'}}>
         {values.map((value) =>(
@@ -71,13 +75,13 @@ const PreviewLayout =({
                 width: 40,
                 height: 20, 
                 alignItems: 'center',
-                backgroundColor:  value.title == selectedValue.title ? 'grey' : 'white',
+                backgroundColor:  value.title == selectedValue.title ? 'grey' : currentTheme.backgroundColor,
                 justifyContent: 'center',
             }}
                 key={value.id}
                    onPress={() => setSelectedValue(prevState => ({ ...prevState, unit: value}))}
             >
-                <Text style = {{fontSize: 10 }}>
+                <Text style = {{fontSize: 10,color:currentTheme.color }}>
                     {value.title}
                 </Text>
             </TouchableOpacity>

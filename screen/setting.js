@@ -21,7 +21,7 @@ export default function Settings({navigation}){
     const [currentTab, setCurrentTab] = useState('');
     // const [isEnabled, setIsEnabled] = useState(false);
     const [isModalVisible, setModalVisible] = useState(false);
-    const [inputValue, setInputValue] = useState('No Name');
+    const [inputValue, setInputValue] = useState('User Name');
 
     return(
         <SafeAreaView style={[style.container,{backgroundColor: currentTheme.backgroundColor}]}> 
@@ -37,6 +37,7 @@ export default function Settings({navigation}){
                     ></Image>
                     <TextInput 
                         style={[style.nameText,{color: currentTheme.color}]}
+                        editable={false}
                         value={inputValue}
                         onChangeText={text => {setInputValue(text)}}
                         
