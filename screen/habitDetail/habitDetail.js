@@ -5,7 +5,7 @@ import {
   } from "react-native-chart-kit";
 import {useStore} from '../../Store';
 import { editListProgressDay,delHabit } from "../../Store";
-import { deleteHabit } from "../../Store/database";
+import { addMemo, deleteHabit, updateProgressMemo } from "../../Store/database";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Modal from "react-native-modal";
 // import hinh 
@@ -117,10 +117,13 @@ const HabitDetail = ({navigation,route}) => {
     const handleEdit=(name,day,count,memo)=>{
         dispatch(editListProgressDay(state.listProgressDay.map(item => {
             if (item.habitName === name && item.date===day) {
-              return { ...item, progress:count, content:memo};
+                updateProgressMemo(name, day, memo, count);
+                return { ...item, progress:count, content:memo};
             }
+            addMemo(name, day, memo, count);
             return item
             })))
+        
     }
     
     //handleEdit(habit.id,habit.day,count,memoText)
@@ -286,7 +289,10 @@ const [isEnabled, setIsEnabled] = useState(false);
                     onChangeText={text => setMemo(text)}
                 />
                 <TouchableOpacity
-                    onPress={() => {setIsEnabled(false),handleEdit(habit.name,habit.date,count,memoText)}}
+                    onPress={() => {
+                        setIsEnabled(false),
+                        handleEdit(habit.name,habit.date,count,memoText)
+                    }}
                     style={[styles.button,{backgroundColor:'blue'}]}
                 >
                     <Text style={styles.text}>Done</Text>

@@ -411,7 +411,6 @@ const addHabit = (habit) => {
     console.log("Adding Habit to db");
     console.log('Pressed Addhabit: ', habit)
 
-
     db.transaction(tx => {
         tx.executeSql('INSERT INTO Habit (name, note, frequency, color, frequencyType, timeRange, reminderMessage, showMemo, chartType, habitStartDate, habitEndDate, goalNo, goalPeriod, unitID, icon, iconFamily, id,tag,flag) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?, ?)', 
         [habit.name, habit.note, habit.frequency, habit.color, habit.frequencyType, habit.timeRange, habit.reminderMessage, habit.showMemo, habit.chartType, habit.habitStartDate, habit.habitEndDate, habit.goalNo, habit.goalPeriod, habit.unitID, habit.icon, habit.iconFamily, habit.id, habit.tag,habit.flag],
