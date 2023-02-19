@@ -96,7 +96,7 @@ const EditHabit = ({navigation, route}) => {
       id: Habit.id,
       name: value.habitname,
       note: value.note,
-      frequency: value.frequency,
+      frequency: value.selectedFreq,
       color: value.changecolor,
       // tagID: Habit.tagID,
       frequencyType: value.selectedItem,
