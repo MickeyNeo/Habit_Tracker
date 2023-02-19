@@ -26,8 +26,6 @@ const Home = ({ navigation }) => {
     if (Platform.OS === 'ios' || Platform.OS === 'android') {
       loadHabit_on_fone(state.listHabit, dispatch)
       loadMemo(state.listProgressDay, dispatch)
-      loadSetting(state, dispatch);
-
      
     } else {
       loadHabit_on_web(state.listHabit, dispatch)
@@ -39,6 +37,8 @@ const Home = ({ navigation }) => {
   const [checkShow, setCheckShow] = useState(0)
   const listH = state.listHabit
   const listP = state.listProgressDay
+
+  // loadSetting(state, dispatch);
 
   //refreshDatabase(state.listHabit, dispatch)
   // console.log('home',state.listProgressDay.length)

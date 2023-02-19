@@ -390,8 +390,8 @@ const initDatabase = () => {
     db.transaction(tx => {
         tx.executeSql('CREATE TABLE IF NOT EXISTS Setting (\
             id INTEGER DEFAULT 0 PRIMARY KEY,\
-            language TEXT DEFAULT "Vietnamese" CHECK(language IN (\'English\', \'German\', \'Vietnamese\', \'French\')) ,\
-            theme    TEXT DEFAULT "light" CHECK(theme IN (\'dark\', \'light\')) ,\
+            language TEXT CHECK(language IN (\'English\', \'German\', \'Vietnamese\', \'French\')) ,\
+            theme    TEXT CHECK(theme IN (\'dark\', \'light\')) ,\
             dateBarStyle TEXT CHECK(dateBarStyle IN (\'DateWeek\', \'Week\', \'Date\')),\
             habitBarSize TEXT CHECK(habitBarSize IN (\'Large\', \'Small\')),\
             dailyReminderText TEXT,\
@@ -407,16 +407,16 @@ const initDatabase = () => {
         );
     }); 
 
-    db.transaction(tx => {
-        tx.executeSql(settingInit,
-        [], 
-        (txObj, resultSet) => {
-            console.log("Initialize setting data")
-            console.log(resultSet);
-        },
-        (txObj, error) => console.log(error)
-        );
-    }); 
+    // db.transaction(tx => {
+    //     tx.executeSql(settingInit,
+    //     [], 
+    //     (txObj, resultSet) => {
+    //         console.log("Initialize setting data")
+    //         console.log(resultSet);
+    //     },
+    //     (txObj, error) => console.log(error)
+    //     );
+    // }); 
 }
 
 const addHabit = (habit) => {    
@@ -523,19 +523,19 @@ const loadHabit_on_fone = (listHabit, dispatch) => {
         tx.executeSql('SELECT * FROM Habit', 
         [], 
         (txObj, resultSet) => {
-            // console.log("Loading data into habit list");
-            // console.log("List habit state");
-            // console.log(listHabit);
-            // console.log("Database resultset");
-            // console.log(resultSet.rows); 
-            // if (listHabit.length < resultSet.rows.length) {
-            //     for (let i = 0; i < resultSet.rows.length; i++) {
-            //         //console.log("Database resultset", resultSet.rows)
-            //         dispatch(addHabitList(resultSet.rows._array[i]));
-            //     } 
-            // }
+            console.log("Loading data into habit list");
+            console.log("List habit state");
+            console.log(listHabit);
+            console.log("Database resultset");
+            console.log(resultSet.rows); 
+            if (listHabit.length < resultSet.rows.length) {
+                for (let i = 0; i < resultSet.rows.length; i++) {
+                    //console.log("Database resultset", resultSet.rows)
+                    dispatch(addHabitList(resultSet.rows._array[i]));
+                } 
+            }
 
-            dispatch(addHabitList(resultSet.rows._array));
+            // dispatch(addHabitList(resultSet.rows._array));
         },
         (txObj, error) => console.log(error)
         );
