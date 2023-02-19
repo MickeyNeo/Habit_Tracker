@@ -486,14 +486,16 @@ const loadHabit_on_fone = (listHabit, dispatch) => {
             // console.log("Loading data into habit list");
             // console.log("List habit state");
             // console.log(listHabit);
-            console.log("Database resultset");
-            console.log(resultSet.rows); 
-            if (listHabit.length < resultSet.rows.length) {
-                for (let i = 0; i < resultSet.rows.length; i++) {
-                    //console.log("Database resultset", resultSet.rows)
-                    dispatch(addHabitList(resultSet.rows._array[i]));
-                } 
-            }
+            // console.log("Database resultset");
+            // console.log(resultSet.rows); 
+            // if (listHabit.length < resultSet.rows.length) {
+            //     for (let i = 0; i < resultSet.rows.length; i++) {
+            //         //console.log("Database resultset", resultSet.rows)
+            //         dispatch(addHabitList(resultSet.rows._array[i]));
+            //     } 
+            // }
+
+            dispatch(addHabitList(resultSet.rows._array));
         },
         (txObj, error) => console.log(error)
         );
@@ -541,12 +543,15 @@ const loadMemo = (listProgressDay, dispatch) => {
         [],
         (txObj, resultSet) => {
 
-            if (listProgressDay.length < resultSet.rows.length) {
-                for (let i = 0; i < resultSet.rows.length; i++) {
-                    // console.log("Database resultset", resultSet.rows)
-                    dispatch(addProgressList(resultSet.rows._array[i]));
-                } 
-            }
+            // if (listProgressDay.length < resultSet.rows.length) {
+            //     for (let i = 0; i < resultSet.rows.length; i++) {
+            //         // console.log("Database resultset", resultSet.rows)
+            //         dispatch(addProgressList(resultSet.rows._array[i]));
+            //     } 
+            // }
+
+            dispatch(addProgressList(resultSet.rows._array));
+
             // console.log("Loading memo to state");
             // console.log(resultSet.rows);
         },
@@ -747,7 +752,7 @@ const updateHabit = (habit, newHabit) => {
 
 }
 
-const calculateMonthlyVolumn = (habit, dispatch) => {
+const calculateMonthlyVolumn = (habit, state, dispatch) => {
     // console.log("Calculated Monthly Volumn");
     // console.log(habit.name)
     db.transaction(tx => {
@@ -764,6 +769,7 @@ const calculateMonthlyVolumn = (habit, dispatch) => {
                 var sum = (resultSet.rows[0]['SUM(progress)']) ? resultSet.rows[0]['SUM(progress)'] : 0;
               }
 
+            if (state.MonthlyVolumn != sum)
               dispatch(setMonthlyVolumn(sum))
               
             
@@ -773,7 +779,7 @@ const calculateMonthlyVolumn = (habit, dispatch) => {
     })
 }
 
-const calculateTotalVolumn  = (habit, dispatch) => {
+const calculateTotalVolumn  = (habit, state, dispatch) => {
 //    console.log("Calculated Total Volumn");    
 //     console.log(habit.name)
     db.transaction(tx => {
@@ -786,13 +792,13 @@ const calculateTotalVolumn  = (habit, dispatch) => {
             // console.log(resultSet.rows[0]['SUM(progress)']);
             // console.log(resultSet);
             if (Platform.OS === 'ios' || Platform.OS === 'android') {
-                // if(state.TotalVolumn != resultSet.rows._array[0]['SUM(progress)']){
+                if(state.TotalVolumn != resultSet.rows._array[0]['SUM(progress)']){
                     dispatch(setTotalVolumn(resultSet.rows._array[0]['SUM(progress)']))
-                // }
+                }
               } else {
-                // if(state.TotalVolumn != resultSet.rows[0]['SUM(progress)']){
+                if(state.TotalVolumn != resultSet.rows[0]['SUM(progress)']){
                     dispatch(setTotalVolumn(resultSet.rows[0]['SUM(progress)']))
-                // }
+                }
               }
             
         },
@@ -801,7 +807,7 @@ const calculateTotalVolumn  = (habit, dispatch) => {
     })  
 }
 
-const calculateDayDoneInMonth = (habit, dispatch) => {
+const calculateDayDoneInMonth = (habit, state, dispatch) => {
     // console.log("Calculated Day Done in month");
 
     // console.log(habit.name);
@@ -815,9 +821,9 @@ const calculateDayDoneInMonth = (habit, dispatch) => {
                     // console.log("Calculated Day Done in month",resultSet.rows)
                     
                     if (Platform.OS === 'ios' || Platform.OS === 'android') {
-                        // if(state.DayDoneInMonth != resultSet.rows._array[0]['COUNT(*)']){
+                        if(state.DayDoneInMonth != resultSet.rows._array[0]['COUNT(*)']){
                             dispatch(setDayDoneInMonth(resultSet.rows._array[0]['COUNT(*)']))
-                        // }
+                        }
                       } else {
                         // if(state.DayDoneInMonth != resultSet.rows[0]['COUNT(*)']){
                             dispatch(setDayDoneInMonth(resultSet.rows[0]['COUNT(*)']))
@@ -879,7 +885,7 @@ const calculateDayDoneInMonth = (habit, dispatch) => {
     }
 } */
 
-const calculateDayStarted  = (habit, dispatch) => {
+const calculateDayStarted  = (habit, state, dispatch) => {
     // console.log("Calculate Day Started ", habit.name);
 
     db.transaction(tx => {
@@ -894,8 +900,8 @@ const calculateDayStarted  = (habit, dispatch) => {
                 if (Platform.OS === 'ios' || Platform.OS === 'android') {
                     // if(state.DayTotalDone != resultSet.rows._array[0]['COUNT(*)']){
                         // console.log(resultSet.rows._array);
-
-                        dispatch(setDayStarted(resultSet.rows._array[0]['COUNT(*)']));
+                        if (state.DayStarted != resultSet.rows._array[0]['COUNT(*)'])
+                            dispatch(setDayStarted(resultSet.rows._array[0]['COUNT(*)']));
                     // }
                     } else {
                     // if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
@@ -908,7 +914,7 @@ const calculateDayStarted  = (habit, dispatch) => {
     })
 }
 
-const calculateDayTotalDone  = (habit, dispatch) => {
+const calculateDayTotalDone  = (habit, state, dispatch) => {
     // console.log("Calculate Day Total Done");
     if (habit instanceof Array) {
         db.transaction(tx => {
@@ -919,9 +925,9 @@ const calculateDayTotalDone  = (habit, dispatch) => {
             [],
             (txObj, resultSet) => {
                 
-
                 if (Platform.OS === 'ios' || Platform.OS === 'android') {
-                    dispatch(setEveryHabitDone(resultSet.rows._array[0]['COUNT(*)']));
+                    if (state.EveryHabitDone != resultSet.rows._array[0]['COUNT(*)'])
+                        dispatch(setEveryHabitDone(resultSet.rows._array[0]['COUNT(*)']));
                   } else {
                     dispatch(setEveryHabitDone(resultSet.rows[0]['COUNT(*)']));
                   }
@@ -959,7 +965,7 @@ const calculateDayTotalDone  = (habit, dispatch) => {
     }
 }
 
-const calculateCurrentStreak = (habit, dispatch) => {
+const calculateCurrentStreak = (habit, state, dispatch) => {
     // console.log("Calculated Current Streak, ", habit.name);
 
     db.transaction(tx => {
@@ -976,16 +982,16 @@ const calculateCurrentStreak = (habit, dispatch) => {
 
             // console.log('streak ', streak);
 
-            // if(state.CurrentStreak != streak){
+            if(state.CurrentStreak != streak){
                 dispatch(setCurrentStreak(streak))
-            // }
+            }
         },
         (txObj, error) => console.log(error)
         );
     })  
 }
 
-const calculateBestStreak = (habit, dispatch) => {
+const calculateBestStreak = (habit, state, dispatch) => {
     // console.log("Calculated Best Streak ", habit.name);
 
     db.transaction(tx => {
@@ -1001,9 +1007,9 @@ const calculateBestStreak = (habit, dispatch) => {
             let streak = BestStreak(resultSet.rows);
             // console.log(streak);
 
-            // if(state.BestStreak != streak){
+            if(state.BestStreak != streak){
                 dispatch(setBestStreak(streak))
-            // }
+            }
         },
         (txObj, error) => console.log(error)
         );
@@ -1258,7 +1264,7 @@ const numberHabitInDay = (listHabit, date) => {
     return count;
 }
 
-const CountPerfectDay = (listHabit, dispatch) => {
+const CountPerfectDay = (listHabit, state, dispatch) => {
 
     db.transaction(tx => {
         tx.executeSql("SELECT date, COUNT(*)\
@@ -1289,8 +1295,8 @@ const CountPerfectDay = (listHabit, dispatch) => {
             
 
             /* console.log('Counting perfect days: ', count); */
-
-            dispatch(setPerfectDayCount(count));
+            if (state.PerfectDayCount != count)
+                dispatch(setPerfectDayCount(count));
 
             /* if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
                 count += resultSet.rows[0]['COUNT(*)'];
@@ -1304,7 +1310,7 @@ const CountPerfectDay = (listHabit, dispatch) => {
     })
 }
 
-const CountPerfectStreak = (listHabit, dispatch) => {
+const CountPerfectStreak = (listHabit, state, dispatch) => {
 
     db.transaction(tx => {
         tx.executeSql("SELECT date, COUNT(*)\
@@ -1374,8 +1380,8 @@ const CountPerfectStreak = (listHabit, dispatch) => {
             
 
             // console.log('Counting perfect days: ', bestStreak); 
-
-            dispatch(setPerFectStreak(bestStreak));
+            if (state.PerfectStreak != bestStreak)
+                dispatch(setPerFectStreak(bestStreak));
 
         },
         (txObj, error) => console.log(error)
@@ -1383,7 +1389,7 @@ const CountPerfectStreak = (listHabit, dispatch) => {
     })
 }
 
-const CalculateOverallRate = (listHabit, dispatch) => {
+const CalculateOverallRate = (listHabit, state, dispatch) => {
     db.transaction(tx => {
         tx.executeSql("SELECT date, COUNT(*)\
         FROM Memo AS M\
@@ -1417,7 +1423,8 @@ const CalculateOverallRate = (listHabit, dispatch) => {
             const average = array => array.reduce((a, b) => a + b) / array.length;
             // console.log(rates)
             // console.log('Overall Rate: ', average(rates));
-            dispatch(setOverallRate(Math.round(average(rates) * 100)/100));
+            if (state.OverallRate != Math.round(average(rates) * 100)/100)
+                dispatch(setOverallRate(Math.round(average(rates) * 100)/100));
 
 
             /* if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){
@@ -1432,7 +1439,7 @@ const CalculateOverallRate = (listHabit, dispatch) => {
 }
 
 
-const CalculateDailyAverage = (dispatch) => {
+const CalculateDailyAverage = (state, dispatch) => {
 
     db.transaction(tx => {
         tx.executeSql("SELECT date, COUNT(*)\
@@ -1463,7 +1470,8 @@ const CalculateDailyAverage = (dispatch) => {
             const average = array => array.reduce((a, b) => a + b) / array.length;
             // console.log(rates)
             // console.log('Overall Rate: ', average(rates));
-            dispatch(setDailyAverage(Math.round(average(counts))));
+            if (state.DailyAverage != Math.round(average(counts)))
+                dispatch(setDailyAverage(Math.round(average(counts))));
 
 
             /* if(state.DayTotalDone != resultSet.rows[0]['COUNT(*)']){

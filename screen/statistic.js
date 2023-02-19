@@ -31,11 +31,11 @@ const Statistic = ({navigation}) => {
     const {currentTheme} =state
     // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
   useEffect(() => {
-    calculateDayTotalDone(state.listHabit, dispatch);
-    CountPerfectDay(state.listHabit, dispatch);
-    CountPerfectStreak(state.listHabit, dispatch);
-    CalculateOverallRate(state.listHabit, dispatch);
-    CalculateDailyAverage(dispatch);
+    calculateDayTotalDone(state.listHabit, state, dispatch);
+    CountPerfectDay(state.listHabit, state, dispatch);
+    CountPerfectStreak(state.listHabit, state, dispatch);
+    CalculateOverallRate(state.listHabit, state, dispatch);
+    CalculateDailyAverage(state, dispatch);
   }, []); // 👈️ empty dependencies array
     
     
@@ -79,13 +79,13 @@ const Statistic = ({navigation}) => {
                                 getMemmoCurDay(habit, state, dispatch);
                                 getDataOfCurWeek(habit, state, dispatch);
                                 getUnitNameforHOAD(habit, state, dispatch)
-                                calculateDayDoneInMonth(habit, dispatch);
-                                calculateDayTotalDone(habit, dispatch);
-                                calculateMonthlyVolumn(habit, dispatch);
-                                calculateTotalVolumn(habit, dispatch);
-                                calculateCurrentStreak(habit, dispatch);
-                                calculateBestStreak(habit, dispatch);
-                                calculateDayStarted(habit, dispatch);
+                                calculateDayDoneInMonth(habit, state, dispatch);
+                                calculateDayTotalDone(habit, state, dispatch);
+                                calculateMonthlyVolumn(habit, state, dispatch);
+                                calculateTotalVolumn(habit, state, dispatch);
+                                calculateCurrentStreak(habit, state, dispatch);
+                                calculateBestStreak(habit, state, dispatch);
+                                calculateDayStarted(habit, state, dispatch);
                                 // dispatch(setDayDoneInMonth(state.DayDoneInMonth));
                                 // dispatch(setDayTotalDone(state.DayTotalDone));
                                 // dispatch(setMonthlyVolumn(state.MonthlyVolumn));

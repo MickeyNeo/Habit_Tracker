@@ -45,7 +45,6 @@ const globalState = {
         iconFamily: '',
         flag: 0,
     },
-    listHabit: [],
     memo: {
         habitID: 0,
         date: '',
@@ -147,6 +146,7 @@ const globalState = {
     memoCurDay: '',
     memoCurDate: '',
     listMemo: [],
+    listHabit: [],
     listMemoDate: [],
     checkHaveMemo : -1,
     listPro: [],
@@ -172,17 +172,21 @@ function reducer (state , action) {
                 stateLanguage: action.payload,
             }
         case ADD_HABIT_LIST:
-            for (let i = 0; i < state.listHabit.length; i++) {
-                // console.log("habit payload: ", action.payload.name)
-                if (state.listHabit[i].name == action.payload.name) {
-                    return {
-                        ...state
-                    }
-                }
-            }
+            // for (let i = 0; i < state.listHabit.length; i++) {
+            //     // console.log("habit payload: ", action.payload.name)
+            //     if (state.listHabit[i].name == action.payload.name) {
+            //         return {
+            //             ...state
+            //         }
+            //     }
+            // }
+            // return {
+            //     ...state,
+            //     listHabit: [...state.listHabit, action.payload]
+            // }
             return {
                 ...state,
-                listHabit: [...state.listHabit, action.payload]
+                listHabit: [...action.payload]
             }
         case EMPTY_HABIT_LIST:
             if (state.listHabit.length >= action.payload) {
@@ -196,18 +200,22 @@ function reducer (state , action) {
                 listHabit: []
             }
         case ADD_PROGRESS_LIST:
-            for (let i = 0; i < state.listProgressDay.length; i++) {
-                // console.log("Progress payload: ", action.payload.habitName)
-                if (state.listProgressDay[i].habitName == action.payload.habitName 
-                    && state.listProgressDay[i].date == action.payload.date) {
-                    return {
-                        ...state
-                    }
-                }
-            }
+            // for (let i = 0; i < state.listProgressDay.length; i++) {
+            //     // console.log("Progress payload: ", action.payload.habitName)
+            //     if (state.listProgressDay[i].habitName == action.payload.habitName 
+            //         && state.listProgressDay[i].date == action.payload.date) {
+            //         return {
+            //             ...state
+            //         }
+            //     }
+            // }
+            // return {
+            //     ...state,
+            //     listProgressDay: [...state.listProgressDay, action.payload]
+            // }
             return {
                 ...state,
-                listProgressDay: [...state.listProgressDay, action.payload]
+                listProgressDay: [...action.payload]
             }
         case SET_THEME:
             const newThemeKey = state.currentTheme.id === "dark" ? "light" : "dark"
