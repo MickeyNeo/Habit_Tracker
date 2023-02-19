@@ -583,14 +583,14 @@ const loadMemo = (listProgressDay, dispatch) => {
         [],
         (txObj, resultSet) => {
 
-            // if (listProgressDay.length < resultSet.rows.length) {
-            //     for (let i = 0; i < resultSet.rows.length; i++) {
-            //         // console.log("Database resultset", resultSet.rows)
-            //         dispatch(addProgressList(resultSet.rows._array[i]));
-            //     } 
-            // }
+            if (listProgressDay.length < resultSet.rows.length) {
+                for (let i = 0; i < resultSet.rows.length; i++) {
+                    // console.log("Database resultset", resultSet.rows)
+                    dispatch(addProgressList(resultSet.rows._array[i]));
+                } 
+            }
 
-            dispatch(addProgressList(resultSet.rows._array));
+            // dispatch(addProgressList(resultSet.rows._array));
 
             // console.log("Loading memo to state");
             // console.log(resultSet.rows);

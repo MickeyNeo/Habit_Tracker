@@ -174,22 +174,22 @@ function reducer (state , action) {
                 stateLanguage: action.payload,
             }
         case ADD_HABIT_LIST:
-            // for (let i = 0; i < state.listHabit.length; i++) {
-            //     // console.log("habit payload: ", action.payload.name)
-            //     if (state.listHabit[i].name == action.payload.name) {
-            //         return {
-            //             ...state
-            //         }
-            //     }
-            // }
-            // return {
-            //     ...state,
-            //     listHabit: [...state.listHabit, action.payload]
-            // }
+            for (let i = 0; i < state.listHabit.length; i++) {
+                // console.log("habit payload: ", action.payload.name)
+                if (state.listHabit[i].name == action.payload.name) {
+                    return {
+                        ...state
+                    }
+                }
+            }
             return {
                 ...state,
-                listHabit: [...action.payload]
+                listHabit: [...state.listHabit, action.payload]
             }
+            // return {
+            //     ...state,
+            //     listHabit: [...action.payload]
+            // }
         case EMPTY_HABIT_LIST:
             if (state.listHabit.length >= action.payload) {
                 return {
@@ -202,23 +202,23 @@ function reducer (state , action) {
                 listHabit: []
             }
         case ADD_PROGRESS_LIST:
-            // for (let i = 0; i < state.listProgressDay.length; i++) {
-            //     // console.log("Progress payload: ", action.payload.habitName)
-            //     if (state.listProgressDay[i].habitName == action.payload.habitName 
-            //         && state.listProgressDay[i].date == action.payload.date) {
-            //         return {
-            //             ...state
-            //         }
-            //     }
-            // }
-            // return {
-            //     ...state,
-            //     listProgressDay: [...state.listProgressDay, action.payload]
-            // }
+            for (let i = 0; i < state.listProgressDay.length; i++) {
+                // console.log("Progress payload: ", action.payload.habitName)
+                if (state.listProgressDay[i].habitName == action.payload.habitName 
+                    && state.listProgressDay[i].date == action.payload.date) {
+                    return {
+                        ...state
+                    }
+                }
+            }
             return {
                 ...state,
-                listProgressDay: [...action.payload]
+                listProgressDay: [...state.listProgressDay, action.payload]
             }
+            // return {
+            //     ...state,
+            //     listProgressDay: [...action.payload]
+            // }
         case SET_THEME:
             const newThemeKey = state.currentTheme.id === "dark" ? "light" : "dark"
             return {
@@ -261,7 +261,7 @@ function reducer (state , action) {
                 ...state,
                 stateLanguage: action.payload.stateLanguage,
                 currentThemeID: action.payload.currentThemeID,
-                currentTheme: action.payload.currentThemeID==='light' ? theme.light : theme.dark, 
+                currentTheme: action.payload.currentThemeID ==='light' ? theme.light : theme.dark, 
                 habitBarStyle: action.payload.habitBarStyle,
                 dateBarStyle: action.payload.dateBarStyle,
                 stateHabitStat: action.payload.habitStat,
