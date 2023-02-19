@@ -19,6 +19,7 @@ import { useStore , setListProgressDay, delHabit, editListProgressDay} from '../
 import { setHabitInput } from '../Store/action'
 import { db, addHabit, updateHabit } from '../Store/database'
 import { Tile } from "@rneui/base";
+//sua nhieu chut
 const EditHabit = ({navigation, route}) => {
   const frequency_of_day = ["Daily", "Weekly", "Monthly"]
   const frequency_of_week = ["Weekly", "Monthly"]
