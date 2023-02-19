@@ -19,13 +19,15 @@ const Home = ({ navigation }) => {
   // const db = SQLite.openDatabase('Habit_tracker.db');
 
   // refreshDatabase();  
-  // initDatabase();
+  initDatabase();
 
   // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
   useEffect(() => {
     if (Platform.OS === 'ios' || Platform.OS === 'android') {
       loadHabit_on_fone(state.listHabit, dispatch)
       loadMemo(state.listProgressDay, dispatch)
+      loadSetting(state, dispatch);
+
      
     } else {
       loadHabit_on_web(state.listHabit, dispatch)
@@ -40,8 +42,7 @@ const Home = ({ navigation }) => {
 
   //refreshDatabase(state.listHabit, dispatch)
   // console.log('home',state.listProgressDay.length)
-  console.log(state.listHabit)
-  //loadSetting(state, dispatch);
+  // console.log(state.listHabit)
   /* loadUnit(); */
   // console.log('list', state.listHabit)
   const HabitZone = (values,navigation,date,listProgressDay, state,check) => {
@@ -54,7 +55,7 @@ const Home = ({ navigation }) => {
     //const [state,dispatch] = useStore();
 
     // const {listProgressDay} =state
-    console.log('listProgressDay',listProgressDay)
+    // console.log('listProgressDay',listProgressDay)
     
 
     const arr3 = values.map(obj => {

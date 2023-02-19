@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from 'react';
 import {Text,  View, StyleSheet, ScrollView, TouchableOpacity,Switch,Button} from 'react-native';
 import { useStore,setTheme,setDateBarStyle,setHabitBarSize } from "../../Store";
+import { updateSettingTheme } from "../../Store/database";
 
 const valueHBS = ['Simple','Intutive'];
 const valueDBS =['Week only','Day + Week','Date only'];
@@ -13,7 +14,7 @@ export default function Theme (){
     //const [DBS, setDBS] =useState('Normal')
     const flag = (currentTheme.id =='light')? true:false
     const [isEnabledSwitch, setIsEnabledSwitch] =useState(flag)
-    const toggleSwitch = () => {setIsEnabledSwitch(previousState => !previousState),dispatch(setTheme())};
+    const toggleSwitch = () => {setIsEnabledSwitch(previousState => !previousState),dispatch(setTheme()), updateSettingTheme((state.currentTheme.id == 'light') ? 'dark' : 'light')};
     const [HBS,setHBS] = useState(state.dateBarStyle?'Monday':'Sunday')
     console.log('date bar size',state.habitBarSize)
     const handleHBS =()=>{

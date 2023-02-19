@@ -120,7 +120,9 @@ const globalState = {
     ],
     listProgressDay: [],
     stateLanguage:"English",
+    currentThemeID: 'light',
     currentTheme: theme.light,
+    
     stateHabitStat: true,
     dateBarStyle: true,
     habitBarSize: true,
@@ -258,7 +260,8 @@ function reducer (state , action) {
             return{
                 ...state,
                 stateLanguage: action.payload.stateLanguage,
-                currentTheme: action.payload.theme,
+                currentThemeID: action.payload.currentThemeID,
+                currentTheme: action.payload.currentThemeID==='light' ? theme.light : theme.dark, 
                 habitBarStyle: action.payload.habitBarStyle,
                 dateBarStyle: action.payload.dateBarStyle,
                 stateHabitStat: action.payload.habitStat,

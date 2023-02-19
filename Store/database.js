@@ -2,13 +2,13 @@ import * as SQLite from 'expo-sqlite';
 import { useContext } from 'react';
 import Context from './Context';
 import reducer, { globalState } from './reducer';
-import { addHabitList, emptyHabitList, setDayStarted, setOverallRate, setPerFectStreak, addProgressList} from './action';
+import { addHabitList, emptyHabitList, setDayStarted, setOverallRate, setPerFectStreak, addProgressList, addStateSetting} from './action';
 import {useStore,setDayDoneInMonth,setDayTotalDone,setMonthlyVolumn,
     setTotalVolumn, setCurrentStreak, setBestStreak, setUnit,setUnitHOAD,
     setDataOfCurWeek, setMemmoCurDay, setListMemmo, setEveryHabitDone, setPerfectDayCount,
     setDailyAverage, setCheckHaveMemo, setProCurMonth} from '../Store'
 import {React, useState } from 'react';
-import { memoInit, habitInit, reminderInit, unitInit, tagInit, haveTagInit } from './init_data';
+import { memoInit, habitInit, reminderInit, unitInit, tagInit, haveTagInit, settingInit } from './init_data';
 import moment from 'moment';
 import { Platform } from 'react-native';
 
@@ -389,9 +389,10 @@ const initDatabase = () => {
 
     db.transaction(tx => {
         tx.executeSql('CREATE TABLE IF NOT EXISTS Setting (\
-            language TEXT CHECK(language IN (\'English\', \'German\', \'Vietnamese\', \'French\')),\
-            theme    TEXT CHECK(theme IN (\'Dark\', \'Light\')),\
-            dateBarStyle TEXT CHECK(theme IN (\'DateWeek\', \'Week\', \'Date\')),\
+            id INTEGER DEFAULT 0 PRIMARY KEY,\
+            language TEXT DEFAULT "Vietnamese" CHECK(language IN (\'English\', \'German\', \'Vietnamese\', \'French\')) ,\
+            theme    TEXT DEFAULT "light" CHECK(theme IN (\'dark\', \'light\')) ,\
+            dateBarStyle TEXT CHECK(dateBarStyle IN (\'DateWeek\', \'Week\', \'Date\')),\
             habitBarSize TEXT CHECK(habitBarSize IN (\'Large\', \'Small\')),\
             dailyReminderText TEXT,\
             dailyReminderTime TEXT,\
@@ -399,8 +400,19 @@ const initDatabase = () => {
         )',
         [], 
         (txObj, resultSet) => {
-            // console.log("Initialize setting table")
-            // console.log(resultSet);
+            console.log("Initialize setting table")
+            console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    }); 
+
+    db.transaction(tx => {
+        tx.executeSql(settingInit,
+        [], 
+        (txObj, resultSet) => {
+            console.log("Initialize setting data")
+            console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -452,6 +464,34 @@ const updateProgressMemo = (habitName,today, content, progress) => {
         (txObj, resultSet) => {
             // console.log("Update habit name ", habitName, " from table Memo to ", newHabit.name);
             // console.log('update Memo to db here',resultSet.rows._array);
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+
+}
+
+const updateSettingTheme = (theme) => {    
+    db.transaction(tx => {
+        tx.executeSql("UPDATE Setting \
+        SET theme = ?", 
+        [theme],
+        (txObj, resultSet) => {
+            console.log('Updating theme: ', theme)
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+
+}
+
+const updateSettingHabitBarSize = (theme) => {    
+
+    db.transaction(tx => {
+        tx.executeSql("UPDATE Setting \
+        SET habitBarStyle = ?", 
+        [theme],
+        (txObj, resultSet) => {
         },
         (txObj, error) => console.log(error)
         );
@@ -596,11 +636,11 @@ const loadSetting = (state, dispatch) => {
     /* db.transaction(tx => {"DROP TABLE Habit"}); */
 
     db.transaction(tx => {
-        tx.executeSql('SELECT * FROM setting', 
+        tx.executeSql('SELECT * FROM Setting', 
         [],
         (txObj, resultSet) => {
-            // console.log("Loading setting into global state");
-            // console.log("resultSet.rows");
+            console.log("Loading setting into global state");
+            console.log(resultSet.rows);
             dispatch(addStateSetting(resultSet.rows));
         },
         (txObj, error) => console.log(error)
@@ -1516,4 +1556,4 @@ export {db,getAllMemmo,getMemmoCurDay,getUnitNameforHOAD, getDataOfCurWeek,getUn
     updateHabit, loadSetting, calculateDayDoneInMonth, calculateMonthlyVolumn, 
     calculateTotalVolumn, calculateDayTotalDone, calculateCurrentStreak, calculateBestStreak, CountPerfectDay,
     CalculateOverallRate, CalculateDailyAverage, CountPerfectStreak, loadMemo, calculateDayStarted, 
-    checkHaveMemoCurDay, addMemo,updateProgressMemo, getProgressCurMonth}
+    checkHaveMemoCurDay, addMemo,updateProgressMemo, getProgressCurMonth, updateSettingTheme, updateSettingHabitBarSize}
