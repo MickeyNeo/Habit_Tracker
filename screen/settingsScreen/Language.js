@@ -36,7 +36,7 @@ export default function Language (params){
                             />
                         </View>
                         <View style={styles.buttonType}>
-                            <Button  title="Confirm" color="pink" onPress={() => {params.setModalVisible(false);dispatch((setLanguage(lg)))}} />
+                            <Button  title="Confirm" color={currentTheme.color} onPress={() => {params.setModalVisible(false);dispatch((setLanguage(lg)))}} />
                         </View>
                         
                     </View>
@@ -89,7 +89,7 @@ const styles=StyleSheet.create({
         marginRight: 30,
         marginBottom: 10, 
         paddingVertical: 5,
-        //backgroundColor: 'white',
+        backgroundColor: 'pink',
     },
     text:{
         flex:1,
