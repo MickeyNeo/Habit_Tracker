@@ -41,7 +41,7 @@ const EditHabit = ({navigation, route}) => {
       Week.push(day);
   }
   const month = [];
-  for ( var i = 0; i < 30; i++)
+  for ( var i = 0; i < 31; i++)
   {
       month.push({id:i+1 , title: i+1, selected: 1})
   }
@@ -65,13 +65,14 @@ const EditHabit = ({navigation, route}) => {
       Week[i].selected = freq_selected.includes(Week[i].title) ? 1 : 0;
     }
   }
-  else {
+  else  {
     for (let i = 0; i < month.length; i++) 
     {
       month[i].selected = freq_selected.includes(month[i].title) ? 1 : 0;
     }
   }
-  console.log(Week);
+  console.log(month);
+
   const [value, setState] = useState({
       goal: Habit.goalNo,
       currentTabPeriod: Habit.goalPeriod,
@@ -90,13 +91,14 @@ const EditHabit = ({navigation, route}) => {
       icon: Habit.icon,
       iconFamily: Habit.iconFamily,
   });
-  const theme = useContext(themeContext);
+  const showday = []
+  value.selectedFreq.forEach((item) => { if (item.selected == true ) showday.push(item.title)})
   const toggleSwitch = () => setState(prevState => ({ ...prevState, isEnabled: !prevState.isEnabled}));
   const habit = {
       id: Habit.id,
       name: value.habitname,
       note: value.note,
-      frequency: value.frequency,
+      frequency: showday.join(),
       color: value.changecolor,
       // tagID: Habit.tagID,
       frequencyType: value.selectedItem,
@@ -114,6 +116,7 @@ const EditHabit = ({navigation, route}) => {
       flag : Habit.flag,
       tag: value.tag,
   }
+  //console.log(habit)
   //Tag
   const [iTag, setiTag] = useState([])
   const [newTag, setNewTag] = useState('');
@@ -262,7 +265,7 @@ const EditHabit = ({navigation, route}) => {
                   </View>
                   {/* Tag */}
                   <View style = {{flexDirection: 'column', padding: 10}}>
-                            <Text style ={{fontWeight: 'bold', color: theme.color,color: currentTheme.color }}>Tag</Text>
+                            <Text style ={{fontWeight: 'bold',color: currentTheme.color }}>Tag</Text>
                             <TouchableOpacity style={{flexDirection:'row',padding: 10,justifyContent: 'space-between' }} onPress={() => setModalVisible(true)}>  
                               <Text style={[styles.boder,{backgroundColor:value.changecolor,color: currentTheme.color}]}>{value.tag}</Text>
                             </TouchableOpacity>
