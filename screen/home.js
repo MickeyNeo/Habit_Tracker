@@ -23,14 +23,10 @@ const Home = ({ navigation }) => {
 
   // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
   useEffect(() => {
-    if (Platform.OS === 'ios' || Platform.OS === 'android') {
+
       loadHabit_on_fone(state.listHabit, dispatch)
       loadMemo(state.listProgressDay, dispatch)
-     
-    } else {
-      loadHabit_on_web(state.listHabit, dispatch)
-    }
-    
+
   }, []); // 👈️ empty dependencies array
   const today = new Date();
   const [selectedDay, setSelectedDay] = useState(format(today, 'MM/dd/yyyy'));
