@@ -38,7 +38,7 @@ export default function TabBar (params){
                                 
                             </View>
                             <View style={styles.buttonType}>
-                                <Button  title="Confirm" color="pink" onPress={() => {params.setModalVisible(false),dispatch(setHabitStat(isEnabledSwitch))}} />
+                                <Button  title="Confirm" color={currentTheme.color} onPress={() => {params.setModalVisible(false),dispatch(setHabitStat(isEnabledSwitch))}} />
                             </View>
                         </View>
                 </Modal>       
@@ -66,7 +66,7 @@ const styles=StyleSheet.create({
         marginRight: 30,
         marginBottom: 10, 
         paddingVertical: 5,
-        //backgroundColor: 'pink',
+        backgroundColor: 'pink',
     },
     text:{
         
