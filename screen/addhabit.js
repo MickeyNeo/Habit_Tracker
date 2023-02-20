@@ -74,8 +74,8 @@ const AddHabit = ({navigation, route}) => {
         remainderMessage: value.mess,
         showMemo: value.isEnabled,
         chartType: 0,
-        habitStartDate: value.startDay,
-        habitEndDate: value.endDay,
+        habitStartDate: value.startDay.toString(),
+        habitEndDate: value.endDay.toString(),
         goalNo: value.goal,
         tag: value.tag,
         goalPeriod: value.currentTabPeriod,
@@ -314,6 +314,7 @@ const AddHabit = ({navigation, route}) => {
         <SafeAreaView style = {[styles.homeZone,{backgroundColor:currentTheme.backgroundColor}]}> 
             <TouchableOpacity 
                 onPress={() => {
+                    console.log("Habit in addHabit: ", habit)
                     // dispatch(addHabitOfaDay(name.toLowerCase()));
                     dispatch(setHabitInput(habit));
                     dispatch(addHabitList(habit));

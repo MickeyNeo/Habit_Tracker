@@ -18,8 +18,8 @@ const Home = ({ navigation }) => {
   
   // const db = SQLite.openDatabase('Habit_tracker.db');
 
-  //refreshDatabase();  
-  //initDatabase();
+  // refreshDatabase();  
+  initDatabase();
 
   // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
   useEffect(() => {
@@ -51,7 +51,7 @@ const Home = ({ navigation }) => {
     //const [state,dispatch] = useStore();
 
     // const {listProgressDay} =state
-    console.log('listProgressDay',listProgressDay)
+    // console.log('listProgressDay',listProgressDay)
     
 
     const arr3 = values.map(obj => {
