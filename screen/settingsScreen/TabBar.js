@@ -3,12 +3,13 @@ import { useState } from 'react';
 import {Text,  View, StyleSheet,Button, Switch } from 'react-native';
 import Modal from "react-native-modal";
 import { useStore,setHabitStat} from "../../Store";
+import { updateHabitStat } from "../../Store/database";
 
 export default function TabBar (params){
     const [state, dispatch] =useStore()
     const {stateHabitStat,currentTheme} =state
     const [isEnabledSwitch, setIsEnabledSwitch] =useState(stateHabitStat)
-    const toggleSwitch = () => {setIsEnabledSwitch(previousState => !previousState)};
+    const toggleSwitch = () => {setIsEnabledSwitch(previousState => !previousState), updateHabitStat(!isEnabledSwitch)};
     
     return(         
         <View >
