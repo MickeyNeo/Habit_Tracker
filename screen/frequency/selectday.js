@@ -20,7 +20,7 @@ export default function SelectFreq (params){
                 onBackdropPress={() => params.setModalVisible(false)}
                 >
                      <View style={{
-                            height: params.freq == 'Week' ? '10%' : '25%', 
+                            height: params.freq == 'Week' ? '10%' : '28%', 
                             borderRadius: 30, 
                             borderWidth: 1,
                             backgroundColor: params.currentTheme.backgroundColor,}}>
@@ -180,7 +180,7 @@ const SelectZone = ({ values, buttonPressed, condition, color, flag, currentThem
     );
 const ChooseFreq = ({values, color, selected, setFreq, setSelect, week, month, currentTheme}) =>
     (   
-        <View style ={{flexDirection: 'column '}}>
+        <View style ={{flexDirection: 'column'}}>
             {values.map((value) => 
                 <TouchableOpacity 
                 onPress = {() => 
