@@ -208,6 +208,7 @@ const EditHabit = ({navigation, route}) => {
                       <Text style ={{fontWeight: 'bold', color: currentTheme.color }}>Name</Text>
                       <TextInput
                           style={[styles.textInput, {backgroundColor:(currentTheme.backgroundColor=='#1f1e1e')?'#918e8e':'#f5f5f5', color: currentTheme.color}]}
+                          editable={false}
                           placeholder={(value.habitname)}
                           value={value.habitname}
                           onChangeText={(value) => setState(prevState => ({ ...prevState, habitname: value }))}
