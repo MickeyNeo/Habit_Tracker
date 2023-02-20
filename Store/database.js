@@ -407,16 +407,16 @@ const initDatabase = () => {
         );
     }); 
 
-    // db.transaction(tx => {
-    //     tx.executeSql(settingInit,
-    //     [], 
-    //     (txObj, resultSet) => {
-    //         console.log("Initialize setting data")
-    //         console.log(resultSet);
-    //     },
-    //     (txObj, error) => console.log(error)
-    //     );
-    // }); 
+    db.transaction(tx => {
+        tx.executeSql(settingInit,
+        [], 
+        (txObj, resultSet) => {
+            console.log("Initialize setting data")
+            console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    }); 
 }
 
 const addHabit = (habit) => {    

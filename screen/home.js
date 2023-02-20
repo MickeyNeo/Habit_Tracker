@@ -19,13 +19,14 @@ const Home = ({ navigation }) => {
   // const db = SQLite.openDatabase('Habit_tracker.db');
 
   // refreshDatabase();  
-  initDatabase();
+  // initDatabase();
 
   // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
   useEffect(() => {
 
       loadHabit_on_fone(state.listHabit, dispatch)
       loadMemo(state.listProgressDay, dispatch)
+      loadSetting(state, dispatch);
 
   }, []); // 👈️ empty dependencies array
   const today = new Date();
@@ -34,11 +35,10 @@ const Home = ({ navigation }) => {
   const listH = state.listHabit
   const listP = state.listProgressDay
 
-  // loadSetting(state, dispatch);
 
   //refreshDatabase(state.listHabit, dispatch)
   // console.log('home',state.listProgressDay.length)
-  console.log('list' ,state.listHabit)
+  // console.log('list' ,state.listHabit)
   /* loadUnit(); */
   // console.log('list', state.listHabit)
   const HabitZone = (values,navigation,date,listProgressDay, state,check) => {

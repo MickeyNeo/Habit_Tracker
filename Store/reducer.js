@@ -257,16 +257,17 @@ function reducer (state , action) {
                 habitBarSize: action.payload,
             }
         case ADD_STATE_SETTING:
+            console.log('Add state setting - payload: ', action.payload);
             return{
                 ...state,
-                stateLanguage: action.payload.stateLanguage,
-                currentThemeID: action.payload.currentThemeID,
-                currentTheme: action.payload.currentThemeID ==='light' ? theme.light : theme.dark, 
-                habitBarStyle: action.payload.habitBarStyle,
-                dateBarStyle: action.payload.dateBarStyle,
-                stateHabitStat: action.payload.habitStat,
-                dailyReminderTime: action.payload.dailyReminderTime,
-                dailyReminderText: action.payload.dailyReminderText
+                stateLanguage: action.payload._array[0].stateLanguage,
+                currentThemeID: action.payload._array[0].theme,
+                currentTheme: action.payload._array[0].theme =='light' ? theme.light : theme.dark, 
+                habitBarSize: action.payload._array[0].habitBarSize,
+                dateBarStyle: action.payload._array[0].dateBarStyle,
+                stateHabitStat: action.payload._array[0].habitStat,
+                dailyReminderTime: action.payload._array[0].dailyReminderTime,
+                dailyReminderText: action.payload._array[0].dailyReminderText
             }
         case INIT_DAY_DONE_IN_MONTH:
             return{
