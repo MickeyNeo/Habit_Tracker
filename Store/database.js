@@ -485,6 +485,20 @@ const updateSettingTheme = (theme) => {
 
 }
 
+const updateHabitStat = (habitStat) => {    
+    db.transaction(tx => {
+        tx.executeSql("UPDATE Setting \
+        SET habitStat = ?", 
+        [habitStat==true? 1: 0],
+        (txObj, resultSet) => {
+            console.log('Updating habit Stat: ', habitStat)
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+
+}
+
 const updateSettingHabitBarSize = (habitBarSize) => {    
 
     db.transaction(tx => {
@@ -1573,4 +1587,4 @@ export {db,getAllMemmo,getMemmoCurDay,getUnitNameforHOAD, getDataOfCurWeek,getUn
     calculateTotalVolumn, calculateDayTotalDone, calculateCurrentStreak, calculateBestStreak, CountPerfectDay,
     CalculateOverallRate, CalculateDailyAverage, CountPerfectStreak, loadMemo, calculateDayStarted, 
     checkHaveMemoCurDay, addMemo,updateProgressMemo, getProgressCurMonth, updateSettingTheme, updateSettingHabitBarSize,
-    updateSettingDateBarStyle}
+    updateSettingDateBarStyle, updateHabitStat}

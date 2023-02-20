@@ -265,7 +265,7 @@ function reducer (state , action) {
                 currentTheme: action.payload._array[0].theme =='light' ? theme.light : theme.dark, 
                 habitBarSize: action.payload._array[0].habitBarSize==='Small' ? false: true,
                 dateBarStyle: action.payload._array[0].dateBarStyle==='Sunday' ? false: true,
-                stateHabitStat: action.payload._array[0].habitStat,
+                stateHabitStat: action.payload._array[0].habitStat==1? true: false,
                 dailyReminderTime: action.payload._array[0].dailyReminderTime,
                 dailyReminderText: action.payload._array[0].dailyReminderText
             }
