@@ -392,8 +392,8 @@ const initDatabase = () => {
             id INTEGER DEFAULT 0 PRIMARY KEY,\
             language TEXT CHECK(language IN (\'English\', \'German\', \'Vietnamese\', \'French\')) ,\
             theme    TEXT CHECK(theme IN (\'dark\', \'light\')) ,\
-            dateBarStyle TEXT CHECK(dateBarStyle IN (\'DateWeek\', \'Week\', \'Date\')),\
-            habitBarSize TEXT CHECK(habitBarSize IN (\'Large\', \'Small\')),\
+            dateBarStyle TEXT CHECK(dateBarStyle IN (\'Monday\', \'Sunday\')),\
+            habitBarSize TEXT CHECK(habitBarSize IN (\'Normal\', \'Small\')),\
             dailyReminderText TEXT,\
             dailyReminderTime TEXT,\
             habitStat INTERGER CHECK(habitStat IN (0, 1))\
@@ -477,7 +477,7 @@ const updateSettingTheme = (theme) => {
         SET theme = ?", 
         [theme],
         (txObj, resultSet) => {
-            console.log('Updating theme: ', theme)
+            // console.log('Updating theme: ', theme)
         },
         (txObj, error) => console.log(error)
         );
@@ -485,13 +485,29 @@ const updateSettingTheme = (theme) => {
 
 }
 
-const updateSettingHabitBarSize = (theme) => {    
+const updateSettingHabitBarSize = (habitBarSize) => {    
 
     db.transaction(tx => {
         tx.executeSql("UPDATE Setting \
-        SET habitBarStyle = ?", 
-        [theme],
+        SET habitBarSize = ?", 
+        [habitBarSize],
         (txObj, resultSet) => {
+            console.log('Updating Habit Bar Size: ', habitBarSize)
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+
+}
+
+const updateSettingDateBarStyle = (dateBarStyle) => {    
+
+    db.transaction(tx => {
+        tx.executeSql("UPDATE Setting \
+        SET dateBarStyle = ?", 
+        [dateBarStyle],
+        (txObj, resultSet) => {
+            // console.log('Updating Date Bar Style: ', dateBarStyle)
         },
         (txObj, error) => console.log(error)
         );
@@ -1556,4 +1572,5 @@ export {db,getAllMemmo,getMemmoCurDay,getUnitNameforHOAD, getDataOfCurWeek,getUn
     updateHabit, loadSetting, calculateDayDoneInMonth, calculateMonthlyVolumn, 
     calculateTotalVolumn, calculateDayTotalDone, calculateCurrentStreak, calculateBestStreak, CountPerfectDay,
     CalculateOverallRate, CalculateDailyAverage, CountPerfectStreak, loadMemo, calculateDayStarted, 
-    checkHaveMemoCurDay, addMemo,updateProgressMemo, getProgressCurMonth, updateSettingTheme, updateSettingHabitBarSize}
+    checkHaveMemoCurDay, addMemo,updateProgressMemo, getProgressCurMonth, updateSettingTheme, updateSettingHabitBarSize,
+    updateSettingDateBarStyle}

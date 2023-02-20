@@ -66,5 +66,5 @@ export const haveTagInit = "INSERT INTO HaveTag (habitName, tagId) VALUES\
     ('Meditate', 3),\
     ('Dancing', 1)"
 
-export const settingInit = "INSERT INTO Setting (id, theme, dateBarStyle, habitBarSize, dailyReminderText, dailyReminderTime, habitStat) VALUES\
-(0, 'light', 'Week', 'Small', '', '', 1)"
+export const settingInit = "INSERT INTO Setting (id, language, theme, dateBarStyle, habitBarSize, dailyReminderText, dailyReminderTime, habitStat) VALUES\
+(0, 'Vietnamese', 'light', 'Monday', 'Small', '', '', 1)"

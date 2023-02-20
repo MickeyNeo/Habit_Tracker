@@ -260,11 +260,11 @@ function reducer (state , action) {
             console.log('Add state setting - payload: ', action.payload);
             return{
                 ...state,
-                stateLanguage: action.payload._array[0].stateLanguage,
+                stateLanguage: action.payload._array[0].language,
                 currentThemeID: action.payload._array[0].theme,
                 currentTheme: action.payload._array[0].theme =='light' ? theme.light : theme.dark, 
-                habitBarSize: action.payload._array[0].habitBarSize,
-                dateBarStyle: action.payload._array[0].dateBarStyle,
+                habitBarSize: action.payload._array[0].habitBarSize==='Small' ? false: true,
+                dateBarStyle: action.payload._array[0].dateBarStyle==='Sunday' ? false: true,
                 stateHabitStat: action.payload._array[0].habitStat,
                 dailyReminderTime: action.payload._array[0].dailyReminderTime,
                 dailyReminderText: action.payload._array[0].dailyReminderText
