@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from 'react';
 import {Text,  View, StyleSheet, ScrollView, TouchableOpacity,Switch,Button} from 'react-native';
 import { useStore,setTheme,setDateBarStyle,setHabitBarSize } from "../../Store";
-import { updateSettingTheme } from "../../Store/database";
+import { updateSettingDateBarStyle, updateSettingHabitBarSize, updateSettingTheme } from "../../Store/database";
 
 const valueHBS = ['Simple','Intutive'];
 const valueDBS =['Week only','Day + Week','Date only'];
@@ -18,9 +18,13 @@ export default function Theme (){
     const [HBS,setHBS] = useState(state.dateBarStyle?'Monday':'Sunday')
     console.log('date bar size',state.habitBarSize)
     const handleHBS =()=>{
-        if (HBS =='Monday') {setHBS('Sunday'), dispatch(setDateBarStyle(false))}
-        else {setHBS('Monday'), dispatch(setDateBarStyle(true))}
-        
+        if (HBS =='Monday') {
+            setHBS('Sunday'), dispatch(setDateBarStyle(false)), 
+            updateSettingDateBarStyle('Sunday')
+        }
+        else {setHBS('Monday'), dispatch(setDateBarStyle(true)),
+            updateSettingDateBarStyle('Monday')
+        }
     }
     
     return(         
@@ -83,7 +87,7 @@ const CheckTab=({
         {values.map((value) =>(
             <TouchableOpacity
                 key={value}
-                onPress={() => {setSelectedValue(value), dispatch(setHabitBarSize(value==='Small'?false:true))}}
+                onPress={() => {setSelectedValue(value), updateSettingHabitBarSize(value), dispatch(setHabitBarSize(value==='Small'?false:true))}}
                 style={[
                     styles.button,
                     selectedValue === value && styles.selected,
