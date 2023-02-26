@@ -307,31 +307,31 @@ const initDatabase = () => {
     );
     });
 
-    // db.transaction(tx => {
-    // tx.executeSql('CREATE TABLE IF NOT EXISTS Tag (\
-    //     id	INTEGER,\
-    //     name	TEXT NOT NULL,\
-    //     PRIMARY KEY(id AUTOINCREMENT)\
-    // )',
-    // [], 
-    // (txObj, resultSet) => {
-    //     // console.log("Initialize Tag table")
-    //     // console.log(resultSet);
-    // },
-    // (txObj, error) => console.log(error)
-    // );
-    // });
+    db.transaction(tx => {
+    tx.executeSql('CREATE TABLE IF NOT EXISTS Tag (\
+        id	INTEGER,\
+        name	TEXT NOT NULL,\
+        PRIMARY KEY(id AUTOINCREMENT)\
+    )',
+    [], 
+    (txObj, resultSet) => {
+        // console.log("Initialize Tag table")
+        // console.log(resultSet);
+    },
+    (txObj, error) => console.log(error)
+    );
+    });
 
-    // db.transaction(tx => {
-    //     tx.executeSql(tagInit,
-    //     [], 
-    //     (txObj, resultSet) => {
-    //         // console.log("Initialize tag data")
-    //         // console.log(resultSet);
-    //     },
-    //     (txObj, error) => console.log(error)
-    //     );
-    // }); 
+    db.transaction(tx => {
+        tx.executeSql(tagInit,
+        [], 
+        (txObj, resultSet) => {
+            // console.log("Initialize tag data")
+            // console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    }); 
 
 
     db.transaction(tx => {
@@ -361,27 +361,47 @@ const initDatabase = () => {
     }); 
 
 
+    db.transaction(tx => {
+        tx.executeSql('CREATE TABLE IF NOT EXISTS HaveTag (\
+            habitName TEXT,\
+            tagId    INTEGER,\
+            PRIMARY KEY(habitName, tagId)\
+        )',
+        [], 
+        (txObj, resultSet) => {
+            // console.log("Initialize haveTag table")
+            // console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    }); 
+
+    db.transaction(tx => {
+        tx.executeSql(haveTagInit,
+        [], 
+        (txObj, resultSet) => {
+            // console.log("Initialize haveTag data")
+            // console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    }); 
+
     // db.transaction(tx => {
-    //     tx.executeSql('CREATE TABLE IF NOT EXISTS HaveTag (\
-    //         habitName TEXT,\
-    //         tagId    INTEGER,\
-    //         PRIMARY KEY(habitName, tagId)\
+    //     tx.executeSql('CREATE TABLE IF NOT EXISTS Setting (\
+    //         id INTEGER DEFAULT 0 PRIMARY KEY,\
+    //         language TEXT CHECK(language IN (\'English\', \'German\', \'Vietnamese\', \'French\')) ,\
+    //         theme    TEXT CHECK(theme IN (\'dark\', \'light\')) ,\
+    //         dateBarStyle TEXT CHECK(dateBarStyle IN (\'Monday\', \'Sunday\')),\
+    //         habitBarSize TEXT CHECK(habitBarSize IN (\'Normal\', \'Small\')),\
+    //         dailyReminderText TEXT,\
+    //         dailyReminderTime TEXT,\
+    //         habitStat INTERGER CHECK(habitStat IN (0, 1))\
     //     )',
     //     [], 
     //     (txObj, resultSet) => {
-    //         // console.log("Initialize haveTag table")
-    //         // console.log(resultSet);
-    //     },
-    //     (txObj, error) => console.log(error)
-    //     );
-    // }); 
-
-    // db.transaction(tx => {
-    //     tx.executeSql(haveTagInit,
-    //     [], 
-    //     (txObj, resultSet) => {
-    //         // console.log("Initialize haveTag data")
-    //         // console.log(resultSet);
+    //         console.log("Initialize setting table")
+    //         console.log(resultSet);
     //     },
     //     (txObj, error) => console.log(error)
     //     );
@@ -389,14 +409,8 @@ const initDatabase = () => {
 
     db.transaction(tx => {
         tx.executeSql('CREATE TABLE IF NOT EXISTS Setting (\
-            id INTEGER DEFAULT 0 PRIMARY KEY,\
-            language TEXT CHECK(language IN (\'English\', \'German\', \'Vietnamese\', \'French\')) ,\
-            theme    TEXT CHECK(theme IN (\'dark\', \'light\')) ,\
-            dateBarStyle TEXT CHECK(dateBarStyle IN (\'Monday\', \'Sunday\')),\
-            habitBarSize TEXT CHECK(habitBarSize IN (\'Normal\', \'Small\')),\
-            dailyReminderText TEXT,\
-            dailyReminderTime TEXT,\
-            habitStat INTERGER CHECK(habitStat IN (0, 1))\
+            key TEXT PRIMARY KEY,\
+            value TEXT\
         )',
         [], 
         (txObj, resultSet) => {
@@ -447,8 +461,64 @@ const addMemo = (habitName,today, content, progress) => {
         (txObj, error) => console.log(error)
         );
     })
-
 }
+
+const addSetting = (state) => {    
+    console.log("Adding Setting to db");
+
+    db.transaction(tx => {
+        tx.executeSql('INSERT INTO Setting (language, theme, habitBarStyle, dateBarStyle, habitStat, dailyReminderTime, dailyReminderText) values (?, ?, ?, ?, ?, ?, ?)', 
+        [state.stateLanguage, state.theme, state.habitBarStyle, state.dateBarStyle, state.habitStat, state.dailyReminderTime, state.dailyReminderText],
+        (txObj, resultSet) => {
+            // console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+}
+
+const addTag = (name) => {
+    console.log("Adding Tag to db", name);
+
+    db.transaction(tx => {
+        tx.executeSql('INSERT INTO Tag (name) values (?)', 
+        [name],
+        (txObj, resultSet) => {
+            console.log("add Tag here",resultSet.rows._array);
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+}
+
+const addHaveTag = (habitName, tagID) => {
+    console.log("Adding HaveTag to db", habitName, tagID);
+
+    db.transaction(tx => {
+        tx.executeSql('INSERT INTO HaveTag (habitName, tagID) values (?, ?)', 
+        [habitName, tagID],
+        (txObj, resultSet) => {
+            console.log("add HaveTag here",resultSet.rows._array);
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+}
+
+const addUnit = (name) => {
+    console.log("Adding Unit to db", name);
+
+    db.transaction(tx => {
+        tx.executeSql('INSERT INTO Unit (name) values (?)', 
+        [name],
+        (txObj, resultSet) => {
+            console.log("add unit here",resultSet.rows._array);
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+}
+
 const updateProgressMemo = (habitName,today, content, progress) => {    
     // console.log("update Memo to db", habitName,today, content, progress);
     // console.log("day need", today.slice(8,10));
@@ -474,7 +544,8 @@ const updateProgressMemo = (habitName,today, content, progress) => {
 const updateSettingTheme = (theme) => {    
     db.transaction(tx => {
         tx.executeSql("UPDATE Setting \
-        SET theme = ?", 
+        SET value = ?\
+        WHERE key = 'theme'", 
         [theme],
         (txObj, resultSet) => {
             // console.log('Updating theme: ', theme)
@@ -488,10 +559,11 @@ const updateSettingTheme = (theme) => {
 const updateHabitStat = (habitStat) => {    
     db.transaction(tx => {
         tx.executeSql("UPDATE Setting \
-        SET habitStat = ?", 
+        SET value = ?\
+        WHERE key = 'habitStat'", 
         [habitStat==true? 1: 0],
         (txObj, resultSet) => {
-            console.log('Updating habit Stat: ', habitStat)
+            // console.log('Updating habit Stat: ', habitStat)
         },
         (txObj, error) => console.log(error)
         );
@@ -503,7 +575,8 @@ const updateSettingHabitBarSize = (habitBarSize) => {
 
     db.transaction(tx => {
         tx.executeSql("UPDATE Setting \
-        SET habitBarSize = ?", 
+        SET value = ?\
+        WHERE key = 'habitBarSize'", 
         [habitBarSize],
         (txObj, resultSet) => {
             console.log('Updating Habit Bar Size: ', habitBarSize)
@@ -518,7 +591,8 @@ const updateSettingDateBarStyle = (dateBarStyle) => {
 
     db.transaction(tx => {
         tx.executeSql("UPDATE Setting \
-        SET dateBarStyle = ?", 
+        SET value = ?\
+        WHERE key = 'dateBarStyle'", 
         [dateBarStyle],
         (txObj, resultSet) => {
             // console.log('Updating Date Bar Style: ', dateBarStyle)
@@ -529,23 +603,8 @@ const updateSettingDateBarStyle = (dateBarStyle) => {
 
 }
 
-
-const addSetting = (state) => {    
-    console.log("Adding Setting to db");
-
-    db.transaction(tx => {
-        tx.executeSql('INSERT INTO Setting (language, theme, habitBarStyle, dateBarStyle, habitStat, dailyReminderTime, dailyReminderText) values (?, ?, ?, ?, ?, ?, ?)', 
-        [state.stateLanguage, state.theme, state.habitBarStyle, state.dateBarStyle, state.habitStat, state.dailyReminderTime, state.dailyReminderText],
-        (txObj, resultSet) => {
-            // console.log(resultSet);
-        },
-        (txObj, error) => console.log(error)
-        );
-    })
-}
-
 const loadHabit_on_fone = (listHabit, dispatch) => {
-    console.log("Loading habit from db");
+    // console.log("Loading habit from db");
 
     /* db.transaction(tx => {"DROP TABLE Habit"}); */
 
@@ -553,11 +612,11 @@ const loadHabit_on_fone = (listHabit, dispatch) => {
         tx.executeSql('SELECT * FROM Habit', 
         [], 
         (txObj, resultSet) => {
-            console.log("Loading data into habit list");
-            console.log("List habit state");
-            console.log(listHabit);
-            console.log("Database resultset");
-            console.log(resultSet.rows); 
+            // console.log("Loading data into habit list");
+            // console.log("List habit state");
+            // console.log(listHabit);
+            // console.log("Database resultset");
+            // console.log(resultSet.rows); 
             if (listHabit.length < resultSet.rows.length) {
                 for (let i = 0; i < resultSet.rows.length; i++) {
                     //console.log("Database resultset", resultSet.rows)
@@ -604,7 +663,7 @@ const loadHabit_on_web = (listHabit, dispatch) => {
 }
 
 const loadMemo = (listProgressDay, dispatch) => {
-    console.log("Loading memo from db");
+    // console.log("Loading memo from db");
 
     /* db.transaction(tx => {"DROP TABLE Habit"}); */
 
@@ -670,8 +729,19 @@ const loadSetting = (state, dispatch) => {
         [],
         (txObj, resultSet) => {
             console.log("Loading setting into global state");
-            console.log(resultSet.rows);
-            dispatch(addStateSetting(resultSet.rows));
+            // console.log('Resultset: ', resultSet.rows);
+
+            let dict = {}
+
+
+            for (let i = 0; i < resultSet.rows._array.length; i++) {
+                // console.log('item: ', resultSet.rows[i]);
+
+                dict[resultSet.rows._array[i].key] = resultSet.rows._array[i].value;
+            }
+
+            console.log(dict);
+            dispatch(addStateSetting(dict));
         },
         (txObj, error) => console.log(error)
         );
@@ -755,6 +825,50 @@ const deleteHabit = (habitName) => {
         );
     })
 
+}
+
+const deleteTag = (id) => {
+    console.log("Deleting Tag from db");
+
+    db.transaction(tx => {
+        tx.executeSql('DELETE FROM HaveTag \
+        WHERE tagID = ?', 
+        [id],
+        (txObj, resultSet) => {
+            // console.log("Deleted habit ", habitName, " from table HaveTag");
+            // console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+
+    db.transaction(tx => {
+        tx.executeSql('DELETE FROM Tag \
+        WHERE id = ?', 
+        [id],
+        (txObj, resultSet) => {
+            // console.log("Deleted habit ", habitName, " from table HaveTag");
+            // console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+}
+
+const deleteUnit = (id) => {
+    console.log("Deleting Unit from db");
+
+    db.transaction(tx => {
+        tx.executeSql('DELETE FROM Unit \
+        WHERE id = ?', 
+        [id],
+        (txObj, resultSet) => {
+            // console.log("Deleted habit ", habitName, " from table HaveTag");
+            // console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
 }
 
 const updateHabit = (habit, newHabit) => {
