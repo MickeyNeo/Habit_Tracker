@@ -64,7 +64,9 @@ export const unitInit = "INSERT INTO Unit (\"name\") VALUES \
 export const haveTagInit = "INSERT INTO HaveTag (habitName, tagId) VALUES\
     ('Run', 0),\
     ('Meditate', 3),\
-    ('Dancing', 1)"
+    ('Meditate', 0),\
+    ('Dancing', 1),\
+    ('Dancing', 3)"
 
 // export const settingInit = "INSERT INTO Setting (id, language, theme, dateBarStyle, habitBarSize, dailyReminderText, dailyReminderTime, habitStat) VALUES\
 // (0, 'Vietnamese', 'light', 'Monday', 'Small', '', '', 1)"

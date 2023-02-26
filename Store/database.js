@@ -307,31 +307,31 @@ const initDatabase = () => {
     );
     });
 
-    // db.transaction(tx => {
-    // tx.executeSql('CREATE TABLE IF NOT EXISTS Tag (\
-    //     id	INTEGER,\
-    //     name	TEXT NOT NULL,\
-    //     PRIMARY KEY(id AUTOINCREMENT)\
-    // )',
-    // [], 
-    // (txObj, resultSet) => {
-    //     // console.log("Initialize Tag table")
-    //     // console.log(resultSet);
-    // },
-    // (txObj, error) => console.log(error)
-    // );
-    // });
+    db.transaction(tx => {
+    tx.executeSql('CREATE TABLE IF NOT EXISTS Tag (\
+        id	INTEGER,\
+        name	TEXT NOT NULL,\
+        PRIMARY KEY(id AUTOINCREMENT)\
+    )',
+    [], 
+    (txObj, resultSet) => {
+        // console.log("Initialize Tag table")
+        // console.log(resultSet);
+    },
+    (txObj, error) => console.log(error)
+    );
+    });
 
-    // db.transaction(tx => {
-    //     tx.executeSql(tagInit,
-    //     [], 
-    //     (txObj, resultSet) => {
-    //         // console.log("Initialize tag data")
-    //         // console.log(resultSet);
-    //     },
-    //     (txObj, error) => console.log(error)
-    //     );
-    // }); 
+    db.transaction(tx => {
+        tx.executeSql(tagInit,
+        [], 
+        (txObj, resultSet) => {
+            // console.log("Initialize tag data")
+            // console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    }); 
 
 
     db.transaction(tx => {
@@ -361,31 +361,31 @@ const initDatabase = () => {
     }); 
 
 
-    // db.transaction(tx => {
-    //     tx.executeSql('CREATE TABLE IF NOT EXISTS HaveTag (\
-    //         habitName TEXT,\
-    //         tagId    INTEGER,\
-    //         PRIMARY KEY(habitName, tagId)\
-    //     )',
-    //     [], 
-    //     (txObj, resultSet) => {
-    //         // console.log("Initialize haveTag table")
-    //         // console.log(resultSet);
-    //     },
-    //     (txObj, error) => console.log(error)
-    //     );
-    // }); 
+    db.transaction(tx => {
+        tx.executeSql('CREATE TABLE IF NOT EXISTS HaveTag (\
+            habitName TEXT,\
+            tagId    INTEGER,\
+            PRIMARY KEY(habitName, tagId)\
+        )',
+        [], 
+        (txObj, resultSet) => {
+            // console.log("Initialize haveTag table")
+            // console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    }); 
 
-    // db.transaction(tx => {
-    //     tx.executeSql(haveTagInit,
-    //     [], 
-    //     (txObj, resultSet) => {
-    //         // console.log("Initialize haveTag data")
-    //         // console.log(resultSet);
-    //     },
-    //     (txObj, error) => console.log(error)
-    //     );
-    // }); 
+    db.transaction(tx => {
+        tx.executeSql(haveTagInit,
+        [], 
+        (txObj, resultSet) => {
+            // console.log("Initialize haveTag data")
+            // console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    }); 
 
     // db.transaction(tx => {
     //     tx.executeSql('CREATE TABLE IF NOT EXISTS Setting (\
