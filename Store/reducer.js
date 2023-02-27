@@ -119,6 +119,10 @@ const globalState = {
     }
     ],
     listProgressDay: [],
+    listTag:[],
+    listUnitInit:[],
+    haveTagInit:[],
+    
     stateLanguage:"English",
     currentThemeID: 'light',
     currentTheme: theme.light,

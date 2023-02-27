@@ -1,5 +1,5 @@
 import React, { useState} from "react";
-import { View,Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Image, TextInput, Alert, Switch } from "react-native";
+import { View,Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Image, TextInput, Alert, Switch , Button} from "react-native";
 import ChooseColor from "./icon_color/chooseColor";
 import ChooseIcon from "./icon_color/chooseIcon";
 import Icons from "./icon_color/Icon";
@@ -85,7 +85,8 @@ const AddHabit = ({navigation, route}) => {
         flag : flag,
     }
     //Tag
-    const [iTag, setiTag] = useState([])
+    const listTag = [{tagId:0, name:'Health' },{tagId:1, name:'Fitness' },{tagId:2, name:'Productivity'},{tagId:3, name:'Mental'}]
+    const [iTag, setiTag] = useState([value.tag])
     const [newTag, setNewTag] = useState('');
     const [isModalVisible, setModalVisible] = useState(false);
     const [inputValue, setInputValue] = useState('');
@@ -97,6 +98,22 @@ const AddHabit = ({navigation, route}) => {
       const newList = [...iTag];
       newList.splice(index, 1);
       setiTag(newList);
+    };
+    //Thong bao xoa tag
+    const showAlertTag = (index) => {
+      Alert.alert(
+          'Confirm',
+          'Do you want to delete this Tag?',
+        [
+          {
+            text: 'Cancel',
+            //onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {text: 'OK', onPress: () => {handleRemoveTag(index)}},
+        ],
+        {cancelable: false},
+      );
     };
     
     //Danh sách các ngày được chọn
@@ -194,27 +211,56 @@ const AddHabit = ({navigation, route}) => {
                     {/* Tag */}
                     <View style = {{flexDirection: 'column', padding: 10}}>
                             <Text style = {{fontWeight: 'bold', color: currentTheme.color }}>Tag</Text>
-                            <TouchableOpacity style={{flexDirection:'row',padding: 10,justifyContent: 'space-between' }} onPress={() => setModalVisible(true)}>  
-                              <Text style= {[styles.btnTouch, {backgroundColor: value.changecolor, color: currentTheme.color }]}> {value.tag} </Text>
-                            </TouchableOpacity>
-                            <Modal
+                            <View style={{flexDirection:'row',padding: 10 }}>  
+                              {/* <Text style={[styles.boder,{backgroundColor: value.changecolor, color: currentTheme.color }]}>{value.tag}</Text> */}
+                              <ScrollView horizontal={true}>
+                                {iTag.map((todo, index) => (
+                                  <View key={index}>
+                                    <TouchableOpacity onPress={()=>{showAlertTag(index)}}> 
+                                      <Text style={[styles.boder,{backgroundColor:value.changecolor, marginLeft:10}]}>{todo}</Text>
+                                    </TouchableOpacity>
+                                  </View>
+                                ))}
+                                {/* onPress={handleAddTag} */}
+                                <TouchableOpacity 
+                                  onPress={() => setModalVisible(true)}
+                                  //style={styles.button}
+                                >
+                                  <Text style={[styles.boder, {backgroundColor:'gray', color:currentTheme.color, marginLeft:10}]}>+</Text>
+                                </TouchableOpacity>
+                                <Modal
                                   isVisible={isModalVisible}
-                                  onBackdropPress={() => setModalVisible(false)}
+                                  onBackdropPress={() => {setModalVisible(false); if (newTag!='') handleAddTag()}}
                                 >
                                   <View style={[styles.modalContainer,{backgroundColor:currentTheme.backgroundColor}]}>
                                     <TextInput
-                                      style={[styles.input, {textAlign : 'center', color:currentTheme.color}]}
+                                      style={[styles.input,{textAlign : 'center', backgroundColor:(currentTheme.backgroundColor=='#1f1e1e')?'#918e8e':'#f5f5f5',color:currentTheme.color}]}
                                       placeholder="Enter text here"
-                                      value={value.tag}
-                                      onChangeText={text => {setState(prevState => ({ ...prevState, tag: text }))}}
+                                      value={newTag}
+                                      onChangeText={text => {setNewTag(text)}}
                                     />
+                                    <View style={{flexDirection:'row',padding: 10 }}>
+                                      <ScrollView horizontal={true}>
+                                        {listTag.map((tag) => (
+                                          <View key={tag.tagId}>
+                                            <TouchableOpacity onPress={()=>{ setNewTag(tag.name)}}> 
+                                              <Text style={[styles.boder,{height: 15,backgroundColor:'gray',color: currentTheme.color, fontSize:11,marginLeft:10}]}>{tag.name}</Text>
+                                            </TouchableOpacity>
+                                          </View>
+                                        ))}
+                                      </ScrollView>
+                                    </View>
+                                    
                                     <TouchableOpacity
-                                      onPress={() => setModalVisible(false)}
-                                      style={[styles.button, { backgroundColor:value.changecolor}]}>
+                                      onPress={() => {setModalVisible(false); if (newTag!='') handleAddTag()}}
+                                      style={[styles.button,{backgroundColor:value.changecolor}]}
+                                    >
                                       <Text style={[styles.text,{color: currentTheme.color}]}>Done</Text>
                                     </TouchableOpacity>
                                   </View>
                                 </Modal>
+                              </ScrollView>
+                            </View>
                     </View>                          
                     <View style = {{flexDirection: 'column',padding: 10}}>
                         <Text style ={{fontWeight: 'bold', color: currentTheme.color }}>Goal & Goal Period</Text>
@@ -574,9 +620,11 @@ const styles = StyleSheet.create({
     borderRadius: 10, 
     width: 60, 
     alignItems: 'center',
-    fontSize: 20,
-    backgroundColor: '#f5f5f5',
-    color: '#a9a9a9',
+    textAlign : 'center',
+    //: 12,
+    //backgroundColor: '#f5f5f5',
+    //color: '#a9a9a9',
+    //marginLeft:30
   },
   text: {
     color: 'white',
