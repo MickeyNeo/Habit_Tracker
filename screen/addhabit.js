@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState, useEffect } from "react";
 import { View,Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Image, TextInput, Alert, Switch , Button} from "react-native";
 import ChooseColor from "./icon_color/chooseColor";
 import ChooseIcon from "./icon_color/chooseIcon";
@@ -10,9 +10,10 @@ import moment from 'moment';
 import Modal from "react-native-modal";
 import { useStore , addHabitList, setListProgressDay} from '../Store'
 import { setHabitInput } from '../Store/action'
-import { db, addHabit,addMemo } from '../Store/database'
+import { db, addHabit,addMemo, loadTag, addTag } from '../Store/database'
 const AddHabit = ({navigation, route}) => {
     const [state, dispatch] = useStore();
+    const [listTag, setListTag] = useState([])
     const {currentTheme} = state
     const {id, name, colors, IconInfo, unitHabit, tag, flag } = route.params;
     
@@ -86,12 +87,14 @@ const AddHabit = ({navigation, route}) => {
     }
     //Tag
     // const listTag = [{tagId:0, name:'Health' },{tagId:1, name:'Fitness' },{tagId:2, name:'Productivity'},{tagId:3, name:'Mental'}]
-    const [listTag, setListTag] = useState([])
+    
     const [iTag, setiTag] = useState([value.tag])
     const [newTag, setNewTag] = useState('');
     const [isModalVisible, setModalVisible] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const handleAddTag = () => {
+      addTag(newTag)
+      loadTag(setListTag)
       setiTag([...iTag, newTag]);
       setNewTag('');
     };
@@ -224,7 +227,10 @@ const AddHabit = ({navigation, route}) => {
                                 ))}
                                 {/* onPress={handleAddTag} */}
                                 <TouchableOpacity 
-                                  onPress={() => setModalVisible(true)}
+                                  onPress={() => {
+                                    setModalVisible(true)
+                                    loadTag(setListTag)
+                                  }}
                                   //style={styles.button}
                                 >
                                   <Text style={[styles.boder, {backgroundColor:'gray', color:currentTheme.color, marginLeft:10}]}>+</Text>

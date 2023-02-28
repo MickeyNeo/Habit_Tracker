@@ -310,7 +310,7 @@ const initDatabase = () => {
     db.transaction(tx => {
     tx.executeSql('CREATE TABLE IF NOT EXISTS Tag (\
         id	INTEGER,\
-        name	TEXT NOT NULL,\
+        name	TEXT NOT NULL UNIQUE,\
         PRIMARY KEY(id AUTOINCREMENT)\
     )',
     [], 
@@ -337,7 +337,7 @@ const initDatabase = () => {
     db.transaction(tx => {
         tx.executeSql('CREATE TABLE IF NOT EXISTS Unit (\
             id	INTEGER,\
-            name	TEXT,\
+            name	TEXT NOT NULL UNIQUE,\
             PRIMARY KEY(id AUTOINCREMENT)\
         )',
         [], 
@@ -448,6 +448,22 @@ const addHabit = (habit) => {
     })
 
 }
+
+// const addHaveTag = (habit) => {    
+//     console.log("Adding Habit to db");
+//     console.log('Pressed Addhabit: ', habit)
+
+//     db.transaction(tx => {
+//         tx.executeSql('INSERT INTO Habit (name, note, frequency, color, frequencyType, timeRange, reminderMessage, showMemo, chartType, habitStartDate, habitEndDate, goalNo, goalPeriod, unitID, icon, iconFamily, id,tag,flag) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?, ?)', 
+//         [habit.name, habit.note, habit.frequency, habit.color, habit.frequencyType, habit.timeRange, habit.reminderMessage, habit.showMemo, habit.chartType, habit.habitStartDate, habit.habitEndDate, habit.goalNo, habit.goalPeriod, habit.unitID, habit.icon, habit.iconFamily, habit.id, habit.tag,habit.flag],
+//         (txObj, resultSet) => {
+//             console.log(resultSet);
+//         },
+//         (txObj, error) => console.log(error)
+//         );
+//     })
+
+// }
 
 const addMemo = (habitName,today, content, progress) => {    
     console.log("Adding Memo to db", habitName,today, content, progress);
@@ -774,7 +790,7 @@ const loadUnit = () => {
     })
 }
 
-const loadTag = () => {
+const loadTag = (setListTag) => {
     // console.log("Loading unit from db");
 
     /* db.transaction(tx => {"DROP TABLE Habit"}); */
@@ -783,17 +799,10 @@ const loadTag = () => {
         tx.executeSql('SELECT * FROM Tag', 
         [],
         (txObj, resultSet) => {
-            // console.log("Loading init unit");
-            /*console.log("List habit state");
-            console.log(listHabit);
+            console.log("Loading init tag");            
             console.log("Database resultset");
             console.log(resultSet.rows);
-            if (listHabit.length < resultSet.rows.length) {
-                for (let i = 0; i < resultSet.rows.length; i++) {
-                dispatch(addHabitList(resultSet.rows[i]));
-                }
-            } */
-            // console.log(resultSet);
+            setListTag([...resultSet.rows._array])
         },
         (txObj, error) => console.log(error)
         );
@@ -1753,4 +1762,4 @@ export {db,getAllMemmo,getMemmoCurDay,getUnitNameforHOAD, getDataOfCurWeek,getUn
     calculateTotalVolumn, calculateDayTotalDone, calculateCurrentStreak, calculateBestStreak, CountPerfectDay,
     CalculateOverallRate, CalculateDailyAverage, CountPerfectStreak, loadMemo, calculateDayStarted, 
     checkHaveMemoCurDay, addMemo,updateProgressMemo, getProgressCurMonth, updateSettingTheme, updateSettingHabitBarSize,
-    updateSettingDateBarStyle, updateHabitStat}
+    updateSettingDateBarStyle, updateHabitStat, loadTag, loadHaveTag, addTag, addUnit}
