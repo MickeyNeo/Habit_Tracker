@@ -10,7 +10,7 @@ import moment from 'moment';
 import Modal from "react-native-modal";
 import { useStore , addHabitList, setListProgressDay} from '../Store'
 import { setHabitInput } from '../Store/action'
-import { db, addHabit,addMemo, loadTag, addTag } from '../Store/database'
+import { db, addHabit,addMemo, loadTag, addTag, addHaveTag, loadHaveTag } from '../Store/database'
 const AddHabit = ({navigation, route}) => {
     const [state, dispatch] = useStore();
     const [listTag, setListTag] = useState([])
@@ -86,16 +86,20 @@ const AddHabit = ({navigation, route}) => {
         flag : flag,
     }
     //Tag
-    // const listTag = [{tagId:0, name:'Health' },{tagId:1, name:'Fitness' },{tagId:2, name:'Productivity'},{tagId:3, name:'Mental'}]
+    // const listTag = [{tagId:0, name:'Health' },{tagId:1  , name:'Fitness' },{tagId:2, name:'Productivity'},{tagId:3, name:'Mental'}]
     
     const [iTag, setiTag] = useState([value.tag])
-    const [newTag, setNewTag] = useState('');
+    const [newTag, setNewTag] = useState("");
+    const [newTagID, setNewTagID] = useState(NaN);
     const [isModalVisible, setModalVisible] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const handleAddTag = () => {
-      addTag(newTag)
-      loadTag(setListTag)
-      setiTag([...iTag, newTag]);
+      console.log("Before", newTagID);
+      addTag(newTag, newTagID, setNewTagID);
+      console.log("After", newTagID);
+      addHaveTag(habit.name, newTagID);
+      loadHaveTag(habit.name, setListTag);
+      setiTag([...iTag, newTag]); 
       setNewTag('');
     };
     const handleRemoveTag = (index) => {
@@ -105,7 +109,7 @@ const AddHabit = ({navigation, route}) => {
     };
     //Thong bao xoa tag
     const showAlertTag = (index) => {
-      Alert.alert(
+      Alert.alert(  
           'Confirm',
           'Do you want to delete this Tag?',
         [
