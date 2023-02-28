@@ -85,7 +85,8 @@ const AddHabit = ({navigation, route}) => {
         flag : flag,
     }
     //Tag
-    const listTag = [{tagId:0, name:'Health' },{tagId:1, name:'Fitness' },{tagId:2, name:'Productivity'},{tagId:3, name:'Mental'}]
+    // const listTag = [{tagId:0, name:'Health' },{tagId:1, name:'Fitness' },{tagId:2, name:'Productivity'},{tagId:3, name:'Mental'}]
+    const [listTag, setListTag] = useState([])
     const [iTag, setiTag] = useState([value.tag])
     const [newTag, setNewTag] = useState('');
     const [isModalVisible, setModalVisible] = useState(false);

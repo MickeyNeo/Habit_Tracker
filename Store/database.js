@@ -774,6 +774,58 @@ const loadUnit = () => {
     })
 }
 
+const loadTag = () => {
+    // console.log("Loading unit from db");
+
+    /* db.transaction(tx => {"DROP TABLE Habit"}); */
+
+    db.transaction(tx => {
+        tx.executeSql('SELECT * FROM Tag', 
+        [],
+        (txObj, resultSet) => {
+            // console.log("Loading init unit");
+            /*console.log("List habit state");
+            console.log(listHabit);
+            console.log("Database resultset");
+            console.log(resultSet.rows);
+            if (listHabit.length < resultSet.rows.length) {
+                for (let i = 0; i < resultSet.rows.length; i++) {
+                dispatch(addHabitList(resultSet.rows[i]));
+                }
+            } */
+            // console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+}
+
+const loadHaveTag = () => {
+    // console.log("Loading unit from db");
+
+    /* db.transaction(tx => {"DROP TABLE Habit"}); */
+
+    db.transaction(tx => {
+        tx.executeSql('SELECT * FROM HaveTag', 
+        [],
+        (txObj, resultSet) => {
+            // console.log("Loading init unit");
+            /*console.log("List habit state");
+            console.log(listHabit);
+            console.log("Database resultset");
+            console.log(resultSet.rows);
+            if (listHabit.length < resultSet.rows.length) {
+                for (let i = 0; i < resultSet.rows.length; i++) {
+                dispatch(addHabitList(resultSet.rows[i]));
+                }
+            } */
+            // console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+}
+
 const deleteHabit = (habitName) => {
     console.log("Deleting habit from db");
 
