@@ -10,10 +10,12 @@ import moment from 'moment';
 import Modal from "react-native-modal";
 import { useStore , addHabitList, setListProgressDay} from '../Store'
 import { setHabitInput } from '../Store/action'
-import { db, addHabit,addMemo, loadTag, addTag } from '../Store/database'
+import { db, addHabit,addMemo, loadTag, addTag, addHaveTag, loadHaveTag } from '../Store/database'
+import { tr } from "date-fns/locale";
 const AddHabit = ({navigation, route}) => {
     const [state, dispatch] = useStore();
     const [listTag, setListTag] = useState([])
+    // const [listHaveTag, setListHaveTag] = useState([])
     const {currentTheme} = state
     const {id, name, colors, IconInfo, unitHabit, tag, flag } = route.params;
     
@@ -86,16 +88,41 @@ const AddHabit = ({navigation, route}) => {
         flag : flag,
     }
     //Tag
-    // const listTag = [{tagId:0, name:'Health' },{tagId:1, name:'Fitness' },{tagId:2, name:'Productivity'},{tagId:3, name:'Mental'}]
+    // const listTag = [{tagId:0, name:'Health' },{tagId:1  , name:'Fitness' },{tagId:2, name:'Productivity'},{tagId:3, name:'Mental'}]
     
     const [iTag, setiTag] = useState([value.tag])
-    const [newTag, setNewTag] = useState('');
+
+    // loadHaveTag(habit.name. setiTag);
+    const [newTag, setNewTag] = useState("");
+    const [newTagID, setNewTagID] = useState(NaN);
     const [isModalVisible, setModalVisible] = useState(false);
     const [inputValue, setInputValue] = useState('');
+
+    const inListTag = (newTag, listTag) => {
+      console.log('Check if in list Tag: ', newTag, listTag)
+      for (let item of listTag) {
+        if (item.name == newTag) {
+          console.log('InlistTag: ', newTag, item.name)
+          return item.id
+        }
+      }
+      console.log('Not in list: ', newTag)
+      return -1
+    }
+
     const handleAddTag = () => {
-      addTag(newTag)
-      loadTag(setListTag)
-      setiTag([...iTag, newTag]);
+      // let newTagId = inListTag(newTag, listTag) //Lay id cua newtag trong listtag
+      // // console.log("Handle add Tag: ", listTag, newTag, newTagId)
+      // if (newTagId == -1){
+      addTag(newTag); //add zo dtb table tag
+      //   addHaveTag(habit.name, listTag.length + 1);//add zo dtb table HaveTag
+      // }
+      // else {
+      //   addHaveTag(habit.name, newTagId);
+      // }
+      // loadHaveTag();
+      loadTag(setListTag);
+      setiTag([...iTag, newTag]); 
       setNewTag('');
     };
     const handleRemoveTag = (index) => {
@@ -105,11 +132,11 @@ const AddHabit = ({navigation, route}) => {
     };
     //Thong bao xoa tag
     const showAlertTag = (index) => {
-      Alert.alert(
+      Alert.alert(  
           'Confirm',
           'Do you want to delete this Tag?',
         [
-          {
+          { 
             text: 'Cancel',
             //onPress: () => console.log('Cancel Pressed'),
             style: 'cancel',
@@ -229,7 +256,7 @@ const AddHabit = ({navigation, route}) => {
                                 <TouchableOpacity 
                                   onPress={() => {
                                     setModalVisible(true)
-                                    loadTag(setListTag)
+                                    loadTag(setListTag) //load tag tu database len usestate
                                   }}
                                   //style={styles.button}
                                 >
@@ -237,7 +264,9 @@ const AddHabit = ({navigation, route}) => {
                                 </TouchableOpacity>
                                 <Modal
                                   isVisible={isModalVisible}
-                                  onBackdropPress={() => {setModalVisible(false); if (newTag!='') handleAddTag()}}
+                                  onBackdropPress={() => {setModalVisible(false); 
+                                    console.log("Pressed Done"); 
+                                    if (!inListTag(newTag, listTag) && newTag!='') handleAddTag()}}
                                 >
                                   <View style={[styles.modalContainer,{backgroundColor:currentTheme.backgroundColor}]}>
                                     <TextInput
@@ -259,7 +288,11 @@ const AddHabit = ({navigation, route}) => {
                                     </View>
                                     
                                     <TouchableOpacity
-                                      onPress={() => {setModalVisible(false); if (newTag!='') handleAddTag()}}
+                                      onPress={() => {
+                                        setModalVisible(false); 
+                                        if (newTag!='') 
+                                          handleAddTag()
+                                        }}
                                       style={[styles.button,{backgroundColor:value.changecolor}]}
                                     >
                                       <Text style={[styles.text,{color: currentTheme.color}]}>Done</Text>
@@ -367,7 +400,20 @@ const AddHabit = ({navigation, route}) => {
         <SafeAreaView style = {[styles.homeZone,{backgroundColor:currentTheme.backgroundColor}]}> 
             <TouchableOpacity 
                 onPress={() => {
-                    console.log("Habit in addHabit: ", habit)
+                    console.log("Habit in addHabit: ", habit, iTag)
+                    let lenListTag = listTag.length;
+                    for (let item of iTag) {
+                      let newTagId = inListTag(item, listTag);
+                      if (newTag == -1) {
+                        addHaveTag(habit.name, lenListTag + 1);
+                        lenListTag += 1;
+                      }
+                      else {
+                        addHaveTag(habit.name, newTagId);
+                        lenListTag += 1;
+                      }
+                    }
+                    loadHaveTag(habit.name. setiTag);
                     // dispatch(addHabitOfaDay(name.toLowerCase()));
                     dispatch(setHabitInput(habit));
                     dispatch(addHabitList(habit));

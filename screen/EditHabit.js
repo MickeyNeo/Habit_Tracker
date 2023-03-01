@@ -17,7 +17,7 @@ import Modal from "react-native-modal";
 
 import { useStore , setListProgressDay, delHabit, editListProgressDay} from '../Store'
 import { setHabitInput } from '../Store/action'
-import { db, addHabit, updateHabit,addMemo } from '../Store/database'
+import { db, addHabit, updateHabit,addMemo, loadHaveTag } from '../Store/database'
 import { Tile } from "@rneui/base";
 const EditHabit = ({navigation, route}) => {
   const frequency_of_day = ["Daily", "Weekly", "Monthly"]
@@ -120,10 +120,12 @@ const EditHabit = ({navigation, route}) => {
   //Tag
   const listTag = [{tagId:0, name:'Health' },{tagId:1, name:'Fitness' },{tagId:2, name:'Productivity'},{tagId:3, name:'Mental'}]
   const [iTag, setiTag] = useState([value.tag])
+  loadHaveTag(habit.name, setiTag);
   const [newTag, setNewTag] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const handleAddTag = () => {
+    // loadHaveTag();
     setiTag([...iTag, newTag]);
     setNewTag('');
   };

@@ -449,13 +449,12 @@ const addHabit = (habit) => {
 
 }
 
-// const addHaveTag = (habit) => {    
-//     console.log("Adding Habit to db");
-//     console.log('Pressed Addhabit: ', habit)
+// const addHaveTag = (habitName, tagID) => {    
+//     console.log("Adding HaveTag to db");
 
 //     db.transaction(tx => {
-//         tx.executeSql('INSERT INTO Habit (name, note, frequency, color, frequencyType, timeRange, reminderMessage, showMemo, chartType, habitStartDate, habitEndDate, goalNo, goalPeriod, unitID, icon, iconFamily, id,tag,flag) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?, ?)', 
-//         [habit.name, habit.note, habit.frequency, habit.color, habit.frequencyType, habit.timeRange, habit.reminderMessage, habit.showMemo, habit.chartType, habit.habitStartDate, habit.habitEndDate, habit.goalNo, habit.goalPeriod, habit.unitID, habit.icon, habit.iconFamily, habit.id, habit.tag,habit.flag],
+//         tx.executeSql('INSERT INTO HaveTag (habitName, tagID) values (?, ?)', 
+//         [habitName, tagID],
 //         (txObj, resultSet) => {
 //             console.log(resultSet);
 //         },
@@ -493,32 +492,78 @@ const addSetting = (state) => {
     })
 }
 
-const addTag = (name) => {
-    console.log("Adding Tag to db", name);
+// const addTag = (newTag, newTagID, setNewTagID) => {
+//     console.log("Adding Tag to db", newTag);
+
+//     db.transaction(tx => {
+//         tx.executeSql('INSERT INTO Tag (name) values (?)', 
+//         [newTag],
+//         (txObj, resultSet) => {
+//             // console.log("add Tag here",resultSet.rows._array[0]);
+//             // setNewTagID(resultSet.rows._array[0])
+//         },
+//         (txObj, error) => console.log(error)
+//         );
+//     })
+
+//     if (setNewTagID) {
+//         db.transaction(tx => {
+//             tx.executeSql('SELECT * FROM Tag\
+//             WHERE name = ?', 
+//             [newTag],
+//             (txObj, resultSet) => {
+//                 // console.log("ResultSet: ",resultSet.rows._array);
+//                 setNewTagID(resultSet.rows._array[0].id)
+//                 // console.log("NewTag: ",newTag);
+//             },
+//             (txObj, error) => console.log(error)
+//             );
+//         })
+//     }
+// }
+
+const addTag = (newTag) => {
+    console.log("Adding Tag to db", newTag);
 
     db.transaction(tx => {
         tx.executeSql('INSERT INTO Tag (name) values (?)', 
-        [name],
+        [newTag],
         (txObj, resultSet) => {
-            console.log("add Tag here",resultSet.rows._array);
+            // console.log("add Tag here",resultSet.rows._array[0]);
+            // setNewTagID(resultSet.rows._array[0])
         },
         (txObj, error) => console.log(error)
         );
     })
+
+    // if (setNewTagID) {
+    //     db.transaction(tx => {
+    //         tx.executeSql('SELECT * FROM Tag\
+    //         WHERE name = ?', 
+    //         [newTag],
+    //         (txObj, resultSet) => {
+    //             // console.log("ResultSet: ",resultSet.rows._array);
+    //             setNewTagID(resultSet.rows._array[0].id)
+    //             // console.log("NewTag: ",newTag);
+    //         },
+    //         (txObj, error) => console.log(error)
+    //         );
+    //     })
+    // }
 }
 
 const addHaveTag = (habitName, tagID) => {
     console.log("Adding HaveTag to db", habitName, tagID);
-
-    db.transaction(tx => {
-        tx.executeSql('INSERT INTO HaveTag (habitName, tagID) values (?, ?)', 
-        [habitName, tagID],
-        (txObj, resultSet) => {
-            console.log("add HaveTag here",resultSet.rows._array);
-        },
-        (txObj, error) => console.log(error)
-        );
-    })
+    if (!isNaN(tagID))
+        db.transaction(tx => {
+            tx.executeSql('INSERT INTO HaveTag (habitName, tagID) values (?, ?)', 
+            [habitName, tagID],
+            (txObj, resultSet) => {
+                console.log("add HaveTag here",resultSet.rows._array);
+            },
+            (txObj, error) => console.log(error)
+            );
+        })
 }
 
 const addUnit = (name) => {
@@ -799,9 +844,8 @@ const loadTag = (setListTag) => {
         tx.executeSql('SELECT * FROM Tag', 
         [],
         (txObj, resultSet) => {
-            console.log("Loading init tag");            
-            console.log("Database resultset");
-            console.log(resultSet.rows);
+            console.log("Loading init tag: ",resultSet.rows);            
+            
             setListTag([...resultSet.rows._array])
         },
         (txObj, error) => console.log(error)
@@ -809,31 +853,55 @@ const loadTag = (setListTag) => {
     })
 }
 
-const loadHaveTag = () => {
-    // console.log("Loading unit from db");
+const loadHaveTag = (habitName, setListTag) => {
+    // console.log("Loading HaveTag from db");
 
-    /* db.transaction(tx => {"DROP TABLE Habit"}); */
-
-    db.transaction(tx => {
-        tx.executeSql('SELECT * FROM HaveTag', 
-        [],
-        (txObj, resultSet) => {
-            // console.log("Loading init unit");
-            /*console.log("List habit state");
-            console.log(listHabit);
-            console.log("Database resultset");
-            console.log(resultSet.rows);
-            if (listHabit.length < resultSet.rows.length) {
-                for (let i = 0; i < resultSet.rows.length; i++) {
-                dispatch(addHabitList(resultSet.rows[i]));
-                }
-            } */
-            // console.log(resultSet);
-        },
-        (txObj, error) => console.log(error)
-        );
-    })
+        /* db.transaction(tx => {"DROP TABLE Habit"}); */
+    if (habitName) 
+        db.transaction(tx => {
+            tx.executeSql('SELECT name FROM HaveTag, Tag\
+            WHERE habitName = ?\
+            AND tagID = id', 
+            [habitName],
+            (txObj, resultSet) => {
+                // console.log("Loading database HaveTag: ", habitName, resultSet.rows); 
+                // console.log("List Tag: ", [...resultSet.rows._array.map(i => i.name)])           
+                setListTag([...resultSet.rows._array.map(i => i.name)])
+            },
+            (txObj, error) => console.log(error)
+            );
+        })
+    else 
+        db.transaction(tx => {
+            tx.executeSql('SELECT habitName, name FROM HaveTag, Tag\
+            WHERE tagID = id', 
+            [],
+            (txObj, resultSet) => {
+                // console.log("Loading database HaveTag: ", habitName, resultSet.rows); 
+                console.log("List Have Tag: ", [...resultSet.rows._array])           
+                setListTag([...resultSet.rows._array])
+            },
+            (txObj, error) => console.log(error)
+            );
+        })
 }
+
+// const loadHaveTag = (habitName) => {
+//     console.log("Loading HaveTag from db");
+
+//     /* db.transaction(tx => {"DROP TABLE Habit"}); */
+
+//     db.transaction(tx => {
+//         tx.executeSql('SELECT * FROM HaveTag', 
+//         [],
+//         (txObj, resultSet) => {
+//             console.log("Loading database HaveTag: ", resultSet.rows);            
+//             // setListTag([...resultSet.rows._array])
+//         },
+//         (txObj, error) => console.log(error)
+//         );
+//     })
+// }
 
 const deleteHabit = (habitName) => {
     console.log("Deleting habit from db");
@@ -1762,4 +1830,4 @@ export {db,getAllMemmo,getMemmoCurDay,getUnitNameforHOAD, getDataOfCurWeek,getUn
     calculateTotalVolumn, calculateDayTotalDone, calculateCurrentStreak, calculateBestStreak, CountPerfectDay,
     CalculateOverallRate, CalculateDailyAverage, CountPerfectStreak, loadMemo, calculateDayStarted, 
     checkHaveMemoCurDay, addMemo,updateProgressMemo, getProgressCurMonth, updateSettingTheme, updateSettingHabitBarSize,
-    updateSettingDateBarStyle, updateHabitStat, loadTag, loadHaveTag, addTag, addUnit}
+    updateSettingDateBarStyle, updateHabitStat, loadTag, loadHaveTag, addTag, addUnit, addHaveTag}

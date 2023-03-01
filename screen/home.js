@@ -5,7 +5,7 @@ import * as Progress from 'react-native-progress';
 import { addHabitList, useStore } from '../Store'
 import * as SQLite from 'expo-sqlite';
 import { CalendarProvider, WeekCalendar } from "react-native-calendars";
-import { refreshDatabase, loadHabit_on_fone, loadHabit_on_web, initDatabase, loadUnit, loadSetting } from '../Store/database';
+import { refreshDatabase, loadHabit_on_fone, loadHabit_on_web, initDatabase, loadUnit, loadSetting, loadHaveTag, loadTag } from '../Store/database';
 import moment from 'moment';
 import { format} from 'date-fns';
 //import { ScrollView, State, TextInput } from 'react-native-gesture-handler';
@@ -15,6 +15,9 @@ import { getUnitName, loadMemo} from '../Store/database';
 const Home = ({ navigation }) => {
   const [state,dispatch] = useStore();
   const {currentTheme} =state
+  const [listTag, setListTag] = useState([]); 
+  const [listHaveTag, setListHaveTag] = useState([]); 
+
   
   // const db = SQLite.openDatabase('Habit_tracker.db');
 
@@ -27,6 +30,8 @@ const Home = ({ navigation }) => {
       loadHabit_on_fone(state.listHabit, dispatch)
       loadMemo(state.listProgressDay, dispatch)
       loadSetting(state, dispatch);
+      loadTag(setListTag);
+      loadHaveTag(null, setListHaveTag);
 
   }, []); // 👈️ empty dependencies array
   const today = new Date();
