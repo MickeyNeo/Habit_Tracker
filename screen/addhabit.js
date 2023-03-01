@@ -11,9 +11,11 @@ import Modal from "react-native-modal";
 import { useStore , addHabitList, setListProgressDay} from '../Store'
 import { setHabitInput } from '../Store/action'
 import { db, addHabit,addMemo, loadTag, addTag, addHaveTag, loadHaveTag } from '../Store/database'
+import { tr } from "date-fns/locale";
 const AddHabit = ({navigation, route}) => {
     const [state, dispatch] = useStore();
     const [listTag, setListTag] = useState([])
+    const [listHaveTag, setListHaveTag] = useState([])
     const {currentTheme} = state
     const {id, name, colors, IconInfo, unitHabit, tag, flag } = route.params;
     
@@ -93,12 +95,31 @@ const AddHabit = ({navigation, route}) => {
     const [newTagID, setNewTagID] = useState(NaN);
     const [isModalVisible, setModalVisible] = useState(false);
     const [inputValue, setInputValue] = useState('');
+
+    const inListTag = (newTag, listTag) => {
+      console.log('Check if in list Tag: ', newTag, listTag)
+      for (let item of listTag) {
+        if (item.name == newTag) {
+          console.log('InlistTag: ', newTag, item.name)
+          return item.id
+        }
+      }
+      console.log('Not in list: ', newTag)
+      return -1
+    }
+
     const handleAddTag = () => {
-      console.log("Before", newTagID);
-      addTag(newTag, newTagID, setNewTagID);
-      console.log("After", newTagID);
-      addHaveTag(habit.name, newTagID);
-      loadHaveTag(habit.name, setListTag);
+      let newTagId = inListTag(newTag, listTag)
+      console.log("Handle add Tag: ", listTag, newTag, newTagId)
+      if (newTagId == -1){
+        addTag(newTag);
+        addHaveTag(habit.name, listTag.length + 1);
+      }
+      else {
+        addHaveTag(habit.name, newTagId);
+      }
+      loadHaveTag(habit.name, setListHaveTag);
+      loadTag(setListTag);
       setiTag([...iTag, newTag]); 
       setNewTag('');
     };
@@ -113,7 +134,7 @@ const AddHabit = ({navigation, route}) => {
           'Confirm',
           'Do you want to delete this Tag?',
         [
-          {
+          { 
             text: 'Cancel',
             //onPress: () => console.log('Cancel Pressed'),
             style: 'cancel',
@@ -241,7 +262,9 @@ const AddHabit = ({navigation, route}) => {
                                 </TouchableOpacity>
                                 <Modal
                                   isVisible={isModalVisible}
-                                  onBackdropPress={() => {setModalVisible(false); if (newTag!='') handleAddTag()}}
+                                  onBackdropPress={() => {setModalVisible(false); 
+                                    console.log("Pressed Done"); 
+                                    if (!inListTag(newTag, listTag) && newTag!='') handleAddTag()}}
                                 >
                                   <View style={[styles.modalContainer,{backgroundColor:currentTheme.backgroundColor}]}>
                                     <TextInput
@@ -263,7 +286,11 @@ const AddHabit = ({navigation, route}) => {
                                     </View>
                                     
                                     <TouchableOpacity
-                                      onPress={() => {setModalVisible(false); if (newTag!='') handleAddTag()}}
+                                      onPress={() => {
+                                        setModalVisible(false); 
+                                        if (newTag!='') 
+                                          handleAddTag()
+                                        }}
                                       style={[styles.button,{backgroundColor:value.changecolor}]}
                                     >
                                       <Text style={[styles.text,{color: currentTheme.color}]}>Done</Text>
