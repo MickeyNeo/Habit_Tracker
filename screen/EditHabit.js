@@ -1,4 +1,4 @@
-import React, { useState, Component, useContext,useReducer } from "react";
+import React, { useState, Component, useContext,useReducer, useEffect } from "react";
 import { View, Button, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Image, TextInput, Alert, Switch } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import themeContext from "./styles/themeContext";
@@ -17,12 +17,14 @@ import Modal from "react-native-modal";
 
 import { useStore , setListProgressDay, delHabit, editListProgressDay} from '../Store'
 import { setHabitInput } from '../Store/action'
-import { db, addHabit, updateHabit,addMemo, loadHaveTag } from '../Store/database'
+import { db, addHabit, updateHabit,addMemo, loadHaveTag, loadTag, addTag, addHaveTag } from '../Store/database'
 import { Tile } from "@rneui/base";
 const EditHabit = ({navigation, route}) => {
+  
   const frequency_of_day = ["Daily", "Weekly", "Monthly"]
   const frequency_of_week = ["Weekly", "Monthly"]
   const [state, dispatch] = useStore();
+  const [listTag, setListTag] = useState([])
   const {currentTheme} =state
   const {Habit} = route.params;
   const IconDetail = {
@@ -55,6 +57,19 @@ const EditHabit = ({navigation, route}) => {
   let freq_selected = Habit.frequency
   freq_selected = freq_selected.split(',')
   const freqtype = Habit.frequencyType;
+
+  const inListTag = (newTag, listTag) => {
+    console.log('Check if in list Tag: ', newTag, listTag)
+    for (let item of listTag) {
+      if (item.name == newTag) {
+        console.log('InlistTag: ', newTag, item.name)
+        return item.id
+      }
+    }
+    console.log('Not in list: ', newTag)
+    return -1
+  }
+
   let old_freq_selected = []
   if (freqtype === 'Daily') {
       old_freq_selected = freq_selected;
@@ -118,17 +133,26 @@ const EditHabit = ({navigation, route}) => {
   }
   //console.log(habit)
   //Tag
-  const listTag = [{tagId:0, name:'Health' },{tagId:1, name:'Fitness' },{tagId:2, name:'Productivity'},{tagId:3, name:'Mental'}]
+  // const listTag = [{tagId:0, name:'Health' },{tagId:1, name:'Fitness' },{tagId:2, name:'Productivity'},{tagId:3, name:'Mental'}]
   const [iTag, setiTag] = useState([value.tag])
-  loadHaveTag(habit.name, setiTag);
+
+  useEffect(() => {
+    loadTag(setListTag);
+    loadHaveTag(habit.name, setiTag);
+
+
+  }, []);
   const [newTag, setNewTag] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
   const [inputValue, setInputValue] = useState('');
+
   const handleAddTag = () => {
-    // loadHaveTag();
-    setiTag([...iTag, newTag]);
+    addTag(newTag); //add zo dtb table tag
+    loadTag(setListTag);
+    setiTag([...iTag, newTag]); 
     setNewTag('');
   };
+
   const handleRemoveTag = (index) => {
     const newList = [...iTag];
     newList.splice(index, 1);
@@ -442,6 +466,20 @@ const EditHabit = ({navigation, route}) => {
       <SafeAreaView style = {[styles.homeZone,{backgroundColor:currentTheme.backgroundColor}]}> 
           <TouchableOpacity 
               onPress={() => {
+                  console.log("Habit in addHabit: ", habit, iTag)
+                    let lenListTag = listTag.length;
+                    for (let item of iTag) {
+                      let newTagId = inListTag(item, listTag);
+                      if (newTag == -1) {
+                        addHaveTag(habit.name, lenListTag + 1);
+                        lenListTag += 1;
+                      }
+                      else {
+                        addHaveTag(habit.name, newTagId);
+                        lenListTag += 1;
+                      }
+                    }
+                    loadHaveTag(habit.name, setiTag);
                   // dispatch(addHabitOfaDay(name.toLowerCase()));
                   //dispatch(setHabitInput(habit));
                   //dispatch(addHabitList(habit));

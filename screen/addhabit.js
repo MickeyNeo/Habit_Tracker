@@ -413,7 +413,7 @@ const AddHabit = ({navigation, route}) => {
                         lenListTag += 1;
                       }
                     }
-                    loadHaveTag(habit.name. setiTag);
+                    loadHaveTag(habit.name, setiTag);
                     // dispatch(addHabitOfaDay(name.toLowerCase()));
                     dispatch(setHabitInput(habit));
                     dispatch(addHabitList(habit));
