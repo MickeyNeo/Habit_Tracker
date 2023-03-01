@@ -856,21 +856,34 @@ const loadTag = (setListTag) => {
 const loadHaveTag = (habitName, setListTag) => {
     // console.log("Loading HaveTag from db");
 
-    /* db.transaction(tx => {"DROP TABLE Habit"}); */
-
-    db.transaction(tx => {
-        tx.executeSql('SELECT name FROM HaveTag, Tag\
-        WHERE habitName = ?\
-        AND tagID = id', 
-        [habitName],
-        (txObj, resultSet) => {
-            // console.log("Loading database HaveTag: ", habitName, resultSet.rows); 
-            // console.log("List Tag: ", [...resultSet.rows._array.map(i => i.name)])           
-            setListTag([...resultSet.rows._array.map(i => i.name)])
-        },
-        (txObj, error) => console.log(error)
-        );
-    })
+        /* db.transaction(tx => {"DROP TABLE Habit"}); */
+    if (habitName) 
+        db.transaction(tx => {
+            tx.executeSql('SELECT name FROM HaveTag, Tag\
+            WHERE habitName = ?\
+            AND tagID = id', 
+            [habitName],
+            (txObj, resultSet) => {
+                // console.log("Loading database HaveTag: ", habitName, resultSet.rows); 
+                // console.log("List Tag: ", [...resultSet.rows._array.map(i => i.name)])           
+                setListTag([...resultSet.rows._array.map(i => i.name)])
+            },
+            (txObj, error) => console.log(error)
+            );
+        })
+    else 
+        db.transaction(tx => {
+            tx.executeSql('SELECT habitName, name FROM HaveTag, Tag\
+            WHERE tagID = id', 
+            [],
+            (txObj, resultSet) => {
+                // console.log("Loading database HaveTag: ", habitName, resultSet.rows); 
+                console.log("List Have Tag: ", [...resultSet.rows._array])           
+                setListTag([...resultSet.rows._array])
+            },
+            (txObj, error) => console.log(error)
+            );
+        })
 }
 
 // const loadHaveTag = (habitName) => {
