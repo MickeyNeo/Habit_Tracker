@@ -854,22 +854,41 @@ const loadTag = (setListTag) => {
 }
 
 const loadHaveTag = (habitName, setListTag) => {
-    // console.log("Loading unit from db");
+    // console.log("Loading HaveTag from db");
 
     /* db.transaction(tx => {"DROP TABLE Habit"}); */
 
     db.transaction(tx => {
-        tx.executeSql('SELECT tagId FROM HaveTag\
-        WHERE habitName = ?', 
+        tx.executeSql('SELECT name FROM HaveTag, Tag\
+        WHERE habitName = ?\
+        AND tagID = id', 
         [habitName],
         (txObj, resultSet) => {
-            console.log("Loading database HaveTag: ", habitName, resultSet.rows);            
-            setListTag([...resultSet.rows._array])
+            // console.log("Loading database HaveTag: ", habitName, resultSet.rows); 
+            // console.log("List Tag: ", [...resultSet.rows._array.map(i => i.name)])           
+            setListTag([...resultSet.rows._array.map(i => i.name)])
         },
         (txObj, error) => console.log(error)
         );
     })
 }
+
+// const loadHaveTag = (habitName) => {
+//     console.log("Loading HaveTag from db");
+
+//     /* db.transaction(tx => {"DROP TABLE Habit"}); */
+
+//     db.transaction(tx => {
+//         tx.executeSql('SELECT * FROM HaveTag', 
+//         [],
+//         (txObj, resultSet) => {
+//             console.log("Loading database HaveTag: ", resultSet.rows);            
+//             // setListTag([...resultSet.rows._array])
+//         },
+//         (txObj, error) => console.log(error)
+//         );
+//     })
+// }
 
 const deleteHabit = (habitName) => {
     console.log("Deleting habit from db");

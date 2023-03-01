@@ -15,7 +15,7 @@ import { tr } from "date-fns/locale";
 const AddHabit = ({navigation, route}) => {
     const [state, dispatch] = useStore();
     const [listTag, setListTag] = useState([])
-    const [listHaveTag, setListHaveTag] = useState([])
+    // const [listHaveTag, setListHaveTag] = useState([])
     const {currentTheme} = state
     const {id, name, colors, IconInfo, unitHabit, tag, flag } = route.params;
     
@@ -91,6 +91,8 @@ const AddHabit = ({navigation, route}) => {
     // const listTag = [{tagId:0, name:'Health' },{tagId:1  , name:'Fitness' },{tagId:2, name:'Productivity'},{tagId:3, name:'Mental'}]
     
     const [iTag, setiTag] = useState([value.tag])
+
+    // loadHaveTag(habit.name. setiTag);
     const [newTag, setNewTag] = useState("");
     const [newTagID, setNewTagID] = useState(NaN);
     const [isModalVisible, setModalVisible] = useState(false);
@@ -109,16 +111,16 @@ const AddHabit = ({navigation, route}) => {
     }
 
     const handleAddTag = () => {
-      let newTagId = inListTag(newTag, listTag)
-      console.log("Handle add Tag: ", listTag, newTag, newTagId)
-      if (newTagId == -1){
-        addTag(newTag);
-        addHaveTag(habit.name, listTag.length + 1);
-      }
-      else {
-        addHaveTag(habit.name, newTagId);
-      }
-      loadHaveTag(habit.name, setListHaveTag);
+      // let newTagId = inListTag(newTag, listTag) //Lay id cua newtag trong listtag
+      // // console.log("Handle add Tag: ", listTag, newTag, newTagId)
+      // if (newTagId == -1){
+      addTag(newTag); //add zo dtb table tag
+      //   addHaveTag(habit.name, listTag.length + 1);//add zo dtb table HaveTag
+      // }
+      // else {
+      //   addHaveTag(habit.name, newTagId);
+      // }
+      // loadHaveTag();
       loadTag(setListTag);
       setiTag([...iTag, newTag]); 
       setNewTag('');
@@ -254,7 +256,7 @@ const AddHabit = ({navigation, route}) => {
                                 <TouchableOpacity 
                                   onPress={() => {
                                     setModalVisible(true)
-                                    loadTag(setListTag)
+                                    loadTag(setListTag) //load tag tu database len usestate
                                   }}
                                   //style={styles.button}
                                 >
@@ -398,7 +400,20 @@ const AddHabit = ({navigation, route}) => {
         <SafeAreaView style = {[styles.homeZone,{backgroundColor:currentTheme.backgroundColor}]}> 
             <TouchableOpacity 
                 onPress={() => {
-                    console.log("Habit in addHabit: ", habit)
+                    console.log("Habit in addHabit: ", habit, iTag)
+                    let lenListTag = listTag.length;
+                    for (let item of iTag) {
+                      let newTagId = inListTag(item, listTag);
+                      if (newTag == -1) {
+                        addHaveTag(habit.name, lenListTag + 1);
+                        lenListTag += 1;
+                      }
+                      else {
+                        addHaveTag(habit.name, newTagId);
+                        lenListTag += 1;
+                      }
+                    }
+                    loadHaveTag(habit.name. setiTag);
                     // dispatch(addHabitOfaDay(name.toLowerCase()));
                     dispatch(setHabitInput(habit));
                     dispatch(addHabitList(habit));
