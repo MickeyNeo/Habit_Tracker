@@ -1,6 +1,6 @@
 import React,{useState, useEffect} from "react";
 import {Text, View, StyleSheet, TouchableOpacity,Alert,TextInput} from 'react-native';
-import { addUnit, loadUnit } from "../../Store/database";
+import { addUnit, loadUnit, deleteUnit } from "../../Store/database";
 import Modal from "react-native-modal";
 export default function SelectUnit (params){
     const [isModalVisible, setModalVisible] = useState(false);
@@ -42,6 +42,7 @@ export default function SelectUnit (params){
         console.log('before',newList)
         newList.filter((obj) => obj.id !== id);
         console.log('after',newList)
+        deleteUnit(id)
         setUnit(newList);
         //console.log('after',unit)
     }

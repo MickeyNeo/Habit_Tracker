@@ -1848,4 +1848,4 @@ export {db,getAllMemmo,getMemmoCurDay,getUnitNameforHOAD, getDataOfCurWeek,getUn
     CalculateOverallRate, CalculateDailyAverage, CountPerfectStreak, loadMemo, calculateDayStarted, 
     checkHaveMemoCurDay, addMemo,updateProgressMemo, getProgressCurMonth, updateSettingTheme, updateSettingHabitBarSize,
     updateSettingDateBarStyle, updateHabitStat, loadTag, loadHaveTag, addTag, addUnit, addHaveTag,
-    deleteHaveTag}
+    deleteHaveTag, deleteUnit}
