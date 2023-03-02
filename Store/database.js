@@ -47,7 +47,10 @@ const streakRetain = (date, followingDate) => {
 const CurrentStreak = (dates) => {
     let currentDate = new Date();
 
-    // console.log(dates)
+    console.log(dates)
+
+    if (dates.length == 0) 
+        return 0;
 
     if (Platform.OS === 'ios' || Platform.OS === 'android') {
         var [y, m, d] = [...dates._array[0].date.split('-').map((x) => parseInt(x))];
@@ -106,6 +109,10 @@ const BestStreak = (dates) => {
     let count = 1;
     let bestStreak = 1;
     // console.log(dates)
+
+    if (dates.length == 0)
+        return 0;
+
     if (Platform.OS === 'ios' || Platform.OS === 'android') {
         for (let i = 1; i < dates._array.length; i++) {
         
@@ -911,8 +918,8 @@ const deleteHabit = (habitName) => {
         WHERE habitName = ?', 
         [habitName],
         (txObj, resultSet) => {
-            // console.log("Deleted habit ", habitName, " from table HaveTag");
-            // console.log(resultSet);
+            console.log("Deleted habit ", habitName, " from table HaveTag");
+            console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -923,8 +930,8 @@ const deleteHabit = (habitName) => {
         WHERE habitName = ?', 
         [habitName],
         (txObj, resultSet) => {
-            // console.log("Deleted habit ", habitName, " from table Memo");
-            // console.log(resultSet);
+            console.log("Deleted habit ", habitName, " from table Memo");
+            console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -935,8 +942,8 @@ const deleteHabit = (habitName) => {
         WHERE habitName = ?', 
         [habitName],
         (txObj, resultSet) => {
-            // console.log("Deleted habit ", habitName, " from table Reminder");
-            // console.log(resultSet);
+            console.log("Deleted habit ", habitName, " from table Reminder");
+            console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -947,8 +954,8 @@ const deleteHabit = (habitName) => {
         WHERE name = ?', 
         [habitName],
         (txObj, resultSet) => {
-            // console.log("Deleted habit ", habitName, " from table Habit");
-            // console.log(resultSet);
+            console.log("Deleted habit ", habitName, " from table Habit");
+            console.log(resultSet);
         },
         (txObj, error) => console.log(error)
         );
@@ -1586,7 +1593,7 @@ const numberHabitInDay = (listHabit, date) => {
         }
         else if (habit.frequencyType == 'Monthly') {
             // console.log('Habit Month: ', date.slice(8), habit.frequency.split());
-            if (date.slice(8) in habit.frequency.split()) {
+            if (habit.frequency.split(',').includes(date.slice(8))) {
                 count += 1;
             }
         }
@@ -1724,6 +1731,7 @@ const CalculateOverallRate = (listHabit, state, dispatch) => {
     db.transaction(tx => {
         tx.executeSql("SELECT date, COUNT(*)\
         FROM Memo AS M\
+        WHERE progress != 0\
         GROUP BY date\
         ORDER BY date\
         ", 
