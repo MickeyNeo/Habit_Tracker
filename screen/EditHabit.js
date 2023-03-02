@@ -17,7 +17,7 @@ import Modal from "react-native-modal";
 
 import { useStore , setListProgressDay, delHabit, editListProgressDay} from '../Store'
 import { setHabitInput } from '../Store/action'
-import { db, addHabit, updateHabit,addMemo, loadHaveTag, loadTag, addTag, addHaveTag } from '../Store/database'
+import { db, addHabit, updateHabit,addMemo, loadHaveTag, loadTag, addTag, addHaveTag, deleteHaveTag } from '../Store/database'
 import { Tile } from "@rneui/base";
 const EditHabit = ({navigation, route}) => {
   
@@ -155,6 +155,8 @@ const EditHabit = ({navigation, route}) => {
 
   const handleRemoveTag = (index) => {
     const newList = [...iTag];
+    let deletedTagID = inListTag(newList[index], listTag);
+    deleteHaveTag(habit.name, deletedTagID);
     newList.splice(index, 1);
     setiTag(newList);
   };
