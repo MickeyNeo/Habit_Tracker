@@ -10,7 +10,7 @@ import moment from 'moment';
 import Modal from "react-native-modal";
 import { useStore , addHabitList, setListProgressDay} from '../Store'
 import { setHabitInput } from '../Store/action'
-import { db, addHabit,addMemo, loadTag, addTag, addHaveTag, loadHaveTag } from '../Store/database'
+import { db, addHabit,addMemo, loadTag, addTag, addHaveTag, loadHaveTag, deleteHaveTag } from '../Store/database'
 import { tr } from "date-fns/locale";
 const AddHabit = ({navigation, route}) => {
     const [state, dispatch] = useStore();
@@ -125,11 +125,15 @@ const AddHabit = ({navigation, route}) => {
       setiTag([...iTag, newTag]); 
       setNewTag('');
     };
+
     const handleRemoveTag = (index) => {
       const newList = [...iTag];
+      // let deletedTagID = inListTag(newList[index]);
+      // deleteHaveTag(habit.name, deletedTagID);
       newList.splice(index, 1);
       setiTag(newList);
     };
+    
     //Thong bao xoa tag
     const showAlertTag = (index) => {
       Alert.alert(  

@@ -856,7 +856,7 @@ const loadTag = (setListTag) => {
 const loadHaveTag = (habitName, setListTag) => {
     // console.log("Loading HaveTag from db");
 
-        /* db.transaction(tx => {"DROP TABLE Habit"}); */
+        /* db.transaction(tx => {"DROP TABLE Habit"}); */ 
     if (habitName) 
         db.transaction(tx => {
             tx.executeSql('SELECT name FROM HaveTag, Tag\
@@ -982,6 +982,24 @@ const deleteTag = (id) => {
         (txObj, error) => console.log(error)
         );
     })
+}
+
+const deleteHaveTag = (habitName, tagID) => {
+    console.log("Deleting Tag from db");
+
+    db.transaction(tx => {
+        tx.executeSql('DELETE FROM HaveTag \
+        WHERE tagID = ?\
+        AND habitName = ?', 
+        [tagID, habitName],
+        (txObj, resultSet) => {
+            // console.log("Deleted habit ", habitName, " from table HaveTag");
+            // console.log(resultSet);
+        },
+        (txObj, error) => console.log(error)
+        );
+    })
+
 }
 
 const deleteUnit = (id) => {
@@ -1830,4 +1848,5 @@ export {db,getAllMemmo,getMemmoCurDay,getUnitNameforHOAD, getDataOfCurWeek,getUn
     calculateTotalVolumn, calculateDayTotalDone, calculateCurrentStreak, calculateBestStreak, CountPerfectDay,
     CalculateOverallRate, CalculateDailyAverage, CountPerfectStreak, loadMemo, calculateDayStarted, 
     checkHaveMemoCurDay, addMemo,updateProgressMemo, getProgressCurMonth, updateSettingTheme, updateSettingHabitBarSize,
-    updateSettingDateBarStyle, updateHabitStat, loadTag, loadHaveTag, addTag, addUnit, addHaveTag}
+    updateSettingDateBarStyle, updateHabitStat, loadTag, loadHaveTag, addTag, addUnit, addHaveTag,
+    deleteHaveTag}
