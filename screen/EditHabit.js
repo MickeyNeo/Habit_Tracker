@@ -587,6 +587,7 @@ return (
             setModalVisible={setIsEnabled}
             unit={unit}
             setunit={setState}
+            color={changecolor}
             currentTheme={currentTheme}
           />
         )}

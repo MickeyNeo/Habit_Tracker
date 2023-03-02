@@ -1,8 +1,56 @@
-import React from "react";
-import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
+import React,{useState} from "react";
+import {Text, View, StyleSheet, TouchableOpacity,Alert,TextInput} from 'react-native';
 import Modal from "react-native-modal";
 export default function SelectUnit (params){
-    // console.log(params.unit)
+    const [isModalVisible, setModalVisible] = useState(false);
+    const [isEdit, setIsEdit] = useState(false) 
+    const [unit, setUnit] = useState([
+        { id: 1, title: 'sec'},
+        { id: 2, title: 'min'},
+        { id: 3, title: 'hr'},
+        { id: 4, title: 'ml'},
+        { id: 5, title: 'oz'},
+        { id: 6, title: 'cal'},
+        { id: 7, title: 'count'},
+        { id: 8, title: 'steps'},
+        { id: 9, title: 'm'},
+        { id: 10, title: 'km'},
+        { id: 11, title: 'mile'},
+    ])
+    const [newUnit, setNewUnit]= useState('')
+    const handleAddUnit =()=>{
+        if (unit.find(p=>p.title===newUnit))
+            showAlertTag()
+        else
+            setUnit([...unit, {id: unit.length+1 , title: newUnit}]);
+        setNewUnit('');
+    }
+    const handleDeleteUnit = (id)=>{
+        console.log("id",id)
+        const newList = [...unit];
+        console.log('before',newList)
+        newList.filter((obj) => obj.id !== id);
+        console.log('after',newList)
+        setUnit(newList);
+        //console.log('after',unit)
+    }
+    //Thong bao co unit da ton tai
+    const showAlertTag = () => {
+        Alert.alert(
+            'Announce',
+            'Unit exists',
+          [
+            {
+              text: 'OK',
+              style: 'cancel',
+            },
+          ],
+          {cancelable: false},
+        );
+      };
+    const handlePress= ()=>{
+        setIsEdit(prevState => !prevState)
+    }
     return(         
         <View >
             <Modal isVisible={params.myIsmodalVisible} 
@@ -16,45 +64,63 @@ export default function SelectUnit (params){
                                 borderRadius: 30, 
                                 borderWidth: 1}}>
                         <View style={styles.container}>
-                            <View style ={{
-                                borderRadius: 20, 
-                                flex: 1, 
-                                justifyContent: 'space-evenly', 
-                                }}>
-                                <Text style={[styles.tilte,{color: params.currentTheme.color}]}>Select Unit</Text>
-                                <PreviewLayout
-                                    values = {[
-                                    { id: 1, title: 'sec'},
-                                    { id: 2, title: 'min'},
-                                    { id: 3, title: 'hr'},
-                                    { id: 4, title: 'ml'},
-                                    { id: 5, title: 'oz'}
-                                ]}
-                                    selectedValue={params.unit}
-                                    setSelectedValue={params.setunit}
-                                    currentTheme={params.currentTheme}
-                                />
-                                <PreviewLayout
-                                    values = {[
-                                    { id: 6, title: 'cal'},
-                                    { id: 7, title: 'count'},
-                                    { id: 8, title: 'steps'},
-                                    { id: 9, title: 'm'},
-                                    { id: 10, title: 'km'}
-                                ]}
-                                    selectedValue={params.unit}
-                                    setSelectedValue={params.setunit}
-                                    currentTheme={params.currentTheme}
-                                />
-                                <PreviewLayout
-                                    values = {[
-                                    { id: 11, title: 'mile'},
-                                ]}
-                                    selectedValue={params.unit}
-                                    setSelectedValue={params.setunit}
-                                    currentTheme={params.currentTheme}
-                                />
-                            </View>
+                                <View style={{flexDirection:'row'}}>
+                                    <TouchableOpacity style={{flex:1, margin:10}} onPress={handlePress}>
+                                    {unit.length>=12 &&<Text style={{fontSize: 20,color: params.currentTheme.color }}>{isEdit ? 'Done' : 'Edit'}</Text>}
+                                    </TouchableOpacity>
+                                    <View style={{ flex: 2,margin:10}}>
+                                        <Text style={{color: params.currentTheme.color,fontSize: 20}}>Select Unit</Text>
+                                    </View>
+                                </View>
+                                <View style = {{flexDirection: 'row', flex: 1, flexWrap:'wrap'}}>
+                                    {unit.map((value) =>(
+                                        <View style={{}}>
+                                            <TouchableOpacity style = {[styles.buttonType,{ 
+                                            backgroundColor:  (value.title === params.unit.title) ? params.color : ((params.currentTheme.backgroundColor=='#1f1e1e')?'#918e8e':'#f5f5f5')
+                                        }]}
+                                            key={value.id}
+                                            onPress={() => params.setunit(prevState => ({ ...prevState, unit: value}))}
+                                            disabled={isEdit}
+                                        >
+                                            <Text style = {{fontSize:12,color:params.currentTheme.color }}>
+                                                {value.title}
+                                            </Text>
+                                            </TouchableOpacity>
+                                            {value.id>=12&& isEdit==true &&<TouchableOpacity style={[styles.delete,{position:'absolute', top:0,left:0}]} onPress={()=>{handleDeleteUnit(value.id)}}>
+                                                <Text style={{color:'white',textAlign:'center'}}>x</Text>
+                                            </TouchableOpacity>}
+                                        </View>
+                                        
+
+                                    ))}
+                                    <TouchableOpacity style = {[styles.buttonType
+                                            ,{backgroundColor:(params.currentTheme.backgroundColor=='#1f1e1e')?'#918e8e':'#f5f5f5'}]}
+                                            onPress={() => setModalVisible(true)}
+                                            disabled={isEdit}
+                                            >
+                                        <Text>+</Text>
+                                    </TouchableOpacity>
+                                    <Modal
+                                        isVisible={isModalVisible}
+                                        onBackdropPress={() => {setModalVisible(false); if (newUnit!='') handleAddUnit()}}
+                                    >
+                                         <View style={[styles.modalContainer,{backgroundColor:params.currentTheme.backgroundColor}]}>
+                                            <TextInput
+                                            style={[styles.input, {textAlign : 'center', color:params.currentTheme.color}]}
+                                            placeholder="Enter text here"
+                                            value={newUnit}
+                                            onChangeText={text => {setNewUnit(text)}}
+                                            />
+                                            <TouchableOpacity
+                                            onPress={() => {setModalVisible(false);if (newUnit!='') handleAddUnit()}}
+                                            style={[styles.button, { backgroundColor:params.color}]}>
+                                            <Text style={[styles.text,{color: params.currentTheme.color}]}>Done</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </Modal>
+        
+                                </View>
+
                         </View>
                     </View>
                 </Modal>       
@@ -62,49 +128,43 @@ export default function SelectUnit (params){
         </View>
     )
 }
-const PreviewLayout =({
-    values,
-    selectedValue,
-    setSelectedValue, 
-    currentTheme,
-})=>(
-    <View style = {{flexDirection: 'row', justifyContent: 'space-evenly'}}>
-        {values.map((value) =>(
-            <TouchableOpacity style = {{ 
-                borderRadius: 10, 
-                width: 40,
-                height: 20, 
-                alignItems: 'center',
-                backgroundColor:  value.title == selectedValue.title ? 'grey' : currentTheme.backgroundColor,
-                justifyContent: 'center',
-            }}
-                key={value.id}
-                   onPress={() => setSelectedValue(prevState => ({ ...prevState, unit: value}))}
-            >
-                <Text style = {{fontSize: 10,color:currentTheme.color }}>
-                    {value.title}
-                </Text>
-            </TouchableOpacity>
-        ))}
-    </View>
-);
 const styles=StyleSheet.create({
     container:{
         flex:1
     },
-    tilte:{
-        fontSize: 15,
-        color: 'black',
-        alignSelf: 'center',
+    delete:{
+        margin:10,
+        borderRadius: 5, 
+        width: 10,
+        height: 20,
+        backgroundColor:'red',
     },
     buttonType:{
-        textAlign: 'center',
-        borderRadius: 10,
-        marginLeft: 30,
-        marginRight: 30,
-        marginBottom: 10, 
-        paddingVertical: 5,
-        backgroundColor: 'pink',
+        margin:10,
+        borderRadius: 10, 
+        width: 40,
+        height: 20, 
+        alignItems: 'center',
+        justifyContent: 'center',
     },
-   
+    modalContainer: {
+        //backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 5,
+        alignItems: 'center',
+    },
+    input: {
+    width: '80%',
+    height: 40,
+    borderWidth: 1,
+    borderColor: 'gray',
+    padding: 10,
+    marginTop: 20,
+    },
+    button :{
+    padding: 10,
+    borderRadius: 10,
+    marginTop: 20,
+    },
+
 })
