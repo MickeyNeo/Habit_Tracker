@@ -344,7 +344,7 @@ const initDatabase = () => {
     db.transaction(tx => {
         tx.executeSql('CREATE TABLE IF NOT EXISTS Unit (\
             id	INTEGER,\
-            name	TEXT NOT NULL UNIQUE,\
+            title	TEXT NOT NULL UNIQUE,\
             PRIMARY KEY(id AUTOINCREMENT)\
         )',
         [], 
@@ -577,7 +577,7 @@ const addUnit = (name) => {
     console.log("Adding Unit to db", name);
 
     db.transaction(tx => {
-        tx.executeSql('INSERT INTO Unit (name) values (?)', 
+        tx.executeSql('INSERT INTO Unit (title) values (?)', 
         [name],
         (txObj, resultSet) => {
             console.log("add unit here",resultSet.rows._array);
@@ -816,7 +816,7 @@ const loadSetting = (state, dispatch) => {
     })
 }
 
-const loadUnit = () => {
+const loadUnit = (setUnit) => {
     // console.log("Loading unit from db");
 
     /* db.transaction(tx => {"DROP TABLE Habit"}); */
@@ -825,17 +825,8 @@ const loadUnit = () => {
         tx.executeSql('SELECT * FROM Unit', 
         [],
         (txObj, resultSet) => {
-            // console.log("Loading init unit");
-            /*console.log("List habit state");
-            console.log(listHabit);
-            console.log("Database resultset");
-            console.log(resultSet.rows);
-            if (listHabit.length < resultSet.rows.length) {
-                for (let i = 0; i < resultSet.rows.length; i++) {
-                dispatch(addHabitList(resultSet.rows[i]));
-                }
-            } */
-            // console.log(resultSet);
+            console.log("Loading unit table from dtb: ", resultSet.rows._array);
+            setUnit([...resultSet.rows._array])
         },
         (txObj, error) => console.log(error)
         );

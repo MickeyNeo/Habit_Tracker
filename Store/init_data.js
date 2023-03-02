@@ -48,7 +48,7 @@ export const tagInit = "INSERT INTO Tag (\"name\") VALUES \
     ('Productivity'),\
     ('Mental')"
 
-export const unitInit = "INSERT INTO Unit (\"name\") VALUES \
+export const unitInit = "INSERT INTO Unit (\"title\") VALUES \
     ('sec'),\
     ('min'),\
     ('hr'),\

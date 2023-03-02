@@ -1,28 +1,39 @@
-import React,{useState} from "react";
+import React,{useState, useEffect} from "react";
 import {Text, View, StyleSheet, TouchableOpacity,Alert,TextInput} from 'react-native';
+import { addUnit, loadUnit } from "../../Store/database";
 import Modal from "react-native-modal";
 export default function SelectUnit (params){
     const [isModalVisible, setModalVisible] = useState(false);
     const [isEdit, setIsEdit] = useState(false) 
-    const [unit, setUnit] = useState([
-        { id: 1, title: 'sec'},
-        { id: 2, title: 'min'},
-        { id: 3, title: 'hr'},
-        { id: 4, title: 'ml'},
-        { id: 5, title: 'oz'},
-        { id: 6, title: 'cal'},
-        { id: 7, title: 'count'},
-        { id: 8, title: 'steps'},
-        { id: 9, title: 'm'},
-        { id: 10, title: 'km'},
-        { id: 11, title: 'mile'},
-    ])
+
+    // const [unit, setUnit] = useState([
+    //     { id: 1, title: 'sec'},
+    //     { id: 2, title: 'min'},
+    //     { id: 3, title: 'hr'},
+    //     { id: 4, title: 'ml'},
+    //     { id: 5, title: 'oz'},
+    //     { id: 6, title: 'cal'},
+    //     { id: 7, title: 'count'},
+    //     { id: 8, title: 'steps'},
+    //     { id: 9, title: 'm'},
+    //     { id: 10, title: 'km'},
+    //     { id: 11, title: 'mile'},
+    // ])
+    const [unit, setUnit] = useState([]);
+
+    useEffect(() => {
+
+        loadUnit(setUnit);
+  
+    }, []);
+
     const [newUnit, setNewUnit]= useState('')
-    const handleAddUnit =()=>{
+    const handleAddUnit = () =>{
         if (unit.find(p=>p.title===newUnit))
             showAlertTag()
         else
             setUnit([...unit, {id: unit.length+1 , title: newUnit}]);
+        addUnit(newUnit);
         setNewUnit('');
     }
     const handleDeleteUnit = (id)=>{
