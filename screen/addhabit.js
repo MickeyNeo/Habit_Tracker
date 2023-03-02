@@ -506,6 +506,7 @@ const TabChoose = ({title, changecolor, unit, tag, IconDetail, icon, iconFamily,
               setModalVisible={setIsEnabled}
               unit={unit}
               setunit={setState}
+              color={changecolor}
               currentTheme={currentTheme}
             />
           )}

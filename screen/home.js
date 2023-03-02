@@ -17,7 +17,8 @@ const Home = ({ navigation }) => {
   const {currentTheme} =state
   const [listTag, setListTag] = useState([]); 
   const [listHaveTag, setListHaveTag] = useState([]); 
-
+  
+  console.log('listHaveTag',listHaveTag)
   
   // const db = SQLite.openDatabase('Habit_tracker.db');
 
@@ -47,18 +48,10 @@ const Home = ({ navigation }) => {
   /* loadUnit(); */
   // console.log('list', state.listHabit)
   const HabitZone = (values,navigation,date,listProgressDay, state,check) => {
-    //console.log('date',date)
+    console.log('listTag',listTag)
     let day = moment(date.dateString).format('ddd')
     day = day.toUpperCase()
     const {currentTheme} =state
-    //console.log(day)
-    //console.log(values)
-    //const [state,dispatch] = useStore();
-
-    // const {listProgressDay} =state
-    // console.log('listProgressDay',listProgressDay)
-    
-
     const arr3 = values.map(obj => {
       const arr2match = listProgressDay.find(x => x.habitName === obj.name && (x.date === date.dateString));
       return { ...obj, ...arr2match };
