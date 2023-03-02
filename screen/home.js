@@ -17,13 +17,17 @@ const Home = ({ navigation }) => {
   const {currentTheme} =state
   const [listTag, setListTag] = useState([]); 
   const [listHaveTag, setListHaveTag] = useState([]); 
-  
-  console.log('listHaveTag',listHaveTag)
-  
+  const [unit, setUnit] = useState([]);
+  //Filter
+  let newObj = { id:0, name: "All"};
+  const [isPressed, setIsPressed] = useState(newObj.name);
+  const handlePress = (tag) => {
+      setIsPressed(tag);
+  };
   // const db = SQLite.openDatabase('Habit_tracker.db');
 
-  // refreshDatabase();  
-  // initDatabase();
+  //refreshDatabase();  
+  //initDatabase();
 
   // Don't comment out useEffect. useEffect prevent the screen from loading repeatedly
   useEffect(() => {
@@ -33,6 +37,7 @@ const Home = ({ navigation }) => {
       loadSetting(state, dispatch);
       loadTag(setListTag);
       loadHaveTag(null, setListHaveTag);
+      loadUnit(setUnit);
 
   }, []); // 👈️ empty dependencies array
   const today = new Date();
@@ -40,15 +45,7 @@ const Home = ({ navigation }) => {
   const [checkShow, setCheckShow] = useState(0)
   const listH = state.listHabit
   const listP = state.listProgressDay
-
-
-  //refreshDatabase(state.listHabit, dispatch)
-  // console.log('home',state.listProgressDay.length)
-  // console.log('list' ,state.listHabit)
-  /* loadUnit(); */
-  // console.log('list', state.listHabit)
-  const HabitZone = (values,navigation,date,listProgressDay, state,check) => {
-    console.log('listTag',listTag)
+  const HabitZone = (values,navigation,date,listProgressDay, state,check,isPressed) => {
     let day = moment(date.dateString).format('ddd')
     day = day.toUpperCase()
     const {currentTheme} =state
@@ -67,7 +64,7 @@ const Home = ({ navigation }) => {
       };
     };
     const findObjectById = (id) => {
-      var a=state.listUnit.find((obj) => obj.id === id) || null;
+      var a=unit.find((obj) => obj.id === id) || null;
       if (a!==null) return a.title
       return null
     };
@@ -77,14 +74,72 @@ const Home = ({ navigation }) => {
         return (
           <ScrollView>
             <View style = {{flexDirection: 'column', padding: 10, justifyContent: 'space-evenly'}}>
-  
-              {arr3.map((value) => {
-                // let pickDay = value.frequency;
-                // pickDay = pickDay.split(',')
-                // for (let i = 0; i < pickDay.length; i++) {
-                //   if (pickDay[i] == day ) {
-  
-                // console.log('day1' ,value.date)
+              {isPressed!='All'?listHaveTag.map((tag,index)=>{
+                    const value = arr3.find(e=>e.name===tag.habitName);
+                    if (value&&value.date===date.dateString&&tag.name===isPressed){
+                      var valueGoal = value.goalNo
+                      var checkShow = null 
+                      //getUnitName(value)
+                      if (value.unitID === 1 || value.unitID === 2 || value.unitID == 3 ){
+                          {checkShow = 1; 
+                            if (value.unitID === 2 ) valueGoal= value.goalNo*60
+                            else if (value.unitID === 3) valueGoal= value.goalNo*3600
+                            else valueGoal= value.goalNo
+                          }
+                      }else{
+                          checkShow = 0
+                      }
+                      const doMath=()=>{
+                        if (checkShow==1){
+                        const {days, hours, minutes, seconds} = handleTime(value.progress)
+                        //console.log(days, hours, minutes, seconds)
+                        if (hours!==0)
+                          return(<Text>{hours}h {minutes}m {seconds}s</Text>)
+                        else if (minutes!==0)
+                          return(<Text>{minutes}m {seconds}s</Text>)
+                        else return(<Text>{seconds}s</Text>)
+                        }
+                        else 
+                          return(<Text>{value.progress}</Text>)
+                      }
+                      //console.log('vlp',value.progress, 'vlg',value.goalNo)
+                      const handleMath=()=>{
+                        if (value.progress===undefined)               
+                          return 0
+                        return(value.progress/valueGoal)
+                      }
+                      
+                      //console.log(days, hours, minutes, seconds)
+                      return (
+                        <TouchableOpacity 
+                          style={{ padding: 5 }} 
+                          key={value.id} 
+                          onPress={() => navigation.navigate('HabitDetail', {habit: value, checkShow: checkShow})}>
+                          <Progress.Bar progress={handleMath()} width={null} height={state.habitBarSize?50:35} color={value.color}>
+                          {/* (value.progress)/(value.goalNo) */}
+                          </Progress.Bar>
+                          <View style={{
+                            flex: 1,
+                            position: 'absolute',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            top:9,
+                            left:10
+                          }}>
+                              <Icons type={value.iconFamily} name={value.icon} size={state.habitBarSize?40:25} color={currentTheme.color} />
+                              <View style={{ flexDirection: 'column' }}>
+                                <Text style={{ fontSize: 10,color: currentTheme.color }}>{value.name}</Text>
+                                <Text style={{ fontSize: 8,color: currentTheme.color }}>{value.note}</Text>
+                              </View>
+                              <View style={{ alignItems: 'flex-end', flex: 1,right:10}}>
+                                {/* {!checkShow && <Text> {(value.progress)/(valueGoal)} {value.unitID.title}</Text>} */}
+                                <Text style={{color: currentTheme.color}}>{doMath()}/{value.goalNo} {findObjectById(value.unitID)}</Text>
+                              </View>
+                            </View>
+                        </TouchableOpacity>
+                      );
+                  }
+              }): arr3.map((value) => {
                 if (value.date===date.dateString){
                     var valueGoal = value.goalNo
                     var checkShow = null 
@@ -172,7 +227,27 @@ const Home = ({ navigation }) => {
 }
   // }
   return (
-    <View style={{backgroundColor: currentTheme.backgroundColor, flex: 1, flexDirection: 'column'}}>
+    <View style={{backgroundColor: currentTheme.backgroundColor, flex: 1}}>
+      <View style={{flexDirection:'row', flexWrap:'wrap',backgroundColor: currentTheme.backgroundColor}}>
+                <TouchableOpacity style={{margin:2}}  onPress={() => handlePress(newObj.name)}>
+                    <View style={[styles.boder, {backgroundColor: isPressed===newObj.name?'red' : 'gray'}]}>
+                        <Text style={{textAlign: 'center',color: isPressed===newObj.name?'white' : 'black'}}>{newObj.name}</Text>
+                    </View>
+                    
+                </TouchableOpacity>
+                {listTag.map((value,index)=>{
+                    
+                    return(
+                    
+                        <TouchableOpacity style={{margin:2}}  key={value.id}  onPress={() => handlePress(value.name)}>
+                            <View style={[styles.boder, {backgroundColor: isPressed===value.name?'red' : 'gray'}]}>
+                                <Text style={{ textAlign: 'center',color: isPressed===value.name?'white' : 'black'}}>{value.name}</Text>
+                            </View>
+                        </TouchableOpacity>
+    
+                    )
+                })}
+      </View>  
       <View style ={{height: 80 }}>
         <CalendarProvider date={format(today, 'MM/dd/yyyy')}>
           <WeekCalendar 
@@ -186,7 +261,7 @@ const Home = ({ navigation }) => {
       </View>
       <View style = {{flex: 0.8, flexDirection: 'column'}}>
         
-      {HabitZone(listH,navigation,selectedDay,listP, state,checkShow)}
+      {HabitZone(listH,navigation,selectedDay,listP, state,checkShow,isPressed)}
       </View>
     </View>
   )
@@ -230,6 +305,14 @@ const styles = StyleSheet.create({
       textDayFontSize: 16,
       textMonthFontSize: 16,
       textDayHeaderFontSize: 16
-    }
+    },
+    boder:{
+      margin:10,
+      justifyContent: 'center',
+      width: 50,
+      height: 20,
+      borderRadius: 20,
+    },
+
 });
 export default Home;
