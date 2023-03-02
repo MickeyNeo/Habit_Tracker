@@ -1,39 +1,55 @@
 import React from "react";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ScrollView } from "react-native";
 import {Text,  View , StyleSheet, Button, TouchableOpacity} from 'react-native';
 import { useStore } from "../../Store";
 import Icons from "../icon_color/Icon";
+import { loadHaveTag,loadTag } from "../../Store/database";
 export default function TagManager (params){
     const[state,dispatch] = useStore()
     const {currentTheme} =state
-    console.log('listHabit', state.listHabit)
-    
-    
-    const uniqueArr = state.listHabit.filter(
-        (obj, index, self) => index === self.findIndex((t) => t.tag === obj.tag)
-      );
-    const [isPressed, setIsPressed] = useState(uniqueArr[0].tag);
+    const [listTag, setListTag] = useState([]); 
+    const [listHaveTag, setListHaveTag] = useState([]); 
+    let newObj = { id:0, name: "All"};
+    useEffect(() => {
+        loadTag(setListTag);
+        loadHaveTag(null, setListHaveTag);
+    }, []);
+    const [isPressed, setIsPressed] = useState(newObj.name);
     const handlePress = (tag) => {
         setIsPressed(tag);
       };
     return(         
         <View style={[styles.container,{backgroundColor: currentTheme.backgroundColor}]}>
-            <View style={{flexDirection:'row'}}>
-                {uniqueArr.map((value,index)=>{
+            <View style={{flexDirection:'row', flexWrap:'wrap'}}>
+                <TouchableOpacity style={{margin:2}}  onPress={() => handlePress(newObj.name)}>
+                    <View style={[styles.boder, {backgroundColor: isPressed===newObj.name?'red' : 'gray'}]}>
+                        <Text style={{textAlign: 'center',color: isPressed===newObj.name?'white' : 'black'}}>{newObj.name}</Text>
+                    </View>
+                    
+                </TouchableOpacity>
+                {listTag.map((value,index)=>{
+                    
                     return(
                     
-                        <TouchableOpacity style={{margin:2}}  key={value.tag}  onPress={() => handlePress(value.tag)}>
-                            <Text style={[styles.boder, {backgroundColor: isPressed===value.tag?'red' : 'gray' ,color: isPressed===value.tag?'white' : 'black'}]}>{value.tag}</Text>
+                        <TouchableOpacity style={{margin:2}}  key={value.id}  onPress={() => handlePress(value.name)}>
+                            <View style={[styles.boder, {backgroundColor: isPressed===value.name?'red' : 'gray'}]}>
+                                <Text style={{ textAlign: 'center',color: isPressed===value.name?'white' : 'black'}}>{value.name}</Text>
+                            </View>
                         </TouchableOpacity>
     
                     )
                 })}
+                <TouchableOpacity style={{margin:2}} >
+                            <View style={[styles.boder, {backgroundColor: 'red'}]}>
+                                <Text style={{ textAlign: 'center',color: 'white'}}>x</Text>
+                            </View>
+                        </TouchableOpacity>
             </View>  
             <ScrollView style={{margin: 12}}>
-                {state.listHabit.map((habit,index)=>{
-                    if (habit.tag===isPressed)
-                    {
+                { isPressed!='All'?listHaveTag.map((tag,index)=>{
+                    const habit = state.listHabit.find(e=>e.name===tag.habitName);
+                    if (habit && tag.name===isPressed){
                         return(
                             <View style={{flexDirection:'row', marginBottom:'5%'}}>
                                 <Icons type={habit.iconFamily} name={habit.icon} size={30} color={habit.color} />
@@ -41,9 +57,17 @@ export default function TagManager (params){
                             </View>
                             
                         )
-                       
                     }
-                })}
+            }):state.listHabit.map((habit,index)=>{
+                return(
+                    <View style={{flexDirection:'row', marginBottom:'5%'}}>
+                        <Icons type={habit.iconFamily} name={habit.icon} size={30} color={habit.color} />
+                        <Text style={{color: currentTheme.color, marginLeft:'4%'}}>{habit.name}</Text>
+                    </View>
+                    
+                )
+            }) 
+            }
             </ScrollView>   
         </View>
     );
@@ -55,68 +79,11 @@ const styles=StyleSheet.create({
         backgroundColor:'white',
         
     },
-    scroll:{
-        //marginLeft: 5,
-        marginTop: -40
-    },
-    iconTitle:{
-        flexDirection:'row', 
-        marginLeft: 20,
-        marginTop: 50,
-        
-    },
-    viewText:{
-        flex:1,
-        flexDirection: 'column', 
-        marginLeft: 30
-    },
-    textName:{
-        fontSize: 20,
-        fontWeight: "bold"
-    },
-    textRemind:{
-        fontWeight: '100'
-    },
-    iconDots:{
-        marginTop: '1%',
-        AlignItems: 'flex-end',
-        marginRight:"9%",
-        
-
-    },
-    centeredView: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 22,
-
-      },
-      modalView: {
-        margin: 20,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        padding: 35,
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-          width: 0,
-          height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-      },
-      modalContainer: {
-        backgroundColor: 'white',
-        padding: 20,
-        borderRadius: 5,
-        alignItems: 'center',
-      },
       boder:{
         margin:10,
+        justifyContent: 'center',
         width: 50,
-        height: 17,
+        height: 20,
         borderRadius: 20,
-        textAlign: 'center',
       },
 })

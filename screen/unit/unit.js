@@ -4,8 +4,7 @@ import { addUnit, loadUnit, deleteUnit } from "../../Store/database";
 import Modal from "react-native-modal";
 export default function SelectUnit (params){
     const [isModalVisible, setModalVisible] = useState(false);
-    const [isEdit, setIsEdit] = useState(false) 
-
+    
     // const [unit, setUnit] = useState([
     //     { id: 1, title: 'sec'},
     //     { id: 2, title: 'min'},
@@ -32,18 +31,19 @@ export default function SelectUnit (params){
         if (unit.find(p=>p.title===newUnit))
             showAlertTag()
         else
-            setUnit([...unit, {id: unit.length+1 , title: newUnit}]);
-        addUnit(newUnit);
+            // setUnit([...unit, {id: unit.length+1 , title: newUnit}]);
+            {addUnit(newUnit);loadUnit(setUnit)}
         setNewUnit('');
     }
     const handleDeleteUnit = (id)=>{
-        console.log("id",id)
-        const newList = [...unit];
-        console.log('before',newList)
-        newList.filter((obj) => obj.id !== id);
-        console.log('after',newList)
+        // console.log("id",id)
+        // const newList = [...unit];
+        // console.log('before',newList)
+        // newList.filter((obj) => obj.id !== id);
+        // console.log('after',newList)
+        if (unit.length==12) setIsEdit(false)
         deleteUnit(id)
-        setUnit(newList);
+        loadUnit(setUnit);
         //console.log('after',unit)
     }
     //Thong bao co unit da ton tai
@@ -60,6 +60,8 @@ export default function SelectUnit (params){
           {cancelable: false},
         );
       };
+    const [isEdit, setIsEdit] = useState(false) 
+    console.log('isEdit', isEdit)
     const handlePress= ()=>{
         setIsEdit(prevState => !prevState)
     }
